@@ -1,0 +1,47 @@
+# 2026-09-07 直チャット — バド / VAIO P・DiMORA
+
+## この日の作業記録
+
+たかとバドで、VAIO Type P（VGN-P70H/W）を今後の自動化実運用基盤として使うための確認を進めた。
+
+### VAIO P 現状確認
+- OS: Debian GNU/Linux 12 (bookworm)
+- CPU: Intel Atom Z520、i686、1 core / 2 threads、32-bit
+- RAM: 約2.0 GiB
+- swap: 約975 MiB、現在未使用
+- ストレージ: 約56 GiB、root ext4、空き約48 GiB
+- Wi-Fi: `wlp2s0` がUP、192.168.10.48、外部疎通確認済み
+- Python: 3.11.2
+- Git: 未導入
+- Firefox系プロファイル: `.mozilla/firefox` / `.mozilla/firefox-esr` が存在
+- `connman` と `NetworkManager` がともに稼働中。現時点では変更しない。
+- 現段階ではパッケージ追加、cron/systemd timer追加、Firefox設定変更、GitHub認証変更などを行わない。
+
+### DiMORA / DIGA 調査
+DiMORAの「操作機器 / お気に入り番組一覧」のHTMLソースを確認した。
+
+ページには「▼もっと見る」の `#linkMoreResult` と、現在表示位置を保持する `#includeFavPgmNextResult` がある。
+
+アップロードされたHTMLに含まれる `favoriteProgram-14.6.0.js` のコードから、次が確認できた。
+
+- `#linkMoreResult` のクリックで `FavoriteProgramController.prototype.addFavPgm()` が呼ばれる。
+- `addFavPgm()` は `GL_FAVPGM_DATA.record` を参照する。
+- 現在位置から10件分を `makeHtmlFavPgm()` でHTML化して追加表示する。
+- したがって「もっと見る」は、クリック時にサーバーから10件を新規取得する処理ではなく、すでにページ側に保持されている `GL_FAVPGM_DATA.record` を10件ずつ追加表示する処理である。
+- `getFavoriteRelationDataManager()` 等の非同期処理は関連番組側の処理であり、メインのお気に入り一覧の「もっと見る」と混同しない。
+
+### 現時点の次の調査対象
+`GL_FAVPGM_DATA` がどこで初期化され、`record[]` にどのようなデータ構造が入っているかを確認する。
+
+最終的には、Firefox → DiMORAお気に入りページ → ページ内データ → `GL_FAVPGM_DATA.record[]` → 番組日時・局・タイトル・録画モード・曜日・番組URL等を読み取り、テキスト/JSON/CSV等へ記録できる形を目指す。
+
+ただし今日はここまでとし、実際の取得・予約操作・cron/systemd化などには進まない。
+
+## 記録上の注意
+- このファイルは本日の作業終了時点の直チャット記録として保存する。
+- 認証情報、session_id、Cookie等の機密情報は記録しない。
+- 事実と推測を混ぜない。
+- 本日の確定事項は、特に「もっと見る」がローカルデータ `GL_FAVPGM_DATA.record` の追加描画であること。
+
+## 作業終了
+2026-09-07、今日はここで終了。次回は `GL_FAVPGM_DATA` の初期化箇所・データ構造の確認から再開する。
