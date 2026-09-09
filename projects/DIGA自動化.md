@@ -1,6 +1,6 @@
 # DIGA自動化
 
-更新日：2026-09-08
+更新日：2026-09-09
 
 ## 1. 位置づけ
 
@@ -95,11 +95,11 @@ Google Drive / Sheets / GAS
 
 - `BUD.md`
 - `docs/AI_READ_MAP.md`
-- `docs/00_CURRENT_STATE.md`
 - `docs/引き継ぎ/現在の引き継ぎ.md`
 - `docs/マスタープラン.md`
 - `rules/README.md`
-- `rules/AI作業運用フロー.md`
+- `rules/運用ルール.md`
+- `rules/直チャット保存プロトコル.md`
 - `直チャット/` 内のDIGA関連ログ
 - `経験ログ/` 内の関連EXP/REC
 
