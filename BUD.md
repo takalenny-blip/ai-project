@@ -20,7 +20,7 @@
 - 設計：revised_complete
 - 採用：complete
 - 実装：current_views_migrated_ci_guard_added
-- 検証：conditional_pending_script_fix
+- 検証：conditional_pending_final_claude_audit
 
 ## 現在状態モデル
 
@@ -29,8 +29,8 @@
 
 ## 直チャット
 
-- 最新保存：**077**
-- 最新パス：`直チャット/2026-09-16_直チャット即時保存_077.md`
+- 最新保存：**078**
+- 最新パス：`直チャット/2026-09-16_直チャット即時保存_078.md`
 - 旧連番保存：True
 - 新タイムスタンプ方式：True
 
@@ -42,4 +42,4 @@
 
 ## 次の一手
 
-**Run #104で確定した日付抽出バグをPath(latest_path).name[:10]へ修正し、次のActionsを実statusで確認する。successならhead SHA一致・全主要step成功・atomic save 3回連続・clean treeを確認し、その後Claudeに現行mainを独立再確認してもらう。**
+**Claudeに現行main・Run #99〜#106・6件のエラーメールとActions runの対応・現行コード・atomic save 3回連続テストを独立監査してもらい、残存問題と最終判定を確認する。**
