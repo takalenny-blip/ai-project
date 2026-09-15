@@ -64,6 +64,28 @@ def check_state(files: list[str]) -> None:
     if not match or match.group(1) != latest:
         raise SystemExit("FAIL: current state latest_saved/latest_path mismatch")
 
+    # The state must identify the newest three-digit direct-chat record, not
+    # merely a path that is internally consistent. Historical four-digit files
+    # are preserved and excluded from this comparison.
+    names = [Path(p).name for p in files if p.startswith("直チャット/")]
+    records: list[tuple[str, int, str]] = []
+    for name in names:
+        m = TIMESTAMP_CHAT.fullmatch(name)
+        if m:
+            records.append((name[:10], int(m.group(1)), name))
+    if not records:
+        raise SystemExit("FAIL: no three-digit direct-chat records found")
+
+    newest_date = max(date for date, _, _ in records)
+    newest_serial = max(serial for date, serial, _ in records if date == newest_date)
+    path_name = Path(path).name
+    path_date = path_name[:10]
+    if path_date != newest_date or int(latest) != newest_serial:
+        raise SystemExit(
+            "FAIL: current state does not point to newest direct-chat record: "
+            f"state={path_name}, newest={newest_date}_..._{newest_serial:03d}.md"
+        )
+
 
 def check_chat_names(files: list[str]) -> None:
     names = [Path(p).name for p in files if p.startswith("直チャット/")]
