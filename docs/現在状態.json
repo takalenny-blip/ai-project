@@ -25,7 +25,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "conditional_pending_script_fix",
-    "next_design_item": "Run #104の実ログで確定した日付抽出バグをPath(latest_path).name[:10]へ修正し、Run #105相当のActionsを実statusで確認する。successならhead SHA一致・全主要step成功・atomic save 3回連続・clean treeを確認し、その後Claudeに現行mainを独立再確認してもらう。"
+    "next_design_item": "Run #104で確定した日付抽出バグをPath(latest_path).name[:10]へ修正し、次のActionsを実statusで確認する。successならhead SHA一致・全主要step成功・atomic save 3回連続・clean treeを確認し、その後Claudeに現行mainを独立再確認してもらう。"
   },
   "migration": {
     "status": "independent_verification_pending",
