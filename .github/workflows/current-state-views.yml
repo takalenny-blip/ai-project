@@ -1,0 +1,30 @@
+name: Current state views
+
+on:
+  push:
+    paths:
+      - 'docs/現在状態.json'
+      - 'scripts/generate_current_views.py'
+      - '.github/workflows/current-state-views.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Render candidate views
+        run: python scripts/generate_current_views.py --out-dir generated/current-views
+
+      - name: Verify deterministic render
+        run: python scripts/generate_current_views.py --check
