@@ -6,14 +6,14 @@
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
-    "status": "migration_verified",
+    "status": "independent_verification_pending",
     "manual_duplicate_management_allowed": false,
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "044",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_044.md",
-    "latest_content_sha": "9790ddcd5d556d112822375fdeef07a663900fac",
+    "latest_saved": "045",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_045.md",
+    "latest_content_sha": "2db817d52cdc8b6969f1f0088bb2f11d97624b89",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -24,11 +24,11 @@
     "design": "revised_complete",
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
-    "verification": "all_required_ci_success_run31",
-    "next_design_item": "Claudeへ大手術の独立検証を依頼済み。自己判定を鵜呑みにせず、実ファイル・workflow・Actions実行結果を根拠に完了性、ループ、盲点、状態整合性を再検証する。"
+    "verification": "independent_verification_pending",
+    "next_design_item": "Claude独立検証の証拠不足を解消するため、現行実ファイルとrun #15〜#31の実statusを提示して再検証を受ける。修正は判定確定後に行う。"
   },
   "migration": {
-    "status": "generated_views_migration_verified",
+    "status": "independent_verification_pending",
     "normal_work_policy": "大手術の独立検証が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
     "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
@@ -46,7 +46,8 @@
     {"item":"新タイムスタンプ命名の検査","status":"done"},
     {"item":"秘密情報検査","status":"done"},
     {"item":"検索経路のAPI依存低減","status":"done"},
-    {"item":"CIまたは同等の機械検査が実行可能であること","status":"done"}
+    {"item":"CIまたは同等の機械検査が実行可能であること","status":"done"},
+    {"item":"Claude独立検証: 現行実ファイル・workflow・Actions実statusを根拠に大手術の完了性を再検証する","status":"pending"}
   ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
