@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "062",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_062.md",
-    "latest_content_sha": "88e2083cdc38b94b40dee0ec84bb04ae0c17733b",
+    "latest_saved": "063",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_063.md",
+    "latest_content_sha": "b002cc21fae5fb801d9cbd5a8cab98038ae8d6ac",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -25,7 +25,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "independent_verification_pending",
-    "next_design_item": "新たに届いたエラーメール2件について、直近Actions runの実status・失敗step・commitを特定し、原因を確定する。原因確定後に必要なら最小修正→再実行→実status確認を行い、Claude再検証へ進む。"
+    "next_design_item": "今回見つかったRun #68〜#70の連続失敗を1件の現象として整理し、保存・現在状態更新・生成ビュー同期が複数コミットに分離され途中状態でActionsを発火する設計が、同様のエラー通知を繰り返す原因になっていないかを確認する。原因を確定した後に必要なら最小修正→再実行→実status確認→Claude再検証へ進む。"
   },
   "migration": {
     "status": "independent_verification_pending",
@@ -48,8 +48,9 @@
     {"item": "検索経路のAPI依存低減", "status": "done"},
     {"item": "CIまたは同等の機械検査が実行可能であること", "status": "done"},
     {"item": "Claude独立検証: 現行実ファイル・workflow・Actions実statusを根拠に大手術の完了性を再検証する", "status": "pending"},
-    {"item": "継続して届くエラーメールに対応する直近Actions runを特定し、実status・失敗step・commitを確定する", "status": "pending"},
-    {"item": "直近失敗の原因を確定し、最小修正→再実行→実status確認まで完了する", "status": "pending"}
+    {"item": "継続して届くエラーメールに対応する直近Actions runを特定し、実status・失敗step・commitを確定する", "status": "done"},
+    {"item": "Run #68〜#70の連続失敗が、複数コミットによる途中状態発火という同一の現象なのかを原因確定する", "status": "pending"},
+    {"item": "原因確定後、必要なら最小修正→再実行→実status確認まで完了する", "status": "pending"}
   ],
   "adopted_improvements": ["構造化された現在状態と一次記録の分離", "現在状態.jsonを唯一の現在状態正本としBUD/引き継ぎを自動生成ビューにする", "最新直チャットを現在状態.jsonの単一パスで明示する", "設計は一括、実装は小さな検証単位とする", "生成スクリプトの実装主体・実行場所・トリガー・失敗時の扱いを先に確定する", "移行期間の二重管理を恒久化しない", "各項目の合格基準を機械判定可能にする", "新規直チャットのタイムスタンプ命名を許可し旧連番を保持", "ローカルcloneとgit grep/rgを通常検索の第一候補にする", "保存前とCIの秘密情報検査", "命名・重複・リンク・現在状態整合性のCI検査", "機械判定可能なルールのスクリプト化", "Issues/Actionsの必要最小限の活用"],
   "known_constraints": ["VAIO Pでは長文手入力を前提にしない", "GitHub Contents APIの大量個別取得を通常検索に使わない", "既知事項を理由なく再調査しない", "認証情報・Cookie・セッション情報等を保存しない"]
