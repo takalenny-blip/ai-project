@@ -40,6 +40,11 @@ jobs:
       - name: Run integrity self-tests
         run: python scripts/check_repo_integrity.py --self-test
 
+      - name: Run local-clone direct-chat search smoke test
+        run: |
+          python scripts/search_direct_chat.py "Claude" --context 0 2>search.stderr
+          grep -q '^source=local_clone ' search.stderr
+
       - name: Run repository integrity checks
         run: python scripts/check_repo_integrity.py
 

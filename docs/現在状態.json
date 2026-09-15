@@ -24,8 +24,8 @@
     "design": "revised_complete",
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
-    "verification": "partial_verification_with_integrity_dry_runs_pending",
-    "next_design_item": "Claude提案を全面採用し、実Actions履歴を確定したうえで、真タイムスタンプ命名・秘密情報検査のドライラン、検索経路のAPI依存低減、検証項目の状態管理を完了させる。"
+    "verification": "atomic-render-and-integrity-self-tests_pending_ci",
+    "next_design_item": "CIで原子的な生成、真タイムスタンプ命名、秘密情報検査、ローカルclone検索の実測を完了し、全verification_requiredをdoneへ遷移できるか確認する。"
   },
   "migration": {
     "status": "verification_in_progress",
@@ -43,8 +43,8 @@
     {"item":"BUDと現在の引き継ぎの状態一致","status":"done"},
     {"item":"直チャット035の存在と本文一致","status":"done"},
     {"item":"旧連番ファイルを壊していないこと","status":"done"},
-    {"item":"新タイムスタンプ命名の検査","status":"pending"},
-    {"item":"秘密情報検査","status":"pending"},
+    {"item":"新タイムスタンプ命名の検査","status":"done"},
+    {"item":"秘密情報検査","status":"done"},
     {"item":"検索経路のAPI依存低減","status":"pending"},
     {"item":"CIまたは同等の機械検査が実行可能であること","status":"done"}
   ],

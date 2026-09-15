@@ -20,7 +20,7 @@
 - 設計：revised_complete
 - 採用：complete
 - 実装：current_views_migrated_ci_guard_added
-- 検証：partial_verification_with_integrity_dry_runs_pending
+- 検証：atomic-render-and-integrity-self-tests_pending_ci
 
 ## 現在状態モデル
 
@@ -42,4 +42,4 @@
 
 ## 次の一手
 
-**Claude提案を全面採用し、実Actions履歴を確定したうえで、真タイムスタンプ命名・秘密情報検査のドライラン、検索経路のAPI依存低減、検証項目の状態管理を完了させる。**
+**CIで原子的な生成、真タイムスタンプ命名、秘密情報検査、ローカルclone検索の実測を完了し、全verification_requiredをdoneへ遷移できるか確認する。**

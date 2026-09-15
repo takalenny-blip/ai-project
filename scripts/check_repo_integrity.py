@@ -80,16 +80,16 @@ def check_chat_names(files: list[str]) -> None:
             + ", ".join(sorted(bad))
         )
 
-    # New three-digit serials are unique across both date-only and true-timestamp
-    # forms. Historical four-digit records are preserved and excluded from this
-    # new-lane duplicate check.
-    serials = [
-        int(match.group(1))
-        for n in marked
-        if (match := TIMESTAMP_CHAT.fullmatch(n))
-    ]
-    if len(serials) != len(set(serials)):
-        raise SystemExit("FAIL: duplicate timestamped direct-chat serial")
+    # A serial may recur on a different date. Within one date, however, a
+    # three-digit serial must identify one new record. Historical four-digit
+    # records are preserved and excluded.
+    identities = []
+    for n in marked:
+        match = TIMESTAMP_CHAT.fullmatch(n)
+        if match:
+            identities.append((n[:10], match.group(1)))
+    if len(identities) != len(set(identities)):
+        raise SystemExit("FAIL: duplicate timestamped direct-chat serial for date")
 
 
 def scan_secret_text(text: str) -> str | None:

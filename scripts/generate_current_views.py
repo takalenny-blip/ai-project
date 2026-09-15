@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""Generate deterministic candidate current-state views.
+"""Generate deterministic current-state views atomically."""
 
-This first implementation is intentionally side-effect free. During the
-migration period it renders candidate BUD/handover files without replacing
-the existing hand-maintained views.
-"""
 from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,10 +24,105 @@ def render(state: dict) -> tuple[str, str]:
     model = state["current_state_model"]
     migration = state["migration"]
 
-    bud = f'''# BUD — バドのための最上位ダッシュボード\n\n更新日：{state["updated"]}\n\n## 正本\n\n- 正本リポジトリ：`{state["canonical_repository"]}`\n- 現在状態正本：`docs/現在状態.json`\n- 現在ビュー：BUD.md / docs/引き継ぎ/現在の引き継ぎ.md\n\n## 現在の作業レーン\n\n**{state["primary_lane"]}**\n\n「一括改修」は設計を一括で行う意味であり、実装は小さな検証単位で進める。\n\n順序：**現状棚卸し → 大手術の設計 → 採用する改善を確定 → 小さな検証単位で順次実装 → 検証**。\n\n- 棚卸し：{surgery["inventory"]}\n- 設計：{surgery["design"]}\n- 採用：{surgery["adoption"]}\n- 実装：{surgery["bulk_refactor"]}\n- 検証：{surgery["verification"]}\n\n## 現在状態モデル\n\n- {model["target"]}\n- 自動生成：{model["generation_flow"]}\n\n## 直チャット\n\n- 最新保存：**{dc["latest_saved"]}**\n- 最新パス：`{dc["latest_path"]}`\n- 旧連番保存：{dc["legacy_serial_files_preserved"]}\n- 新タイムスタンプ方式：{dc["new_timestamp_naming_allowed"]}\n\n## 移行\n\n- 状態：{migration["status"]}\n- 通常工程：{migration["normal_work_policy"]}\n- 暫定同期：{migration["temporary_manual_sync"]}\n\n## 次の一手\n\n**{surgery["next_design_item"]}**\n'''
+    bud = f"""# BUD — バドのための最上位ダッシュボード
 
-    handover = f'''# 現在の引き継ぎ\n\n更新日：{state["updated"]}\n\n## 正本\n\n- `{state["canonical_repository"]}`\n- 現在状態の唯一の正本：`docs/現在状態.json`\n- このファイルは生成ビュー。\n\n## 現在の作業レーン\n\n**{state["primary_lane"]}**\n\n「一括改修」＝設計を一括、実装を小さな検証単位。\n\n## 現在状態\n\n- 目的：{model["target"]}\n- 自動生成状態：{model["status"]}\n- 生成フロー：{model["generation_flow"]}\n\n## 直チャット\n\n- 最新：**{dc["latest_saved"]}**\n- 実体：`{dc["latest_path"]}`\n\n## 移行\n\n- {migration["normal_work_policy"]}\n- {migration["temporary_manual_sync"]}\n\n## 次の一手\n\n**{surgery["next_design_item"]}**\n'''
+更新日：{state["updated"]}
+
+## 正本
+
+- 正本リポジトリ：`{state["canonical_repository"]}`
+- 現在状態正本：`docs/現在状態.json`
+- 現在ビュー：BUD.md / docs/引き継ぎ/現在の引き継ぎ.md
+
+## 現在の作業レーン
+
+**{state["primary_lane"]}**
+
+「一括改修」は設計を一括で行う意味であり、実装は小さな検証単位で進める。
+
+順序：**現状棚卸し → 大手術の設計 → 採用する改善を確定 → 小さな検証単位で順次実装 → 検証**。
+
+- 棚卸し：{surgery["inventory"]}
+- 設計：{surgery["design"]}
+- 採用：{surgery["adoption"]}
+- 実装：{surgery["bulk_refactor"]}
+- 検証：{surgery["verification"]}
+
+## 現在状態モデル
+
+- {model["target"]}
+- 自動生成：{model["generation_flow"]}
+
+## 直チャット
+
+- 最新保存：**{dc["latest_saved"]}**
+- 最新パス：`{dc["latest_path"]}`
+- 旧連番保存：{dc["legacy_serial_files_preserved"]}
+- 新タイムスタンプ方式：{dc["new_timestamp_naming_allowed"]}
+
+## 移行
+
+- 状態：{migration["status"]}
+- 通常工程：{migration["normal_work_policy"]}
+- 暫定同期：{migration["temporary_manual_sync"]}
+
+## 次の一手
+
+**{surgery["next_design_item"]}**
+"""
+
+    handover = f"""# 現在の引き継ぎ
+
+更新日：{state["updated"]}
+
+## 正本
+
+- `{state["canonical_repository"]}`
+- 現在状態の唯一の正本：`docs/現在状態.json`
+- このファイルは生成ビュー。
+
+## 現在の作業レーン
+
+**{state["primary_lane"]}**
+
+「一括改修」＝設計を一括、実装を小さな検証単位。
+
+## 現在状態
+
+- 目的：{model["target"]}
+- 自動生成状態：{model["status"]}
+- 生成フロー：{model["generation_flow"]}
+
+## 直チャット
+
+- 最新：**{dc["latest_saved"]}**
+- 実体：`{dc["latest_path"]}`
+
+## 移行
+
+- {migration["normal_work_policy"]}
+- {migration["temporary_manual_sync"]}
+
+## 次の一手
+
+**{surgery["next_design_item"]}**
+"""
     return bud, handover
+
+
+def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None:
+    out_dir.parent.mkdir(parents=True, exist_ok=True)
+    temp_dir = Path(tempfile.mkdtemp(prefix=f".{out_dir.name}.", dir=out_dir.parent))
+    try:
+        (temp_dir / "BUD.md").write_text(bud, encoding="utf-8")
+        (temp_dir / "現在の引き継ぎ.md").write_text(handover, encoding="utf-8")
+        if out_dir.exists():
+            shutil.rmtree(out_dir)
+        temp_dir.rename(out_dir)
+        temp_dir = None
+    finally:
+        if temp_dir is not None and temp_dir.exists():
+            shutil.rmtree(temp_dir)
 
 
 def main() -> int:
@@ -39,11 +132,7 @@ def main() -> int:
     args = parser.parse_args()
 
     bud, handover = render(load_state())
-    args.out_dir.mkdir(parents=True, exist_ok=True)
-    bud_path = args.out_dir / "BUD.md"
-    handover_path = args.out_dir / "現在の引き継ぎ.md"
-    bud_path.write_text(bud, encoding="utf-8")
-    handover_path.write_text(handover, encoding="utf-8")
+    write_views_atomically(args.out_dir, bud, handover)
 
     if args.check_deterministic:
         bud2, handover2 = render(load_state())
@@ -52,8 +141,8 @@ def main() -> int:
             return 1
         print("OK: deterministic render")
     else:
-        print(f"OK: rendered {bud_path}")
-        print(f"OK: rendered {handover_path}")
+        print(f"OK: rendered {args.out_dir / 'BUD.md'}")
+        print(f"OK: rendered {args.out_dir / '現在の引き継ぎ.md'}")
     return 0
 
 
