@@ -27,13 +27,17 @@ def git_blob_sha(data: bytes) -> str:
     return hashlib.sha1(header + data).hexdigest()
 
 
-def next_serial() -> str:
+def next_serial(date: str) -> str:
     values = []
-    for p in DIRECT_CHAT_DIR.glob("*_直チャット即時保存_*.md"):
-        tail = p.stem.rsplit("_", 1)[-1]
+    prefix = f"{date}_直チャット即時保存_"
+    for p in DIRECT_CHAT_DIR.glob(f"{prefix}*.md"):
+        tail = p.stem[len(prefix):]
         if tail.isdigit() and len(tail) == 3:
             values.append(int(tail))
-    return f"{(max(values, default=0) + 1):03d}"
+    next_value = max(values, default=0) + 1
+    if next_value > 999:
+        raise SystemExit(f"no three-digit serials remaining for date {date}")
+    return f"{next_value:03d}"
 
 
 def render_views() -> None:
@@ -56,11 +60,15 @@ def main() -> int:
     ap.add_argument("--message", default=None)
     args = ap.parse_args()
 
+    # Do not mix unrelated pre-staged work into the atomic save commit.
+    if run("git", "diff", "--cached", "--name-only"):
+        raise SystemExit("refusing to run with pre-staged changes")
+
     content = (args.content_file.read_text(encoding="utf-8") if args.content_file else sys.stdin.read())
     if not content.endswith("\n"):
         content += "\n"
 
-    serial = args.serial or next_serial()
+    serial = args.serial or next_serial(args.date)
     if not (serial.isdigit() and len(serial) == 3):
         raise SystemExit("serial must be exactly three digits")
     filename = f"{args.date}_直チャット即時保存_{serial}.md"
@@ -82,15 +90,25 @@ def main() -> int:
 
     render_views()
 
+    # Stage before integrity checks because the integrity checker intentionally
+    # reasons about tracked files via `git ls-files`.
+    subprocess.run(["git", "add", str(path), str(STATE_PATH), str(BUD_PATH), str(HANDOVER_PATH)], cwd=ROOT, check=True)
+    expected = {
+        str(path.relative_to(ROOT)),
+        str(STATE_PATH.relative_to(ROOT)),
+        str(BUD_PATH.relative_to(ROOT)),
+        str(HANDOVER_PATH.relative_to(ROOT)),
+    }
+    staged = set(run("git", "diff", "--cached", "--name-only").splitlines())
+    if staged != expected:
+        raise SystemExit(f"unexpected staged paths: {sorted(staged)}")
+
     subprocess.run([sys.executable, "scripts/check_repo_integrity.py"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "scripts/generate_current_views.py", "--out-dir", ".generated-save-check", "--check-deterministic"], cwd=ROOT, check=True)
     subprocess.run(["cmp", "--silent", ".generated-save-check/BUD.md", "BUD.md"], cwd=ROOT, check=True)
     subprocess.run(["cmp", "--silent", ".generated-save-check/現在の引き継ぎ.md", str(HANDOVER_PATH)], cwd=ROOT, check=True)
     subprocess.run(["rm", "-rf", ".generated-save-check"], cwd=ROOT, check=True)
 
-    subprocess.run(["git", "add", str(path), str(STATE_PATH), str(BUD_PATH), str(HANDOVER_PATH)], cwd=ROOT, check=True)
-    if not run("git", "diff", "--cached", "--name-only"):
-        raise SystemExit("no staged changes")
     message = args.message or f"直チャット{serial}保存＋現在状態と生成ビューを一括同期"
     subprocess.run(["git", "commit", "-m", message], cwd=ROOT, check=True)
     print(run("git", "rev-parse", "HEAD"))
