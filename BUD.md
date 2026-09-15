@@ -20,26 +20,26 @@
 - 設計：revised_complete
 - 採用：complete
 - 実装：current_views_migrated_ci_guard_added
-- 検証：three_ci_error_notifications_pending_root_cause
+- 検証：exact_match_ci_success_run14
 
 ## 現在状態モデル
 
 - docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする
-- 自動生成：第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、CIで完全一致を機械検証する段階へ進んだ。今回3件のエラーメールを受領したため、失敗runのjob/logを直接確認して原因を確定するまで移行完了とは扱わない。現時点で正本JSONとBUD/引き継ぎの保存番号不一致を確認済み。
+- 自動生成：第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、完全一致CIを追加した。run #13の失敗原因は生成ビューとチェックイン済みBUD/引き継ぎの不一致で、run #14で034同期後の完全一致CIがsuccess。Node 20警告は失敗原因ではない。
 
 ## 直チャット
 
-- 最新保存：**034**
-- 最新パス：`直チャット/2026-09-15_直チャット即時保存_034.md`
+- 最新保存：**035**
+- 最新パス：`直チャット/2026-09-15_直チャット即時保存_035.md`
 - 旧連番保存：True
 - 新タイムスタンプ方式：True
 
 ## 移行
 
-- 状態：generated_views_active_ci_verification_pending
-- 通常工程：自動生成への移行が完了するまでDiMORA本来工程は再開せず、大手術を優先する
+- 状態：generated_views_migration_verified
+- 通常工程：大手術の移行確認が完了するまでDiMORA本来工程は再開せず、大手術を優先する
 - 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
 
 ## 次の一手
 
-**正本JSONとBUD/引き継ぎの保存番号不一致を最小修正し、完全一致CIで再検証する。成功後に移行完了側へ状態を更新する。**
+**run #14成功を正本状態へ反映したため、生成ビューの読み戻しと次工程への移行可否を確認する。**
