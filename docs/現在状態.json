@@ -8,12 +8,12 @@
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
     "status": "implementation_in_progress",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、CIで完全一致を機械検証する段階へ進んだ。今回3件のエラーメールを受領したため、失敗runのjob/logを直接確認して原因を確定するまで移行完了とは扱わない。"
+    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、CIで完全一致を機械検証する段階へ進んだ。今回3件のエラーメールを受領したため、失敗runのjob/logを直接確認して原因を確定するまで移行完了とは扱わない。現時点で正本JSONとBUD/引き継ぎの保存番号不一致を確認済み。"
   },
   "direct_chat": {
-    "latest_saved": "033",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_033.md",
-    "latest_content_sha": "",
+    "latest_saved": "034",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_034.md",
+    "latest_content_sha": "a04fd4973a90778f547873703d6f542095ec9a2c",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -25,7 +25,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "three_ci_error_notifications_pending_root_cause",
-    "next_design_item": "3件のActionsエラーrunを特定し、jobと詳細ログを取得して、cmp不一致か別原因かを確定する。原因が判明したら最小修正→読み戻し→再検証。"
+    "next_design_item": "正本JSONとBUD/引き継ぎの保存番号不一致を最小修正し、完全一致CIで再検証する。成功後に移行完了側へ状態を更新する。"
   },
   "migration": {
     "status": "generated_views_active_ci_verification_pending",
@@ -41,7 +41,7 @@
     "今回3件のActionsエラー原因を確定する",
     "生成失敗時に中途半端な現在ビューを残さないこと",
     "BUDと現在の引き継ぎの状態一致",
-    "直チャット033の存在と本文一致",
+    "直チャット034の存在と本文一致",
     "旧連番ファイルを壊していないこと",
     "新タイムスタンプ命名の検査",
     "秘密情報検査",
