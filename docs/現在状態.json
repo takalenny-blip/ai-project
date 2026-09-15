@@ -8,11 +8,11 @@
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
     "status": "implementation_in_progress",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsが決定性を検証する。既存ビューの自動上書きは移行完了まで行わない"
+    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。実行結果はrender-and-check失敗。既存ビューの自動上書きは移行完了まで行わない"
   },
   "direct_chat": {
-    "latest_saved": "027",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_027.md",
+    "latest_saved": "028",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_028.md",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -22,9 +22,9 @@
     "inventory": "complete",
     "design": "revised_complete",
     "adoption": "complete",
-    "bulk_refactor": "first_implementation_complete_pending_ci_run",
-    "verification": "pending_ci_run",
-    "next_design_item": "GitHub Actionsで第1実装の決定性検証結果を確認し、合格後に既存BUD/引き継ぎを完全生成ビューへ移行する小単位を設計する"
+    "bulk_refactor": "first_implementation_complete",
+    "verification": "ci_failed_pending_cause_analysis",
+    "next_design_item": "render-and-checkの失敗原因を確認し、原因に対する最小修正→読み戻し→再検証を行う。合格後に既存BUD/引き継ぎを完全生成ビューへ移行する小単位を設計する"
   },
   "migration": {
     "status": "in_progress",
@@ -34,10 +34,11 @@
   "verification_required": [
     "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる",
     "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する",
+    "今回のrender-and-check失敗原因を特定し、最小修正後に再検証する",
     "既存BUD/引き継ぎを移行完了前に自動上書きしない",
     "生成失敗時に中途半端な現在ビューを残さないこと",
     "BUDと現在の引き継ぎの状態一致",
-    "直チャット027の存在と本文一致",
+    "直チャット028の存在と本文一致",
     "旧連番ファイルを壊していないこと",
     "新タイムスタンプ命名の検査",
     "秘密情報検査",
