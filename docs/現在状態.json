@@ -4,72 +4,11 @@
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "ai-project運用基盤の大手術（一括改修）",
   "original_lane": "DIGA / DiMORA自動化",
-  "current_state_model": {
-    "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
-    "status": "independent_verification_pending",
-    "manual_duplicate_management_allowed": false,
-    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
-  },
-  "direct_chat": {
-    "latest_saved": "047",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_047.md",
-    "latest_content_sha": "a5a42dd09200880d85cd77045d6e5abc60ec186f",
-    "legacy_serial_files_preserved": true,
-    "new_timestamp_naming_allowed": true
-  },
-  "surgery": {
-    "meaning": "設計は一括、実装は小さな検証単位",
-    "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "小さな検証単位で順次実装", "検証"],
-    "inventory": "complete",
-    "design": "revised_complete",
-    "adoption": "complete",
-    "bulk_refactor": "current_views_migrated_ci_guard_added",
-    "verification": "independent_verification_pending",
-    "next_design_item": "run #42の失敗（生成ビューとチェックイン済みビューの不一致）だけを最小修正する。現在状態JSONと生成スクリプトを基準にBUD/引き継ぎを正確に同期し、Actions再実行後の実statusを確認する。"
-  },
-  "migration": {
-    "status": "independent_verification_pending",
-    "normal_work_policy": "大手術の独立検証と継続エラーの解消が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
-    "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
-  },
-  "verification_required": [
-    {"item":"第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる","status":"done"},
-    {"item":"第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する","status":"done"},
-    {"item":"過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する","status":"done"},
-    {"item":"既存BUD/引き継ぎを生成ビューへ移行する","status":"done"},
-    {"item":"生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する","status":"done"},
-    {"item":"今回のActionsエラー4件（run #25〜#28）の原因を確定する","status":"done"},
-    {"item":"生成失敗時に中途半端な現在ビューを残さないこと","status":"done"},
-    {"item":"BUDと現在の引き継ぎの状態一致","status":"done"},
-    {"item":"直チャット035の存在と本文一致","status":"done"},
-    {"item":"旧連番ファイルを壊していないこと","status":"done"},
-    {"item":"新タイムスタンプ命名の検査","status":"done"},
-    {"item":"秘密情報検査","status":"done"},
-    {"item":"検索経路のAPI依存低減","status":"done"},
-    {"item":"CIまたは同等の機械検査が実行可能であること","status":"done"},
-    {"item":"Claude独立検証: 現行実ファイル・workflow・Actions実statusを根拠に大手術の完了性を再検証する","status":"pending"},
-    {"item":"継続して届くエラーメールに対応する直近Actions runを特定し、実status・失敗step・commitを確定する","status":"done"},
-    {"item":"直近失敗の原因を確定し、最小修正→再実行→実status確認まで完了する","status":"pending"}
-  ],
-  "adopted_improvements": [
-    "構造化された現在状態と一次記録の分離",
-    "現在状態.jsonを唯一の現在状態正本としBUD/引き継ぎを自動生成ビューにする",
-    "最新直チャットを現在状態.jsonの単一パスで明示する",
-    "設計は一括、実装は小さな検証単位とする",
-    "生成スクリプトの実装主体・実行場所・トリガー・失敗時の扱いを先に確定する",
-    "移行期間の二重管理を恒久化しない",
-    "各項目の合格基準を機械判定可能にする",
-    "新規直チャットのタイムスタンプ命名を許可し旧連番を保持",
-    "ローカルcloneとgit grep/rgを通常検索の第一候補にする",
-    "保存前とCIの秘密情報検査",
-    "命名・重複・リンク・現在状態整合性のCI検査",
-    "機械判定可能なルールのスクリプト化",
-    "Issues/Actionsの必要最小限の活用"
-  ],
-  "known_constraints": [
-    "VAIO Pでは長文手入力を前提にしない",
-    "GitHub Contents APIの大量個別取得を通常検索に使わない",
-    "既知事項を理由なく再調査しない",
-    "認証情報・Cookie・セッション情報等を保存しない"
-  ]
+  "current_state_model": {"target":"docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする","status":"independent_verification_pending","manual_duplicate_management_allowed":false,"generation_flow":"第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"},
+  "direct_chat": {"latest_saved":"048","latest_path":"直チャット/2026-09-15_直チャット即時保存_048.md","latest_content_sha":"c48abcc483bd1f77550eff84414c1ea40efd4295","legacy_serial_files_preserved":true,"new_timestamp_naming_allowed":true},
+  "surgery": {"meaning":"設計は一括、実装は小さな検証単位","order":["現状棚卸し","大手術の設計","採用する改善を確定","小さな検証単位で順次実装","検証"],"inventory":"complete","design":"revised_complete","adoption":"complete","bulk_refactor":"current_views_migrated_ci_guard_added","verification":"independent_verification_pending","next_design_item":"run #47の実statusを確定する。成功なら今回の同期修正を実証し、失敗ならその1件だけ原因を確定して最小修正する。"},
+  "migration": {"status":"independent_verification_pending","normal_work_policy":"大手術の独立検証と継続エラーの解消が完了するまでDiMORA本来工程は再開せず、大手術を優先する","temporary_manual_sync":"BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"},
+  "verification_required":[{"item":"第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる","status":"done"},{"item":"第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する","status":"done"},{"item":"過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する","status":"done"},{"item":"既存BUD/引き継ぎを生成ビューへ移行する","status":"done"},{"item":"生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する","status":"done"},{"item":"今回のActionsエラー4件（run #25〜#28）の原因を確定する","status":"done"},{"item":"生成失敗時に中途半端な現在ビューを残さないこと","status":"done"},{"item":"BUDと現在の引き継ぎの状態一致","status":"done"},{"item":"直チャット035の存在と本文一致","status":"done"},{"item":"旧連番ファイルを壊していないこと","status":"done"},{"item":"新タイムスタンプ命名の検査","status":"done"},{"item":"秘密情報検査","status":"done"},{"item":"検索経路のAPI依存低減","status":"done"},{"item":"CIまたは同等の機械検査が実行可能であること","status":"done"},{"item":"Claude独立検証: 現行実ファイル・workflow・Actions実statusを根拠に大手術の完了性を再検証する","status":"pending"},{"item":"継続して届くエラーメールに対応する直近Actions runを特定し、実status・失敗step・commitを確定する","status":"done"},{"item":"直近失敗の原因を確定し、最小修正→再実行→実status確認まで完了する","status":"pending"}],
+  "adopted_improvements":["構造化された現在状態と一次記録の分離","現在状態.jsonを唯一の現在状態正本としBUD/引き継ぎを自動生成ビューにする","最新直チャットを現在状態.jsonの単一パスで明示する","設計は一括、実装は小さな検証単位とする","生成スクリプトの実装主体・実行場所・トリガー・失敗時の扱いを先に確定する","移行期間の二重管理を恒久化しない","各項目の合格基準を機械判定可能にする","新規直チャットのタイムスタンプ命名を許可し旧連番を保持","ローカルcloneとgit grep/rgを通常検索の第一候補にする","保存前とCIの秘密情報検査","命名・重複・リンク・現在状態整合性のCI検査","機械判定可能なルールのスクリプト化","Issues/Actionsの必要最小限の活用"],
+  "known_constraints":["VAIO Pでは長文手入力を前提にしない","GitHub Contents APIの大量個別取得を通常検索に使わない","既知事項を理由なく再調査しない","認証情報・Cookie・セッション情報等を保存しない"]
 }
