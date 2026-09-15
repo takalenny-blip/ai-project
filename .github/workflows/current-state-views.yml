@@ -63,7 +63,7 @@ jobs:
           from pathlib import Path
           state = json.loads(Path('docs/現在状態.json').read_text(encoding='utf-8'))
           path = state['direct_chat']['latest_path']
-          print(path[:10])
+          print(Path(path).name[:10])
           PY
           )
 
