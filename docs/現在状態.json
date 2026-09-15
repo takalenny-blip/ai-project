@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "updated": "2026-09-15",
+  "canonical_repository": "takalenny-blip/ai-project",
+  "primary_lane": "ai-project運用基盤の大手術（一括改修）",
+  "original_lane": "DIGA / DiMORA自動化",
+  "direct_chat": {
+    "latest_saved": "023",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_023.md",
+    "legacy_serial_files_preserved": true,
+    "new_timestamp_naming_allowed": true
+  },
+  "surgery": {
+    "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "一括改修", "検証"],
+    "inventory": "complete",
+    "design": "complete",
+    "adoption": "complete",
+    "bulk_refactor": "in_progress",
+    "verification": "pending"
+  },
+  "adopted_improvements": [
+    "構造化された現在状態と一次記録の分離",
+    "BUDを現在状態ダッシュボードとして維持",
+    "引き継ぎを現在状態ビューとして扱う",
+    "新規直チャットのタイムスタンプ命名を許可し旧連番を保持",
+    "ローカルcloneとgit grep/rgを通常検索の第一候補にする",
+    "保存前とCIの秘密情報検査",
+    "命名・重複・リンク・現在状態整合性のCI検査",
+    "機械判定可能なルールのスクリプト化",
+    "Issues/Actionsの必要最小限の活用"
+  ],
+  "known_constraints": [
+    "VAIO Pでは長文手入力を前提にしない",
+    "GitHub Contents APIの大量個別取得を通常検索に使わない",
+    "既知事項を理由なく再調査しない",
+    "認証情報・Cookie・セッション情報等を保存しない"
+  ],
+  "verification_required": [
+    "BUDと現在の引き継ぎの状態一致",
+    "直チャット023の存在と本文一致",
+    "旧連番ファイルを壊していないこと",
+    "新タイムスタンプ命名の検査",
+    "秘密情報検査",
+    "検索経路のAPI依存低減",
+    "CIまたは同等の機械検査が実行可能であること"
+  ]
+}
