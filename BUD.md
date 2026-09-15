@@ -20,7 +20,7 @@
 - 設計：revised_complete
 - 採用：complete
 - 実装：current_views_migrated_ci_guard_added
-- 検証：all_required_ci_success_run31
+- 検証：independent_verification_pending
 
 ## 現在状態モデル
 
@@ -29,17 +29,17 @@
 
 ## 直チャット
 
-- 最新保存：**044**
-- 最新パス：`直チャット/2026-09-15_直チャット即時保存_044.md`
+- 最新保存：**045**
+- 最新パス：`直チャット/2026-09-15_直チャット即時保存_045.md`
 - 旧連番保存：True
 - 新タイムスタンプ方式：True
 
 ## 移行
 
-- 状態：generated_views_migration_verified
+- 状態：independent_verification_pending
 - 通常工程：大手術の独立検証が完了するまでDiMORA本来工程は再開せず、大手術を優先する
 - 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
 
 ## 次の一手
 
-**Claudeへ大手術の独立検証を依頼済み。自己判定を鵜呑みにせず、実ファイル・workflow・Actions実行結果を根拠に完了性、ループ、盲点、状態整合性を再検証する。**
+**Claude独立検証の証拠不足を解消するため、現行実ファイルとrun #15〜#31の実statusを提示して再検証を受ける。修正は判定確定後に行う。**
