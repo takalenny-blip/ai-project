@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "046",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_046.md",
-    "latest_content_sha": "6aaf8111f951f430c428a825c8cef45cac6849d5",
+    "latest_saved": "047",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_047.md",
+    "latest_content_sha": "b81d89b2964144edd277d05482b7153e6f11f798",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -25,7 +25,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "independent_verification_pending",
-    "next_design_item": "直近のエラーActions runを特定し、実status・失敗step・commitを確定する。原因確定後に最小修正を一つずつ行い、Claudeと共同で再検証する。"
+    "next_design_item": "run #42の失敗（生成ビューとチェックイン済みビューの不一致）だけを最小修正する。現在状態JSONと生成スクリプトを基準にBUD/引き継ぎを正確に同期し、Actions再実行後の実statusを確認する。"
   },
   "migration": {
     "status": "independent_verification_pending",
@@ -48,7 +48,7 @@
     {"item":"検索経路のAPI依存低減","status":"done"},
     {"item":"CIまたは同等の機械検査が実行可能であること","status":"done"},
     {"item":"Claude独立検証: 現行実ファイル・workflow・Actions実statusを根拠に大手術の完了性を再検証する","status":"pending"},
-    {"item":"継続して届くエラーメールに対応する直近Actions runを特定し、実status・失敗step・commitを確定する","status":"pending"},
+    {"item":"継続して届くエラーメールに対応する直近Actions runを特定し、実status・失敗step・commitを確定する","status":"done"},
     {"item":"直近失敗の原因を確定し、最小修正→再実行→実status確認まで完了する","status":"pending"}
   ],
   "adopted_improvements": [
