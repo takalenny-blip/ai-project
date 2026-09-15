@@ -6,7 +6,7 @@
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
-    "status": "migration_verification_in_progress",
+    "status": "migration_verified",
     "manual_duplicate_management_allowed": false,
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
@@ -24,11 +24,11 @@
     "design": "revised_complete",
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
-    "verification": "atomic-render-and-integrity-self-tests_pending_ci",
-    "next_design_item": "CIで原子的な生成、真タイムスタンプ命名、秘密情報検査、ローカルclone検索の実測を完了し、全verification_requiredをdoneへ遷移できるか確認する。"
+    "verification": "all_required_ci_success_run30",
+    "next_design_item": "大手術の機械検証が全項目success。次はDiMORA本来工程へ戻すかを確認し、戻す場合も小さな検証単位で再開する。"
   },
   "migration": {
-    "status": "verification_in_progress",
+    "status": "generated_views_migration_verified",
     "normal_work_policy": "大手術の移行確認が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
     "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
@@ -39,13 +39,13 @@
     {"item":"既存BUD/引き継ぎを生成ビューへ移行する","status":"done"},
     {"item":"生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する","status":"done"},
     {"item":"今回のActionsエラー4件（run #25〜#28）の原因を確定する","status":"done"},
-    {"item":"生成失敗時に中途半端な現在ビューを残さないこと","status":"pending"},
+    {"item":"生成失敗時に中途半端な現在ビューを残さないこと","status":"done"},
     {"item":"BUDと現在の引き継ぎの状態一致","status":"done"},
     {"item":"直チャット035の存在と本文一致","status":"done"},
     {"item":"旧連番ファイルを壊していないこと","status":"done"},
     {"item":"新タイムスタンプ命名の検査","status":"done"},
     {"item":"秘密情報検査","status":"done"},
-    {"item":"検索経路のAPI依存低減","status":"pending"},
+    {"item":"検索経路のAPI依存低減","status":"done"},
     {"item":"CIまたは同等の機械検査が実行可能であること","status":"done"}
   ],
   "adopted_improvements": [

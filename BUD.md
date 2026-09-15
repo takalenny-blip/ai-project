@@ -20,7 +20,7 @@
 - 設計：revised_complete
 - 採用：complete
 - 実装：current_views_migrated_ci_guard_added
-- 検証：atomic-render-and-integrity-self-tests_pending_ci
+- 検証：all_required_ci_success_run30
 
 ## 現在状態モデル
 
@@ -36,10 +36,10 @@
 
 ## 移行
 
-- 状態：verification_in_progress
+- 状態：generated_views_migration_verified
 - 通常工程：大手術の移行確認が完了するまでDiMORA本来工程は再開せず、大手術を優先する
 - 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
 
 ## 次の一手
 
-**CIで原子的な生成、真タイムスタンプ命名、秘密情報検査、ローカルclone検索の実測を完了し、全verification_requiredをdoneへ遷移できるか確認する。**
+**大手術の機械検証が全項目success。次はDiMORA本来工程へ戻すかを確認し、戻す場合も小さな検証単位で再開する。**
