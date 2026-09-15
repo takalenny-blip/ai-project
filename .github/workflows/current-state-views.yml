@@ -57,12 +57,21 @@ jobs:
           git config user.name "CI atomic save test"
           git config user.email "ci-atomic-save@example.invalid"
           base=$(git rev-parse HEAD)
+          save_date=$(python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+          state = json.loads(Path('docs/現在状態.json').read_text(encoding='utf-8'))
+          path = state['direct_chat']['latest_path']
+          print(re.match(r'^(\\d{4}-\\d{2}-\\d{2})_', path).group(1))
+          PY
+          )
           printf '%s\n' '# atomic save test 1' > /tmp/save-test-1.md
           printf '%s\n' '# atomic save test 2' > /tmp/save-test-2.md
-          python scripts/save_and_currentize.py --content-file /tmp/save-test-1.md --message 'CI atomic save test 1'
+          python scripts/save_and_currentize.py --content-file /tmp/save-test-1.md --date "$save_date" --message 'CI atomic save test 1'
           first=$(git rev-parse HEAD)
           test "$first" != "$base"
-          python scripts/save_and_currentize.py --content-file /tmp/save-test-2.md --message 'CI atomic save test 2'
+          python scripts/save_and_currentize.py --content-file /tmp/save-test-2.md --date "$save_date" --message 'CI atomic save test 2'
           second=$(git rev-parse HEAD)
           test "$second" != "$first"
           test "$(git rev-list --count "$base"..HEAD)" = "2"
@@ -72,6 +81,7 @@ jobs:
           cmp --silent generated/save-test/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
           test "$(git show --format='' --name-only "$first" | grep -c '^直チャット/')" = "1"
           test "$(git show --format='' --name-only "$second" | grep -c '^直チャット/')" = "1"
+          test -z "$(git status --porcelain)"
           echo "OK: two atomic save operations produced exactly two commits"
 
       - name: Show candidate files
