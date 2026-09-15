@@ -8,12 +8,12 @@
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
     "status": "implementation_in_progress",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。実行結果は現在のrun #5/#6でsuccess。過去の失敗runの詳細原因を特定中。既存ビューの自動上書きは移行完了まで行わない"
+    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、CIで完全一致を機械検証する段階へ進んだ。今回の一致検証結果は確認待ち。"
   },
   "direct_chat": {
-    "latest_saved": "031",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_031.md",
-    "latest_content_sha": "aa73438798828f56ebef018573e3b1146c43682c",
+    "latest_saved": "032",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_032.md",
+    "latest_content_sha": "",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -23,23 +23,24 @@
     "inventory": "complete",
     "design": "revised_complete",
     "adoption": "complete",
-    "bulk_refactor": "first_implementation_complete",
-    "verification": "historical_ci_failure_detail_pending",
-    "next_design_item": "過去の失敗runを特定し、jobと詳細ログを取得して失敗原因を確定する。原因が現行成功状態で既に解消済みかを判定し、必要な場合のみ最小修正→読み戻し→再検証を行う。合格後に既存BUD/引き継ぎを完全生成ビューへ移行する小単位を設計する"
+    "bulk_refactor": "current_views_migrated_ci_guard_added",
+    "verification": "generated_views_match_ci_pending",
+    "next_design_item": "今回追加した生成ビュー一致CIの結果を確認する。成功なら現在状態を移行完了側へ更新し、BUD/引き継ぎをその状態から再生成して再検証する。失敗なら失敗箇所だけを最小修正する。"
   },
   "migration": {
-    "status": "in_progress",
+    "status": "generated_views_active_ci_verification_pending",
     "normal_work_policy": "自動生成への移行が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
-    "temporary_manual_sync": "必要な保存後処理は現行ルールで行うが、手動同期を恒久運用にしない"
+    "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
   "verification_required": [
     "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる",
     "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する",
-    "過去のrender-and-check失敗原因を特定し、必要な場合のみ最小修正後に再検証する",
-    "既存BUD/引き継ぎを移行完了前に自動上書きしない",
+    "過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する",
+    "既存BUD/引き継ぎを生成ビューへ移行する",
+    "生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する",
     "生成失敗時に中途半端な現在ビューを残さないこと",
     "BUDと現在の引き継ぎの状態一致",
-    "直チャット031の存在と本文一致",
+    "直チャット032の存在と本文一致",
     "旧連番ファイルを壊していないこと",
     "新タイムスタンプ命名の検査",
     "秘密情報検査",
