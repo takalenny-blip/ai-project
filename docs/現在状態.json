@@ -6,13 +6,13 @@
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
-    "status": "design_pending_implementation",
+    "status": "implementation_in_progress",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "未実装。実装主体・実行場所・トリガー・失敗時の扱いを先に確定する"
+    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsが決定性を検証する。既存ビューの自動上書きは移行完了まで行わない"
   },
   "direct_chat": {
-    "latest_saved": "026",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_026.md",
+    "latest_saved": "027",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_027.md",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -20,23 +20,24 @@
     "meaning": "設計は一括、実装は小さな検証単位",
     "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "小さな検証単位で順次実装", "検証"],
     "inventory": "complete",
-    "design": "revised_pending_implementation",
+    "design": "revised_complete",
     "adoption": "complete",
-    "bulk_refactor": "not_started_under_revised_order",
-    "verification": "pending",
-    "next_design_item": "現在状態.json → 生成スクリプト → BUD/引き継ぎ → CI/Actionsの一方向フロー"
+    "bulk_refactor": "first_implementation_complete_pending_ci_run",
+    "verification": "pending_ci_run",
+    "next_design_item": "GitHub Actionsで第1実装の決定性検証結果を確認し、合格後に既存BUD/引き継ぎを完全生成ビューへ移行する小単位を設計する"
   },
   "migration": {
-    "status": "pending",
+    "status": "in_progress",
     "normal_work_policy": "自動生成への移行が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
     "temporary_manual_sync": "必要な保存後処理は現行ルールで行うが、手動同期を恒久運用にしない"
   },
   "verification_required": [
-    "各変更ごとに変更→読み戻し→機械判定可能な合格基準確認→次へ進む",
-    "生成したBUDと引き継ぎが現在状態.jsonから期待どおり生成されること",
+    "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる",
+    "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する",
+    "既存BUD/引き継ぎを移行完了前に自動上書きしない",
     "生成失敗時に中途半端な現在ビューを残さないこと",
     "BUDと現在の引き継ぎの状態一致",
-    "直チャット026の存在と本文一致",
+    "直チャット027の存在と本文一致",
     "旧連番ファイルを壊していないこと",
     "新タイムスタンプ命名の検査",
     "秘密情報検査",
