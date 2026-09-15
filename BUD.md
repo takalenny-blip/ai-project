@@ -19,27 +19,27 @@
 - 棚卸し：complete
 - 設計：revised_complete
 - 採用：complete
-- 実装：first_implementation_complete
-- 検証：historical_ci_failure_detail_pending
+- 実装：current_views_migrated_ci_guard_added
+- 検証：generated_views_match_ci_pending
 
 ## 現在状態モデル
 
 - docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする
-- 自動生成：第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。実行結果は現在のrun #5/#6でsuccess。過去の失敗runの詳細原因を特定中。既存ビューの自動上書きは移行完了まで行わない
+- 自動生成：第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、CIで完全一致を機械検証する段階へ進んだ。今回の一致検証結果は確認待ち。
 
 ## 直チャット
 
-- 最新保存：**031**
-- 最新パス：`直チャット/2026-09-15_直チャット即時保存_031.md`
+- 最新保存：**032**
+- 最新パス：`直チャット/2026-09-15_直チャット即時保存_032.md`
 - 旧連番保存：True
 - 新タイムスタンプ方式：True
 
 ## 移行
 
-- 状態：in_progress
+- 状態：generated_views_active_ci_verification_pending
 - 通常工程：自動生成への移行が完了するまでDiMORA本来工程は再開せず、大手術を優先する
-- 暫定同期：必要な保存後処理は現行ルールで行うが、手動同期を恒久運用にしない
+- 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
 
 ## 次の一手
 
-**過去の失敗runを特定し、jobと詳細ログを取得して失敗原因を確定する。原因が現行成功状態で既に解消済みかを判定し、必要な場合のみ最小修正→読み戻し→再検証を行う。合格後に既存BUD/引き継ぎを完全生成ビューへ移行する小単位を設計する。**
+**今回追加した生成ビュー一致CIの結果を確認する。成功なら現在状態を移行完了側へ更新し、BUD/引き継ぎをその状態から再生成して再検証する。失敗なら失敗箇所だけを最小修正する。**
