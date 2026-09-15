@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "043",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_043.md",
-    "latest_content_sha": "75dfc5e6d57547243cb6b23ce9cacee5c5243154",
+    "latest_saved": "044",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_044.md",
+    "latest_content_sha": "9790ddcd5d556d112822375fdeef07a663900fac",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -25,11 +25,11 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "all_required_ci_success_run31",
-    "next_design_item": "大手術の機械検証は全項目success。次回はDiMORA本来工程へ戻すかを確認し、戻す場合も小さな検証単位で再開する。"
+    "next_design_item": "Claudeへ大手術の独立検証を依頼済み。自己判定を鵜呑みにせず、実ファイル・workflow・Actions実行結果を根拠に完了性、ループ、盲点、状態整合性を再検証する。"
   },
   "migration": {
     "status": "generated_views_migration_verified",
-    "normal_work_policy": "大手術の移行確認が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
+    "normal_work_policy": "大手術の独立検証が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
     "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
   "verification_required": [
