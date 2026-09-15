@@ -26,5 +26,11 @@ jobs:
       - name: Render candidate views and verify determinism
         run: python scripts/generate_current_views.py --out-dir generated/current-views --check-deterministic
 
+      - name: Verify checked-in views match generated views
+        run: |
+          cmp --silent generated/current-views/BUD.md BUD.md
+          cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
+          echo "OK: checked-in views match generated views"
+
       - name: Show candidate files
         run: git diff --no-index -- /dev/null generated/current-views/BUD.md || true; git diff --no-index -- /dev/null generated/current-views/現在の引き継ぎ.md || true
