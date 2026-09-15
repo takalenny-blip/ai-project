@@ -11,8 +11,8 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。実行結果はrender-and-check失敗。既存ビューの自動上書きは移行完了まで行わない"
   },
   "direct_chat": {
-    "latest_saved": "028",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_028.md",
+    "latest_saved": "030",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_030.md",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -23,8 +23,8 @@
     "design": "revised_complete",
     "adoption": "complete",
     "bulk_refactor": "first_implementation_complete",
-    "verification": "ci_failed_pending_cause_analysis",
-    "next_design_item": "render-and-checkの失敗原因を確認し、原因に対する最小修正→読み戻し→再検証を行う。合格後に既存BUD/引き継ぎを完全生成ビューへ移行する小単位を設計する"
+    "verification": "ci_failed_step_identified_detail_pending",
+    "next_design_item": "Verify deterministic renderの詳細ログ取得経路を確認し、失敗原因を特定する。原因に対する最小修正→読み戻し→再検証を行う。合格後に既存BUD/引き継ぎを完全生成ビューへ移行する小単位を設計する"
   },
   "migration": {
     "status": "in_progress",
@@ -38,7 +38,7 @@
     "既存BUD/引き継ぎを移行完了前に自動上書きしない",
     "生成失敗時に中途半端な現在ビューを残さないこと",
     "BUDと現在の引き継ぎの状態一致",
-    "直チャット028の存在と本文一致",
+    "直チャット030の存在と本文一致",
     "旧連番ファイルを壊していないこと",
     "新タイムスタンプ命名の検査",
     "秘密情報検査",
