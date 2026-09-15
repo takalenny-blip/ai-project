@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   render-and-check:
@@ -23,8 +23,8 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Render candidate views
-        run: python scripts/generate_current_views.py --out-dir generated/current-views
+      - name: Render candidate views and verify determinism
+        run: python scripts/generate_current_views.py --out-dir generated/current-views --check-deterministic
 
-      - name: Verify deterministic render
-        run: python scripts/generate_current_views.py --check
+      - name: Show candidate files
+        run: git diff --no-index -- /dev/null generated/current-views/BUD.md || true; git diff --no-index -- /dev/null generated/current-views/現在の引き継ぎ.md || true
