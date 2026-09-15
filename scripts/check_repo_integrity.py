@@ -10,10 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs/現在状態.json"
-CHAT_DIR = ROOT / "直チャット"
 
 TIMESTAMP_CHAT = re.compile(r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{3}\.md$")
-LEGACY_CHAT = re.compile(r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{3}$")
+HISTORIC_TIMESTAMP_CHAT = re.compile(r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{4}\.md$")
 SECRET_PATTERNS = [
     re.compile(r"ghp_[A-Za-z0-9]{30,}"),
     re.compile(r"github_pat_[A-Za-z0-9_]{30,}"),
@@ -40,11 +39,19 @@ def check_state(files: list[str]) -> None:
 
 def check_chat_names(files: list[str]) -> None:
     names = [Path(p).name for p in files if p.startswith("直チャット/")]
-    timestamped = [n for n in names if "_直チャット即時保存_" in n]
-    bad = [n for n in timestamped if not TIMESTAMP_CHAT.fullmatch(n)]
+    marked = [n for n in names if "_直チャット即時保存_" in n]
+    bad = [
+        n
+        for n in marked
+        if not TIMESTAMP_CHAT.fullmatch(n) and not HISTORIC_TIMESTAMP_CHAT.fullmatch(n)
+    ]
     if bad:
         raise SystemExit("FAIL: malformed timestamped direct-chat names: " + ", ".join(sorted(bad)))
-    serials = [int(TIMESTAMP_CHAT.fullmatch(n).group(1)) for n in timestamped]
+
+    # New saves use three-digit serials. Historical four-digit files are preserved
+    # as legacy timestamped records and are intentionally excluded from this
+    # duplicate check so their older numbering cannot collide with the new lane.
+    serials = [int(TIMESTAMP_CHAT.fullmatch(n).group(1)) for n in marked if TIMESTAMP_CHAT.fullmatch(n)]
     if len(serials) != len(set(serials)):
         raise SystemExit("FAIL: duplicate timestamped direct-chat serial")
 
