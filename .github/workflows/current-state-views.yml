@@ -6,6 +6,8 @@ on:
       - 'docs/現在状態.json'
       - 'scripts/generate_current_views.py'
       - '.github/workflows/current-state-views.yml'
+      - 'BUD.md'
+      - 'docs/引き継ぎ/現在の引き継ぎ.md'
   workflow_dispatch:
 
 permissions:
