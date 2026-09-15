@@ -20,7 +20,7 @@
 - 設計：revised_complete
 - 採用：complete
 - 実装：current_views_migrated_ci_guard_added
-- 検証：independent_verification_pending
+- 検証：conditional_pending_script_fix
 
 ## 現在状態モデル
 
@@ -29,8 +29,8 @@
 
 ## 直チャット
 
-- 最新保存：**071**
-- 最新パス：`直チャット/2026-09-15_直チャット即時保存_071.md`
+- 最新保存：**072**
+- 最新パス：`直チャット/2026-09-15_直チャット即時保存_072.md`
 - 旧連番保存：True
 - 新タイムスタンプ方式：True
 
@@ -42,4 +42,4 @@
 
 ## 次の一手
 
-**保存・現在状態更新・BUD/引き継ぎ生成を単一スクリプト／単一コミットに固定する実装を、既存の失敗状態を悪化させずに1コミットで反映する。反映後にActions実statusでintegrity/generator/cmpを確認し、2〜3回の実運用相当テストで1論理操作＝1コミット＝CI成功を実証する。**
+**Claude独立検証で発見されたsave_and_currentize.pyの2バグ（当日連番限定とgit add前integrity check）を最小修正し、修正版を1コミットで反映後、使い捨てcloneで連続2回実行して1論理操作＝1コミット＝CI成功を実証する。**
