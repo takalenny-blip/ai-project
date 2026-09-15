@@ -10,6 +10,7 @@ on:
       - 'BUD.md'
       - 'docs/引き継ぎ/現在の引き継ぎ.md'
       - '直チャット/**'
+      - 'scripts/search_direct_chat.py'
   workflow_dispatch:
 
 permissions:
@@ -35,6 +36,9 @@ jobs:
           cmp --silent generated/current-views/BUD.md BUD.md
           cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
           echo "OK: checked-in views match generated views"
+
+      - name: Run integrity self-tests
+        run: python scripts/check_repo_integrity.py --self-test
 
       - name: Run repository integrity checks
         run: python scripts/check_repo_integrity.py

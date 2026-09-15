@@ -20,26 +20,26 @@
 - 設計：revised_complete
 - 採用：complete
 - 実装：current_views_migrated_ci_guard_added
-- 検証：exact_match_ci_success_run14
+- 検証：partial_verification_with_integrity_dry_runs_pending
 
 ## 現在状態モデル
 
 - docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする
-- 自動生成：第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、完全一致CIを追加した。run #13の失敗原因は生成ビューとチェックイン済みBUD/引き継ぎの不一致で、run #14で034同期後の完全一致CIがsuccess。Node 20警告は失敗原因ではない。
+- 自動生成：第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。
 
 ## 直チャット
 
-- 最新保存：**035**
-- 最新パス：`直チャット/2026-09-15_直チャット即時保存_035.md`
+- 最新保存：**042**
+- 最新パス：`直チャット/2026-09-15_直チャット即時保存_042.md`
 - 旧連番保存：True
 - 新タイムスタンプ方式：True
 
 ## 移行
 
-- 状態：generated_views_migration_verified
+- 状態：verification_in_progress
 - 通常工程：大手術の移行確認が完了するまでDiMORA本来工程は再開せず、大手術を優先する
 - 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
 
 ## 次の一手
 
-**run #14成功を正本状態へ反映したため、生成ビューの読み戻しと次工程への移行可否を確認する。**
+**Claude提案を全面採用し、実Actions履歴を確定したうえで、真タイムスタンプ命名・秘密情報検査のドライラン、検索経路のAPI依存低減、検証項目の状態管理を完了させる。**

@@ -1,19 +1,19 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "updated": "2026-09-15",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "ai-project運用基盤の大手術（一括改修）",
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
-    "status": "migration_verified",
+    "status": "migration_verification_in_progress",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性を検証する。run #5/#6で決定性検証はsuccess。既存BUD/引き継ぎを生成結果へ移行し、完全一致CIを追加した。run #13の失敗原因は生成ビューとチェックイン済みBUD/引き継ぎの不一致で、run #14で034同期後の完全一致CIがsuccess。Node 20警告は失敗原因ではない。"
+    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "035",
-    "latest_path": "直チャット/2026-09-15_直チャット即時保存_035.md",
-    "latest_content_sha": "539ae7b16d443a9dbc3ba39f1d23ace7a5a4625f",
+    "latest_saved": "042",
+    "latest_path": "直チャット/2026-09-15_直チャット即時保存_042.md",
+    "latest_content_sha": "8878fee84e40a91280db4c9a800ed6234fe7d7ab",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -24,29 +24,29 @@
     "design": "revised_complete",
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
-    "verification": "exact_match_ci_success_run14",
-    "next_design_item": "run #14成功を正本状態へ反映したため、生成ビューの読み戻しと次工程への移行可否を確認する。"
+    "verification": "partial_verification_with_integrity_dry_runs_pending",
+    "next_design_item": "Claude提案を全面採用し、実Actions履歴を確定したうえで、真タイムスタンプ命名・秘密情報検査のドライラン、検索経路のAPI依存低減、検証項目の状態管理を完了させる。"
   },
   "migration": {
-    "status": "generated_views_migration_verified",
+    "status": "verification_in_progress",
     "normal_work_policy": "大手術の移行確認が完了するまでDiMORA本来工程は再開せず、大手術を優先する",
     "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
   "verification_required": [
-    "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる",
-    "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する",
-    "過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する",
-    "既存BUD/引き継ぎを生成ビューへ移行する",
-    "生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する",
-    "今回3件のActionsエラー原因を確定する",
-    "生成失敗時に中途半端な現在ビューを残さないこと",
-    "BUDと現在の引き継ぎの状態一致",
-    "直チャット035の存在と本文一致",
-    "旧連番ファイルを壊していないこと",
-    "新タイムスタンプ命名の検査",
-    "秘密情報検査",
-    "検索経路のAPI依存低減",
-    "CIまたは同等の機械検査が実行可能であること"
+    {"item":"第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる","status":"done"},
+    {"item":"第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する","status":"done"},
+    {"item":"過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する","status":"done"},
+    {"item":"既存BUD/引き継ぎを生成ビューへ移行する","status":"done"},
+    {"item":"生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する","status":"done"},
+    {"item":"今回のActionsエラー4件（run #25〜#28）の原因を確定する","status":"done"},
+    {"item":"生成失敗時に中途半端な現在ビューを残さないこと","status":"pending"},
+    {"item":"BUDと現在の引き継ぎの状態一致","status":"done"},
+    {"item":"直チャット035の存在と本文一致","status":"done"},
+    {"item":"旧連番ファイルを壊していないこと","status":"done"},
+    {"item":"新タイムスタンプ命名の検査","status":"pending"},
+    {"item":"秘密情報検査","status":"pending"},
+    {"item":"検索経路のAPI依存低減","status":"pending"},
+    {"item":"CIまたは同等の機械検査が実行可能であること","status":"done"}
   ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
