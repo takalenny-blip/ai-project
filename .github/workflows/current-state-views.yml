@@ -60,11 +60,10 @@ jobs:
           base=$root_base
           save_date=$(python - <<'PY'
           import json
-          import re
           from pathlib import Path
           state = json.loads(Path('docs/現在状態.json').read_text(encoding='utf-8'))
           path = state['direct_chat']['latest_path']
-          print(re.match(r'^(\d{4}-\d{2}-\d{2})_', path).group(1))
+          print(path[:10])
           PY
           )
 

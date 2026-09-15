@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "076",
-    "latest_path": "直チャット/2026-09-16_直チャット即時保存_076.md",
-    "latest_content_sha": "7d74e5741f5876c4648761f85c32c614f7d3d82c",
+    "latest_saved": "077",
+    "latest_path": "直チャット/2026-09-16_直チャット即時保存_077.md",
+    "latest_content_sha": "03af6c41a24efff8ae7db11c9f34004c0a7c6486",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -25,7 +25,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "conditional_pending_script_fix",
-    "next_design_item": "Claudeに現行main・workflow・check_repo_integrity.py・save_and_currentize.py・直近Actionsを独立監査してもらい、conditionalの根本原因、残存問題、最小修正、実行可能な合格条件を確認する。監査結果を採否判断してから修正する。"
+    "next_design_item": "Run #103のatomic save 3回連続テスト結果を実statusとログで確認し、successならhead SHA一致・全主要step成功・clean treeを確認する。失敗ならログから直接原因を確定して最小修正する。その後Claudeに現行mainを独立再確認してもらう。"
   },
   "migration": {
     "status": "independent_verification_pending",
