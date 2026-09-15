@@ -6,6 +6,7 @@ on:
       - 'docs/現在状態.json'
       - 'scripts/generate_current_views.py'
       - 'scripts/check_repo_integrity.py'
+      - 'scripts/save_and_currentize.py'
       - '.github/workflows/current-state-views.yml'
       - 'BUD.md'
       - 'docs/引き継ぎ/現在の引き継ぎ.md'
@@ -47,6 +48,31 @@ jobs:
 
       - name: Run repository integrity checks
         run: python scripts/check_repo_integrity.py
+
+      - name: Test atomic save script twice in disposable clone
+        run: |
+          tmp="$RUNNER_TEMP/ai-project-save-test"
+          git clone --quiet . "$tmp"
+          cd "$tmp"
+          git config user.name "CI atomic save test"
+          git config user.email "ci-atomic-save@example.invalid"
+          base=$(git rev-parse HEAD)
+          printf '%s\n' '# atomic save test 1' > /tmp/save-test-1.md
+          printf '%s\n' '# atomic save test 2' > /tmp/save-test-2.md
+          python scripts/save_and_currentize.py --content-file /tmp/save-test-1.md --message 'CI atomic save test 1'
+          first=$(git rev-parse HEAD)
+          test "$first" != "$base"
+          python scripts/save_and_currentize.py --content-file /tmp/save-test-2.md --message 'CI atomic save test 2'
+          second=$(git rev-parse HEAD)
+          test "$second" != "$first"
+          test "$(git rev-list --count "$base"..HEAD)" = "2"
+          python scripts/check_repo_integrity.py
+          python scripts/generate_current_views.py --out-dir generated/save-test --check-deterministic
+          cmp --silent generated/save-test/BUD.md BUD.md
+          cmp --silent generated/save-test/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
+          test "$(git show --format='' --name-only "$first" | grep -c '^直チャット/')" = "1"
+          test "$(git show --format='' --name-only "$second" | grep -c '^直チャット/')" = "1"
+          echo "OK: two atomic save operations produced exactly two commits"
 
       - name: Show candidate files
         run: git diff --no-index -- /dev/null generated/current-views/BUD.md || true; git diff --no-index -- /dev/null generated/current-views/現在の引き継ぎ.md || true
