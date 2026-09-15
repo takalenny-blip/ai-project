@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generate current-state views from docs/現在状態.json.
+"""Generate deterministic candidate current-state views.
 
-This first implementation is intentionally deterministic and side-effect free:
-it renders candidate views and can compare them with checked-in files. It does
-not commit or mutate GitHub state itself.
+This first implementation is intentionally side-effect free. During the
+migration period it renders candidate BUD/handover files without replacing
+the existing hand-maintained views.
 """
 from __future__ import annotations
 
@@ -34,32 +34,26 @@ def render(state: dict) -> tuple[str, str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--check", action="store_true", help="compare rendered views with checked-in views")
-    parser.add_argument("--out-dir", type=Path, help="write rendered views to this directory")
+    parser.add_argument("--out-dir", type=Path, required=True)
+    parser.add_argument("--check-deterministic", action="store_true")
     args = parser.parse_args()
 
     bud, handover = render(load_state())
-    if args.out_dir:
-        args.out_dir.mkdir(parents=True, exist_ok=True)
-        (args.out_dir / "BUD.md").write_text(bud, encoding="utf-8")
-        (args.out_dir / "現在の引き継ぎ.md").write_text(handover, encoding="utf-8")
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    bud_path = args.out_dir / "BUD.md"
+    handover_path = args.out_dir / "現在の引き継ぎ.md"
+    bud_path.write_text(bud, encoding="utf-8")
+    handover_path.write_text(handover, encoding="utf-8")
 
-    if args.check:
-        expected = {
-            ROOT / "BUD.md": bud,
-            ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md": handover,
-        }
-        failed = False
-        for path, content in expected.items():
-            actual = path.read_text(encoding="utf-8") if path.exists() else None
-            if actual != content:
-                print(f"MISMATCH: {path}")
-                failed = True
-            else:
-                print(f"OK: {path}")
-        return 1 if failed else 0
-
-    print("rendered current views")
+    if args.check_deterministic:
+        bud2, handover2 = render(load_state())
+        if (bud, handover) != (bud2, handover2):
+            print("FAIL: render is not deterministic")
+            return 1
+        print("OK: deterministic render")
+    else:
+        print(f"OK: rendered {bud_path}")
+        print(f"OK: rendered {handover_path}")
     return 0
 
 
