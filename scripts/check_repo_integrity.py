@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs/現在状態.json"
 
-TIMESTAMP_CHAT = re.compile(r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{3}\.md$")
+TIMESTAMP_CHAT = re.compile(r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_(\d{3})\.md$")
 HISTORIC_TIMESTAMP_CHAT = re.compile(r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{4}\.md$")
 SECRET_PATTERNS = [
     re.compile(r"ghp_[A-Za-z0-9]{30,}"),
@@ -51,7 +51,7 @@ def check_chat_names(files: list[str]) -> None:
     # New saves use three-digit serials. Historical four-digit files are preserved
     # as legacy timestamped records and are intentionally excluded from this
     # duplicate check so their older numbering cannot collide with the new lane.
-    serials = [int(TIMESTAMP_CHAT.fullmatch(n).group(1)) for n in marked if TIMESTAMP_CHAT.fullmatch(n)]
+    serials = [int(match.group(1)) for n in marked if (match := TIMESTAMP_CHAT.fullmatch(n))]
     if len(serials) != len(set(serials)):
         raise SystemExit("FAIL: duplicate timestamped direct-chat serial")
 
