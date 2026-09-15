@@ -56,7 +56,8 @@ jobs:
           cd "$tmp"
           git config user.name "CI atomic save test"
           git config user.email "ci-atomic-save@example.invalid"
-          base=$(git rev-parse HEAD)
+          root_base=$(git rev-parse HEAD)
+          base=$root_base
           save_date=$(python - <<'PY'
           import json
           import re
@@ -72,7 +73,7 @@ jobs:
             python scripts/save_and_currentize.py --content-file "/tmp/save-test-$n.md" --date "$save_date" --message "CI atomic save test $n"
             current=$(git rev-parse HEAD)
             test "$current" != "$base"
-            test "$(git rev-list --count "$base"..HEAD)" = "$n"
+            test "$(git rev-list --count "$root_base"..HEAD)" = "$n"
             test "$(git -c core.quotepath=false show --format='' --name-only "$current" | grep -c '^直チャット/')" = "1"
             test -z "$(git status --porcelain)"
             base="$current"
