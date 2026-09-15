@@ -99,7 +99,12 @@ def main() -> int:
         str(BUD_PATH.relative_to(ROOT)),
         str(HANDOVER_PATH.relative_to(ROOT)),
     }
-    staged = set(run("git", "diff", "--cached", "--name-only").splitlines())
+    # Use NUL-delimited output so Git's core.quotepath setting cannot alter
+    # non-ASCII filenames before we compare staged paths.
+    staged_raw = subprocess.check_output(
+        ["git", "diff", "--cached", "--name-only", "-z"], cwd=ROOT
+    )
+    staged = set(p for p in staged_raw.decode("utf-8").split("\0") if p)
     if staged != expected:
         raise SystemExit(f"unexpected staged paths: {sorted(staged)}")
 

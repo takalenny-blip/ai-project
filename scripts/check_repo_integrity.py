@@ -39,10 +39,12 @@ def check_verification_state(state: dict) -> None:
         raise SystemExit("FAIL: verification_required must use {item,status} objects")
 
     statuses = {item["status"] for item in required}
-    invalid = statuses - {"done", "pending", "not_started"}
+    invalid = statuses - {"done", "pending", "not_started", "conditional"}
     if invalid:
         raise SystemExit("FAIL: invalid verification status: " + ", ".join(sorted(invalid)))
 
+    # `conditional` is a valid non-terminal state. It must never satisfy the
+    # migration-complete condition merely by being accepted here.
     if state["migration"]["status"] == "generated_views_migration_verified":
         incomplete = [item["item"] for item in required if item["status"] != "done"]
         if incomplete:
