@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Save one direct-chat record and currentize all dependent views in one commit."""
+"""Save one direct-chat record and currentize all dependent state/views in one commit."""
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs" / "現在状態.json"
@@ -40,6 +41,15 @@ def next_serial(date: str) -> str:
     return f"{next_value:03d}"
 
 
+def merge_patch(target: dict[str, Any], patch: dict[str, Any]) -> None:
+    """Recursively merge a JSON object patch into the current state."""
+    for key, value in patch.items():
+        if isinstance(value, dict) and isinstance(target.get(key), dict):
+            merge_patch(target[key], value)
+        else:
+            target[key] = value
+
+
 def render_views() -> None:
     subprocess.run(
         [sys.executable, "scripts/generate_current_views.py", "--out-dir", ".generated-save-views"],
@@ -58,6 +68,12 @@ def main() -> int:
     ap.add_argument("--date", default=datetime.now().astimezone().strftime("%Y-%m-%d"))
     ap.add_argument("--serial", default=None)
     ap.add_argument("--message", default=None)
+    ap.add_argument(
+        "--state-patch-file",
+        type=Path,
+        default=None,
+        help="optional JSON object recursively merged into docs/現在状態.json before views are generated",
+    )
     args = ap.parse_args()
 
     # Do not mix unrelated pre-staged work into the atomic save commit.
@@ -86,6 +102,13 @@ def main() -> int:
     state["direct_chat"]["latest_saved"] = serial
     state["direct_chat"]["latest_path"] = f"直チャット/{filename}"
     state["direct_chat"]["latest_content_sha"] = git_blob_sha(content.encode("utf-8"))
+
+    if args.state_patch_file:
+        patch = json.loads(args.state_patch_file.read_text(encoding="utf-8"))
+        if not isinstance(patch, dict):
+            raise SystemExit("state patch must be a JSON object")
+        merge_patch(state, patch)
+
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     render_views()
@@ -99,8 +122,6 @@ def main() -> int:
         str(BUD_PATH.relative_to(ROOT)),
         str(HANDOVER_PATH.relative_to(ROOT)),
     }
-    # Use NUL-delimited output so Git's core.quotepath setting cannot alter
-    # non-ASCII filenames before we compare staged paths.
     staged_raw = subprocess.check_output(
         ["git", "diff", "--cached", "--name-only", "-z"], cwd=ROOT
     )
