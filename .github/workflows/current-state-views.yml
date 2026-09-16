@@ -2,6 +2,7 @@ name: Current state views
 
 on:
   push:
+    branches: [main]
     paths:
       - 'docs/現在状態.json'
       - 'scripts/generate_current_views.py'
