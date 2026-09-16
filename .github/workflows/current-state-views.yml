@@ -7,7 +7,10 @@ on:
       - 'scripts/generate_current_views.py'
       - 'scripts/check_repo_integrity.py'
       - 'scripts/save_and_currentize.py'
+      - 'scripts/check_entry_docs.py'
       - '.github/workflows/current-state-views.yml'
+      - 'README.md'
+      - 'rules/構造変更時・独立監査ガード.md'
       - 'BUD.md'
       - 'docs/引き継ぎ/現在の引き継ぎ.md'
       - '直チャット/**'
@@ -37,6 +40,9 @@ jobs:
           cmp --silent generated/current-views/BUD.md BUD.md
           cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
           echo "OK: checked-in views match generated views"
+
+      - name: Verify AI entry documentation
+        run: python scripts/check_entry_docs.py
 
       - name: Run integrity self-tests
         run: python scripts/check_repo_integrity.py --self-test
