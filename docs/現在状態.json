@@ -5,8 +5,8 @@
   "primary_lane": "ai-project運用基盤の大手術（一括改修）",
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {"target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする", "status": "independent_verification_pending", "manual_duplicate_management_allowed": false, "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"},
-  "direct_chat": {"latest_saved": "083", "latest_path": "直チャット/2026-09-16_直チャット即時保存_083.md", "latest_content_sha": "e2257921a83ec94d6086a75477a3908707a4b01f", "legacy_serial_files_preserved": true, "new_timestamp_naming_allowed": true},
-  "surgery": {"meaning": "設計は一括、実装は小さな検証単位", "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "小さな検証単位で順次実装", "検証"], "inventory": "complete", "design": "revised_complete", "adoption": "complete", "bulk_refactor": "current_views_migrated_ci_guard_added", "verification": "conditional_pending_final_claude_audit", "next_design_item": "ClaudeにBUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdの正しい生成内容を提示してもらい、それを現在状態JSONからの生成結果と照合する。採用後は手動編集せず、2ファイルを正規生成して1コミットで修正し、Actionsのexact-match successまで確認する。"},
+  "direct_chat": {"latest_saved": "084", "latest_path": "直チャット/2026-09-16_直チャット即時保存_084.md", "latest_content_sha": "b60df2f46c6dddd1c18f11bfb0a3c43f19ce5c63", "legacy_serial_files_preserved": true, "new_timestamp_naming_allowed": true},
+  "surgery": {"meaning": "設計は一括、実装は小さな検証単位", "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "小さな検証単位で順次実装", "検証"], "inventory": "complete", "design": "revised_complete", "adoption": "complete", "bulk_refactor": "current_views_migrated_ci_guard_added", "verification": "conditional_pending_final_claude_audit", "next_design_item": "Run #112以降のGitHub Actionsを実際に確認し、exact-match successとhead_shaを確定する。083時点のBUD/引き継ぎは生成結果と一致しており、追加の修正コミットは行わない。"},
   "migration": {"status": "independent_verification_pending", "normal_work_policy": "大手術の独立検証と継続エラーの解消が完了するまでDiMORA本来工程は再開せず、大手術を優先する", "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"},
   "verification_required": [
     {"item": "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる", "status": "done"},
