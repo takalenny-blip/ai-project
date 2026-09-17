@@ -25,7 +25,7 @@ def main() -> int:
         print("OK: initial commit has no parent; atomic-save guard skipped")
         return 0
 
-    changed = set(git("diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD^", "HEAD"))
+    changed = set(git("-c", "core.quotepath=false", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD^", "HEAD"))
     bundle_touched = changed & BUNDLE
     direct_chat = sorted(p for p in changed if p.startswith(DIRECT_CHAT_PREFIX))
 
