@@ -1,0 +1,117 @@
+name: Save request intake
+
+on:
+  push:
+    branches:
+      - 'chat-save-request/**'
+    paths:
+      - '.github/save-queue/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout request branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Validate and read queue entry
+        id: queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | sed '/^$/d')
+          test "${#changed[@]}" = "1"
+          queue_file="${changed[0]}"
+          case "$queue_file" in
+            .github/save-queue/*.md) ;;
+            *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
+          esac
+          test -s "$queue_file"
+          cp "$queue_file" "$RUNNER_TEMP/direct-chat.md"
+          echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
+
+      - name: Create isolated save branch from main
+        id: branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          base_sha="$(git rev-parse origin/main)"
+          branch="save/direct-chat-${GITHUB_RUN_ID}"
+          git switch -c "$branch" "$base_sha"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "base_sha=$base_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Run canonical save script
+        shell: bash
+        run: |
+          set -euo pipefail
+          save_date="$(TZ=Asia/Tokyo date +%F)"
+          python scripts/save_and_currentize.py \
+            --content-file "$RUNNER_TEMP/direct-chat.md" \
+            --date "$save_date" \
+            --message '直チャット保存＋現在状態と生成ビューを一括同期'
+
+      - name: Verify atomic save result
+        env:
+          BASE_SHA: ${{ steps.branch.outputs.base_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse HEAD^)" = "$BASE_SHA"
+          mapfile -t changed < <(git -c core.quotepath=false show --format='' --name-only HEAD | sed '/^$/d')
+          test "${#changed[@]}" = "4"
+          direct_chat_path="$(printf '%s\n' "${changed[@]}" | grep '^直チャット/')"
+          test -n "$direct_chat_path"
+          expected="$(printf '%s\n' \
+            'BUD.md' \
+            'docs/現在状態.json' \
+            'docs/引き継ぎ/現在の引き継ぎ.md' \
+            "$direct_chat_path")"
+          actual="$(printf '%s\n' "${changed[@]}" | sort)"
+          test "$actual" = "$(printf '%s\n' "$expected" | sort)"
+
+      - name: Push save branch
+        env:
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push --set-upstream origin "$BRANCH"
+
+      - name: Open pull request
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title '直チャット保存＋現在状態と生成ビューを一括同期' \
+            --body $'Canonical direct-chat save executed by scripts/save_and_currentize.py on an Actions runner.'
+
+      - name: Cleanup request branch
+        if: always()
+        env:
+          SOURCE_BRANCH: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin --delete "$SOURCE_BRANCH" || true
