@@ -75,12 +75,13 @@ jobs:
           test "$(git rev-parse HEAD^)" = "$BASE_SHA"
           mapfile -t changed < <(git -c core.quotepath=false show --format='' --name-only HEAD | sed '/^$/d')
           test "${#changed[@]}" = "4"
-          direct_chat_path="$(printf '%s\n' "${changed[@]}" | grep '^直チャット/$')"
+          direct_chat_path="$(printf '%s\n' "${changed[@]}" | grep '^直チャット/')"
           test -n "$direct_chat_path"
-          expected="BUD.md
-docs/現在状態.json
-docs/引き継ぎ/現在の引き継ぎ.md
-$direct_chat_path"
+          expected="$(printf '%s\n' \
+            'BUD.md' \
+            'docs/現在状態.json' \
+            'docs/引き継ぎ/現在の引き継ぎ.md' \
+            "$direct_chat_path")"
           actual="$(printf '%s\n' "${changed[@]}" | sort)"
           test "$actual" = "$(printf '%s\n' "$expected" | sort)"
 
