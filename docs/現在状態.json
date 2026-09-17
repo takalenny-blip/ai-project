@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-17T05-16-25.054925+0000",
-    "latest_path": "直チャット/2026-09-17_直チャット即時保存_2026-09-17T05-16-25.054925+0000.md",
-    "latest_content_sha": "a5bc8c29764dd355336379d38bda8802f56bf5d1",
+    "latest_saved": "2026-09-17T11-41-25.081538+0000",
+    "latest_path": "直チャット/2026-09-17_直チャット即時保存_2026-09-17T11-41-25.081538+0000.md",
+    "latest_content_sha": "255bfefded3353c2eb918a2865a64b602f58d407",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -39,19 +39,58 @@
     "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
   "verification_required": [
-    {"item": "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる", "status": "done"},
-    {"item": "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する", "status": "done"},
-    {"item": "過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する", "status": "done"},
-    {"item": "既存BUD/引き継ぎを生成ビューへ移行する", "status": "done"},
-    {"item": "生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する", "status": "done"},
-    {"item": "Claude最終監査で現HEAD・実ファイル・atomic save・検索・workflow・Actions結果の整合を確認する", "status": "done"},
-    {"item": "Run #112の生成ビュー不一致が084/085反映後に再発していないことを確認する", "status": "done"},
-    {"item": "構造変更後のREADME・独立監査ガード・入口資料の機械検査を確認する", "status": "done"},
-    {"item": "直近5件のfailure Runを特定し、5件のエラーメールとの一対一対応をメール本文まで確認する", "status": "done"},
-    {"item": "Run #141のfailure原因（091のまま直チャット092が存在）を一括現在化で解消し、新CI成功を確認する", "status": "done"},
-    {"item": "JUNの「はじまりの言葉」へメタ監査視点を集成するか判断する", "status": "done"},
-    {"item": "097の保存ミス（Contents API個別コミット）を再発防止対象として整理し、保存経路の事前強制策をClaude確認する", "status": "done"},
-    {"item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する", "status": "done"}
+    {
+      "item": "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる",
+      "status": "done"
+    },
+    {
+      "item": "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する",
+      "status": "done"
+    },
+    {
+      "item": "過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する",
+      "status": "done"
+    },
+    {
+      "item": "既存BUD/引き継ぎを生成ビューへ移行する",
+      "status": "done"
+    },
+    {
+      "item": "生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する",
+      "status": "done"
+    },
+    {
+      "item": "Claude最終監査で現HEAD・実ファイル・atomic save・検索・workflow・Actions結果の整合を確認する",
+      "status": "done"
+    },
+    {
+      "item": "Run #112の生成ビュー不一致が084/085反映後に再発していないことを確認する",
+      "status": "done"
+    },
+    {
+      "item": "構造変更後のREADME・独立監査ガード・入口資料の機械検査を確認する",
+      "status": "done"
+    },
+    {
+      "item": "直近5件のfailure Runを特定し、5件のエラーメールとの一対一対応をメール本文まで確認する",
+      "status": "done"
+    },
+    {
+      "item": "Run #141のfailure原因（091のまま直チャット092が存在）を一括現在化で解消し、新CI成功を確認する",
+      "status": "done"
+    },
+    {
+      "item": "JUNの「はじまりの言葉」へメタ監査視点を集成するか判断する",
+      "status": "done"
+    },
+    {
+      "item": "097の保存ミス（Contents API個別コミット）を再発防止対象として整理し、保存経路の事前強制策をClaude確認する",
+      "status": "done"
+    },
+    {
+      "item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する",
+      "status": "done"
+    }
   ],
   "pending_monitoring": [],
   "adopted_improvements": [
