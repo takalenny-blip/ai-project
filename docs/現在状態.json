@@ -5,8 +5,8 @@
   "primary_lane": "DIGA / DiMORA自動化",
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {"target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする", "status": "structurally_complete", "manual_duplicate_management_allowed": false, "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"},
-  "direct_chat": {"latest_saved": "2026-09-17T09-06-43+0900", "latest_path": "直チャット/2026-09-17_直チャット即時保存_2026-09-17T09-06-43+0900.md", "latest_content_sha": "4d25b1d0e7d4d69a8d10a1c3a4351d5642d151e2", "legacy_serial_files_preserved": true, "new_timestamp_naming_allowed": true},
-  "surgery": {"meaning": "設計は一括、実装は小さな検証単位", "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "小さな検証単位で順次実装", "検証"], "inventory": "complete", "design": "revised_complete", "adoption": "complete", "bulk_refactor": "current_views_migrated_ci_guard_added", "verification": "done", "next_design_item": "Run #158の生成ビュー不一致の原因を修正・検証し、その後に直チャット新規保存をタイムスタンプ方式へ完全移行し、最後にGitHubのmain保護設定を変更・確認する。"},
+  "direct_chat": {"latest_saved": "103", "latest_path": "直チャット/2026-09-17_直チャット即時保存_103.md", "latest_content_sha": "1e91c9ca6f8df702d6e73f67f4419d0224985670", "legacy_serial_files_preserved": true, "new_timestamp_naming_allowed": true},
+  "surgery": {"meaning": "設計は一括、実装は小さな検証単位", "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "小さな検証単位で順次実装", "検証"], "inventory": "complete", "design": "revised_complete", "adoption": "complete", "bulk_refactor": "current_views_migrated_ci_guard_added", "verification": "done", "next_design_item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する。完了まで未完了事項として監視する。"},
   "migration": {"status": "complete", "normal_work_policy": "大手術の独立検証が完了したためDiMORA本来工程へ復帰する", "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"},
   "verification_required": [
     {"item": "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる", "status": "done"},
@@ -21,16 +21,12 @@
     {"item": "Run #141のfailure原因（091のまま直チャット092が存在）を一括現在化で解消し、新CI成功を確認する", "status": "done"},
     {"item": "JUNの「はじまりの言葉」へメタ監査視点を集成するか判断する", "status": "done"},
     {"item": "097の保存ミス（Contents API個別コミット）を再発防止対象として整理し、保存経路の事前強制策をClaude確認する", "status": "pending"},
-    {"item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する", "status": "pending"},
-    {"item": "Run #158の生成ビュー不一致を原因修正し、再発しないことをCIで確認する", "status": "pending"},
-    {"item": "GitHubのmain保護設定（直接push抑止・必要CI・squash merge運用）を変更し、実運用を確認する", "status": "pending"}
+    {"item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する", "status": "pending"}
   ],
   "pending_monitoring": [
     {"item": "直近5件のfailure Runを特定し、5件のエラーメールとの一対一対応をメール本文まで確認する", "status": "pending", "monitoring": "active", "rule": "未確認のため完了扱いにしない"},
     {"item": "097の保存ミス（Contents API個別コミット）を再発防止対象として整理し、保存経路の事前強制策をClaude確認する", "status": "pending", "monitoring": "active", "rule": "事前強制策の確認・実装判断まで保留として追跡する"},
-    {"item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する", "status": "pending", "monitoring": "active", "rule": "完全移行が確認されるまで完了扱いにしない"},
-    {"item": "Run #158の生成ビュー不一致を原因修正し、再発しないことをCIで確認する", "status": "pending", "monitoring": "active", "rule": "原因修正とCI成功を確認するまで完了扱いにしない"},
-    {"item": "GitHubのmain保護設定（直接push抑止・必要CI・squash merge運用）を変更し、実運用を確認する", "status": "pending", "monitoring": "active", "rule": "GitHub側設定と実運用確認が終わるまで完了扱いにしない"}
+    {"item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する", "status": "pending", "monitoring": "active", "rule": "完全移行が確認されるまで完了扱いにしない"}
   ],
   "adopted_improvements": ["構造化された現在状態と一次記録の分離", "現在状態.jsonを唯一の現在状態正本としBUD/引き継ぎを自動生成ビューにする", "最新直チャットを現在状態.jsonの単一パスで明示する", "設計は一括、実装は小さな検証単位とする", "生成スクリプトの実装主体・実行場所・トリガー・失敗時の扱いを先に確定する", "移行期間の二重管理を恒久化しない", "各項目の合格基準を機械判定可能にする", "新規直チャットのタイムスタンプ命名を許可し旧連番を保持", "ローカルcloneとgit grep/rgを通常検索の第一候補にする", "保存前とCIの秘密情報検査", "命名・重複・リンク・現在状態整合性のCI検査", "機械判定可能なルールのスクリプト化", "Issues/Actionsの必要最小限の活用", "直チャット保存・現在状態更新・生成ビュー同期を単一スクリプト／単一コミットにまとめる", "構造変更後のREADMEを現在状態正本・生成ビュー構造へ同期する", "構造変更時だけ深い独立監査を発動し通常運用では静かに監視する", "自然言語ルールと機械的検証境界を対応付ける", "入口資料の正本・生成ビュー契約をCIで機械検査する", "JUNの監査で受け取った指示文・初期前提・入口資料そのものも現在の実態と照合し、次のAIや人間の誤動作リスクまで逆算する", "保存操作は原子保存経路を使用し、個別Contents APIへの逸脱を再発防止対象とする"],
   "known_constraints": ["VAIO Pでは長文手入力を前提にしない", "GitHub Contents APIの大量個別取得を通常検索に使わない", "既知事項を理由なく再調査しない", "認証情報・Cookie・セッション情報等を保存しない"]
