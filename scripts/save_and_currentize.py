@@ -28,19 +28,6 @@ def git_blob_sha(data: bytes) -> str:
     return hashlib.sha1(header + data).hexdigest()
 
 
-def next_serial(date: str) -> str:
-    values = []
-    prefix = f"{date}_直チャット即時保存_"
-    for p in DIRECT_CHAT_DIR.glob(f"{prefix}*.md"):
-        tail = p.stem[len(prefix):]
-        if tail.isdigit() and len(tail) == 3:
-            values.append(int(tail))
-    next_value = max(values, default=0) + 1
-    if next_value > 999:
-        raise SystemExit(f"no three-digit serials remaining for date {date}")
-    return f"{next_value:03d}"
-
-
 def merge_patch(target: dict[str, Any], patch: dict[str, Any]) -> None:
     """Recursively merge a JSON object patch into the current state."""
     for key, value in patch.items():
@@ -66,7 +53,6 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--content-file", type=Path, help="direct-chat markdown; stdin when omitted")
     ap.add_argument("--date", default=datetime.now().astimezone().strftime("%Y-%m-%d"))
-    ap.add_argument("--serial", default=None)
     ap.add_argument("--message", default=None)
     ap.add_argument(
         "--state-patch-file",
@@ -76,7 +62,6 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    # Do not mix unrelated pre-staged work into the atomic save commit.
     if run("git", "diff", "--cached", "--name-only"):
         raise SystemExit("refusing to run with pre-staged changes")
 
@@ -84,24 +69,25 @@ def main() -> int:
     if not content.endswith("\n"):
         content += "\n"
 
-    serial = args.serial or next_serial(args.date)
-    if not (serial.isdigit() and len(serial) == 3):
-        raise SystemExit("serial must be exactly three digits")
-    filename = f"{args.date}_直チャット即時保存_{serial}.md"
+    now = datetime.now().astimezone()
+    timestamp = f"{args.date}T{now:%H-%M-%S.%f%z}"
+    filename = f"{args.date}_直チャット即時保存_{timestamp}.md"
     path = DIRECT_CHAT_DIR / filename
     if path.exists():
         raise SystemExit(f"refusing to overwrite existing record: {path}")
 
-    title = f"# 直チャット{serial}\n"
+    title = f"# 直チャット{timestamp}\n"
     if not content.startswith("# 直チャット"):
         content = title + "\n" + content.lstrip()
     path.write_text(content, encoding="utf-8")
 
     state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
     state["updated"] = args.date
-    state["direct_chat"]["latest_saved"] = serial
+    state["direct_chat"]["latest_saved"] = timestamp
     state["direct_chat"]["latest_path"] = f"直チャット/{filename}"
     state["direct_chat"]["latest_content_sha"] = git_blob_sha(content.encode("utf-8"))
+    state["direct_chat"]["legacy_serial_files_preserved"] = True
+    state["direct_chat"]["new_timestamp_naming_allowed"] = True
 
     if args.state_patch_file:
         patch = json.loads(args.state_patch_file.read_text(encoding="utf-8"))
@@ -110,11 +96,8 @@ def main() -> int:
         merge_patch(state, patch)
 
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-
     render_views()
 
-    # Stage before integrity checks because the integrity checker intentionally
-    # reasons about tracked files via `git ls-files`.
     subprocess.run(["git", "add", str(path), str(STATE_PATH), str(BUD_PATH), str(HANDOVER_PATH)], cwd=ROOT, check=True)
     expected = {
         str(path.relative_to(ROOT)),
@@ -122,9 +105,7 @@ def main() -> int:
         str(BUD_PATH.relative_to(ROOT)),
         str(HANDOVER_PATH.relative_to(ROOT)),
     }
-    staged_raw = subprocess.check_output(
-        ["git", "diff", "--cached", "--name-only", "-z"], cwd=ROOT
-    )
+    staged_raw = subprocess.check_output(["git", "diff", "--cached", "--name-only", "-z"], cwd=ROOT)
     staged = set(p for p in staged_raw.decode("utf-8").split("\0") if p)
     if staged != expected:
         raise SystemExit(f"unexpected staged paths: {sorted(staged)}")
@@ -135,7 +116,7 @@ def main() -> int:
     subprocess.run(["cmp", "--silent", ".generated-save-check/現在の引き継ぎ.md", str(HANDOVER_PATH)], cwd=ROOT, check=True)
     subprocess.run(["rm", "-rf", ".generated-save-check"], cwd=ROOT, check=True)
 
-    message = args.message or f"直チャット{serial}保存＋現在状態と生成ビューを一括同期"
+    message = args.message or f"直チャット{timestamp}保存＋現在状態と生成ビューを一括同期"
     subprocess.run(["git", "commit", "-m", message], cwd=ROOT, check=True)
     print(run("git", "rev-parse", "HEAD"))
     return 0
