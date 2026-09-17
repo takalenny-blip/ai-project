@@ -31,7 +31,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "done",
-    "next_design_item": "DiMORA本来工程へ復帰する。"
+    "next_design_item": "最終修正PRのCI・merge・読み戻し確認後、通常のDiMORA本来工程へ復帰する"
   },
   "migration": {
     "status": "complete",
@@ -90,9 +90,28 @@
     {
       "item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する",
       "status": "done"
+    },
+    {
+      "item": "Claude最終監査B1: rules/運用ルール.md 4-2をタイムスタンプ方式へ一致させる",
+      "status": "implemented_in_this_fix"
+    },
+    {
+      "item": "Claude最終監査B2: 正規保存経路をrules/運用ルール.mdへ明記する",
+      "status": "implemented_in_this_fix"
+    },
+    {
+      "item": "Claude最終監査B3: 実装済み保存経路・workflow・PR権限問題の現在状態をdocs/現在状態.jsonへ反映する",
+      "status": "implemented_in_this_fix"
+    },
+    {
+      "item": "Claude最終監査D: save-request-intake.ymlのPR作成失敗をcontinue-on-errorで握り潰さず失敗として検知する",
+      "status": "implemented_in_this_fix; production_run_pending"
     }
   ],
-  "pending_monitoring": [],
+  "pending_monitoring": [
+    "最終修正PR merge後のCI成功確認",
+    "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認"
+  ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
     "現在状態.jsonを唯一の現在状態正本としBUD/引き継ぎを自動生成ビューにする",
@@ -113,12 +132,32 @@
     "自然言語ルールと機械的検証境界を対応付ける",
     "入口資料の正本・生成ビュー契約をCIで機械検査する",
     "JUNの監査で受け取った指示文・初期前提・入口資料そのものも現在の実態と照合し、次のAIや人間の誤動作リスクまで逆算する",
-    "保存操作は原子保存経路を使用し、個別Contents APIへの逸脱を再発防止対象とする"
+    "保存操作は原子保存経路を使用し、個別Contents APIへの逸脱を再発防止対象とする",
+    "正規直チャット保存経路を運用ルールへ明記しContents API個別保存を禁止",
+    "save-request-intake.ymlでPR作成失敗を成功扱いにしない"
   ],
   "known_constraints": [
     "VAIO Pでは長文手入力を前提にしない",
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
     "既知事項を理由なく再調査しない",
     "認証情報・Cookie・セッション情報等を保存しない"
-  ]
+  ],
+  "save_pipeline": {
+    "status": "canonical_route_documented_and_guarded",
+    "normal_entrypoints": [
+      "save-request-intake.yml",
+      "save-direct-chat.yml",
+      "repository_dispatch"
+    ],
+    "canonical_processor": "scripts/save_and_currentize.py",
+    "atomic_output": [
+      "直チャット/<timestamp>.md",
+      "docs/現在状態.json",
+      "BUD.md",
+      "docs/引き継ぎ/現在の引き継ぎ.md"
+    ],
+    "integration_flow": "保存要求 → 正規workflow → save_and_currentize.py → save branch → 1 commit → PR → CI → merge",
+    "pr_creation_failure": "job failure; never treat a save branch without PR as successful",
+    "direct_contents_api_for_save": "prohibited"
+  }
 }
