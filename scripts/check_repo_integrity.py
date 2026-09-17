@@ -12,9 +12,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs/現在状態.json"
 
-# New records may use a real wall-clock timestamp between the date and marker.
+# New records may use a wall-clock timestamp after the direct-chat marker.
 # The old date+serial form remains valid for records already created.
 TIMESTAMP_CHAT = re.compile(
+    r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}[+-]\d{4}\.md$"
+)
+SERIAL_CHAT = re.compile(
     r"^\d{4}-\d{2}-\d{2}(?:_\d{2}-\d{2}-\d{2})?_直チャット即時保存_(\d{3})\.md$"
 )
 HISTORIC_TIMESTAMP_CHAT = re.compile(
@@ -68,11 +71,12 @@ def check_state(files: list[str]) -> None:
 
     # The state must identify the newest three-digit direct-chat record, not
     # merely a path that is internally consistent. Historical four-digit files
-    # are preserved and excluded from this comparison.
+    # and new wall-clock timestamp files are preserved and excluded from this
+    # legacy serial comparison during the migration period.
     names = [Path(p).name for p in files if p.startswith("直チャット/")]
     records: list[tuple[str, int, str]] = []
     for name in names:
-        m = TIMESTAMP_CHAT.fullmatch(name)
+        m = SERIAL_CHAT.fullmatch(name)
         if m:
             records.append((name[:10], int(m.group(1)), name))
     if not records:
@@ -96,6 +100,7 @@ def check_chat_names(files: list[str]) -> None:
     bad = [
         n for n in marked
         if not TIMESTAMP_CHAT.fullmatch(n)
+        and not SERIAL_CHAT.fullmatch(n)
         and not HISTORIC_TIMESTAMP_CHAT.fullmatch(n)
     ]
     if bad:
@@ -106,10 +111,10 @@ def check_chat_names(files: list[str]) -> None:
 
     # A serial may recur on a different date. Within one date, however, a
     # three-digit serial must identify one new record. Historical four-digit
-    # records are preserved and excluded.
+    # records and wall-clock timestamp records are preserved and excluded.
     identities = []
     for n in marked:
-        match = TIMESTAMP_CHAT.fullmatch(n)
+        match = SERIAL_CHAT.fullmatch(n)
         if match:
             identities.append((n[:10], match.group(1)))
     if len(identities) != len(set(identities)):
@@ -138,9 +143,10 @@ def check_secrets(files: list[str]) -> None:
 
 
 def self_test() -> None:
-    # Green test: a real timestamp filename is accepted.
+    # Green tests: both the real wall-clock timestamp form and legacy serial form are accepted.
     check_chat_names([
-        "直チャット/2026-09-15_12-34-56_直チャット即時保存_043.md"
+        "直チャット/2026-09-15_直チャット即時保存_2026-09-15T12-34-56+0900.md",
+        "直チャット/2026-09-15_12-34-56_直チャット即時保存_043.md",
     ])
 
     # Red-test semantics: the secret scanner must reject a synthetic secret-like value.

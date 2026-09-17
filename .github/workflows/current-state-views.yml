@@ -17,6 +17,21 @@ on:
       - 'docs/引き継ぎ/現在の引き継ぎ.md'
       - '直チャット/**'
       - 'scripts/search_direct_chat.py'
+  pull_request:
+    paths:
+      - 'docs/現在状態.json'
+      - 'scripts/generate_current_views.py'
+      - 'scripts/check_repo_integrity.py'
+      - 'scripts/save_and_currentize.py'
+      - 'scripts/check_entry_docs.py'
+      - 'scripts/check_atomic_save_commit.py'
+      - '.github/workflows/current-state-views.yml'
+      - 'README.md'
+      - 'rules/構造変更時・独立監査ガード.md'
+      - 'BUD.md'
+      - 'docs/引き継ぎ/現在の引き継ぎ.md'
+      - '直チャット/**'
+      - 'scripts/search_direct_chat.py'
   workflow_dispatch:
 
 permissions:
