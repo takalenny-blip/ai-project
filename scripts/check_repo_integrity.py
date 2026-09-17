@@ -7,18 +7,17 @@ import argparse
 import json
 import re
 import subprocess
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs/現在状態.json"
 
-# New records may use a wall-clock timestamp after the direct-chat marker.
-# The old date+serial form remains valid for records already created.
 TIMESTAMP_CHAT = re.compile(
-    r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}[+-]\d{4}\.md$"
+    r"^(?P<date>\d{4}-\d{2}-\d{2})_直チャット即時保存_(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}(?:\.\d{6})?[+-]\d{4})\.md$"
 )
 SERIAL_CHAT = re.compile(
-    r"^\d{4}-\d{2}-\d{2}(?:_\d{2}-\d{2}-\d{2})?_直チャット即時保存_(\d{3})\.md$"
+    r"^(?P<date>\d{4}-\d{2}-\d{2})(?:_\d{2}-\d{2}-\d{2})?_直チャット即時保存_(?P<serial>\d{3})\.md$"
 )
 HISTORIC_TIMESTAMP_CHAT = re.compile(
     r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{4}\.md$"
@@ -40,14 +39,10 @@ def check_verification_state(state: dict) -> None:
     required = state.get("verification_required", [])
     if not all(isinstance(item, dict) and "item" in item and "status" in item for item in required):
         raise SystemExit("FAIL: verification_required must use {item,status} objects")
-
     statuses = {item["status"] for item in required}
     invalid = statuses - {"done", "pending", "not_started", "conditional"}
     if invalid:
         raise SystemExit("FAIL: invalid verification status: " + ", ".join(sorted(invalid)))
-
-    # `conditional` is a valid non-terminal state. It must never satisfy the
-    # migration-complete condition merely by being accepted here.
     if state["migration"]["status"] == "generated_views_migration_verified":
         incomplete = [item["item"] for item in required if item["status"] != "done"]
         if incomplete:
@@ -55,6 +50,10 @@ def check_verification_state(state: dict) -> None:
                 "FAIL: migration.status claims verified with incomplete verification items: "
                 + "; ".join(incomplete)
             )
+
+
+def timestamp_key(timestamp: str) -> datetime:
+    return datetime.strptime(timestamp, "%Y-%m-%dT%H-%M-%S.%f%z" if "." in timestamp else "%Y-%m-%dT%H-%M-%S%z")
 
 
 def check_state(files: list[str]) -> None:
@@ -65,26 +64,44 @@ def check_state(files: list[str]) -> None:
     latest = state["direct_chat"]["latest_saved"]
     if path not in files:
         raise SystemExit(f"FAIL: latest direct-chat path missing: {path}")
-    match = re.search(r"_(\d{3})\.md$", path)
-    if not match or match.group(1) != latest:
+
+    path_name = Path(path).name
+    timestamp_match = TIMESTAMP_CHAT.fullmatch(path_name)
+    serial_match = SERIAL_CHAT.fullmatch(path_name)
+
+    if timestamp_match:
+        if timestamp_match.group("timestamp") != latest:
+            raise SystemExit("FAIL: current state latest_saved/latest_path timestamp mismatch")
+        timestamps = []
+        for rel in files:
+            if not rel.startswith("直チャット/"):
+                continue
+            match = TIMESTAMP_CHAT.fullmatch(Path(rel).name)
+            if match:
+                timestamps.append(match.group("timestamp"))
+        if not timestamps:
+            raise SystemExit("FAIL: timestamped current state has no timestamped direct-chat records")
+        newest = max(timestamps, key=timestamp_key)
+        if latest != newest:
+            raise SystemExit(
+                "FAIL: current state does not point to newest timestamped direct-chat record: "
+                f"state={latest}, newest={newest}"
+            )
+        return
+
+    if not serial_match or serial_match.group("serial") != latest:
         raise SystemExit("FAIL: current state latest_saved/latest_path mismatch")
 
-    # The state must identify the newest three-digit direct-chat record, not
-    # merely a path that is internally consistent. Historical four-digit files
-    # and new wall-clock timestamp files are preserved and excluded from this
-    # legacy serial comparison during the migration period.
     names = [Path(p).name for p in files if p.startswith("直チャット/")]
     records: list[tuple[str, int, str]] = []
     for name in names:
-        m = SERIAL_CHAT.fullmatch(name)
-        if m:
-            records.append((name[:10], int(m.group(1)), name))
+        match = SERIAL_CHAT.fullmatch(name)
+        if match:
+            records.append((match.group("date"), int(match.group("serial")), name))
     if not records:
         raise SystemExit("FAIL: no three-digit direct-chat records found")
-
     newest_date = max(date for date, _, _ in records)
     newest_serial = max(serial for date, serial, _ in records if date == newest_date)
-    path_name = Path(path).name
     path_date = path_name[:10]
     if path_date != newest_date or int(latest) != newest_serial:
         raise SystemExit(
@@ -96,7 +113,6 @@ def check_state(files: list[str]) -> None:
 def check_chat_names(files: list[str]) -> None:
     names = [Path(p).name for p in files if p.startswith("直チャット/")]
     marked = [n for n in names if "_直チャット即時保存_" in n]
-
     bad = [
         n for n in marked
         if not TIMESTAMP_CHAT.fullmatch(n)
@@ -104,19 +120,13 @@ def check_chat_names(files: list[str]) -> None:
         and not HISTORIC_TIMESTAMP_CHAT.fullmatch(n)
     ]
     if bad:
-        raise SystemExit(
-            "FAIL: malformed timestamped direct-chat names: "
-            + ", ".join(sorted(bad))
-        )
+        raise SystemExit("FAIL: malformed timestamped direct-chat names: " + ", ".join(sorted(bad)))
 
-    # A serial may recur on a different date. Within one date, however, a
-    # three-digit serial must identify one new record. Historical four-digit
-    # records and wall-clock timestamp records are preserved and excluded.
     identities = []
     for n in marked:
         match = SERIAL_CHAT.fullmatch(n)
         if match:
-            identities.append((n[:10], match.group(1)))
+            identities.append((match.group("date"), match.group("serial")))
     if len(identities) != len(set(identities)):
         raise SystemExit("FAIL: duplicate timestamped direct-chat serial for date")
 
@@ -143,13 +153,12 @@ def check_secrets(files: list[str]) -> None:
 
 
 def self_test() -> None:
-    # Green tests: both the real wall-clock timestamp form and legacy serial form are accepted.
     check_chat_names([
         "直チャット/2026-09-15_直チャット即時保存_2026-09-15T12-34-56+0900.md",
+        "直チャット/2026-09-15_直チャット即時保存_2026-09-15T12-34-56.123456+0900.md",
         "直チャット/2026-09-15_12-34-56_直チャット即時保存_043.md",
     ])
 
-    # Red-test semantics: the secret scanner must reject a synthetic secret-like value.
     synthetic = "github_pat_" + "A" * 40
     if scan_secret_text(synthetic) is None:
         raise SystemExit("FAIL: secret self-test did not detect synthetic secret-like value")
@@ -161,11 +170,9 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
-
     if args.self_test:
         self_test()
         return 0
-
     files = git_files()
     check_state(files)
     check_chat_names(files)
