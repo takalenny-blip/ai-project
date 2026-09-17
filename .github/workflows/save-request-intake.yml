@@ -47,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
           git fetch origin main
-          base_sha="$(git rev-parse origin/main)"
+          base_sha="$(git rev-parse FETCH_HEAD)"
           branch="save/direct-chat-${GITHUB_RUN_ID}"
           git switch -c "$branch" "$base_sha"
           git config user.name "github-actions[bot]"
