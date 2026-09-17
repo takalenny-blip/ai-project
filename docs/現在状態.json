@@ -5,7 +5,7 @@
   "primary_lane": "DIGA / DiMORA自動化",
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {"target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする", "status": "structurally_complete", "manual_duplicate_management_allowed": false, "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"},
-  "direct_chat": {"latest_saved": "102", "latest_path": "直チャット/2026-09-17_直チャット即時保存_102.md", "latest_content_sha": "9eb440c41e145b0c1e049dd5c19853f2c45874cc", "legacy_serial_files_preserved": true, "new_timestamp_naming_allowed": true},
+  "direct_chat": {"latest_saved": "103", "latest_path": "直チャット/2026-09-17_直チャット即時保存_103.md", "latest_content_sha": "1e91c9ca6f8df702d6e73f67f4419d0224985670", "legacy_serial_files_preserved": true, "new_timestamp_naming_allowed": true},
   "surgery": {"meaning": "設計は一括、実装は小さな検証単位", "order": ["現状棚卸し", "大手術の設計", "採用する改善を確定", "小さな検証単位で順次実装", "検証"], "inventory": "complete", "design": "revised_complete", "adoption": "complete", "bulk_refactor": "current_views_migrated_ci_guard_added", "verification": "done", "next_design_item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する。完了まで未完了事項として監視する。"},
   "migration": {"status": "complete", "normal_work_policy": "大手術の独立検証が完了したためDiMORA本来工程へ復帰する", "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"},
   "verification_required": [
