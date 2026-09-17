@@ -12,6 +12,8 @@ on:
         required: false
         default: '直チャット保存＋現在状態と生成ビューを一括同期'
         type: string
+  repository_dispatch:
+    types: [save-direct-chat]
 
 permissions:
   contents: write
@@ -47,7 +49,7 @@ jobs:
 
       - name: Write exact save content
         env:
-          DIRECT_CHAT_CONTENT: ${{ inputs.content }}
+          DIRECT_CHAT_CONTENT: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.content || inputs.content }}
         shell: bash
         run: |
           set -euo pipefail
@@ -55,7 +57,7 @@ jobs:
 
       - name: Run canonical save script
         env:
-          SAVE_MESSAGE: ${{ inputs.message }}
+          SAVE_MESSAGE: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.message || inputs.message }}
         shell: bash
         run: |
           set -euo pipefail
@@ -97,7 +99,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ steps.branch.outputs.branch }}
-          SAVE_TITLE: ${{ inputs.message }}
+          SAVE_TITLE: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.message || inputs.message }}
         shell: bash
         run: |
           set -euo pipefail
