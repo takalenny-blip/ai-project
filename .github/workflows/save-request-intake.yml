@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t changed < <(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | sed '/^$/d')
+          mapfile -t changed < <(git -c core.quotepath=false diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | sed '/^$/d')
           test "${#changed[@]}" = "1"
           queue_file="${changed[0]}"
           case "$queue_file" in
