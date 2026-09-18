@@ -86,18 +86,9 @@ jobs:
           git config user.email "ci-atomic-save@example.invalid"
           root_base=$(git rev-parse HEAD)
           base=$root_base
-          save_date=$(python - <<'PY'
-          import json
-          from pathlib import Path
-          state = json.loads(Path('docs/現在状態.json').read_text(encoding='utf-8'))
-          path = state['direct_chat']['latest_path']
-          print(Path(path).name[:10])
-          PY
-          )
-
           for n in 1 2 3; do
             printf '# atomic save test %s\n' "$n" > "/tmp/save-test-$n.md"
-            python scripts/save_and_currentize.py --content-file "/tmp/save-test-$n.md" --date "$save_date" --message "CI atomic save test $n"
+            python scripts/save_and_currentize.py --content-file "/tmp/save-test-$n.md" --message "CI atomic save test $n"
             current=$(git rev-parse HEAD)
             test "$current" != "$base"
             test "$(git rev-list --count "$root_base"..HEAD)" = "$n"

@@ -9,6 +9,7 @@ import json
 import subprocess
 import sys
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any
 
@@ -52,7 +53,6 @@ def render_views() -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--content-file", type=Path, help="direct-chat markdown; stdin when omitted")
-    ap.add_argument("--date", default=datetime.now().astimezone().strftime("%Y-%m-%d"))
     ap.add_argument("--message", default=None)
     ap.add_argument(
         "--state-patch-file",
@@ -69,9 +69,10 @@ def main() -> int:
     if not content.endswith("\n"):
         content += "\n"
 
-    now = datetime.now().astimezone()
-    timestamp = f"{args.date}T{now:%H-%M-%S.%f%z}"
-    filename = f"{args.date}_直チャット即時保存_{timestamp}.md"
+    now = datetime.now(ZoneInfo("Asia/Tokyo"))
+    save_date = now.strftime("%Y-%m-%d")
+    timestamp = f"{save_date}T{now:%H-%M-%S.%f%z}"
+    filename = f"{save_date}_直チャット即時保存_{timestamp}.md"
     path = DIRECT_CHAT_DIR / filename
     if path.exists():
         raise SystemExit(f"refusing to overwrite existing record: {path}")
@@ -82,7 +83,7 @@ def main() -> int:
     path.write_text(content, encoding="utf-8")
 
     state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
-    state["updated"] = args.date
+    state["updated"] = save_date
     state["direct_chat"]["latest_saved"] = timestamp
     state["direct_chat"]["latest_path"] = f"直チャット/{filename}"
     state["direct_chat"]["latest_content_sha"] = git_blob_sha(content.encode("utf-8"))
