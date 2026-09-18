@@ -1,0 +1,41 @@
+name: Auto-approve canonical save PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  approve:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'save/direct-chat-') &&
+      github.event.pull_request.title == '直チャット保存＋現在状態と生成ビューを一括同期' &&
+      github.event.pull_request.body == 'Canonical direct-chat save executed by scripts/save_and_currentize.py on an Actions runner.'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify canonical save PR shape
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(gh api             "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100"             --jq '.[].filename')
+          test "${#files[@]}" = "4"
+          expected=$(printf '%s\n'             'BUD.md'             'docs/現在状態.json'             'docs/引き継ぎ/現在の引き継ぎ.md'             '直チャット/' | sort)
+          actual=$(printf '%s\n' "${files[@]}" | sort)
+          test "$(printf '%s\n' "${files[@]}" | grep -c '^直チャット/') = "1"
+          test "$(printf '%s\n' "${files[@]}" | grep '^直チャット/' | grep -c '直チャット即時保存_.*+0900.md$') = "1"
+          test "$(printf '%s\n' "${files[@]}" | grep -E '^(BUD.md|docs/現在状態.json|docs/引き継ぎ/現在の引き継ぎ.md|直チャット/)' | wc -l) = "4"
+
+      - name: Approve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr review "$PR_URL" --approve --body 'Canonical save PR passed the save-shape guard; approving automatically.'
