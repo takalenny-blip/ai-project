@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-18T16-39-22.699428+0900",
-    "latest_path": "直チャット/2026-09-18_直チャット即時保存_2026-09-18T16-39-22.699428+0900.md",
-    "latest_content_sha": "5dfa7c66d6908ca60fda80995d6ce3d98ae442ce",
+    "latest_saved": "2026-09-18T16-52-01.445927+0900",
+    "latest_path": "直チャット/2026-09-18_直チャット即時保存_2026-09-18T16-52-01.445927+0900.md",
+    "latest_content_sha": "fe792dcb929ce84ceb1fbc6ebc14b18a9d2e87d2",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -31,7 +31,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "done",
-    "next_design_item": "最終修正PRのCI・merge・読み戻し確認後、通常のDiMORA本来工程へ復帰する"
+    "next_design_item": "通常のDiMORA本来工程へ復帰する"
   },
   "migration": {
     "status": "complete",
@@ -109,7 +109,6 @@
     }
   ],
   "pending_monitoring": [
-    "最終修正PR merge後のCI成功確認",
     "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認"
   ],
   "adopted_improvements": [
@@ -145,9 +144,7 @@
   "save_pipeline": {
     "status": "canonical_route_documented_and_guarded",
     "normal_entrypoints": [
-      "save-request-intake.yml",
-      "save-direct-chat.yml",
-      "repository_dispatch"
+      "save-request-intake.yml"
     ],
     "canonical_processor": "scripts/save_and_currentize.py",
     "atomic_output": [
