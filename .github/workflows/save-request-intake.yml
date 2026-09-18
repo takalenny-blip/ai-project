@@ -93,11 +93,12 @@ jobs:
 
       - name: Open pull request
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
         shell: bash
         run: |
           set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "SAVE_PR_TOKEN repository secret is required." >&2; exit 1; }
           gh pr create \
             --base main \
             --head "$BRANCH" \
