@@ -26,13 +26,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t files < <(gh api             "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100"             --jq '.[].filename')
+          mapfile -t files < <(
+            gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" --jq '.[].filename'
+          )
           test "${#files[@]}" = "4"
-          expected=$(printf '%s\n'             'BUD.md'             'docs/現在状態.json'             'docs/引き継ぎ/現在の引き継ぎ.md'             '直チャット/' | sort)
-          actual=$(printf '%s\n' "${files[@]}" | sort)
+          direct_chat_path="$(printf '%s\n' "${files[@]}" | grep '^直チャット/')"
           test "$(printf '%s\n' "${files[@]}" | grep -c '^直チャット/') = "1"
           test "$(printf '%s\n' "${files[@]}" | grep '^直チャット/' | grep -c '直チャット即時保存_.*+0900.md$') = "1"
-          test "$(printf '%s\n' "${files[@]}" | grep -E '^(BUD.md|docs/現在状態.json|docs/引き継ぎ/現在の引き継ぎ.md|直チャット/)' | wc -l) = "4"
+          expected="$(printf '%s\n'             'BUD.md'             'docs/現在状態.json'             'docs/引き継ぎ/現在の引き継ぎ.md'             "$direct_chat_path" | sort)"
+          actual="$(printf '%s\n' "${files[@]}" | sort)"
+          test "$actual" = "$expected"
 
       - name: Approve
         env:
