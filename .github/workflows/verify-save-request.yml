@@ -1,0 +1,37 @@
+name: Verify save request chain
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: "Commit SHA pushed to chat-save-request/*"
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout verifier
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Verify save chain
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python scripts/verify_save_request.py "${{ inputs.source_sha }}" | tee "$RUNNER_TEMP/save-verification.json"
+          code=${PIPESTATUS[0]}
+          echo "verification_exit_code=$code" >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/save-verification.json" >> "$GITHUB_STEP_SUMMARY"
+          exit "$code"
