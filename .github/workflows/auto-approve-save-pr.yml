@@ -37,17 +37,8 @@ jobs:
           actual="$(printf '%s\n' "${files[@]}" | sort)"
           test "$actual" = "$expected"
 
-      - name: Create GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.SAVE_APPROVE_APP_ID }}
-          private-key: ${{ secrets.SAVE_APPROVE_APP_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-          repositories: ai-project
-
-      - name: Approve
+      - name: Approve as taka2-dev
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: gh pr review "$PR_URL" --approve --body 'Canonical save PR passed the save-shape guard; approving automatically.'
