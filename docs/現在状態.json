@@ -93,19 +93,19 @@
     },
     {
       "item": "Claude最終監査B1: rules/運用ルール.md 4-2をタイムスタンプ方式へ一致させる",
-      "status": "implemented_in_this_fix"
+      "status": "done"
     },
     {
       "item": "Claude最終監査B2: 正規保存経路をrules/運用ルール.mdへ明記する",
-      "status": "implemented_in_this_fix"
+      "status": "done"
     },
     {
       "item": "Claude最終監査B3: 実装済み保存経路・workflow・PR権限問題の現在状態をdocs/現在状態.jsonへ反映する",
-      "status": "implemented_in_this_fix"
+      "status": "done"
     },
     {
       "item": "Claude最終監査D: save-request-intake.ymlのPR作成失敗をcontinue-on-errorで握り潰さず失敗として検知する",
-      "status": "implemented_in_this_fix; production_run_pending"
+      "status": "done"
     }
   ],
   "pending_monitoring": [
