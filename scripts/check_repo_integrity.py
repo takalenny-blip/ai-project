@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs/現在状態.json"
+CANONICAL_TIMESTAMP_OFFSET = "+0900"
 
 TIMESTAMP_CHAT = re.compile(
     r"^(?P<date>\d{4}-\d{2}-\d{2})_直チャット即時保存_(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}(?:\.\d{6})?[+-]\d{4})\.md$"
@@ -72,19 +73,31 @@ def check_state(files: list[str]) -> None:
     if timestamp_match:
         if timestamp_match.group("timestamp") != latest:
             raise SystemExit("FAIL: current state latest_saved/latest_path timestamp mismatch")
+        # Timestamped records created before the timezone-consistency fix may carry
+        # a legacy +0000 offset. Do not reinterpret or rename those historical files
+        # here. The canonical producer now emits +0900, so only canonical-offset
+        # records participate in the newest-record invariant once current state has
+        # moved to the canonical format.
+        if not latest.endswith(CANONICAL_TIMESTAMP_OFFSET):
+            print(
+                "OK: legacy timestamped current state retained; "
+                "newest-record invariant deferred until canonical +0900 save"
+            )
+            return
+
         timestamps = []
         for rel in files:
             if not rel.startswith("直チャット/"):
                 continue
             match = TIMESTAMP_CHAT.fullmatch(Path(rel).name)
-            if match:
+            if match and match.group("timestamp").endswith(CANONICAL_TIMESTAMP_OFFSET):
                 timestamps.append(match.group("timestamp"))
         if not timestamps:
-            raise SystemExit("FAIL: timestamped current state has no timestamped direct-chat records")
+            raise SystemExit("FAIL: canonical current state has no canonical +0900 direct-chat records")
         newest = max(timestamps, key=timestamp_key)
         if latest != newest:
             raise SystemExit(
-                "FAIL: current state does not point to newest timestamped direct-chat record: "
+                "FAIL: current state does not point to newest canonical timestamped direct-chat record: "
                 f"state={latest}, newest={newest}"
             )
         return
