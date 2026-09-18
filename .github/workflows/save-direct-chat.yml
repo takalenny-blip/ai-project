@@ -61,10 +61,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          save_date="$(TZ=Asia/Tokyo date +%F)"
           python scripts/save_and_currentize.py \
             --content-file "$RUNNER_TEMP/direct-chat.md" \
-            --date "$save_date" \
             --message "$SAVE_MESSAGE"
 
       - name: Verify atomic save result
