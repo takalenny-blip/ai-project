@@ -17,6 +17,22 @@ jobs:
       github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
+      - name: Verify canonical save PR shape (save PRs only)
+        if: startsWith(github.event.pull_request.head.ref, 'save/direct-chat-')
+        env:
+          GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          set -euo pipefail
+          gh pr view "$PR_URL" --json files --jq '.files[].path' | sort > /tmp/pr-files.txt
+          printf '%s\n' \
+            '直チャット/' \
+            'docs/現在状態.json' \
+            'BUD.md' \
+            'docs/引き継ぎ/現在の引き継ぎ.md' \
+            > /tmp/expected-files.txt
+          diff -u /tmp/expected-files.txt /tmp/pr-files.txt
+
       - name: Approve as taka2-dev
         env:
           GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
