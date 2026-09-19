@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-09-18",
+  "updated": "2026-09-19",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "DIGA / DiMORA自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -169,5 +169,12 @@
     "resume_main_work_after_save_dispatch": true,
     "duplicate_operation_guard": true,
     "final_report_separates_work_and_save": true
+  },
+  "approval_policy": {
+    "approver": "taka2-dev",
+    "scope": "同一リポジトリ・非Draftの全PR",
+    "save_pr_extra_verification": "save/direct-chat-* の保存PRのみ4ファイル形状を検証してから承認",
+    "workflow": "pull_request_target",
+    "security_guard": "github.event.pull_request.head.repo.full_name == github.repository を必須条件として維持"
   }
 }
