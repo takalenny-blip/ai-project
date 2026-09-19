@@ -24,14 +24,13 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: |
           set -euo pipefail
-          gh pr view "$PR_URL" --json files --jq '.files[].path' | sort > /tmp/pr-files.txt
-          printf '%s\n' \
-            '直チャット/' \
-            'docs/現在状態.json' \
-            'BUD.md' \
-            'docs/引き継ぎ/現在の引き継ぎ.md' \
-            > /tmp/expected-files.txt
-          diff -u /tmp/expected-files.txt /tmp/pr-files.txt
+          mapfile -t files < <(gh pr view "$PR_URL" --json files --jq '.files[].path' | sort)
+          test "${#files[@]}" = "4"
+          direct_chat_path="$(printf '%s\n' "${files[@]}" | grep '^直チャット/')"
+          test -n "$direct_chat_path"
+          expected="$(printf '%s\n' 'BUD.md' 'docs/現在状態.json' 'docs/引き継ぎ/現在の引き継ぎ.md' "$direct_chat_path" | sort)"
+          actual="$(printf '%s\n' "${files[@]}" | sort)"
+          test "$actual" = "$expected"
 
       - name: Approve as taka2-dev
         env:
