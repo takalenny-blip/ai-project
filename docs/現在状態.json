@@ -133,7 +133,11 @@
     "JUNの監査で受け取った指示文・初期前提・入口資料そのものも現在の実態と照合し、次のAIや人間の誤動作リスクまで逆算する",
     "保存操作は原子保存経路を使用し、個別Contents APIへの逸脱を再発防止対象とする",
     "正規直チャット保存経路を運用ルールへ明記しContents API個別保存を禁止",
-    "save-request-intake.ymlでPR作成失敗を成功扱いにしない"
+    "save-request-intake.ymlでPR作成失敗を成功扱いにしない",
+    "主作業トラックと保存トラックを分離し、保存要求を非同期の副次タスクとして投入後すぐ主作業へ復帰する",
+    "主作業を進行中／完了／ブロック中、保存を未実行／投入済み・結果待ち／完了／失敗として独立管理する",
+    "実行済み操作を操作／目的／結果／状態で保持し、同一操作の理由なき再実行を防ぐ",
+    "最終報告で【作業】と【保存】の状態を分離する"
   ],
   "known_constraints": [
     "VAIO Pでは長文手入力を前提にしない",
@@ -156,5 +160,14 @@
     "integration_flow": "保存要求 → 正規workflow → save_and_currentize.py → save branch → 1 commit → PR → CI → merge",
     "pr_creation_failure": "job failure; never treat a save branch without PR as successful",
     "direct_contents_api_for_save": "prohibited"
+  },
+  "operation_separation": {
+    "status": "implemented_in_rules",
+    "main_work": "進行中|完了|ブロック中",
+    "save_work": "未実行|投入済み・結果待ち|完了|失敗",
+    "save_is_non_blocking": true,
+    "resume_main_work_after_save_dispatch": true,
+    "duplicate_operation_guard": true,
+    "final_report_separates_work_and_save": true
   }
 }
