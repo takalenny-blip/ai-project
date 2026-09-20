@@ -35,18 +35,10 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Reject duplicate pending save request
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          mapfile -t pending < <(gh pr list --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("chat-save-request/")) | select(.number != '$PR_NUMBER') | .number')
-          if [ "${#pending[@]}" -gt 0 ]; then
-            echo "Duplicate pending save request detected: ${pending[*]}" >&2
-            exit 1
-          fi
+      # Save requests are independent queue items. An older open request must
+      # never block a newer explicit save request. Successful processing below
+      # closes the request PR so stale queue PRs do not accumulate.
+
       - name: Validate and read queue entry
         id: queue
         env:
@@ -133,6 +125,16 @@ jobs:
             --head "$BRANCH" \
             --title '直チャット保存＋現在状態と生成ビューを一括同期' \
             --body $'Canonical direct-chat save executed by scripts/save_and_currentize.py on an Actions runner.'
+
+      - name: Close processed request PR
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh pr close "$PR_NUMBER" --comment "Save request processed successfully by the canonical save pipeline."
 
       - name: Cleanup request branch
         if: success()
