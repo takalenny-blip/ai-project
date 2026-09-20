@@ -13,6 +13,8 @@ from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any
 
+from operation_history import append_operation, state_fingerprint
+
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 DIRECT_CHAT_DIR = ROOT / "直チャット"
@@ -83,6 +85,7 @@ def main() -> int:
     path.write_text(content, encoding="utf-8")
 
     state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    before_state_fingerprint = state_fingerprint(state)
     state["updated"] = save_date
     state["direct_chat"]["latest_saved"] = timestamp
     state["direct_chat"]["latest_path"] = f"直チャット/{filename}"
@@ -103,6 +106,18 @@ def main() -> int:
         if not isinstance(patch, dict):
             raise SystemExit("state patch must be a JSON object")
         merge_patch(state, patch)
+
+    after_state_fingerprint = state_fingerprint(state)
+    append_operation(
+        state,
+        operation="save_and_currentize",
+        purpose="direct chat save and canonical currentization",
+        target="direct_chat/current_state/generated_views",
+        before_state_fingerprint=before_state_fingerprint,
+        after_state_fingerprint=after_state_fingerprint,
+        result="canonical state prepared for atomic save",
+        status="success",
+    )
 
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render_views()
