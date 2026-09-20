@@ -113,7 +113,7 @@ def render(state: dict) -> tuple[str, str]:
 - {migration["normal_work_policy"]}
 - {migration["temporary_manual_sync"]}
 """
-    return bud.rstrip("\n"), handover.rstrip("\n")
+    # Keep generated views byte-identical to checked-in views: no trailing newline.\n    return bud.rstrip("\n"), handover.rstrip("\n")
 
 def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None:
     out_dir.parent.mkdir(parents=True, exist_ok=True)
