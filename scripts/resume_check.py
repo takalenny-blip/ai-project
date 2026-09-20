@@ -58,6 +58,8 @@ def main():
     missing_contract = [k for k in required_contract if not contract.get(k)]
     if missing_contract:
         return fail("reaction_contract missing: " + ", ".join(missing_contract))
+    if gate_status == "clear" and external_gate.get("last_reaction") is None and not external_gate.get("clear_reason"):
+        return fail("clear external_response_gate requires last_reaction or clear_reason")
     reaction = external_gate.get("last_reaction")
     if reaction is not None:
         required_reaction = ("proposal", "judgment", "reason", "next_action", "consistency")
