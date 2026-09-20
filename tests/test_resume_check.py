@@ -24,6 +24,16 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                 "prerequisites": [prerequisite],
             },
             "resume_manifest": {"source": "docs/現在状態.json", "generator": "scripts/resume_manifest.py"},
+            "external_response_gate": {
+                "status": "clear",
+                "clear_reason": "no_pending_external_proposal",
+                "reaction_contract": {
+                    "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
+                    "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
+                    "rule": "all five required",
+                    "clear_condition": "all five valid",
+                },
+            },
         }
         if readiness == "blocked":
             state["next_step"]["blocked_reason"] = "blocked"
@@ -99,6 +109,12 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state["external_response_gate"] = {
                 "status": "pending", "purpose": "react", "trigger": "proposal received",
                 "required_action": "respond", "completion": "reaction presented",
+                "reaction_contract": {
+                    "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
+                    "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
+                    "rule": "all five required",
+                    "clear_condition": "all five valid",
+                },
             }
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 3)
