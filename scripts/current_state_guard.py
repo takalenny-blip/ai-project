@@ -30,6 +30,30 @@ def load_state(path: Path = STATE_PATH) -> dict:
     except Exception as exc:
         fail(f"canonical state unreadable: {exc}")
 
+def validate_prerequisites(next_step: dict) -> None:
+    prerequisites = next_step.get("prerequisites")
+    if not isinstance(prerequisites, list):
+        fail("next_step.prerequisites must be an explicit list")
+    readiness = next_step.get("readiness")
+    if readiness not in {"ready", "blocked"}:
+        fail("next_step.readiness must be ready or blocked")
+    if readiness == "blocked" and (not next_step.get("blocked_reason") or not next_step.get("unblock_action")):
+        fail("blocked next_step requires blocked_reason and unblock_action")
+    for index, prerequisite in enumerate(prerequisites):
+        if not isinstance(prerequisite, dict):
+            fail(f"next_step.prerequisites[{index}] must be an object")
+        for field in ("name", "kind", "verify_scope", "status"):
+            if not prerequisite.get(field):
+                fail(f"next_step.prerequisites[{index}].{field} is missing")
+        if prerequisite["status"] not in {"verified", "unverified", "missing", "invalid"}:
+            fail(f"invalid prerequisite status: {prerequisite['status']}")
+        if prerequisite["status"] == "verified":
+            evidence = prerequisite.get("evidence")
+            if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at"):
+                fail(f"verified prerequisite {prerequisite['name']} requires method and checked_at evidence")
+    if readiness == "ready" and any(p["status"] != "verified" for p in prerequisites):
+        fail("next_step.readiness=ready requires every prerequisite to be verified")
+
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
     if missing:
@@ -54,6 +78,7 @@ def validate_state(state: dict) -> None:
         fail("current_position.summary is missing")
     if any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
         fail("next_step.target is too abstract or stale; require current concrete work")
+    validate_prerequisites(nxt)
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
         fail("work_pc clone_status=cloned requires clone_evidence")
