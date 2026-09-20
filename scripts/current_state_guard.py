@@ -17,6 +17,7 @@ REQUIRED = ("execution_environment", "current_position", "next_step")
 ABSTRACT_NEXT_STEP = (
     "本来工程へ復帰",
     "通常のDiMORA本来工程へ復帰",
+    "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める",
 )
 RETIRED_ALIASES = {
     "vaio_p": ("vaio_p", "VAIO P", "VAIO P + Chromium", "VAIO P運用"),
@@ -61,7 +62,7 @@ def validate_state(state: dict) -> None:
 
     target = nxt["target"]
     if any(phrase in target for phrase in ABSTRACT_NEXT_STEP):
-        fail("next_step.target is too abstract; require environment, target, and evidence")
+        fail("next_step.target is too abstract or stale; require current concrete work")
 
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
@@ -101,7 +102,8 @@ def validate_generated_views(state: dict) -> None:
             if fragment not in text:
                 fail(f"generated view is stale or incomplete: {path} missing {fragment}")
         for token in retired_tokens(state):
-            if token in text and token not in "\n".join([
+            if token in text and token not in "
+".join([
                 f"退役：{', '.join(env.get('retired', []))}",
             ]):
                 fail(f"retired environment leaked into generated view outside retired list: {path}: {token}")
@@ -115,7 +117,8 @@ def validate_projects(state: dict) -> None:
         text = path.read_text(encoding="utf-8")
         if not any(token in text for token in retired):
             continue
-        header = "\n".join(text.splitlines()[:20]).lower()
+        header = "
+".join(text.splitlines()[:20]).lower()
         if "status: historical" not in header:
             fail(f"non-historical project doc mentions retired policy: {path}")
 
