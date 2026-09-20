@@ -16,13 +16,13 @@
 
 ## 現在地点
 
-**VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。PR1はマージ済み、PR2のmanifest・生成ビュー現在化を実装中。**
+**VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。PR1・PR2はマージ済み、PR3のCIガードを実装中。**
 
 ## 次の一手
 
 - 環境：**work_pc**
-- 目的：**PR2: resume_manifest.pyでcanonical stateのfreshness manifestを生成し、BUD/引き継ぎ生成ビューへ実行環境・現在地点・具体的next_stepを反映する**
-- 根拠：scripts/resume_manifest.py / scripts/generate_current_views.py
+- 目的：**PR3: current_state_guard.pyでactive/retired/next_step/clone evidence/生成ビュー/歴史資料を機械検証する**
+- 根拠：scripts/current_state_guard.py / tests/test_current_state_guard.py / .github/workflows/current-state-guard.yml
 - 状態：in_progress
 
 ## 現在の作業レーン
