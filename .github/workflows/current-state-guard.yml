@@ -12,5 +12,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run current-state guards
         run: python3 scripts/current_state_guard.py
-      - name: Run regression tests
-        run: python3 tests/test_current_state_guard.py
+      - name: Run full regression tests
+        run: python3 -m unittest discover -s tests
