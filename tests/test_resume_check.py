@@ -167,6 +167,74 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 0)
 
+    def test_operation_stagnation_stops_repeated_same_operation(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
+                 "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
+                              "sha256": digest, "record_count": 1}}
+            self.write_state(root, p)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            fp = resume_check.state_fingerprint(state)
+            state["operation_history"] = [
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+            ]
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 4)
+
+    def test_operation_stagnation_allows_progress_after_state_change(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
+                 "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
+                              "sha256": digest, "record_count": 1}}
+            self.write_state(root, p)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            fp = resume_check.state_fingerprint(state)
+            state["current_position"]["summary"] = "changed"
+            new_fp = resume_check.state_fingerprint(state)
+            state["operation_history"] = [
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": new_fp},
+            ]
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 0)
+
+    def test_operation_stagnation_ignores_incomplete_history(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
+                 "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
+                              "sha256": digest, "record_count": 1}}
+            self.write_state(root, p)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            fp = resume_check.state_fingerprint(state)
+            state["operation_history"] = [
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state"},
+            ]
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
