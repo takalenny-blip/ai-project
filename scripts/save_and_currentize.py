@@ -91,7 +91,7 @@ def main() -> int:
     state["direct_chat"]["new_timestamp_naming_allowed"] = True
 
     # Keep canonical save metadata aligned with the sole live entrypoint.
-    state["save_pipeline"]["normal_entrypoints"] = ["save-request-intake.yml"]
+    state["save_pipeline"]["normal_entrypoints"] = ["save-request-intake.yml (pull_request_target; queue PR required)"]
     state["pending_monitoring"] = [
         item for item in state.get("pending_monitoring", [])
         if item != "最終修正PR merge後のCI成功確認"
