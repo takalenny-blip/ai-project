@@ -201,7 +201,38 @@
     "environment": "work_pc",
     "target": "DiMORA実機エクスポートJSONを正規化処理へ入力し、実データで正規化結果を検証する",
     "evidence": "scripts/dimora_json_normalizer.py / tests/test_dimora_json_normalizer.py / 実機エクスポートJSON（dimora-favorite-programs.json）",
-    "status": "ready"
+    "readiness": "blocked",
+    "blocked_reason": "実機エクスポートJSON（dimora-favorite-programs.json）が現時点で実行環境から利用可能であることを確認できていない",
+    "unblock_action": "作業PCで実機エクスポートJSONを取得・読み込み、preflightで存在・可読性・形式・件数を確認して証拠を記録する",
+    "prerequisites": [
+      {
+        "name": "scripts/dimora_json_normalizer.py",
+        "kind": "repo_file",
+        "verify_scope": "ci",
+        "status": "verified",
+        "evidence": {
+          "method": "GitHub main readback after PR #146 merge",
+          "checked_at": "2026-09-20"
+        }
+      },
+      {
+        "name": "tests/test_dimora_json_normalizer.py",
+        "kind": "repo_file",
+        "verify_scope": "ci",
+        "status": "verified",
+        "evidence": {
+          "method": "GitHub main readback after PR #146 merge",
+          "checked_at": "2026-09-20"
+        }
+      },
+      {
+        "name": "dimora-favorite-programs.json",
+        "kind": "external_artifact",
+        "verify_scope": "runtime",
+        "status": "unverified",
+        "evidence": null
+      }
+    ]
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
