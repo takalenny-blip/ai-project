@@ -53,7 +53,6 @@ def render(state: dict) -> tuple[str, str]:
     bud = f"""# BUD — バドのための最上位ダッシュボード
 
 {header}
-
 ## 現在の作業レーン
 
 **{state["primary_lane"]}**
@@ -90,7 +89,6 @@ def render(state: dict) -> tuple[str, str]:
     handover = f"""# 現在の引き継ぎ
 
 {header}
-
 ## 現在の作業レーン
 
 **{state["primary_lane"]}**
