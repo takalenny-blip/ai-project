@@ -37,6 +37,16 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "source": "docs/現在状態.json",
                 "generator": "scripts/resume_manifest.py",
             },
+            "external_response_gate": {
+                "status": "clear",
+                "clear_reason": "no pending external proposal",
+                "reaction_contract": {
+                    "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
+                    "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
+                    "rule": "all five required",
+                    "clear_condition": "all five valid",
+                },
+            },
         }
 
     def test_active_work_pc_passes(self):
