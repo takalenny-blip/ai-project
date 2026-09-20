@@ -303,8 +303,9 @@
         "verify_scope": "ci",
         "status": "verified",
         "evidence": {
-          "method": "GitHub main readback after PR #146 merge",
-          "checked_at": "2026-09-20"
+          "method": "GitHub main readback with repository blob SHA",
+          "checked_at": "2026-09-20",
+          "blob_sha": "7bcf28c818f836dd7257b7f5db1dd233da8543c5"
         }
       },
       {
@@ -313,8 +314,9 @@
         "verify_scope": "ci",
         "status": "verified",
         "evidence": {
-          "method": "GitHub main readback after PR #146 merge",
-          "checked_at": "2026-09-20"
+          "method": "GitHub main readback with repository blob SHA",
+          "checked_at": "2026-09-20",
+          "blob_sha": "8ff57ffba6562fbf350f6679783ee83234692588"
         }
       },
       {
@@ -324,8 +326,7 @@
         "status": "unverified",
         "evidence": null
       }
-    ],
-    "status": "blocked"
+    ]
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
