@@ -14,7 +14,14 @@ jobs:
   approve:
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.draft == false
+      github.event.pull_request.draft == false &&
+      (startsWith(github.event.pull_request.head.ref, 'bud/') ||
+       startsWith(github.event.pull_request.head.ref, 'ops/') ||
+       startsWith(github.event.pull_request.head.ref, 'fix/') ||
+       startsWith(github.event.pull_request.head.ref, 'feat/') ||
+       startsWith(github.event.pull_request.head.ref, 'docs/') ||
+       startsWith(github.event.pull_request.head.ref, 'save/direct-chat-') ||
+       startsWith(github.event.pull_request.head.ref, 'chat-save-request/'))
     runs-on: ubuntu-latest
     steps:
       - name: Verify canonical save PR shape (save PRs only)
