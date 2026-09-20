@@ -35,6 +35,18 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Reject duplicate pending save request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t pending < <(gh pr list --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("chat-save-request/")) | select(.number != '$PR_NUMBER') | .number')
+          if [ "${#pending[@]}" -gt 0 ]; then
+            echo "Duplicate pending save request detected: ${pending[*]}" >&2
+            exit 1
+          fi
       - name: Validate and read queue entry
         id: queue
         env:
