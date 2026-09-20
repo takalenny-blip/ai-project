@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
-import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,10 +21,8 @@ RETIRED_ALIASES = {
     "vaio_p": ("vaio_p", "VAIO P", "VAIO P + Chromium", "VAIO P運用"),
 }
 
-
 def fail(message: str) -> None:
     raise ValueError(message)
-
 
 def load_state(path: Path = STATE_PATH) -> dict:
     try:
@@ -34,18 +30,15 @@ def load_state(path: Path = STATE_PATH) -> dict:
     except Exception as exc:
         fail(f"canonical state unreadable: {exc}")
 
-
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
     if missing:
         fail("missing required fields: " + ", ".join(missing))
-
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
     nxt = state["next_step"]
     current = state["current_position"]
-
     if not active:
         fail("active execution environment is not defined")
     if not isinstance(retired, list):
@@ -59,15 +52,11 @@ def validate_state(state: dict) -> None:
             fail(f"next_step.{field} is missing")
     if not current.get("summary"):
         fail("current_position.summary is missing")
-
-    target = nxt["target"]
-    if any(phrase in target for phrase in ABSTRACT_NEXT_STEP):
+    if any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
         fail("next_step.target is too abstract or stale; require current concrete work")
-
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
         fail("work_pc clone_status=cloned requires clone_evidence")
-
 
 def retired_tokens(state: dict) -> tuple[str, ...]:
     tokens = []
@@ -76,13 +65,11 @@ def retired_tokens(state: dict) -> tuple[str, ...]:
         tokens.extend(RETIRED_ALIASES.get(item, ()))
     return tuple(dict.fromkeys(tokens))
 
-
 def validate_next_step_no_retired(state: dict) -> None:
     text = json.dumps(state["next_step"], ensure_ascii=False)
     for token in retired_tokens(state):
         if token in text:
             fail(f"retired environment appears in next_step: {token}")
-
 
 def validate_generated_views(state: dict) -> None:
     env = state["execution_environment"]
@@ -96,32 +83,24 @@ def validate_generated_views(state: dict) -> None:
         f"根拠：{nxt['evidence']}",
         f"**{current['summary']}**",
     ]
+    retired_line = f"退役：{', '.join(env.get('retired', [])) or '(なし)'}"
     for path in (BUD_PATH, HANDOVER_PATH):
         text = path.read_text(encoding="utf-8")
         for fragment in expected:
             if fragment not in text:
                 fail(f"generated view is stale or incomplete: {path} missing {fragment}")
         for token in retired_tokens(state):
-            if token in text and token not in "
-".join([
-                f"退役：{', '.join(env.get('retired', []))}",
-            ]):
+            if token in text and token not in retired_line:
                 fail(f"retired environment leaked into generated view outside retired list: {path}: {token}")
-
 
 def validate_projects(state: dict) -> None:
     retired = retired_tokens(state)
-    if not retired:
-        return
     for path in sorted((ROOT / "projects").glob("*.md")):
         text = path.read_text(encoding="utf-8")
-        if not any(token in text for token in retired):
-            continue
-        header = "
-".join(text.splitlines()[:20]).lower()
-        if "status: historical" not in header:
-            fail(f"non-historical project doc mentions retired policy: {path}")
-
+        if any(token in text for token in retired):
+            header = "\n".join(text.splitlines()[:20]).lower()
+            if "status: historical" not in header:
+                fail(f"non-historical project doc mentions retired policy: {path}")
 
 def validate_hash_contract(state: dict) -> None:
     manifest = state.get("resume_manifest", {})
@@ -130,7 +109,6 @@ def validate_hash_contract(state: dict) -> None:
     if not manifest.get("generator"):
         fail("resume_manifest.generator is missing")
 
-
 def validate(state_path: Path = STATE_PATH) -> None:
     state = load_state(state_path)
     validate_state(state)
@@ -138,7 +116,6 @@ def validate(state_path: Path = STATE_PATH) -> None:
     validate_hash_contract(state)
     validate_generated_views(state)
     validate_projects(state)
-
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -151,7 +128,6 @@ def main() -> int:
         return 1
     print("OK: current-state guards passed")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
