@@ -87,6 +87,8 @@ def validate_external_response_gate(state: dict) -> None:
     missing_contract = [key for key in required_contract if not contract.get(key)]
     if missing_contract:
         fail("reaction_contract missing: " + ", ".join(missing_contract))
+    if status == "clear" and gate.get("last_reaction") is None and not gate.get("clear_reason"):
+        fail("clear external_response_gate requires last_reaction or clear_reason")
     reaction = gate.get("last_reaction")
     if reaction is not None:
         required_reaction = ("proposal", "judgment", "reason", "next_action", "consistency")
