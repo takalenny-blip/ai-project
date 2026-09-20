@@ -89,6 +89,27 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             guard.validate_hash_contract(state)
 
+    def test_verified_repo_file_without_hash_fails(self):
+        state = self.base_state()
+        state["next_step"]["prerequisites"][0]["evidence"].pop("method", None)
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_verified_repo_file_wrong_hash_fails(self):
+        state = self.base_state()
+        state["next_step"]["prerequisites"][0]["evidence"]["sha256"] = "0" * 64
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_readiness_status_conflict_fails(self):
+        state = self.base_state()
+        state["next_step"]["status"] = "ready"
+        state["next_step"]["readiness"] = "blocked"
+        state["next_step"]["blocked_reason"] = "blocked"
+        state["next_step"]["unblock_action"] = "preflight"
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
 
 if __name__ == "__main__":
     unittest.main()
