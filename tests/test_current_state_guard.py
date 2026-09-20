@@ -49,7 +49,13 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
-    def test_stale_pr3_next_step_fails(self):\n        state = self.base_state()\n        state["next_step"]["target"] = "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める"\n        with self.assertRaises(ValueError):\n            guard.validate_state(state)\n\n    def test_cloned_without_evidence_fails(self):
+    def test_stale_pr3_next_step_fails(self):
+        state = self.base_state()
+        state["next_step"]["target"] = "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める"
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_cloned_without_evidence_fails(self):
         state = self.base_state()
         state["work_pc"] = {"clone_status": "cloned"}
         with self.assertRaises(ValueError):
