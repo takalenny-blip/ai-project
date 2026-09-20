@@ -41,71 +41,156 @@
   "verification_required": [
     {
       "item": "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "過去のrender-and-check失敗原因を特定し、現行成功状態で解消済みであることを確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "既存BUD/引き継ぎを生成ビューへ移行する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "Claude最終監査で現HEAD・実ファイル・atomic save・検索・workflow・Actions結果の整合を確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "Run #112の生成ビュー不一致が084/085反映後に再発していないことを確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "構造変更後のREADME・独立監査ガード・入口資料の機械検査を確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "直近5件のfailure Runを特定し、5件のエラーメールとの一対一対応をメール本文まで確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "Run #141のfailure原因（091のまま直チャット092が存在）を一括現在化で解消し、新CI成功を確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "JUNの「はじまりの言葉」へメタ監査視点を集成するか判断する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "097の保存ミス（Contents API個別コミット）を再発防止対象として整理し、保存経路の事前強制策をClaude確認する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "Claude最終監査B1: rules/運用ルール.md 4-2をタイムスタンプ方式へ一致させる",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "Claude最終監査B2: 正規保存経路をrules/運用ルール.mdへ明記する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "Claude最終監査B3: 実装済み保存経路・workflow・PR権限問題の現在状態をdocs/現在状態.jsonへ反映する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     },
     {
       "item": "Claude最終監査D: save-request-intake.ymlのPR作成失敗をcontinue-on-errorで握り潰さず失敗として検知する",
-      "status": "done"
+      "status": "recorded_unverified",
+      "evidence": {
+        "type": "historical_record",
+        "source": "docs/現在状態.json",
+        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+      }
     }
   ],
   "pending_monitoring": [
@@ -142,7 +227,6 @@
     "最終報告で【作業】と【保存】の状態を分離する"
   ],
   "known_constraints": [
-    "VAIO Pでは長文手入力を前提にしない",
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
     "既知事項を理由なく再調査しない",
     "認証情報・Cookie・セッション情報等を保存しない"
@@ -195,7 +279,15 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DiMORA実機でお気に入り番組データを取得しJSON化、PR #146の正規化処理をmainへ反映済み。保存経路の実機確認も完了し、次は実機エクスポートJSONを正規化処理へ入力して実データ検証を行う段階。"
+    "summary": "DiMORA実機でお気に入り番組データを取得しJSON化、PR #146の正規化処理をmainへ反映済み。保存経路の実機確認も完了し、次は実機エクスポートJSONを正規化処理へ入力して実データ検証を行う段階。",
+    "evidence": {
+      "type": "repository_record",
+      "references": [
+        "PR #146 merge 2c62ee474bd8e60b464c1275760a80574330290",
+        "PR #160 merge 32c6e1de948eebc815a371c3e28ec08ad2baf5c0"
+      ],
+      "note": "PR #146の正規化実装反映とPR #160のpreflight gate導入をmain readbackで確認。"
+    }
   },
   "next_step": {
     "environment": "work_pc",
@@ -246,5 +338,13 @@
     "source": "docs/現在状態.json",
     "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・next_stepを一括確認するための生成manifest",
     "required_first_check": "scripts/resume_check.py"
+  },
+  "verification_contract": {
+    "status": "implemented",
+    "verification_required_statuses": [
+      "recorded_unverified",
+      "verified"
+    ],
+    "rule": "recorded_unverifiedは履歴上の記録であり独立検証済みを意味しない。verifiedには一次証拠参照を付ける。doneを独立証拠なしの完了表現として使用しない。"
   }
 }
