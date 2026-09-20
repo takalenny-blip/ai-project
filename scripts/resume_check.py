@@ -51,6 +51,25 @@ def main():
     gate_status = external_gate.get("status", "clear")
     if gate_status not in {"clear", "pending"}:
         return fail("external_response_gate.status must be clear or pending")
+    contract = external_gate.get("reaction_contract")
+    if not isinstance(contract, dict):
+        return fail("external_response_gate.reaction_contract must be an object")
+    required_contract = ("required_fields", "judgment_values", "rule", "clear_condition")
+    missing_contract = [k for k in required_contract if not contract.get(k)]
+    if missing_contract:
+        return fail("reaction_contract missing: " + ", ".join(missing_contract))
+    if gate_status == "clear" and external_gate.get("last_reaction") is None and not external_gate.get("clear_reason"):
+        return fail("clear external_response_gate requires last_reaction or clear_reason")
+    reaction = external_gate.get("last_reaction")
+    if reaction is not None:
+        required_reaction = ("proposal", "judgment", "reason", "next_action", "consistency")
+        missing_reaction = [k for k in required_reaction if not reaction.get(k)]
+        if missing_reaction:
+            return fail("last_reaction missing: " + ", ".join(missing_reaction))
+        if reaction.get("judgment") not in contract["judgment_values"]:
+            return fail("last_reaction.judgment is invalid")
+        if reaction.get("consistency") is not True:
+            return fail("last_reaction.consistency must be true")
     if gate_status == "pending":
         required_gate_fields = ("purpose", "trigger", "required_action", "completion")
         missing_gate_fields = [k for k in required_gate_fields if not external_gate.get(k)]

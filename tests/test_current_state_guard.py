@@ -37,6 +37,16 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "source": "docs/現在状態.json",
                 "generator": "scripts/resume_manifest.py",
             },
+            "external_response_gate": {
+                "status": "clear",
+                "clear_reason": "no pending external proposal",
+                "reaction_contract": {
+                    "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
+                    "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
+                    "rule": "all five required",
+                    "clear_condition": "all five valid",
+                },
+            },
         }
 
     def test_active_work_pc_passes(self):
@@ -125,8 +135,28 @@ class CurrentStateGuardTests(unittest.TestCase):
             "trigger": "proposal received",
             "required_action": "state judgment and next action",
             "completion": "reaction presented",
+            "reaction_contract": {
+                "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
+                "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
+                "rule": "all five required",
+                "clear_condition": "all five valid",
+            },
         }
         guard.validate_state(state)
+
+    def test_clear_without_reaction_or_reason_fails(self):
+        state = self.base_state()
+        state["external_response_gate"] = {
+            "status": "clear",
+            "reaction_contract": {
+                "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
+                "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
+                "rule": "all five required",
+                "clear_condition": "all five valid",
+            },
+        }
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
 
     def test_readiness_status_conflict_fails(self):
         state = self.base_state()

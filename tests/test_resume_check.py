@@ -114,6 +114,43 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             self.write_state(root, p)
             self.assertEqual(self.run_check(root, artifact), 1)
 
+    def test_pending_gate_reaction_missing_field_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "unverified"}
+            self.write_state(root, p, readiness="blocked")
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["external_response_gate"] = {
+                "status": "pending", "purpose": "react", "trigger": "proposal received",
+                "required_action": "respond", "completion": "reaction presented",
+                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"],"judgment_values": ["adopt","adopt_modified","hold","reject","info_only"],"rule": "all five required","clear_condition": "all five valid"},
+                "last_reaction": {"proposal": "x", "judgment": "adopt", "reason": "r", "next_action": "n"}
+            }
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 1)
+
+    def test_reaction_contract_accepts_complete_consistent_reaction(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 1}}
+            self.write_state(root, p)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["external_response_gate"] = {
+                "status": "clear", "purpose": "react", "trigger": "proposal received",
+                "required_action": "respond", "completion": "reaction presented",
+                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"],"judgment_values": ["adopt","adopt_modified","hold","reject","info_only"],"rule": "all five required","clear_condition": "all five valid"},
+                "last_reaction": {"proposal": "x", "judgment": "adopt_modified", "reason": "r", "next_action": "n", "consistency": True}
+            }
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -359,6 +359,25 @@
     "trigger": "JUN/Claude等の外部提案・レビュー本文を受領した瞬間",
     "required_action": "5-2-1に従い、提案の要点・バドの判断・理由/考え・次の行動を同一応答で処理する。pending中は保存結果待ちや主作業を先行しない",
     "completion": "反応済みの判断と次の行動を提示し、必要な実行・検証へ移った時点でclearへ戻す",
-    "hard_stop_exit_code": 3
+    "hard_stop_exit_code": 3,
+    "reaction_contract": {
+      "required_fields": [
+        "proposal",
+        "judgment",
+        "reason",
+        "next_action",
+        "consistency"
+      ],
+      "judgment_values": [
+        "adopt",
+        "adopt_modified",
+        "hold",
+        "reject",
+        "info_only"
+      ],
+      "rule": "5項目すべてが非空で、judgmentが許容値、consistencyがtrueであること。1項目でも欠ける・曖昧・不整合ならpendingを解除しない。",
+      "clear_condition": "pending対象について5項目を満たす反応を提示し、judgmentとnext_actionが整合していること"
+    },
+    "clear_reason": "no_pending_external_proposal"
   }
 }
