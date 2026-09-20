@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 import tempfile
 import unittest
@@ -9,8 +10,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import current_state_guard as guard
 
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def git_blob_sha(path):
+    data = path.read_bytes()
+    header = f"blob {len(data)}\0".encode()
+    return hashlib.sha1(header + data).hexdigest()
+
+
 class CurrentStateGuardTests(unittest.TestCase):
     def base_state(self):
+        resume_check = ROOT / "scripts" / "resume_check.py"
         return {
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "current"},
@@ -18,9 +29,8 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "environment": "work_pc",
                 "target": "work_pcで再開確認を実施する",
                 "evidence": "resume_check.py",
-                "status": "proposed",
                 "readiness": "ready",
-                "prerequisites": [{"name": "resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20"}}],
+                "prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": git_blob_sha(resume_check)}}],
             },
             "work_pc": {"clone_status": "unverified"},
             "resume_manifest": {
@@ -88,6 +98,27 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["resume_manifest"]["source"] = "README.md"
         with self.assertRaises(ValueError):
             guard.validate_hash_contract(state)
+
+    def test_verified_repo_file_without_hash_fails(self):
+        state = self.base_state()
+        state["next_step"]["prerequisites"][0]["evidence"].pop("method", None)
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_verified_repo_file_wrong_hash_fails(self):
+        state = self.base_state()
+        state["next_step"]["prerequisites"][0]["evidence"]["sha256"] = "0" * 64
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_readiness_status_conflict_fails(self):
+        state = self.base_state()
+        state["next_step"]["status"] = "ready"
+        state["next_step"]["readiness"] = "blocked"
+        state["next_step"]["blocked_reason"] = "blocked"
+        state["next_step"]["unblock_action"] = "preflight"
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
 
 
 if __name__ == "__main__":

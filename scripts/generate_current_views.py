@@ -47,7 +47,7 @@ def render(state: dict) -> tuple[str, str]:
 - 環境：**{nxt["environment"]}**
 - 目的：**{nxt["target"]}**
 - 根拠：{nxt["evidence"]}
-- 状態：{nxt["status"]}
+- 状態：{nxt["readiness"]}
 """.rstrip("\n")
 
     bud = f"""# BUD — バドのための最上位ダッシュボード
