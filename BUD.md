@@ -16,15 +16,14 @@
 
 ## 現在地点
 
-**退役済み環境を除外し、work_pcを現在の作業環境として再開基盤を整備中。PR1・PR2はマージ済み、PR3のCIガードを実装中。**
+**退役済み環境を除外し、work_pcを現在の作業環境として再開基盤を整備済み。PR1・PR2・PR3はマージ済み。PR3のCIガードと直チャット保存経路のcanonical確認まで完了。**
 
 ## 次の一手
 
 - 環境：**work_pc**
-- 目的：**PR3: current_state_guard.pyでactive/retired/next_step/clone evidence/生成ビュー/歴史資料を機械検証する**
-- 根拠：scripts/current_state_guard.py / tests/test_current_state_guard.py / .github/workflows/current-state-guard.yml
-- 状態：in_progress
-
+- 目的：**PR3完了後のcanonical現在状態を確認し、次の実装単位を決める**
+- 根拠：docs/現在状態.json / scripts/current_state_guard.py / tests/test_current_state_guard.py / .github/workflows/current-state-guard.yml
+- 状態：ready
 
 ## 現在の作業レーン
 
@@ -49,8 +48,8 @@
 
 - 最新保存：**2026-09-20T13-10-04.656860+0900**
 - 最新パス：直チャット/2026-09-20_直チャット即時保存_2026-09-20T13-10-04.656860+0900.md
-- 旧連番保存：True
-- 新タイムスタンプ方式：True
+- 旧連番保存：true
+- 新タイムスタンプ方式：true
 
 ## 移行
 
