@@ -2,11 +2,15 @@ name: Save request intake
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened]
+    types: [opened]
     branches:
       - main
     paths:
       - '.github/save-queue/**'
+
+concurrency:
+  group: save-intake-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -40,6 +44,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # pull_request_target deliberately checks out only trusted main.
+          # The queue PR head is read as data through the API and is never executed.
           mapfile -t changed < <(gh pr view "$PR_URL" --json files --jq '.files[].path' | sort)
           test "${#changed[@]}" = "1"
           queue_file="${changed[0]}"
@@ -47,7 +53,6 @@ jobs:
             .github/save-queue/*.md) ;;
             *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
           esac
-          test -s <(gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${HEAD_SHA}" --jq '.content' | tr -d '\n' | base64 --decode)
           gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${HEAD_SHA}" --jq '.content' |
             tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
           test -s "$RUNNER_TEMP/direct-chat.md"
@@ -118,7 +123,7 @@ jobs:
             --body $'Canonical direct-chat save executed by scripts/save_and_currentize.py on an Actions runner.'
 
       - name: Cleanup request branch
-        if: always()
+        if: success()
         env:
           SOURCE_BRANCH: ${{ github.head_ref }}
         shell: bash
