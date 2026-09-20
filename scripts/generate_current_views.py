@@ -111,8 +111,9 @@ def render(state: dict) -> tuple[str, str]:
 - {migration["normal_work_policy"]}
 - {migration["temporary_manual_sync"]}
 """
-    # Keep generated views byte-identical to checked-in views: no trailing newline.
-    return bud, handover
+    # Generated views intentionally have no trailing newline; the checked-in views
+    # use the same byte-level contract and CI compares them with cmp.
+    return bud.rstrip("\n"), handover.rstrip("\n")
 
 def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None:
     out_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -141,6 +142,9 @@ def main() -> int:
         bud2, handover2 = render(load_state())
         if (bud, handover) != (bud2, handover2):
             print("FAIL: render is not deterministic")
+            return 1
+        if bud.endswith("\n") or handover.endswith("\n"):
+            print("FAIL: generated views must not have a trailing newline")
             return 1
         print("OK: deterministic render")
     else:
