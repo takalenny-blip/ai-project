@@ -17,21 +17,16 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "current"},
             "next_step": {
-                "environment": "work_pc",
-                "target": "target",
-                "evidence": "evidence",
-                "readiness": readiness,
-                "prerequisites": [prerequisite],
+                "environment": "work_pc", "target": "target", "evidence": "evidence",
+                "readiness": readiness, "prerequisites": [prerequisite],
             },
             "resume_manifest": {"source": "docs/現在状態.json", "generator": "scripts/resume_manifest.py"},
             "external_response_gate": {
-                "status": "clear",
-                "clear_reason": "no_pending_external_proposal",
+                "status": "clear", "clear_reason": "no_pending_external_proposal",
                 "reaction_contract": {
                     "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
                     "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
-                    "rule": "all five required",
-                    "clear_condition": "all five valid",
+                    "rule": "all five required", "clear_condition": "all five valid",
                 },
             },
         }
@@ -60,49 +55,38 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
 
     def test_ready_valid_json_and_count(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             artifact.write_text(json.dumps([{"eventId": 1}, {"eventId": 2}]), encoding="utf-8")
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 2}}
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 2}}
             self.write_state(root, p)
             self.assertEqual(self.run_check(root, artifact), 0)
 
     def test_invalid_json_fails(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             artifact.write_text("{invalid", encoding="utf-8")
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 1}}
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 1}}
             self.write_state(root, p)
             self.assertEqual(self.run_check(root, artifact), 1)
 
     def test_record_count_mismatch_fails(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 2}}
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 2}}
             self.write_state(root, p)
             self.assertEqual(self.run_check(root, artifact), 1)
 
     def test_pending_external_response_gate_stops_with_exit_3(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "unverified"}
+            root = Path(td); artifact = root / "dimora.json"
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "unverified"}
             self.write_state(root, p, readiness="blocked")
             state_path = root / "docs" / "現在状態.json"
             state = json.loads(state_path.read_text(encoding="utf-8"))
@@ -112,8 +96,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                 "reaction_contract": {
                     "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
                     "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
-                    "rule": "all five required",
-                    "clear_condition": "all five valid",
+                    "rule": "all five required", "clear_condition": "all five valid",
                 },
             }
             state_path.write_text(json.dumps(state), encoding="utf-8")
@@ -121,19 +104,15 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
 
     def test_missing_artifact_fails(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "missing.json"
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": "0" * 64, "record_count": 0}}
+            root = Path(td); artifact = root / "missing.json"
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": "0" * 64, "record_count": 0}}
             self.write_state(root, p)
             self.assertEqual(self.run_check(root, artifact), 1)
 
     def test_pending_gate_reaction_missing_field_fails(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "unverified"}
             self.write_state(root, p, readiness="blocked")
             state_path = root / "docs" / "現在状態.json"
@@ -141,7 +120,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state["external_response_gate"] = {
                 "status": "pending", "purpose": "react", "trigger": "proposal received",
                 "required_action": "respond", "completion": "reaction presented",
-                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"],"judgment_values": ["adopt","adopt_modified","hold","reject","info_only"],"rule": "all five required","clear_condition": "all five valid"},
+                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"], "judgment_values": ["adopt","adopt_modified","hold","reject","info_only"], "rule": "all five required", "clear_condition": "all five valid"},
                 "last_reaction": {"proposal": "x", "judgment": "adopt", "reason": "r", "next_action": "n"}
             }
             state_path.write_text(json.dumps(state), encoding="utf-8")
@@ -149,8 +128,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
 
     def test_reaction_contract_accepts_complete_consistent_reaction(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
             p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
@@ -161,28 +139,24 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state["external_response_gate"] = {
                 "status": "clear", "purpose": "react", "trigger": "proposal received",
                 "required_action": "respond", "completion": "reaction presented",
-                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"],"judgment_values": ["adopt","adopt_modified","hold","reject","info_only"],"rule": "all five required","clear_condition": "all five valid"},
+                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"], "judgment_values": ["adopt","adopt_modified","hold","reject","info_only"], "rule": "all five required", "clear_condition": "all five valid"},
                 "last_reaction": {"proposal": "x", "judgment": "adopt_modified", "reason": "r", "next_action": "n", "consistency": True}
             }
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 0)
 
-    def test_operation_stagnation_stops_repeated_same_operation(self):
+    def test_operation_stagnation_stops_after_two_repetitions(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 1}}
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 1}}
             self.write_state(root, p)
             state_path = root / "docs" / "現在状態.json"
             state = json.loads(state_path.read_text(encoding="utf-8"))
             fp = resume_check.state_fingerprint(state)
             state["operation_history"] = [
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
                 {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
                 {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
             ]
@@ -191,14 +165,11 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
 
     def test_operation_stagnation_allows_progress_after_state_change(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 1}}
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 1}}
             self.write_state(root, p)
             state_path = root / "docs" / "現在状態.json"
             state = json.loads(state_path.read_text(encoding="utf-8"))
@@ -207,7 +178,6 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             new_fp = resume_check.state_fingerprint(state)
             state["operation_history"] = [
                 {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
                 {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": new_fp},
             ]
             state_path.write_text(json.dumps(state), encoding="utf-8")
@@ -215,22 +185,35 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
 
     def test_operation_stagnation_ignores_incomplete_history(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
+            root = Path(td); artifact = root / "dimora.json"
             artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
             digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 1}}
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 1}}
             self.write_state(root, p)
             state_path = root / "docs" / "現在状態.json"
             state = json.loads(state_path.read_text(encoding="utf-8"))
             fp = resume_check.state_fingerprint(state)
             state["operation_history"] = [
                 {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
                 {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state"},
+            ]
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 0)
+
+    def test_single_operation_does_not_stop(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td); artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
+                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 1}}
+            self.write_state(root, p)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            fp = resume_check.state_fingerprint(state)
+            state["operation_history"] = [
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
             ]
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 0)
