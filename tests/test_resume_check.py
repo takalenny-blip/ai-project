@@ -9,6 +9,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import resume_check
+from operation_history import append_operation, state_fingerprint
 
 
 class ResumeCheckExternalArtifactTests(unittest.TestCase):
@@ -155,10 +156,10 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             self.write_state(root, p)
             state_path = root / "docs" / "現在状態.json"
             state = json.loads(state_path.read_text(encoding="utf-8"))
-            fp = resume_check.state_fingerprint(state)
+            fp = state_fingerprint(state)
             state["operation_history"] = [
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "before_state_fingerprint": fp, "after_state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "before_state_fingerprint": fp, "after_state_fingerprint": fp},
             ]
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 4)
@@ -177,8 +178,8 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state["current_position"]["summary"] = "changed"
             new_fp = resume_check.state_fingerprint(state)
             state["operation_history"] = [
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": new_fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "before_state_fingerprint": fp, "after_state_fingerprint": new_fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "before_state_fingerprint": new_fp, "after_state_fingerprint": new_fp},
             ]
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 0)
@@ -195,7 +196,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state = json.loads(state_path.read_text(encoding="utf-8"))
             fp = resume_check.state_fingerprint(state)
             state["operation_history"] = [
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "before_state_fingerprint": fp, "after_state_fingerprint": fp},
                 {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state"},
             ]
             state_path.write_text(json.dumps(state), encoding="utf-8")
@@ -211,12 +212,32 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             self.write_state(root, p)
             state_path = root / "docs" / "現在状態.json"
             state = json.loads(state_path.read_text(encoding="utf-8"))
-            fp = resume_check.state_fingerprint(state)
+            fp = state_fingerprint(state)
             state["operation_history"] = [
-                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "state_fingerprint": fp},
+                {"operation": "resume_check", "purpose": "resume validation", "target": "canonical state", "before_state_fingerprint": fp, "after_state_fingerprint": fp},
             ]
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 0)
+
+
+    def test_append_operation_records_before_after(self):
+        state = {}
+        before = state_fingerprint(state)
+        state["current_position"] = {"summary": "changed"}
+        after = state_fingerprint(state)
+        append_operation(
+            state,
+            operation="test",
+            purpose="record operation",
+            target="canonical state",
+            before_state_fingerprint=before,
+            after_state_fingerprint=after,
+            result="ok",
+            status="success",
+        )
+        self.assertEqual(len(state["operation_history"]), 1)
+        self.assertEqual(state["operation_history"][0]["before_state_fingerprint"], before)
+        self.assertEqual(state["operation_history"][0]["after_state_fingerprint"], after)
 
 
 if __name__ == "__main__":
