@@ -80,6 +80,23 @@ def validate_external_response_gate(state: dict) -> None:
     status = gate.get("status", "clear")
     if status not in {"clear", "pending"}:
         fail("external_response_gate.status must be clear or pending")
+    contract = gate.get("reaction_contract")
+    if not isinstance(contract, dict):
+        fail("external_response_gate.reaction_contract must be an object")
+    required_contract = ("required_fields", "judgment_values", "rule", "clear_condition")
+    missing_contract = [key for key in required_contract if not contract.get(key)]
+    if missing_contract:
+        fail("reaction_contract missing: " + ", ".join(missing_contract))
+    reaction = gate.get("last_reaction")
+    if reaction is not None:
+        required_reaction = ("proposal", "judgment", "reason", "next_action", "consistency")
+        missing_reaction = [key for key in required_reaction if not reaction.get(key)]
+        if missing_reaction:
+            fail("last_reaction missing: " + ", ".join(missing_reaction))
+        if reaction.get("judgment") not in contract["judgment_values"]:
+            fail("last_reaction.judgment is invalid")
+        if reaction.get("consistency") is not True:
+            fail("last_reaction.consistency must be true")
     if status == "pending":
         required = ("purpose", "trigger", "required_action", "completion")
         missing = [key for key in required if not gate.get(key)]
