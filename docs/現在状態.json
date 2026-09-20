@@ -195,13 +195,19 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。PR1はマージ済み、PR2のmanifest・生成ビュー現在化を実装中。"
+    "summary": "VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。PR1・PR2はマージ済み、PR3のCIガードを実装中。"
   },
   "next_step": {
     "environment": "work_pc",
-    "target": "PR2: resume_manifest.pyでcanonical stateのfreshness manifestを生成し、BUD/引き継ぎ生成ビューへ実行環境・現在地点・具体的next_stepを反映する",
-    "evidence": "scripts/resume_manifest.py / scripts/generate_current_views.py",
+    "target": "PR3: current_state_guard.pyでactive/retired/next_step/clone evidence/生成ビュー/歴史資料を機械検証する",
+    "evidence": "scripts/current_state_guard.py / tests/test_current_state_guard.py / .github/workflows/current-state-guard.yml",
     "status": "in_progress"
+  },
+  "current_state_guards": {
+    "script": "scripts/current_state_guard.py",
+    "tests": "tests/test_current_state_guard.py",
+    "workflow": ".github/workflows/current-state-guard.yml",
+    "purpose": "active/retiredの矛盾、抽象next_step、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入をCIで停止する"
   },
   "resume_manifest": {
     "generator": "scripts/resume_manifest.py",
