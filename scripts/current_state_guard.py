@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +31,26 @@ def load_state(path: Path = STATE_PATH) -> dict:
     except Exception as exc:
         fail(f"canonical state unreadable: {exc}")
 
+def _repo_blob_sha(path: Path) -> str:
+    data = path.read_bytes()
+    header = ("blob " + str(len(data)) + "\0").encode()
+    return hashlib.sha1(header + data).hexdigest()
+
+def _validate_verified_evidence(prerequisite: dict) -> None:
+    evidence = prerequisite.get("evidence")
+    if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at"):
+        fail("verified prerequisite requires method and checked_at evidence")
+    if prerequisite["kind"] == "repo_file":
+        path = ROOT / prerequisite["name"]
+        if not path.is_file():
+            fail("verified repo_file does not exist: " + prerequisite["name"])
+        expected = evidence.get("sha256") or evidence.get("blob_sha")
+        if not expected:
+            fail("verified repo_file requires sha256 or blob_sha evidence: " + prerequisite["name"])
+        actual = hashlib.sha256(path.read_bytes()).hexdigest() if evidence.get("sha256") else _repo_blob_sha(path)
+        if actual != expected:
+            fail("verified repo_file evidence mismatch: " + prerequisite["name"])
+
 def validate_prerequisites(next_step: dict) -> None:
     prerequisites = next_step.get("prerequisites")
     if not isinstance(prerequisites, list):
@@ -48,9 +69,7 @@ def validate_prerequisites(next_step: dict) -> None:
         if prerequisite["status"] not in {"verified", "unverified", "missing", "invalid"}:
             fail(f"invalid prerequisite status: {prerequisite['status']}")
         if prerequisite["status"] == "verified":
-            evidence = prerequisite.get("evidence")
-            if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at"):
-                fail(f"verified prerequisite {prerequisite['name']} requires method and checked_at evidence")
+            _validate_verified_evidence(prerequisite)
     if readiness == "ready" and any(p["status"] != "verified" for p in prerequisites):
         fail("next_step.readiness=ready requires every prerequisite to be verified")
 
@@ -74,6 +93,8 @@ def validate_state(state: dict) -> None:
     for field in ("target", "evidence"):
         if not nxt.get(field):
             fail(f"next_step.{field} is missing")
+    if nxt.get("status") not in {None, nxt.get("readiness")}:
+        fail("next_step.status must be absent or equal to readiness")
     if not current.get("summary"):
         fail("current_position.summary is missing")
     if any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
