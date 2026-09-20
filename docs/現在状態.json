@@ -109,7 +109,8 @@
     }
   ],
   "pending_monitoring": [
-    "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認"
+    "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認",
+    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する"
   ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
@@ -148,7 +149,7 @@
   "save_pipeline": {
     "status": "canonical_route_documented_and_guarded",
     "normal_entrypoints": [
-      "save-request-intake.yml"
+      "save-request-intake.yml (pull_request_target; queue PR required)"
     ],
     "canonical_processor": "scripts/save_and_currentize.py",
     "atomic_output": [
@@ -157,9 +158,11 @@
       "BUD.md",
       "docs/引き継ぎ/現在の引き継ぎ.md"
     ],
-    "integration_flow": "保存要求 → 正規workflow → save_and_currentize.py → save branch → 1 commit → PR → CI → merge",
-    "pr_creation_failure": "job failure; never treat a save branch without PR as successful",
-    "direct_contents_api_for_save": "prohibited"
+    "integration_flow": "保存要求 → chat-save-request/** キューbranch＋キューPR → save-request-intake.yml → save_and_currentize.py → save branch → 1 commit → PR → CI → merge",
+    "pr_creation_failure": "queue PR or final save PR creation failure is not success; report the failed stage",
+    "direct_contents_api_for_save": "prohibited",
+    "queue_entrypoint": "chat-save-request/** のキューbranch＋キューPR",
+    "final_save_branch_owned_by": "save-request-intake.yml"
   },
   "operation_separation": {
     "status": "implemented_in_rules",
@@ -168,7 +171,8 @@
     "save_is_non_blocking": true,
     "resume_main_work_after_save_dispatch": true,
     "duplicate_operation_guard": true,
-    "final_report_separates_work_and_save": true
+    "final_report_separates_work_and_save": true,
+    "final_report_contract": "【作業】主作業の状態・実施内容・未完了事項・現在の次の一手／【保存】保存状態・投入先識別情報・残段階。保存は主作業を停止させない。"
   },
   "approval_policy": {
     "approver": "taka2-dev",
