@@ -1,3 +1,5 @@
+status: historical
+
 # DIGA自動化
 
 更新日：2026-09-13
