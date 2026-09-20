@@ -39,6 +39,19 @@ def main():
         return fail("next_step.environment does not match active environment")
     if not nxt.get("target") or not nxt.get("evidence"):
         return fail("next_step requires target and evidence")
+    if not isinstance(nxt.get("prerequisites"), list):
+        return fail("next_step.prerequisites must be explicit")
+    if nxt.get("readiness") not in {"ready", "blocked"}:
+        return fail("next_step.readiness must be ready or blocked")
+    bad = [p.get("name", "?") for p in nxt["prerequisites"] if p.get("status") != "verified"]
+    if nxt["readiness"] == "ready" and bad:
+        return fail("next_step is ready but prerequisites are not verified: " + ", ".join(bad))
+    if nxt["readiness"] == "blocked":
+        if not nxt.get("blocked_reason") or not nxt.get("unblock_action"):
+            return fail("blocked next_step requires blocked_reason and unblock_action")
+        print("STOP: next_step is blocked: " + nxt["blocked_reason"])
+        print("UNBLOCK: " + nxt["unblock_action"])
+        return 1
     if not current.get("summary"):
         return fail("current_position.summary is missing")
 

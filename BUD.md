@@ -23,7 +23,7 @@
 - 環境：**work_pc**
 - 目的：**DiMORA実機エクスポートJSONを正規化処理へ入力し、実データで正規化結果を検証する**
 - 根拠：scripts/dimora_json_normalizer.py / tests/test_dimora_json_normalizer.py / 実機エクスポートJSON（dimora-favorite-programs.json）
-- 状態：ready
+- 状態：blocked
 ## 現在の作業レーン
 
 **DIGA / DiMORA自動化**

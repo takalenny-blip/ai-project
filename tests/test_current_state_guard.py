@@ -19,6 +19,8 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "target": "work_pcで再開確認を実施する",
                 "evidence": "resume_check.py",
                 "status": "proposed",
+                "readiness": "ready",
+                "prerequisites": [{"name": "resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20"}}],
             },
             "work_pc": {"clone_status": "unverified"},
             "resume_manifest": {
@@ -52,6 +54,26 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_stale_pr3_next_step_fails(self):
         state = self.base_state()
         state["next_step"]["target"] = "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める"
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_ready_with_unverified_prerequisite_fails(self):
+        state = self.base_state()
+        state["next_step"]["prerequisites"][0]["status"] = "unverified"
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_blocked_with_unverified_prerequisite_passes(self):
+        state = self.base_state()
+        state["next_step"]["readiness"] = "blocked"
+        state["next_step"]["blocked_reason"] = "artifact missing"
+        state["next_step"]["unblock_action"] = "run preflight"
+        state["next_step"]["prerequisites"][0]["status"] = "unverified"
+        guard.validate_state(state)
+
+    def test_verified_without_evidence_fails(self):
+        state = self.base_state()
+        state["next_step"]["prerequisites"][0]["evidence"] = None
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
