@@ -48,7 +48,7 @@ def render(state: dict) -> tuple[str, str]:
 - 目的：**{nxt["target"]}**
 - 根拠：{nxt["evidence"]}
 - 状態：{nxt["status"]}
-"""
+""".rstrip("\n")
 
     bud = f"""# BUD — バドのための最上位ダッシュボード
 
