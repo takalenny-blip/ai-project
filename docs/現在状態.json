@@ -271,11 +271,14 @@
     "retired": [
       "vaio_p"
     ],
-    "note": "active=たか申告（Issue #114）に基づく現在の作業環境。clone_statusは一次記録確認まで未検証。"
+    "note": "active=Windows PC（たか申告）。Linux/VAIO Pはretired。作業環境の実体をWindows PCとして固定し、旧環境へ読み替えない。"
   },
   "work_pc": {
     "clone_status": "unverified",
-    "evidence_status": "unverified"
+    "evidence_status": "unverified",
+    "platform": "Windows PC",
+    "runtime_artifact_access": "unverified",
+    "artifact": "dimora-favorite-programs.json"
   },
   "current_position": {
     "status": "current",
@@ -295,7 +298,7 @@
     "evidence": "scripts/dimora_json_normalizer.py / tests/test_dimora_json_normalizer.py / 実機エクスポートJSON（dimora-favorite-programs.json）",
     "readiness": "blocked",
     "blocked_reason": "実機エクスポートJSON（dimora-favorite-programs.json）が現時点で実行環境から利用可能であることを確認できていない",
-    "unblock_action": "作業PCで実機エクスポートJSONを取得・読み込み、preflightで存在・可読性・形式・件数を確認して証拠を記録する",
+    "unblock_action": "Windows PCで実機エクスポートJSON（dimora-favorite-programs.json）を取得・読み込み、preflightで存在・可読性・形式・件数を確認して証拠を記録する。実行環境をLinux/VAIOへ読み替えない。",
     "prerequisites": [
       {
         "name": "scripts/dimora_json_normalizer.py",
@@ -321,7 +324,7 @@
       },
       {
         "name": "dimora-favorite-programs.json",
-        "location": "work_pc runtime artifact",
+        "location": "Windows PC runtime artifact",
         "kind": "external_artifact",
         "verify_scope": "runtime",
         "status": "unverified",
