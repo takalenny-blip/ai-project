@@ -6,6 +6,8 @@ import hashlib
 import os
 from pathlib import Path
 
+from operation_history import state_fingerprint
+
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "docs" / "現在状態.json"
 REQUIRED = ("execution_environment", "current_position", "next_step")
@@ -30,27 +32,38 @@ def external_record_count(data):
         raise ValueError("external_artifact records must be objects")
     return len(records)
 
-def state_fingerprint(state):
-    """Fingerprint canonical state excluding operation history itself."""
-    snapshot = {k: v for k, v in state.items() if k != "operation_history"}
-    payload = json.dumps(snapshot, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
-
 def operation_stagnation(state, threshold=2):
-    """Return a stop reason when the same operation repeats without state change."""
+    """Return a stop reason when the same operation repeats without canonical progress."""
     history = state.get("operation_history", [])
     if not isinstance(history, list) or len(history) < threshold:
         return None
     recent = history[-threshold:]
-    required = ("operation", "purpose", "target", "state_fingerprint")
-    if not all(isinstance(item, dict) and all(item.get(k) for k in required) for item in recent):
+    required = (
+        "operation",
+        "purpose",
+        "target",
+        "before_state_fingerprint",
+        "after_state_fingerprint",
+    )
+    if not all(
+        isinstance(item, dict) and all(item.get(k) for k in required)
+        for item in recent
+    ):
         return None
-    signatures = {(item["operation"], item["purpose"], item["target"]) for item in recent}
-    fingerprints = {item["state_fingerprint"] for item in recent}
-    current = state_fingerprint(state)
-    if len(signatures) == 1 and len(fingerprints) == 1 and fingerprints == {current}:
+    signatures = {
+        (item["operation"], item["purpose"], item["target"]) for item in recent
+    }
+    no_change = all(
+        item["before_state_fingerprint"] == item["after_state_fingerprint"]
+        for item in recent
+    )
+    fingerprints = {item["before_state_fingerprint"] for item in recent}
+    if len(signatures) == 1 and no_change and len(fingerprints) == 1:
         operation, purpose, target = next(iter(signatures))
-        return f"operation stagnation detected: {operation} / {purpose} / {target} repeated {threshold} times without canonical state change"
+        return (
+            f"operation stagnation detected: {operation} / {purpose} / {target} "
+            f"repeated {threshold} times without canonical state change"
+        )
     return None
 
 def fail(message):
