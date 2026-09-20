@@ -76,8 +76,8 @@ def render(state: dict) -> tuple[str, str]:
 
 - 最新保存：**{dc["latest_saved"]}**
 - 最新パス：{dc["latest_path"]}
-- 旧連番保存：{dc["legacy_serial_files_preserved"]}
-- 新タイムスタンプ方式：{dc["new_timestamp_naming_allowed"]}
+- 旧連番保存：{str(dc["legacy_serial_files_preserved"]).lower()}
+- 新タイムスタンプ方式：{str(dc["new_timestamp_naming_allowed"]).lower()}
 
 ## 移行
 
