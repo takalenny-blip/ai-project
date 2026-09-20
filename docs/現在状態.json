@@ -195,12 +195,18 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。"
+    "summary": "VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。PR1はマージ済み、PR2のmanifest・生成ビュー現在化を実装中。"
   },
   "next_step": {
     "environment": "work_pc",
-    "target": "PR1: resume_check.py と現在状態の実行環境・現在地点・next_stepを導入し、再開時のSTOP/OK判定を可能にする",
-    "evidence": "docs/現在状態.json の execution_environment / current_position / next_step",
-    "status": "proposed"
+    "target": "PR2: resume_manifest.pyでcanonical stateのfreshness manifestを生成し、BUD/引き継ぎ生成ビューへ実行環境・現在地点・具体的next_stepを反映する",
+    "evidence": "scripts/resume_manifest.py / scripts/generate_current_views.py",
+    "status": "in_progress"
+  },
+  "resume_manifest": {
+    "generator": "scripts/resume_manifest.py",
+    "source": "docs/現在状態.json",
+    "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・next_stepを一括確認するための生成manifest",
+    "required_first_check": "scripts/resume_check.py"
   }
 }
