@@ -73,6 +73,20 @@ def validate_prerequisites(next_step: dict) -> None:
     if readiness == "ready" and any(p["status"] != "verified" for p in prerequisites):
         fail("next_step.readiness=ready requires every prerequisite to be verified")
 
+def validate_external_response_gate(state: dict) -> None:
+    gate = state.get("external_response_gate", {"status": "clear"})
+    if not isinstance(gate, dict):
+        fail("external_response_gate must be an object")
+    status = gate.get("status", "clear")
+    if status not in {"clear", "pending"}:
+        fail("external_response_gate.status must be clear or pending")
+    if status == "pending":
+        required = ("purpose", "trigger", "required_action", "completion")
+        missing = [key for key in required if not gate.get(key)]
+        if missing:
+            fail("pending external_response_gate missing: " + ", ".join(missing))
+
+
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
     if missing:
@@ -100,6 +114,7 @@ def validate_state(state: dict) -> None:
     if any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
         fail("next_step.target is too abstract or stale; require current concrete work")
     validate_prerequisites(nxt)
+    validate_external_response_gate(state)
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
         fail("work_pc clone_status=cloned requires clone_evidence")
