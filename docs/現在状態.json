@@ -321,6 +321,7 @@
       },
       {
         "name": "dimora-favorite-programs.json",
+        "location": "work_pc runtime artifact",
         "kind": "external_artifact",
         "verify_scope": "runtime",
         "status": "unverified",
