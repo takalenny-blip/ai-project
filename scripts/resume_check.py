@@ -36,8 +36,7 @@ def state_fingerprint(state):
     payload = json.dumps(snapshot, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
 
-
-def operation_stagnation(state, threshold=3):
+def operation_stagnation(state, threshold=2):
     """Return a stop reason when the same operation repeats without state change."""
     history = state.get("operation_history", [])
     if not isinstance(history, list) or len(history) < threshold:
@@ -53,7 +52,6 @@ def operation_stagnation(state, threshold=3):
         operation, purpose, target = next(iter(signatures))
         return f"operation stagnation detected: {operation} / {purpose} / {target} repeated {threshold} times without canonical state change"
     return None
-
 
 def fail(message):
     print(f"STOP: {message}")
