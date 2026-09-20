@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 import tempfile
 import unittest
@@ -9,8 +10,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import current_state_guard as guard
 
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def git_blob_sha(path):
+    data = path.read_bytes()
+    header = f"blob {len(data)}\0".encode()
+    return hashlib.sha1(header + data).hexdigest()
+
+
 class CurrentStateGuardTests(unittest.TestCase):
     def base_state(self):
+        resume_check = ROOT / "scripts" / "resume_check.py"
         return {
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "current"},
@@ -19,7 +30,7 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "target": "work_pcで再開確認を実施する",
                 "evidence": "resume_check.py",
                 "readiness": "ready",
-                "prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": "1b4ba628eee011ee8d82f2de8e5b5dd12d42271d"}}],
+                "prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": git_blob_sha(resume_check)}}],
             },
             "work_pc": {"clone_status": "unverified"},
             "resume_manifest": {
