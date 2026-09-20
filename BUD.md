@@ -4,9 +4,26 @@
 
 ## 正本
 
-- 正本リポジトリ：`takalenny-blip/ai-project`
-- 現在状態正本：`docs/現在状態.json`
+- 正本リポジトリ：takalenny-blip/ai-project
+- 現在状態正本：docs/現在状態.json
 - 現在ビュー：BUD.md / docs/引き継ぎ/現在の引き継ぎ.md
+
+## 実行環境
+
+- 現在：**work_pc**
+- 退役：vaio_p
+- work_pc clone：**unverified**
+
+## 現在地点
+
+**VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。PR1はマージ済み、PR2のmanifest・生成ビュー現在化を実装中。**
+
+## 次の一手
+
+- 環境：**work_pc**
+- 目的：**PR2: resume_manifest.pyでcanonical stateのfreshness manifestを生成し、BUD/引き継ぎ生成ビューへ実行環境・現在地点・具体的next_stepを反映する**
+- 根拠：scripts/resume_manifest.py / scripts/generate_current_views.py
+- 状態：in_progress
 
 ## 現在の作業レーン
 
@@ -30,16 +47,12 @@
 ## 直チャット
 
 - 最新保存：**2026-09-20T10-16-14.585194+0900**
-- 最新パス：`直チャット/2026-09-20_直チャット即時保存_2026-09-20T10-16-14.585194+0900.md`
-- 旧連番保存：True
-- 新タイムスタンプ方式：True
+- 最新パス：直チャット/2026-09-20_直チャット即時保存_2026-09-20T10-16-14.585194+0900.md
+- 旧連番保存：true
+- 新タイムスタンプ方式：true
 
 ## 移行
 
 - 状態：complete
 - 通常工程：大手術の独立検証が完了したためDiMORA本来工程へ復帰する
 - 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
-
-## 次の一手
-
-**通常のDiMORA本来工程へ復帰する**
