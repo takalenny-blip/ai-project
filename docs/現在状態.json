@@ -181,5 +181,26 @@
     "save_pr_extra_verification": "save/direct-chat-* の保存PRのみ4ファイル形状を検証してから承認",
     "workflow": "pull_request_target",
     "security_guard": "github.event.pull_request.head.repo.full_name == github.repository を必須条件として維持"
+  },
+  "execution_environment": {
+    "active": "work_pc",
+    "retired": [
+      "vaio_p"
+    ],
+    "note": "active=たか申告（Issue #114）に基づく現在の作業環境。clone_statusは一次記録確認まで未検証。"
+  },
+  "work_pc": {
+    "clone_status": "unverified",
+    "evidence_status": "unverified"
+  },
+  "current_position": {
+    "status": "current",
+    "summary": "VAIO P運用を終了し、work_pcを現在の作業環境として再開基盤を整備中。"
+  },
+  "next_step": {
+    "environment": "work_pc",
+    "target": "PR1: resume_check.py と現在状態の実行環境・現在地点・next_stepを導入し、再開時のSTOP/OK判定を可能にする",
+    "evidence": "docs/現在状態.json の execution_environment / current_position / next_step",
+    "status": "proposed"
   }
 }
