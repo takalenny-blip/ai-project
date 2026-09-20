@@ -19,7 +19,7 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "target": "work_pcで再開確認を実施する",
                 "evidence": "resume_check.py",
                 "readiness": "ready",
-                "prerequisites": [{"name": "resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20"}}],
+                "prerequisites": [{"name": "resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": "REPLACE_ME"}}],
             },
             "work_pc": {"clone_status": "unverified"},
             "resume_manifest": {
