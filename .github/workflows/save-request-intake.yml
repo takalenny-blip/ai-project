@@ -1,9 +1,10 @@
 name: Save request intake
 
 on:
-  push:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
     branches:
-      - 'chat-save-request/**'
+      - main
     paths:
       - '.github/save-queue/**'
 
@@ -13,11 +14,16 @@ permissions:
 
 jobs:
   intake:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.head_ref, 'chat-save-request/') &&
+      github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout request branch
+      - name: Checkout trusted base branch
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Set up Python
@@ -27,18 +33,24 @@ jobs:
 
       - name: Validate and read queue entry
         id: queue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t changed < <(git -c core.quotepath=false diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | sed '/^$/d')
+          mapfile -t changed < <(gh pr view "$PR_URL" --json files --jq '.files[].path' | sort)
           test "${#changed[@]}" = "1"
           queue_file="${changed[0]}"
           case "$queue_file" in
             .github/save-queue/*.md) ;;
             *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
           esac
-          test -s "$queue_file"
-          cp "$queue_file" "$RUNNER_TEMP/direct-chat.md"
+          test -s <(gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${HEAD_SHA}" --jq '.content' | tr -d '\n' | base64 --decode)
+          gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${HEAD_SHA}" --jq '.content' |
+            tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
+          test -s "$RUNNER_TEMP/direct-chat.md"
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
 
       - name: Create isolated save branch from main
@@ -108,7 +120,7 @@ jobs:
       - name: Cleanup request branch
         if: always()
         env:
-          SOURCE_BRANCH: ${{ github.ref_name }}
+          SOURCE_BRANCH: ${{ github.head_ref }}
         shell: bash
         run: |
           set -euo pipefail
