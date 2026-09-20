@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Generate deterministic current-state views atomically."""
-
 from __future__ import annotations
 
 import argparse
@@ -12,27 +11,48 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "docs" / "現在状態.json"
 
-
 def load_state() -> dict:
     with STATE.open(encoding="utf-8") as f:
         return json.load(f)
-
 
 def render(state: dict) -> tuple[str, str]:
     dc = state["direct_chat"]
     surgery = state["surgery"]
     model = state["current_state_model"]
     migration = state["migration"]
+    env = state["execution_environment"]
+    current = state["current_position"]
+    nxt = state["next_step"]
 
-    bud = f"""# BUD — バドのための最上位ダッシュボード
-
-更新日：{state["updated"]}
+    header = f"""更新日：{state["updated"]}
 
 ## 正本
 
-- 正本リポジトリ：`{state["canonical_repository"]}`
-- 現在状態正本：`docs/現在状態.json`
+- 正本リポジトリ：{state["canonical_repository"]}
+- 現在状態正本：docs/現在状態.json
 - 現在ビュー：BUD.md / docs/引き継ぎ/現在の引き継ぎ.md
+
+## 実行環境
+
+- 現在：**{env["active"]}**
+- 退役：{", ".join(env.get("retired", [])) or "(なし)"}
+- work_pc clone：**{state.get("work_pc", {}).get("clone_status", "unknown")}**
+
+## 現在地点
+
+**{current["summary"]}**
+
+## 次の一手
+
+- 環境：**{nxt["environment"]}**
+- 目的：**{nxt["target"]}**
+- 根拠：{nxt["evidence"]}
+- 状態：{nxt["status"]}
+"""
+
+    bud = f"""# BUD — バドのための最上位ダッシュボード
+
+{header}
 
 ## 現在の作業レーン
 
@@ -56,7 +76,7 @@ def render(state: dict) -> tuple[str, str]:
 ## 直チャット
 
 - 最新保存：**{dc["latest_saved"]}**
-- 最新パス：`{dc["latest_path"]}`
+- 最新パス：{dc["latest_path"]}
 - 旧連番保存：{dc["legacy_serial_files_preserved"]}
 - 新タイムスタンプ方式：{dc["new_timestamp_naming_allowed"]}
 
@@ -65,21 +85,11 @@ def render(state: dict) -> tuple[str, str]:
 - 状態：{migration["status"]}
 - 通常工程：{migration["normal_work_policy"]}
 - 暫定同期：{migration["temporary_manual_sync"]}
-
-## 次の一手
-
-**{surgery["next_design_item"]}**
 """
 
     handover = f"""# 現在の引き継ぎ
 
-更新日：{state["updated"]}
-
-## 正本
-
-- `{state["canonical_repository"]}`
-- 現在状態の唯一の正本：`docs/現在状態.json`
-- このファイルは生成ビュー。
+{header}
 
 ## 現在の作業レーン
 
@@ -96,19 +106,14 @@ def render(state: dict) -> tuple[str, str]:
 ## 直チャット
 
 - 最新：**{dc["latest_saved"]}**
-- 実体：`{dc["latest_path"]}`
+- 実体：{dc["latest_path"]}
 
 ## 移行
 
 - {migration["normal_work_policy"]}
 - {migration["temporary_manual_sync"]}
-
-## 次の一手
-
-**{surgery["next_design_item"]}**
 """
     return bud, handover
-
 
 def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None:
     out_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -123,7 +128,6 @@ def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None:
     finally:
         if temp_dir is not None and temp_dir.exists():
             shutil.rmtree(temp_dir)
-
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -144,7 +148,6 @@ def main() -> int:
         print(f"OK: rendered {args.out_dir / 'BUD.md'}")
         print(f"OK: rendered {args.out_dir / '現在の引き継ぎ.md'}")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
