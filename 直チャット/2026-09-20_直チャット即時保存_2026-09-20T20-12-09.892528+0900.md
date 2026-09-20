@@ -1,0 +1,70 @@
+# 直チャット保存要求：会話エンジン強制接続を進めながらDiMORA実機JSON/runtime検証と実データ正規化検証をどう進めるか
+
+日付: 2026-09-20
+
+## たかの発言
+会話エンジン側の強制接続 はやりながら検証でいい。DiMORA実機JSONのruntime検証 と正規化の実データ検証 はどうする？やり取り書き込んで。
+
+## バドの回答
+
+### 結論
+DiMORA側は、会話エンジンの強制接続とは切り離して、1件ずつ「実機JSONが実行環境で確認できる」→「preflight通過」→「正規化を実行」→「出力を実データと照合」の順で検証する。
+
+現在の正本では、正規化スクリプトとテストはverifiedだが、実機エクスポートJSONはruntime artifactとしてunverified、next_stepはblockedのまま。したがって、まだ「実データ検証済み」とは扱わない。
+
+### 1. DiMORA実機JSONのruntime検証
+作業PCを対象にする。確認対象は dimora-favorite-programs.json。
+
+preflightで最低限、
+- 実ファイルが存在する
+- 読み込み可能
+- UTF-8 JSONとして読める
+- トップレベルが配列、または record[] を持つオブジェクト
+- 各recordがJSON object
+- 件数が取得結果と一致する
+- 必要ならSHA-256を取得して、実行時の証拠として残す
+を確認する。
+
+ここで重要なのは、チャットにJSON本文を貼ったことや、過去に取得したことをruntime証拠にしないこと。実行環境で実際に読めたことを一次証拠にする。
+
+ただし現時点では、バドから作業PCのruntimeへ直接アクセスする経路が確認できていない。したがって、この段階は「作業PCで実行して証拠を返す」か、実行環境へ接続できる仕組みを用意する必要がある。ここを飛ばしてreadyにはしない。
+
+### 2. 正規化の実データ検証
+runtime preflightが通った同じJSONを、mainの scripts/dimora_json_normalizer.py に入力する。
+
+検証は、
+1. 実機JSONの入力件数
+2. 正規化後の出力件数
+3. 各recordの13項目（eventId / mindsProgramId / title / startDate / endDate / bcsNm / chNo / mode / requestId / recTimerState / length / status / genre）
+4. 値が元の実機JSONの同名フィールドからそのまま対応していること
+5. 欠損項目は勝手に補完せず null 相当になること
+6. 出力が期待したJSON構造になっていること
+を確認する。
+
+さらに、今回すでに確認できている実データ1件については、期待値として eventId=3068、mindsProgramId=997701、bcsNm=BS日テレ、chNo=141、mode=15倍録、length=30、status=10、genre=アニメ/特撮 / 国内アニメ などがあり、runtime実行結果と一致するかを照合する。ただし、これはruntime実行証拠の代わりにはしない。
+
+### 3. 完了条件
+DiMORA実データ検証を完了とする条件は次の4つ。
+
+- runtime artifactの存在・可読性・形式・件数をpreflightでverified
+- 実際にnormalizerをruntimeで実行
+- 入力件数と出力件数、13項目の値対応を確認
+- 実行結果・入力artifactの識別情報（必要ならSHA）・実行方法を証拠として記録
+
+どれか一つでも未確認なら、readinessはblockedのままにする。
+
+### 4. 会話エンジン側との関係
+会話エンジン側の強制接続は「やりながら検証」でよい。ただし、DiMORA検証をその接続実装の完成待ちにはしない。
+
+つまり、
+- 会話エンジン側：強制接続を小さく実装 → 実際の会話で検証
+- DiMORA側：runtime artifact preflight → normalizer実行 → 実データ照合
+を別トラックで進める。
+
+この分離なら、片方の進捗をもう片方の「完了証拠」に混ぜずに済む。
+
+### 現時点の判断
+判断：修正して採用。
+理由：DiMORAのruntime検証と会話エンジン接続は目的が異なり、同じ完了条件に束ねると、また「進んだように見えるだけ」の状態を作る危険があるため。
+次の行動：DiMORAはまずruntime artifactのpreflightを一次証拠付きで通す。会話エンジン側は別トラックで、実際の強制停止・再開が検証できる最小接続を作る。
+整合性：true。
