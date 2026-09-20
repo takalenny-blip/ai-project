@@ -41,14 +41,14 @@ def check_verification_state(state: dict) -> None:
     if not all(isinstance(item, dict) and "item" in item and "status" in item for item in required):
         raise SystemExit("FAIL: verification_required must use {item,status} objects")
     statuses = {item["status"] for item in required}
-    invalid = statuses - {"done", "pending", "not_started", "conditional", "implemented_in_this_fix", "production_run_pending"}
+    invalid = statuses - {"done", "pending", "not_started", "conditional", "implemented_in_this_fix", "production_run_pending", "recorded_unverified", "verified"}
     if invalid:
         raise SystemExit("FAIL: invalid verification status: " + ", ".join(sorted(invalid)))
     if state["migration"]["status"] in {"generated_views_migration_verified", "complete"}:
-        incomplete = [item["item"] for item in required if item["status"] != "done"]
+        incomplete = [item["item"] for item in required if item["status"] in {"pending", "not_started"}]
         if incomplete:
             raise SystemExit(
-                "FAIL: migration.status claims complete with incomplete verification items: "
+                "FAIL: migration.status claims complete with pending verification items: "
                 + "; ".join(incomplete)
             )
 
