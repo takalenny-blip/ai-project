@@ -59,17 +59,8 @@ jobs:
 
       - name: Verify checked-in views match generated views
         run: |
-          if ! cmp --silent generated/current-views/BUD.md BUD.md; then
-            echo "FAIL: BUD.md mismatch"
-            sha256sum generated/current-views/BUD.md BUD.md
-            diff -u BUD.md generated/current-views/BUD.md | head -80 || true
-            exit 1
-          fi
-          if ! cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md; then
-            echo "FAIL: handover mismatch"
-            sha256sum generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
-            exit 1
-          fi
+          cmp --silent generated/current-views/BUD.md BUD.md
+          cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
           echo "OK: checked-in views match generated views"
 
       - name: Verify AI entry documentation
