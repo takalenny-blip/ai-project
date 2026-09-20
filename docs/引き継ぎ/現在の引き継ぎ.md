@@ -16,15 +16,14 @@
 
 ## 現在地点
 
-**退役済み環境を除外し、work_pcを現在の作業環境として再開基盤を整備済み。PR1・PR2・PR3はマージ済み。PR3のCIガードと直チャット保存経路のcanonical確認まで完了。**
+**DiMORA実機でお気に入り番組データを取得しJSON化、PR #146の正規化処理をmainへ反映済み。保存経路の実機確認も完了し、次は実機エクスポートJSONを正規化処理へ入力して実データ検証を行う段階。**
 
 ## 次の一手
 
 - 環境：**work_pc**
-- 目的：**PR3完了後のcanonical現在状態を確認し、次の実装単位を決める**
-- 根拠：docs/現在状態.json / scripts/current_state_guard.py / tests/test_current_state_guard.py / .github/workflows/current-state-guard.yml
+- 目的：**DiMORA実機エクスポートJSONを正規化処理へ入力し、実データで正規化結果を検証する**
+- 根拠：scripts/dimora_json_normalizer.py / tests/test_dimora_json_normalizer.py / 実機エクスポートJSON（dimora-favorite-programs.json）
 - 状態：ready
-
 ## 現在の作業レーン
 
 **DIGA / DiMORA自動化**
