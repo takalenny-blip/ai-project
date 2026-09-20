@@ -377,6 +377,7 @@
       ],
       "rule": "5項目すべてが非空で、judgmentが許容値、consistencyがtrueであること。1項目でも欠ける・曖昧・不整合ならpendingを解除しない。",
       "clear_condition": "pending対象について5項目を満たす反応を提示し、judgmentとnext_actionが整合していること"
-    }
+    },
+    "clear_reason": "no_pending_external_proposal"
   }
 }
