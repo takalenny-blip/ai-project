@@ -45,6 +45,20 @@ def main():
     if missing:
         return fail("missing required fields: " + ", ".join(missing))
 
+    external_gate = state.get("external_response_gate", {"status": "clear"})
+    if not isinstance(external_gate, dict):
+        return fail("external_response_gate must be an object")
+    gate_status = external_gate.get("status", "clear")
+    if gate_status not in {"clear", "pending"}:
+        return fail("external_response_gate.status must be clear or pending")
+    if gate_status == "pending":
+        required_gate_fields = ("purpose", "trigger", "required_action", "completion")
+        missing_gate_fields = [k for k in required_gate_fields if not external_gate.get(k)]
+        if missing_gate_fields:
+            return fail("pending external_response_gate missing: " + ", ".join(missing_gate_fields))
+        print("STOP: external proposal response is pending; react before any other work")
+        return 3
+
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
