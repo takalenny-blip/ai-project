@@ -111,6 +111,23 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
+    def test_pending_external_response_gate_requires_fields(self):
+        state = self.base_state()
+        state["external_response_gate"] = {"status": "pending"}
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_pending_external_response_gate_passes_shape_validation(self):
+        state = self.base_state()
+        state["external_response_gate"] = {
+            "status": "pending",
+            "purpose": "react to external proposal",
+            "trigger": "proposal received",
+            "required_action": "state judgment and next action",
+            "completion": "reaction presented",
+        }
+        guard.validate_state(state)
+
     def test_readiness_status_conflict_fails(self):
         state = self.base_state()
         state["next_step"]["status"] = "ready"
