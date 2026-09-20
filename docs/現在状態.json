@@ -232,7 +232,8 @@
         "status": "unverified",
         "evidence": null
       }
-    ]
+    ],
+    "status": "blocked"
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
