@@ -1,3 +1,5 @@
+status: historical
+
 # VAIO P運用基盤
 
 更新日：2026-09-07
