@@ -52,6 +52,15 @@ def main():
     if nxt.get("status") not in {None, nxt.get("readiness")}:
         return fail("next_step.status must be absent or equal to readiness")
     for p in nxt["prerequisites"]:
+        if p.get("status") == "verified" and p.get("kind") == "external_artifact":
+            path = ROOT / p["name"]
+            ev = p.get("evidence") or {}
+            expected = ev.get("sha256")
+            if not path.is_file() or not expected:
+                return fail("verified external_artifact cannot be proven: " + p.get("name", "?"))
+            actual = hashlib.sha256(path.read_bytes()).hexdigest()
+            if actual != expected:
+                return fail("verified external_artifact SHA-256 mismatch: " + p.get("name", "?"))
         if p.get("status") == "verified" and p.get("kind") == "repo_file":
             path = ROOT / p["name"]
             ev = p.get("evidence") or {}
