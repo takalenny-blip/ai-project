@@ -2,11 +2,17 @@
 """Validate the canonical state before resuming work."""
 from __future__ import annotations
 import json
+import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "docs" / "現在状態.json"
 REQUIRED = ("execution_environment", "current_position", "next_step")
+
+def repo_blob_sha(path):
+    data = path.read_bytes()
+    header = ("blob " + str(len(data)) + "\0").encode()
+    return hashlib.sha1(header + data).hexdigest()
 
 def fail(message):
     print(f"STOP: {message}")
@@ -43,15 +49,27 @@ def main():
         return fail("next_step.prerequisites must be explicit")
     if nxt.get("readiness") not in {"ready", "blocked"}:
         return fail("next_step.readiness must be ready or blocked")
+    if nxt.get("status") not in {None, nxt.get("readiness")}:
+        return fail("next_step.status must be absent or equal to readiness")
+    for p in nxt["prerequisites"]:
+        if p.get("status") == "verified" and p.get("kind") == "repo_file":
+            path = ROOT / p["name"]
+            ev = p.get("evidence") or {}
+            expected = ev.get("sha256") or ev.get("blob_sha")
+            if not path.is_file() or not expected:
+                return fail("verified repo_file cannot be proven: " + p.get("name", "?"))
+            actual = hashlib.sha256(path.read_bytes()).hexdigest() if ev.get("sha256") else repo_blob_sha(path)
+            if actual != expected:
+                return fail("verified repo_file evidence mismatch: " + p.get("name", "?"))
     bad = [p.get("name", "?") for p in nxt["prerequisites"] if p.get("status") != "verified"]
     if nxt["readiness"] == "ready" and bad:
         return fail("next_step is ready but prerequisites are not verified: " + ", ".join(bad))
     if nxt["readiness"] == "blocked":
         if not nxt.get("blocked_reason") or not nxt.get("unblock_action"):
             return fail("blocked next_step requires blocked_reason and unblock_action")
-        print("STOP: next_step is blocked: " + nxt["blocked_reason"])
+        print("BLOCKED: next_step is blocked: " + nxt["blocked_reason"])
         print("UNBLOCK: " + nxt["unblock_action"])
-        return 1
+        return 2
     if not current.get("summary"):
         return fail("current_position.summary is missing")
 
