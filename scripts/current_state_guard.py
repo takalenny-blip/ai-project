@@ -114,8 +114,12 @@ def validate_completed_verifications(state: dict) -> None:
     for scope, record in records.items():
         if not isinstance(record, dict):
             fail(f"verification_records[{scope}] must be an object")
-        if record.get("status") not in {"verified", "unverified"}:
-            fail(f"verification_records[{scope}].status must be verified or unverified")
+        if record.get("status") not in {"verified", "unverified", "retired"}:
+            fail(f"verification_records[{scope}].status must be verified, unverified, or retired")
+        if record.get("status") == "retired":
+            evidence = record.get("evidence")
+            if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at") or not evidence.get("reason"):
+                fail(f"retired verification record requires method, checked_at, and reason: {scope}")
         if record.get("status") == "verified":
             evidence = record.get("evidence")
             if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at"):
