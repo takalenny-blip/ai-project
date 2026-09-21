@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-21T10-34-08.528040+0900",
-    "latest_path": "直チャット/2026-09-21_直チャット即時保存_2026-09-21T10-34-08.528040+0900.md",
-    "latest_content_sha": "f58dd2f00f4864418ec84a8259a67d06ccc3d7ed",
+    "latest_saved": "2026-09-21T10-37-32.061341+0900",
+    "latest_path": "直チャット/2026-09-21_直チャット即時保存_2026-09-21T10-37-32.061341+0900.md",
+    "latest_content_sha": "d9ad7fb07ad2d958787b4c7c0168e35343a1004e",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -279,15 +279,16 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DiMORAの実データ正規化検証（P2）はPR #234で完了済み。これはwork_pc上の原本ファイルへのBudの直接アクセス検証とは別であり、現在はそのアクセス経路だけを検証する段階。",
+    "summary": "直前回答を保存した。DiMORAの実データ正規化検証（P2）はPR #234で完了済みであり、残件はwork_pc原本JSONへの直接アクセス確認だけ。",
     "evidence": {
       "type": "repository_record",
       "references": [
-        "PR #234: DiMORA実データ正規化検証完了",
-        "PR #255: 検証scope分離・再実行防止機構をmainへ反映",
-        "PR #258: 旧正本の段階移行互換をmainへ反映"
+        "PR #234",
+        "PR #255",
+        "PR #258",
+        "PR #260"
       ],
-      "note": "PR #234の実データ正規化検証結果を完了済みscopeとして固定し、PR #255でnext_step.scopeとverification_recordsによる分離ガードを実装、PR #258で移行途中の旧正本を一時許容した。"
+      "note": "今回の直チャット保存を記録。"
     }
   },
   "next_step": {
