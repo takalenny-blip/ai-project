@@ -1,0 +1,16 @@
+# 保存要求
+
+直前のやり取りを正規の保存経路へ投入する。
+
+【作業】
+- ユーザーから「vaiopはもう使ってない。引継ぎできてないのは大問題。問題つぶせ。やり取り書き込んで」と明示された。
+- PR #271「DiMORAのVAIO P + Chromium取得プローブを追加」は承認済みだったため、squash mergeしてmainへ反映した。merge SHA: bcb094ea5cb2c9611aea089b7bd1b0fb212a562b。
+- その後、引継ぎ不整合の原因を確認した。canonical stateではVAIO Pはretiredになっていた一方、PR #271で追加した未実行のVAIO P Chromium取得プローブと引継ぎ資料がリポジトリに残り、次のAI/人間が現行工程と誤認し得る状態だった。
+- 問題を実際に修正した。canonical stateのexecution_environmentとnext_stepをwork_pc基準へ明示し、VAIO Pをretiredとして再確認し、VAIO Pプローブの検証記録もretiredとして固定した。
+- PR #271で追加した未実行のVAIO Pプローブ script と引継ぎ資料を削除した。
+- 修正PR #274「引継ぎのVAIO P残骸を除去しwork_pcへ統一」を作成し、taka2-devへレビュー依頼済み。PR #274は承認待ちで、まだmergeしていない。
+- 現在のDiMORA本来工程はwork_pc＋Dropbox。work_pc原本JSONへのアクセスはverified済みで、正規化検証もPR #234で完了済み。正規化は再実行していない。
+
+【保存】
+- この回答とユーザー指摘を正規のsave-requestキューへ投入する。
+- 保存は主作業を停止させない。
