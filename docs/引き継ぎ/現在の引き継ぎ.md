@@ -16,7 +16,7 @@
 
 ## 現在地点
 
-**DiMORAの実データ正規化検証（P2）は完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認済み。現行工程はwork_pc＋DropboxでDiMORA本来工程を継続する。**
+**DiMORAの実データ正規化検証（P2）は完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認済み。Dropbox原本を通常処理へ渡す非破壊入口チェックも実装・原本1件で内容確認済み。現行工程はwork_pc＋DropboxでDiMORA本来工程を継続する。**
 
 ## 次の一手
 
