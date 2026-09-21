@@ -170,3 +170,7 @@ main の自動承認は、全ファイルが除外対象の PR だけを止め�
 つまり、今回止まっているのは **PR解決処理ではなく、その前段の `workflow_run` トリガーそのもの**。
 
 ここで同じ空コミットやclose/reopenを繰り返すのはループになるので止める。次は `workflow_run` に依存しない、GitHub Actions上で確実にqueue PRを拾える起動方式へ修正する段階。
+
+
+[Bud]
+【起動確認】#339 merge後、save-request-intakeをpull_request_targetへ切替済み。#336のsynchronizeを1回発生させ、intake実行の有無を確認する。
