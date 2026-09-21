@@ -23,6 +23,7 @@ def render(state: dict) -> tuple[str, str]:
     env = state["execution_environment"]
     current = state["current_position"]
     nxt = state["next_step"]
+    verification_records = state.get("verification_records", {})
 
     header = f"""更新日：{state["updated"]}
 
