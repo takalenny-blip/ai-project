@@ -1,16 +1,14 @@
 name: Save request intake
 
 on:
-  pull_request_target:
-    types: [opened]
-    branches:
-      - main
-    paths:
-      - '.github/save-queue/**'
+  workflow_run:
+    workflows:
+      - current-state-guard
+    types: [completed]
 
 concurrency:
-  group: save-intake-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  group: save-intake-global
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -18,12 +16,32 @@ permissions:
 
 jobs:
   intake:
-    if: >-
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      startsWith(github.head_ref, 'chat-save-request/') &&
-      github.event.pull_request.draft == false
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve triggering pull request
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t prs < <(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/pull_requests" --jq '.[].number')
+          test "${#prs[@]}" = "1"
+          pr_number="${prs[0]}"
+          head_ref="$(gh pr view "$pr_number" --json headRefName --jq '.headRefName')"
+          draft="$(gh pr view "$pr_number" --json isDraft --jq '.isDraft')"
+          head_repo="$(gh pr view "$pr_number" --json headRepository --jq '.headRepository.nameWithOwner')"
+          test "$draft" = "false"
+          test "$head_repo" = "$GITHUB_REPOSITORY"
+          case "$head_ref" in
+            chat-save-request/*) ;;
+            *) echo "Not a save-request PR; nothing to do."; exit 0 ;;
+          esac
+          echo "number=$pr_number" >> "$GITHUB_OUTPUT"
+          echo "head_ref=$head_ref" >> "$GITHUB_OUTPUT"
+
       - name: Checkout trusted base branch
         uses: actions/checkout@v4
         with:
@@ -35,37 +53,40 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Reject duplicate pending save request
+      - name: Wait for earlier canonical save PRs
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t pending < <(gh pr list --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("chat-save-request/")) | select(.number != '$PR_NUMBER') | .number')
-          if [ "${#pending[@]}" -gt 0 ]; then
-            echo "Duplicate pending save request detected: ${pending[*]}" >&2
-            exit 1
-          fi
+          for i in {1..60}; do
+            mapfile -t saves < <(gh pr list --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("save/direct-chat-")) | .number')
+            if [ "${#saves[@]}" -eq 0 ]; then
+              exit 0
+            fi
+            echo "Waiting for open canonical save PRs: ${saves[*]}"
+            sleep 10
+          done
+          echo "Timed out waiting for earlier canonical save PRs." >&2
+          exit 1
+
       - name: Validate and read queue entry
         id: queue
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
         shell: bash
         run: |
           set -euo pipefail
-          # pull_request_target deliberately checks out only trusted main.
-          # The queue PR head is read as data through the API and is never executed.
-          mapfile -t changed < <(gh pr view "$PR_URL" --json files --jq '.files[].path' | sort)
+          mapfile -t changed < <(gh pr view "$PR_NUMBER" --json files --jq '.files[].path' | sort)
           test "${#changed[@]}" = "1"
           queue_file="${changed[0]}"
           case "$queue_file" in
             .github/save-queue/*.md) ;;
             *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
           esac
-          gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${HEAD_SHA}" --jq '.content' |
+          head_sha="$(gh pr view "$PR_NUMBER" --json headRefOid --jq '.headRefOid')"
+          gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${head_sha}" --jq '.content' |
             tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
           test -s "$RUNNER_TEMP/direct-chat.md"
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
@@ -120,7 +141,7 @@ jobs:
           set -euo pipefail
           git push --set-upstream origin "$BRANCH"
 
-      - name: Open pull request
+      - name: Open canonical save pull request
         env:
           GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
@@ -137,7 +158,7 @@ jobs:
       - name: Cleanup request branch
         if: success()
         env:
-          SOURCE_BRANCH: ${{ github.head_ref }}
+          SOURCE_BRANCH: ${{ steps.pr.outputs.head_ref }}
         shell: bash
         run: |
           set -euo pipefail
