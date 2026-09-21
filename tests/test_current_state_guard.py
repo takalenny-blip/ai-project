@@ -25,8 +25,10 @@ class CurrentStateGuardTests(unittest.TestCase):
         return {
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "current"},
+            "verification_records": {"resume_check": {"status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20"}}},
             "next_step": {
                 "environment": "work_pc",
+                "scope": "new_scope",
                 "target": "work_pcで再開確認を実施する",
                 "evidence": "resume_check.py",
                 "readiness": "ready",
@@ -52,6 +54,25 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_active_work_pc_passes(self):
         guard.validate_state(self.base_state())
         guard.validate_next_step_no_retired(self.base_state())
+
+
+    def test_next_step_repeating_verified_scope_fails(self):
+        state = self.base_state()
+        state["next_step"]["scope"] = "resume_check"
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_missing_next_step_scope_fails(self):
+        state = self.base_state()
+        state["next_step"].pop("scope")
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
+
+    def test_verified_record_without_evidence_fails(self):
+        state = self.base_state()
+        state["verification_records"]["resume_check"]["evidence"] = None
+        with self.assertRaises(ValueError):
+            guard.validate_state(state)
 
     def test_retired_environment_mismatch_fails(self):
         state = self.base_state()

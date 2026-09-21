@@ -8,6 +8,7 @@ import hashlib
 import json
 import subprocess
 import sys
+import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -38,6 +39,35 @@ def merge_patch(target: dict[str, Any], patch: dict[str, Any]) -> None:
             target[key] = value
 
 
+
+STATE_PATCH_BEGIN = "<!-- BUD_STATE_PATCH_BEGIN"
+STATE_PATCH_END = "BUD_STATE_PATCH_END -->"
+
+
+def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | None]:
+    """Extract an optional canonical-state patch from a save-queue markdown payload.
+
+    The patch is transport metadata, not direct-chat content, so it is removed before
+    the saved chat record is written. This keeps canonical state changes on the normal
+    atomic save path while allowing the queue entry to request an explicit state patch.
+    """
+    pattern = re.compile(
+        re.escape(STATE_PATCH_BEGIN) + r"\s*\n(.*?)\n" + re.escape(STATE_PATCH_END),
+        re.DOTALL,
+    )
+    match = pattern.search(content)
+    if not match:
+        return content, None
+    try:
+        patch = json.loads(match.group(1))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid embedded state patch JSON: {exc}") from exc
+    if not isinstance(patch, dict):
+        raise SystemExit("embedded state patch must be a JSON object")
+    cleaned = (content[:match.start()] + content[match.end():]).strip() + "\n"
+    return cleaned, patch
+
+
 def render_views() -> None:
     subprocess.run(
         [sys.executable, "scripts/generate_current_views.py", "--out-dir", ".generated-save-views"],
@@ -66,6 +96,7 @@ def main() -> int:
         raise SystemExit("refusing to run with pre-staged changes")
 
     content = (args.content_file.read_text(encoding="utf-8") if args.content_file else sys.stdin.read())
+    content, embedded_patch = extract_embedded_state_patch(content)
     if not content.endswith("\n"):
         content += "\n"
 
@@ -103,6 +134,8 @@ def main() -> int:
         if not isinstance(patch, dict):
             raise SystemExit("state patch must be a JSON object")
         merge_patch(state, patch)
+    if embedded_patch is not None:
+        merge_patch(state, embedded_patch)
 
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render_views()

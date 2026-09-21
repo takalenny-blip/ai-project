@@ -106,6 +106,22 @@ def validate_external_response_gate(state: dict) -> None:
             fail("pending external_response_gate missing: " + ", ".join(missing))
 
 
+
+def validate_completed_verifications(state: dict) -> None:
+    records = state.get("verification_records")
+    if not isinstance(records, dict):
+        fail("verification_records must be an object")
+    for scope, record in records.items():
+        if not isinstance(record, dict):
+            fail(f"verification_records[{scope}] must be an object")
+        if record.get("status") not in {"verified", "unverified"}:
+            fail(f"verification_records[{scope}].status must be verified or unverified")
+        if record.get("status") == "verified":
+            evidence = record.get("evidence")
+            if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at"):
+                fail(f"verified verification record requires method and checked_at: {scope}")
+
+
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
     if missing:
@@ -114,6 +130,12 @@ def validate_state(state: dict) -> None:
     active = env.get("active")
     retired = env.get("retired", [])
     nxt = state["next_step"]
+    validate_completed_verifications(state)
+    if not nxt.get("scope"):
+        fail("next_step.scope is missing")
+    completed = state["verification_records"].get(nxt["scope"])
+    if isinstance(completed, dict) and completed.get("status") == "verified":
+        fail("next_step repeats an already verified scope: " + nxt["scope"])
     current = state["current_position"]
     if not active:
         fail("active execution environment is not defined")
