@@ -47,7 +47,6 @@ if(-not $tabs){
 $tab = $tabs | Where-Object { $_.type -eq "page" } | Select-Object -First 1
 if(-not $tab){ throw "No debuggable page found on port $Port." }
 
-Add-Type -AssemblyName System.Net.WebSockets
 $ws=[System.Net.WebSockets.ClientWebSocket]::new()
 $ws.ConnectAsync([Uri]$tab.webSocketDebuggerUrl,[Threading.CancellationToken]::None).GetAwaiter().GetResult()
 $script:Id=0
