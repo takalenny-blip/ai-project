@@ -396,5 +396,28 @@
         "reason": "現行のバド単独運用では実機側の取得・操作まで完遂できないため"
       }
     }
+  },
+  "interaction_control": {
+    "status": "implemented_preflight",
+    "scope": "next_step と対話上の進捗・完了主張",
+    "principle": "文書ルールだけでAIの自己抑制を期待せず、進捗主張の受理前に機械的preflightを通す",
+    "guard_script": "scripts/interaction_guard.py",
+    "blocked_output": {
+      "trigger": "next_step.readiness=blocked",
+      "action": "進捗・完了・検証済み等の主張を停止し、証拠取得・preflight・unblock_actionに限定",
+      "exit_code": 2
+    },
+    "evidence_claim": {
+      "trigger": "進捗・完了・検証済み等の主張",
+      "action": "evidence recordのkind/path/sha256を要求し、実体SHA-256一致を確認",
+      "exit_code": 2
+    },
+    "loop_detection": {
+      "trigger": "同一state_fingerprintが連続threshold回、progress=false",
+      "threshold": 2,
+      "action": "強制停止して人間判断へ戻す",
+      "exit_code": 2
+    },
+    "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
   }
 }
