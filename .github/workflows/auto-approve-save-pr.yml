@@ -39,8 +39,18 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: gh pr review "$PR_URL" --approve --body 'Same-repository PR auto-approved by taka2-dev.'
 
-      - name: Merge as squash
+      - name: Merge as squash (retry after approval propagation)
         env:
           GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr merge "$PR_URL" --squash --delete-branch
+        run: |
+          set -u
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if gh pr merge "$PR_URL" --squash --delete-branch; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 10 ]; then
+              sleep 5
+            fi
+          done
+          exit 1
