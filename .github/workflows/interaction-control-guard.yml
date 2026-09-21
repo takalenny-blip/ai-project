@@ -1,0 +1,32 @@
+name: Interaction control guard
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/interaction_guard.py'
+      - 'scripts/resume_check.py'
+      - 'tests/test_interaction_guard.py'
+      - 'docs/現在状態.json'
+      - '.github/workflows/interaction-control-guard.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/interaction_guard.py'
+      - 'scripts/resume_check.py'
+      - 'tests/test_interaction_guard.py'
+      - 'docs/現在状態.json'
+      - '.github/workflows/interaction-control-guard.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  interaction-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run interaction guard tests
+        run: python -m unittest discover -s tests -p 'test_interaction_guard.py' -v
+      - name: Run resume preflight
+        run: python scripts/resume_check.py
