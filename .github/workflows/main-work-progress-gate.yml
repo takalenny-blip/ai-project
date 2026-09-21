@@ -1,0 +1,23 @@
+name: Main work progress gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  progress-gate:
+    if: startsWith(github.event.pull_request.head.ref, 'work/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout merge ref
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for substantive main-work change
+        run: |
+          python3 scripts/main_work_progress_guard.py             --branch "${{ github.event.pull_request.head.ref }}"             --base "origin/${{ github.base_ref }}"             --head "HEAD"
