@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-21T10-27-33.956994+0900",
-    "latest_path": "直チャット/2026-09-21_直チャット即時保存_2026-09-21T10-27-33.956994+0900.md",
-    "latest_content_sha": "d7c03704375fe49bf88be4a54212397639e3074c",
+    "latest_saved": "2026-09-21T10-34-08.528040+0900",
+    "latest_path": "直チャット/2026-09-21_直チャット即時保存_2026-09-21T10-34-08.528040+0900.md",
+    "latest_content_sha": "f58dd2f00f4864418ec84a8259a67d06ccc3d7ed",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -279,23 +279,24 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DiMORA実機でお気に入り番組データを取得しJSON化、PR #146の正規化処理をmainへ反映済み。保存経路の実機確認も完了し、次は実機エクスポートJSONを正規化処理へ入力して実データ検証を行う段階。",
+    "summary": "DiMORAの実データ正規化検証（P2）はPR #234で完了済み。これはwork_pc上の原本ファイルへのBudの直接アクセス検証とは別であり、現在はそのアクセス経路だけを検証する段階。",
     "evidence": {
       "type": "repository_record",
       "references": [
-        "PR #146 merge 2c62ee474bd8e60b464c1275760a80574330290",
-        "PR #160 merge 32c6e1de948eebc815a371c3e28ec08ad2baf5c0"
+        "PR #234: DiMORA実データ正規化検証完了",
+        "PR #255: 検証scope分離・再実行防止機構をmainへ反映",
+        "PR #258: 旧正本の段階移行互換をmainへ反映"
       ],
-      "note": "PR #146の正規化実装反映とPR #160のpreflight gate導入をmain readbackで確認。"
+      "note": "PR #234の実データ正規化検証結果を完了済みscopeとして固定し、PR #255でnext_step.scopeとverification_recordsによる分離ガードを実装、PR #258で移行途中の旧正本を一時許容した。"
     }
   },
   "next_step": {
     "environment": "work_pc",
-    "target": "DiMORA実機エクスポートJSONを正規化処理へ入力し、実データで正規化結果を検証する",
-    "evidence": "scripts/dimora_json_normalizer.py / tests/test_dimora_json_normalizer.py / 実機エクスポートJSON（dimora-favorite-programs.json）",
+    "target": "work_pc上のDiMORA実機エクスポート原本JSONへの直接アクセス経路を検証する",
+    "evidence": "work_pc runtime artifact: dimora-favorite-programs.json / PR #234の実データ正規化検証とは別scope",
     "readiness": "blocked",
-    "blocked_reason": "実機エクスポートJSON（dimora-favorite-programs.json）が現時点で実行環境から利用可能であることを確認できていない",
-    "unblock_action": "作業PCで実機エクスポートJSONを取得・読み込み、preflightで存在・可読性・形式・件数を確認して証拠を記録する",
+    "blocked_reason": "work_pc上の実機エクスポート原本JSONが、現在の実行環境から直接利用可能であることは未確認",
+    "unblock_action": "work_pcで原本JSONの存在・可読性・形式・件数を確認し、直接アクセス経路の証拠を記録する。正規化検証は再実行しない。",
     "prerequisites": [
       {
         "name": "scripts/dimora_json_normalizer.py",
@@ -327,7 +328,8 @@
         "status": "unverified",
         "evidence": null
       }
-    ]
+    ],
+    "scope": "dimora_source_artifact_access"
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -379,5 +381,25 @@
       "clear_condition": "pending対象について5項目を満たす反応を提示し、judgmentとnext_actionが整合していること"
     },
     "clear_reason": "no_pending_external_proposal"
+  },
+  "verification_records": {
+    "dimora_actual_data_normalization": {
+      "status": "verified",
+      "label": "DiMORA実データ正規化検証",
+      "evidence": {
+        "method": "PR #234でmainのscripts/dimora_json_normalizer.pyに実データ1件を入力して検証",
+        "checked_at": "2026-09-20",
+        "pr": "#234",
+        "input_count": 1,
+        "output_count": 1,
+        "field_count": 13,
+        "result_sha256": "d445b92b13f34fef12cfd8206373b69d437329d7b362c4defe7eaf79ab182759"
+      }
+    },
+    "dimora_source_artifact_access": {
+      "status": "unverified",
+      "label": "work_pc上のDiMORA実機エクスポート原本JSONへの直接アクセス",
+      "evidence": null
+    }
   }
 }
