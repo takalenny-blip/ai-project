@@ -29,10 +29,11 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$PR_NUMBER"
-          head_ref="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefName --jq ".headRefName")"
-          head_sha="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq ".headRefOid")"
-          head_repo="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRepository --jq ".headRepository.nameWithOwner")"
-          draft="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json isDraft --jq ".isDraft")"
+          pr_json="$(gh api \"repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}\")"
+          head_ref="$(printf '%s' "$pr_json" | jq -r '.head.ref')"
+          head_sha="$(printf '%s' "$pr_json" | jq -r '.head.sha')"
+          head_repo="$(printf '%s' "$pr_json" | jq -r '.head.repo.full_name')"
+          draft="$(printf '%s' "$pr_json" | jq -r '.draft')"
           test "$draft" = "false"
           test "$head_repo" = "$GITHUB_REPOSITORY"
           case "$head_ref" in
@@ -75,14 +76,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t changed < <(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json files --jq '.files[].path' | sort)
+          mapfile -t changed < <(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" --paginate --jq '.[].filename' | sort)
           test "${#changed[@]}" = "1"
           queue_file="${changed[0]}"
           case "$queue_file" in
             .github/save-queue/*.md) ;;
             *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
           esac
-          head_sha="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq '.headRefOid')"
+          head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq '.head.sha')"
           gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${head_sha}" --jq '.content' |
             tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
           test -s "$RUNNER_TEMP/direct-chat.md"
@@ -140,7 +141,21 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$GH_TOKEN" || { echo "SAVE_PR_TOKEN repository secret is required." >&2; exit 1; }
-          gh pr create             --base main             --head "$BRANCH"             --title '直チャット保存＋現在状態と生成ビューを一括同期'             --body $'Canonical direct-chat save executed by scripts/save_and_currentize.py on an Actions runner.'
+          gh api "repos/${GITHUB_REPOSITORY}/pulls" \
+            -f base=main \
+            -f head="$BRANCH" \
+            -f title='直チャット保存＋現在状態と生成ビューを一括同期' \
+            -f body=
+
+      - name: Cleanup request branch
+        if: success()
+        env:
+          SOURCE_BRANCH: ${{ steps.pr.outputs.head_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin --delete "$SOURCE_BRANCH" || true
+Canonical direct-chat save executed by scripts/save_and_currentize.py on an Actions runner.'
 
       - name: Cleanup request branch
         if: success()
