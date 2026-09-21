@@ -196,7 +196,8 @@
   "pending_monitoring": [
     "期限付き対応: GitHub公開リポジトリのpull_request_target既定ポリシー強制開始予定日2026-11-02までに、save-request-intake.yml と auto-approve-save-pr.yml の両workflowが停止しない明示的許可設定または代替方式を確定・実装・本番検証する",
     "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認",
-    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する"
+    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する",
+    "引継ぎ整合性: retired環境をnext_stepへ再混入させないことをcurrent-state guardで維持する"
   ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
@@ -271,7 +272,7 @@
     "retired": [
       "vaio_p"
     ],
-    "note": "active=たか申告（Issue #114）に基づく現在の作業環境。clone_statusは一次記録確認まで未検証。"
+    "note": "active=work_pc。VAIO Pは現在の作業環境ではなく、過去の検討・実験対象として扱う。今後の引継ぎでVAIO Pを次工程として提示しない。"
   },
   "work_pc": {
     "clone_status": "unverified",
@@ -279,7 +280,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DiMORAの実データ正規化検証（P2）はPR #234で完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認し、原本アクセス検証も完了した。",
+    "summary": "DiMORAの実データ正規化検証（P2）はPR #234で完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認し、原本アクセス検証も完了した。VAIO P経由の取得テストは現行工程から除外し、work_pc＋Dropboxで本来工程を継続する。",
     "evidence": {
       "type": "runtime_artifact",
       "references": [
@@ -292,7 +293,7 @@
   "next_step": {
     "environment": "work_pc",
     "scope": "dimora_normal_work",
-    "target": "DiMORA本来工程へ復帰する",
+    "target": "work_pc＋DropboxでDiMORA本来工程を継続する",
     "evidence": "dimora_source_artifact_access verified",
     "readiness": "ready",
     "unblock_action": "none",
@@ -409,6 +410,16 @@
         "dropbox_path": "/dimora/dimora-favorite-programs.json",
         "size_bytes": 6442,
         "record_count": 1
+      }
+    },
+    "dimora_vaio_p_probe": {
+      "status": "retired",
+      "label": "VAIO P + ChromiumによるDiMORA取得プローブ",
+      "evidence": {
+        "method": "PR #271で実装したが、現行作業環境がwork_pcでVAIO Pはretiredのため、実機実行前に工程対象から除外",
+        "checked_at": "2026-09-21",
+        "pr": "#271",
+        "reason": "現行環境・本来工程と不一致。引継ぎ時に次工程として残さない"
       }
     }
   }
