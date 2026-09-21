@@ -1,0 +1,14 @@
+# 2026-09-21 直チャット保存：DiMORA work_pc CDP実行でログイン画面まで到達
+
+## 【作業】
+- work_pc上でGitHub mainの `scripts/dimora_workpc_cdp_capture.ps1` を取得。
+- 実行した結果、`Dedicated browser profile opened. If DiMORA asks for login, log in there, then rerun.` と表示された。
+- 専用Chromeプロファイルが起動し、DiMORAのログイン画面が表示された。
+- したがって、work_pc上の本線取得スクリプトは少なくとも専用ブラウザ起動まで実際に動作したことを確認。
+- この時点ではDiMORAログイン後の `GL_FAVPGM_DATA.record[]` 取得は未実施。
+- 正規化の再実行はしていない。
+- VAIO Pには戻っていない。
+
+## 【保存】
+- 本件は直チャット保存として記録する。
+- 次の実作業は、起動した専用ChromeでDiMORAへログイン後、同じPowerShellコマンドを再実行してlive取得を確認すること。
