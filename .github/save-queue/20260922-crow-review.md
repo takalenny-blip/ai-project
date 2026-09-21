@@ -124,3 +124,29 @@ main の自動承認は、全ファイルが除外対象の PR だけを止め�
 3. M1・M2 を先に直すか。
 
 今回は確認のみで、変更・実装はしていません。\n\n[Bud]\n【保存】保存要求を正規入口へ投入する。今回の保存対象は、このUser発言（クロウの検証結果全文）と、この直後のBud返答。保存内容は原文として扱い、要約・再構成しない。\n
+
+[Bud]
+【今回の進捗】
+- #336 は、同じ close/reopen の反復ではなく、起動機構そのものを変更する方向へ進めた。
+- これまでの save-request-intake.yml は pull_request_target → opened だったが、#336 で実際に起動しなかった。
+- 原因への対処として、save-request-intake.yml を workflow_run → current-state-guard completed に切り替える修正を実装し、PR #337 を作成した。
+- 新方式では trusted な main を checkout し、queue 内容は API からデータとして読み、canonical save は scripts/save_and_currentize.py を実行する。
+- canonical save PR の直列化も入れ、先行する save/direct-chat-* PR がある場合は待機する構造にした。
+
+【PR #337】
+- title: fix: move save intake off pull_request_target
+- branch: work/fix-save-intake-trigger
+- head: c511c8b178021372927ff23a98983b37babd380b
+- 状態: open / 未マージ
+- guard / progress-gate は起動済みだが、完了結果はまだ未確認。
+
+【判断】
+- #336 の canonical save 自体はまだ未完了。
+- save_and_currentize.py を直接実行するなど、正規入口を迂回する保存はしていない。
+- 今回は「イベントをもう一度投げる」操作を繰り返さず、起動機構そのものを修正した。
+- #337 のチェック完了とマージ条件確認後、#336 を正規経路で流す。
+
+【未確認】
+- #337 の CI 完了結果。
+- #337 マージ後に workflow_run 方式で #336 の save intake が実際に起動すること。
+- canonical save の CI、承認、merge、正本 readback。
