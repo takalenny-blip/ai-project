@@ -21,6 +21,7 @@ jobs:
        startsWith(github.event.pull_request.head.ref, 'fix/') ||
        startsWith(github.event.pull_request.head.ref, 'feat/') ||
        startsWith(github.event.pull_request.head.ref, 'docs/') ||
+       startsWith(github.event.pull_request.head.ref, 'work/') ||
        startsWith(github.event.pull_request.head.ref, 'save/direct-chat-') ||
        startsWith(github.event.pull_request.head.ref, 'chat-save-request/'))
     runs-on: ubuntu-latest
