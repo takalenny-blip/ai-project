@@ -113,3 +113,11 @@ Google Drive / Sheets / GAS
 過去のClaude/JUNの利用実績は、このプロジェクトの履歴・provenanceである。現在の担当固定を意味しない。
 
 現在は、**たかを中心にバドと進め、必要に応じて他のAI・ツールを使う**。
+
+## 9. 本線実装：変更検知
+
+入口チェックの次の実処理として、正規化済みDiMORAデータを入力にした変更検知を実装する。正規化は再実行しない。
+
+- scripts/dimora_change_detector.py が前回スナップショットと今回スナップショットを比較する。
+- added / changed / removed を件数とレコードで出力する。
+- 次段のGoogle Sheets / GAS連携や警告メールへ渡せる差分単位を作る。
