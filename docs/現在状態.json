@@ -279,24 +279,23 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DiMORAの実データ正規化検証（P2）はPR #234で完了済み。これはwork_pc上の原本ファイルへのBudの直接アクセス検証とは別であり、現在はそのアクセス経路だけを検証する段階。",
+    "summary": "DiMORAの実データ正規化検証（P2）はPR #234で完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認し、原本アクセス検証も完了した。",
     "evidence": {
-      "type": "repository_record",
+      "type": "runtime_artifact",
       "references": [
-        "PR #234: DiMORA実データ正規化検証完了",
-        "PR #255: 検証scope分離・再実行防止機構をmainへ反映",
-        "PR #258: 旧正本の段階移行互換をmainへ反映"
+        "work_pc: C:\\Users\\kiyam\\Downloads\\dimora-favorite-programs.json",
+        "Dropbox: /dimora/dimora-favorite-programs.json"
       ],
-      "note": "PR #234の実データ正規化検証結果を完了済みscopeとして固定し、PR #255でnext_step.scopeとverification_recordsによる分離ガードを実装、PR #258で移行途中の旧正本を一時許容した。"
+      "note": "work_pc原本をDropboxへコピーし、Dropbox接続済みのBudから同一ファイルを取得。取得サイズ6,442 bytes、JSONとして正常読込、実データ1件を確認。正規化は再実行していない。"
     }
   },
   "next_step": {
     "environment": "work_pc",
-    "target": "work_pc上のDiMORA実機エクスポート原本JSONへの直接アクセス経路を検証する",
-    "evidence": "work_pc runtime artifact: dimora-favorite-programs.json / PR #234の実データ正規化検証とは別scope",
-    "readiness": "blocked",
-    "blocked_reason": "work_pc上の実機エクスポート原本JSONが、現在の実行環境から直接利用可能であることは未確認",
-    "unblock_action": "work_pcで原本JSONの存在・可読性・形式・件数を確認し、直接アクセス経路の証拠を記録する。正規化検証は再実行しない。",
+    "scope": "dimora_normal_work",
+    "target": "DiMORA本来工程へ復帰する",
+    "evidence": "dimora_source_artifact_access verified",
+    "readiness": "ready",
+    "unblock_action": "none",
     "prerequisites": [
       {
         "name": "scripts/dimora_json_normalizer.py",
@@ -322,14 +321,18 @@
       },
       {
         "name": "dimora-favorite-programs.json",
-        "location": "work_pc runtime artifact",
+        "location": "Dropbox /dimora/dimora-favorite-programs.json",
         "kind": "external_artifact",
         "verify_scope": "runtime",
-        "status": "unverified",
-        "evidence": null
+        "status": "verified",
+        "evidence": {
+          "method": "Dropbox fetch after work_pc copy",
+          "checked_at": "2026-09-21",
+          "size_bytes": 6442,
+          "record_count": 1
+        }
       }
-    ],
-    "scope": "dimora_source_artifact_access"
+    ]
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -397,9 +400,16 @@
       }
     },
     "dimora_source_artifact_access": {
-      "status": "unverified",
+      "status": "verified",
       "label": "work_pc上のDiMORA実機エクスポート原本JSONへの直接アクセス",
-      "evidence": null
+      "evidence": {
+        "method": "work_pc原本をDropbox同期フォルダへコピーし、接続済みDropboxからBudが原本を直接取得",
+        "checked_at": "2026-09-21",
+        "source_path": "C:\\Users\\kiyam\\Downloads\\dimora-favorite-programs.json",
+        "dropbox_path": "/dimora/dimora-favorite-programs.json",
+        "size_bytes": 6442,
+        "record_count": 1
+      }
     }
   }
 }
