@@ -16,7 +16,7 @@
 
 ## 現在地点
 
-**DiMORAの実データ正規化検証（P2）はPR #234で完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認し、原本アクセス検証も完了した。VAIO P経由の取得テストは現行工程から除外し、work_pc＋Dropboxで本来工程を継続する。**
+**DiMORAの実データ正規化検証（P2）は完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認済み。現行工程はwork_pc＋DropboxでDiMORA本来工程を継続する。**
 
 ## 次の一手
 
