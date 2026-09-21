@@ -27,7 +27,7 @@ DIGA自動化は、`ai-project` の重要な継続・発展テーマ。
 
 ## 3. 今後の方向
 
-VAIO Pを実験・将来の実運用基盤として、DIGA/DiMORAから必要な情報を自動取得し、既存のGoogle/GAS運用と接続する。
+work_pc＋Dropboxを現在の実運用・検証基盤として、DIGA/DiMORAから必要な情報を取得し、既存のGoogle/GAS運用と接続する。
 
 ```text
 DIGA / DiMORA
@@ -69,8 +69,8 @@ Google Drive / Sheets / GAS
 - DiMORAお気に入り一覧のHTML内に `GL_FAVPGM_DATA` があり、`record[]` にお気に入りデータが保持されていることを確認している。
 - 「もっと見る」は、ページ内の `record[]` を10件ずつ表示するJavaScript処理であり、追加取得の通信先を探すことが主課題ではない。
 - 現在使用している制限付きWindows PCでは、F12、Ctrl + Shift + I、Ctrl + U、およびChromeメニューからのDevTools操作が利用できない。
-- 制限付きPCで同じブラウザ操作を反復せず、現在は**VAIO P + Chromiumで取得・解析の実証へ進む方針**である。
-- VAIO P + Firefox ESRでは `GL_FAVPGM_DATA` が見つからず、長いJavaScriptの手入力による細かなConsole調査は非効率として打ち切り・保留している。
+- 制限付きPCで同じブラウザ操作を反復せず、現在は**work_pc＋Dropboxで取得・解析の実証へ進む方針**である。
+- VAIO P + Firefox ESRでの過去調査は履歴として保持するが、現行工程には含めない。
 - 作業開始時は、過去ログの「次にやること」をそのまま現在の作業とせず、現在化・作業判断ゲートを通して現在の次の一手を決める。
 
 ### 今後検証すること
