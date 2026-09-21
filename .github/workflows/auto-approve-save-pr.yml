@@ -5,6 +5,11 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'scripts/current_state_guard.py'
+      - 'scripts/main_work_progress_guard.py'
+      - 'tests/test_current_state_guard.py'
 
 permissions:
   contents: write
