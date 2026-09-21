@@ -29,10 +29,10 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$PR_NUMBER"
-          head_ref="$(gh pr view "$PR_NUMBER" --json headRefName --jq ".headRefName")"
-          head_sha="$(gh pr view "$PR_NUMBER" --json headRefOid --jq ".headRefOid")"
-          head_repo="$(gh pr view "$PR_NUMBER" --json headRepository --jq ".headRepository.nameWithOwner")"
-          draft="$(gh pr view "$PR_NUMBER" --json isDraft --jq ".isDraft")"
+          head_ref="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefName --jq ".headRefName")"
+          head_sha="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq ".headRefOid")"
+          head_repo="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRepository --jq ".headRepository.nameWithOwner")"
+          draft="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json isDraft --jq ".isDraft")"
           test "$draft" = "false"
           test "$head_repo" = "$GITHUB_REPOSITORY"
           case "$head_ref" in
@@ -54,22 +54,18 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Wait for earlier canonical save PRs
+      - name: Check canonical save backlog
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          for i in {1..60}; do
-            mapfile -t saves < <(gh pr list --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("save/direct-chat-")) | .number')
-            if [ "${#saves[@]}" -eq 0 ]; then
-              exit 0
-            fi
-            echo "Waiting for open canonical save PRs: ${saves[*]}"
-            sleep 10
-          done
-          echo "Timed out waiting for earlier canonical save PRs." >&2
-          exit 1
+          mapfile -t saves < <(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --json number,headRefName,createdAt --jq '.[] | select(.headRefName | startswith("save/direct-chat-")) | [.number,.createdAt] | @tsv')
+          if [ "${#saves[@]}" -eq 0 ]; then
+            exit 0
+          fi
+          echo "Existing canonical save PRs: ${saves[*]}"
+          echo "Stale canonical save PRs do not block intake; concurrency serializes intake runs."
 
       - name: Validate and read queue entry
         id: queue
@@ -79,14 +75,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t changed < <(gh pr view "$PR_NUMBER" --json files --jq '.files[].path' | sort)
+          mapfile -t changed < <(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json files --jq '.files[].path' | sort)
           test "${#changed[@]}" = "1"
           queue_file="${changed[0]}"
           case "$queue_file" in
             .github/save-queue/*.md) ;;
             *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
           esac
-          head_sha="$(gh pr view "$PR_NUMBER" --json headRefOid --jq '.headRefOid')"
+          head_sha="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq '.headRefOid')"
           gh api "repos/${GITHUB_REPOSITORY}/contents/${queue_file}?ref=${head_sha}" --jq '.content' |
             tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
           test -s "$RUNNER_TEMP/direct-chat.md"
