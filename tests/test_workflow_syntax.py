@@ -25,10 +25,8 @@ raise "empty workflow" if data.nil?
                 parsed = subprocess.run([ruby, "-e", script, str(path)], text=True, capture_output=True)
                 self.assertEqual(parsed.returncode, 0, parsed.stderr or parsed.stdout)
                 text = path.read_text(encoding="utf-8")
-                masked = re.sub(r"${{.*?}}", "GITHUB_EXPRESSION", text, flags=re.S)
-                blocks = re.findall(r"(?ms)^s+run:s*|
-((?:^[ ]{10,}.*
-?)+)", masked)
+                masked = re.sub(r"\$\{\{.*?\}\}", "GITHUB_EXPRESSION", text, flags=re.S)
+                blocks = re.findall(r"(?ms)^\s+run:\s*\|\n((?:^[ ]{10,}.*\n?)+)", masked)
                 for block in blocks:
                     lines = block.splitlines()
                     while lines and not lines[0].strip():
@@ -36,9 +34,7 @@ raise "empty workflow" if data.nil?
                     if not lines:
                         continue
                     indent = min(len(line) - len(line.lstrip(" ")) for line in lines if line.strip())
-                    shell = "
-".join(line[indent:] for line in lines) + "
-"
+                    shell = "\n".join(line[indent:] for line in lines) + "\n"
                     with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".sh") as fh:
                         fh.write(shell)
                         fh.flush()
