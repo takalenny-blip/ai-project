@@ -44,29 +44,36 @@ if(-not $tabs){
   if($tabs.Count -eq 0){ throw "CDP endpoint did not become available on port $Port." }
 }
 
-$tab = $tabs | Where-Object { $_.type -eq "page" } | Select-Object -First 1
+$tab = $tabs | Where-Object { $_.type -eq "page" -and $_.url -match "dimora\\.jp" } | Select-Object -First 1
+if(-not $tab){ $tab = $tabs | Where-Object { $_.type -eq "page" } | Select-Object -First 1 }
 if(-not $tab){ throw "No debuggable page found on port $Port." }
 
 $ws=[System.Net.WebSockets.ClientWebSocket]::new()
-$ws.ConnectAsync([Uri]$tab.webSocketDebuggerUrl,[Threading.CancellationToken]::None).GetAwaiter().GetResult()
+$null=$ws.ConnectAsync([Uri]$tab.webSocketDebuggerUrl,[Threading.CancellationToken]::None).GetAwaiter().GetResult()
 $script:Id=0
 
 function Invoke-Cdp([string]$method,[hashtable]$params=@{}){
   $script:Id++
-  $msg=@{id=$script:Id;method=$method;params=$params}|ConvertTo-Json -Compress
+  $wantedId=$script:Id
+  $msg=@{id=$wantedId;method=$method;params=$params}|ConvertTo-Json -Compress
   $bytes=[Text.Encoding]::UTF8.GetBytes($msg)
-  $ws.SendAsync([ArraySegment[byte]]::new($bytes),[Net.WebSockets.WebSocketMessageType]::Text,$true,[Threading.CancellationToken]::None).GetAwaiter().GetResult()
-  $buf=New-Object byte[] 1048576; $result=""
-  do{
-    $seg=[ArraySegment[byte]]::new($buf)
-    $r=$ws.ReceiveAsync($seg,[Threading.CancellationToken]::None).GetAwaiter().GetResult()
-    $result+=[Text.Encoding]::UTF8.GetString($buf,0,$r.Count)
-  }while(-not $r.EndOfMessage)
-  return $result|ConvertFrom-Json
+  $null=$ws.SendAsync([ArraySegment[byte]]::new($bytes),[Net.WebSockets.WebSocketMessageType]::Text,$true,[Threading.CancellationToken]::None).GetAwaiter().GetResult()
+  $buf=New-Object byte[] 1048576
+  while($true){
+    $result=""
+    do{
+      $seg=[ArraySegment[byte]]::new($buf)
+      $r=$ws.ReceiveAsync($seg,[Threading.CancellationToken]::None).GetAwaiter().GetResult()
+      if($r.MessageType -eq [Net.WebSockets.WebSocketMessageType]::Close){ throw "CDP WebSocket closed." }
+      $result+=[Text.Encoding]::UTF8.GetString($buf,0,$r.Count)
+    }while(-not $r.EndOfMessage)
+    $obj=$result|ConvertFrom-Json
+    if($obj.id -eq $wantedId){ return $obj }
+  }
 }
 
 Invoke-Cdp "Page.navigate" @{url=$Url}|Out-Null
-Write-Host "Navigated dedicated browser to DiMORA URL. If login is shown, log in and rerun this command."
+Write-Host "Navigated dedicated browser to DiMORA URL. Waiting for GL_FAVPGM_DATA..."
 
 $deadline=(Get-Date).AddSeconds(20)
 $value=$null
