@@ -258,7 +258,9 @@
     "resume_main_work_after_save_dispatch": true,
     "duplicate_operation_guard": true,
     "final_report_separates_work_and_save": true,
-    "final_report_contract": "【作業】主作業の状態・実施内容・未完了事項・現在の次の一手／【保存】保存状態・投入先識別情報・残段階。保存は主作業を停止させない。"
+    "final_report_contract": "【作業】主作業の状態・実施内容・未完了事項・現在の次の一手／【保存】保存状態・投入先識別情報・残段階。保存は主作業を停止させない。",
+    "main_work_progress_gate": true,
+    "main_work_progress_rule": "work/* PRはscripts/tests/src/app/tools/.github/workflowsのいずれかに実質変更を含める。現在状態・生成ビューだけの更新はsave trackへ分離し、main workとしてmergeさせない。"
   },
   "approval_policy": {
     "approver": "taka2-dev",
@@ -339,7 +341,9 @@
     "script": "scripts/current_state_guard.py",
     "tests": "tests/test_current_state_guard.py",
     "workflow": ".github/workflows/current-state-guard.yml",
-    "purpose": "active/retiredの矛盾、抽象next_step、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入をCIで停止する"
+    "purpose": "active/retiredの矛盾、抽象next_step、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入に加え、work/* PRが状態・生成ビューだけを更新して本線作業を進めたことにするループをCIで停止する",
+    "main_work_progress_guard": "scripts/main_work_progress_guard.py",
+    "main_work_progress_workflow": ".github/workflows/main-work-progress-gate.yml"
   },
   "resume_manifest": {
     "generator": "scripts/resume_manifest.py",
