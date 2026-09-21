@@ -1,0 +1,31 @@
+name: Experience article material
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/build_experience_article_material.py'
+      - 'tests/test_build_experience_article_material.py'
+      - '経験ログ/**'
+      - '.github/workflows/experience-article-material.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_experience_article_material.py'
+      - 'tests/test_build_experience_article_material.py'
+      - '経験ログ/**'
+      - '.github/workflows/experience-article-material.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Run article material tests
+        run: python -m unittest tests/test_build_experience_article_material.py
