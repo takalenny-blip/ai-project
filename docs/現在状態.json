@@ -290,9 +290,13 @@
     }
   },
   "next_step": {
+    "environment": "work_pc",
     "scope": "experience_log_to_blogger",
     "target": "最終ゴールに向けて経験ログを中心としたAI編集・Blogger自動化へ戻る",
-    "readiness": "ready"
+    "evidence": "DIGA / DiMORA自動化 本線断念の決定記録",
+    "readiness": "ready",
+    "unblock_action": "none",
+    "prerequisites": []
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
