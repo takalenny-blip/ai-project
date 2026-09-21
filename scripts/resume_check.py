@@ -98,6 +98,20 @@ def main():
         return fail("next_step.prerequisites must be explicit")
     if nxt.get("readiness") not in {"ready", "blocked"}:
         return fail("next_step.readiness must be ready or blocked")
+    interaction = state.get("interaction_control")
+    if not isinstance(interaction, dict):
+        return fail("interaction_control must be defined")
+    if interaction.get("status") != "implemented_preflight":
+        return fail("interaction_control.status must be implemented_preflight")
+    guard_script = interaction.get("guard_script")
+    if guard_script != "scripts/interaction_guard.py":
+        return fail("interaction_control.guard_script is invalid")
+    loop = interaction.get("loop_detection") or {}
+    if loop.get("threshold") != 2 or loop.get("action") != "強制停止して人間判断へ戻す":
+        return fail("interaction_control.loop_detection contract is invalid")
+    blocked = interaction.get("blocked_output") or {}
+    if blocked.get("exit_code") != 2:
+        return fail("interaction_control.blocked_output.exit_code must be 2")
     if nxt.get("status") not in {None, nxt.get("readiness")}:
         return fail("next_step.status must be absent or equal to readiness")
     for p in nxt["prerequisites"]:
