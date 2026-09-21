@@ -1,0 +1,16 @@
+# 直前チャット保存要求
+
+## 作業結果
+- ユーザー申告の「VAIO Pはもう使っていない」という引継ぎ不整合を修正するPR #274を確認し、承認済みであることを確認した。
+- PR #274をsquash mergeし、merge SHAは `8a51b9873f1d15429d984b23fbcfab46b364edcb`。
+- mainの `docs/現在状態.json` をreadbackし、VAIO Pをretired、active/work_pc、next_step/work_pc＋Dropbox、DiMORA本来工程継続へ統一されていることを確認した。
+- その際、ユーザーに急に承認依頼が戻った原因を調査した。
+- 原因は `.github/workflows/auto-approve-save-pr.yml` の自動承認対象branch prefixに `work/*` が入っていなかったこと。PR #274は `work/fix-handoff-retire-vaio-p` だったため、自動承認条件から外れていた。
+- 自動化を一本化するため、`work/*` を自動承認対象へ追加するPR #277を作成した。既存の安全条件（同一repo・非Draft・repo owner作成）は維持する。
+- 正規保存経路は変更せず、直チャット保存はsave-request-intake.yml経由で行う。
+
+## 現在の状態
+- PR #274: merged
+- PR #277: 自動承認対象の修正、open
+- 正規保存経路: save-request-intake.yml → save_and_currentize.py → final save PR
+- 次工程: work_pc＋DropboxでDiMORA本来工程
