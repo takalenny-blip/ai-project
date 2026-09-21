@@ -1,10 +1,8 @@
 name: Save request intake
 
 on:
-  workflow_run:
-    workflows:
-      - current-state-guard
-    types: [completed]
+  pull_request_target:
+    types: [opened, synchronize, reopened]
 
 concurrency:
   group: save-intake-global
@@ -16,31 +14,34 @@ permissions:
 
 jobs:
   intake:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'chat-save-request/') &&
+      github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - name: Resolve triggering pull request
         id: pr
         env:
           GH_TOKEN: ${{ github.token }}
-          SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t prs < <(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open&base=main&per_page=100" --jq --arg sha "$SOURCE_SHA" '.[] | select(.head.sha == $sha) | .number')
-          test "${#prs[@]}" = "1"
-          pr_number="${prs[0]}"
-          head_ref="$(gh pr view "$pr_number" --json headRefName --jq '.headRefName')"
-          draft="$(gh pr view "$pr_number" --json isDraft --jq '.isDraft')"
-          head_repo="$(gh pr view "$pr_number" --json headRepository --jq '.headRepository.nameWithOwner')"
+          test -n "$PR_NUMBER"
+          head_ref="$(gh pr view "$PR_NUMBER" --json headRefName --jq ".headRefName")"
+          head_sha="$(gh pr view "$PR_NUMBER" --json headRefOid --jq ".headRefOid")"
+          head_repo="$(gh pr view "$PR_NUMBER" --json headRepository --jq ".headRepository.nameWithOwner")"
+          draft="$(gh pr view "$PR_NUMBER" --json isDraft --jq ".isDraft")"
           test "$draft" = "false"
           test "$head_repo" = "$GITHUB_REPOSITORY"
           case "$head_ref" in
             chat-save-request/*) ;;
             *) echo "Not a save-request PR; nothing to do."; exit 0 ;;
           esac
-          echo "number=$pr_number" >> "$GITHUB_OUTPUT"
+          echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
           echo "head_ref=$head_ref" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
 
       - name: Checkout trusted base branch
         uses: actions/checkout@v4
