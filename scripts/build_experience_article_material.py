@@ -43,7 +43,7 @@ def build_material(log_dir: Path, exp_id: str) -> dict:
     for rec_path in find_rec_files(log_dir, exp_id):
         recs.append(
             {
-                "source_path": str(rec_path.as_posix()),
+                "source_path": rec_path.name,
                 "sections": parse_sections(rec_path.read_text(encoding="utf-8")),
             }
         )

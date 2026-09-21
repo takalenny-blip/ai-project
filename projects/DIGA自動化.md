@@ -1,4 +1,4 @@
-status: current
+status: historical
 
 # DIGA自動化
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse, json
 from pathlib import Path
 from typing import Any
-KEY_FIELDS=("eventId","mindsProgramId","title","startDate","endDate","bcsNm","chNo","mode")
+KEY_FIELDS=("eventId","mindsProgramId")
 RECORD_FIELDS=("eventId","mindsProgramId","title","startDate","endDate","bcsNm","chNo","mode","requestId","recTimerState","length","status","genre")
 def load(path:Path)->list[dict[str,Any]]:
     data=json.loads(path.read_text(encoding="utf-8"))

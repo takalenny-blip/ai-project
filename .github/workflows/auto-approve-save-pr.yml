@@ -39,11 +39,31 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: gh pr review "$PR_URL" --approve --body 'Same-repository PR auto-approved by taka2-dev.'
 
-      - name: Wait for all PR checks
+      - name: Wait for all other PR checks
         env:
           GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
-        run: gh pr checks "$PR_URL" --watch --fail-fast --interval 5
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 120); do
+            checks="$(gh pr checks "$PR_URL" --json name,bucket,state)"
+            pending="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select(.bucket == "PENDING")] | length')"
+            failed="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select(.bucket == "FAIL" or .bucket == "CANCEL")] | length')"
+            if [ "$failed" -gt 0 ]; then
+              echo "A non-merge PR check failed or was cancelled."
+              printf '%s\n' "$checks" | jq -r '.[] | select(.name != "approve-and-merge") | [.name, .bucket, .state] | @tsv'
+              exit 1
+            fi
+            if [ "$pending" -eq 0 ]; then
+              echo "All other PR checks completed successfully or were skipped."
+              printf '%s\n' "$checks" | jq -r '.[] | select(.name != "approve-and-merge") | [.name, .bucket, .state] | @tsv'
+              exit 0
+            fi
+            echo "Waiting for $pending non-merge PR check(s)..."
+            sleep 5
+          done
+          echo "Timed out waiting for non-merge PR checks."
+          exit 1
 
       - name: Merge as squash (retry after approval propagation)
         env:
