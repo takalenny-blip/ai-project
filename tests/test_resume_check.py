@@ -15,6 +15,12 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
     def write_state(self, root, prerequisite, readiness="ready"):
         state = {
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
+            "interaction_control": {
+                "status": "implemented_preflight",
+                "guard_script": "scripts/interaction_guard.py",
+                "loop_detection": {"threshold": 2, "action": "強制停止して人間判断へ戻す"},
+                "blocked_output": {"exit_code": 2},
+            },
             "current_position": {"summary": "current"},
             "next_step": {
                 "environment": "work_pc",
