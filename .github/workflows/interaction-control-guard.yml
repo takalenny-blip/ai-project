@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'scripts/interaction_guard.py'
+      - 'scripts/interaction_preflight.py'
+      - 'tests/test_interaction_preflight.py'
       - 'scripts/resume_check.py'
       - 'tests/test_interaction_guard.py'
       - 'docs/現在状態.json'
