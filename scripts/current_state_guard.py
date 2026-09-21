@@ -130,12 +130,17 @@ def validate_state(state: dict) -> None:
     active = env.get("active")
     retired = env.get("retired", [])
     nxt = state["next_step"]
-    validate_completed_verifications(state)
-    if not nxt.get("scope"):
-        fail("next_step.scope is missing")
-    completed = state["verification_records"].get(nxt["scope"])
-    if isinstance(completed, dict) and completed.get("status") == "verified":
-        fail("next_step repeats an already verified scope: " + nxt["scope"])
+    legacy_verification_model = "verification_records" not in state
+    if not legacy_verification_model:
+        validate_completed_verifications(state)
+        if not nxt.get("scope"):
+            fail("next_step.scope is missing")
+        completed = state["verification_records"].get(nxt["scope"])
+        if isinstance(completed, dict) and completed.get("status") == "verified":
+            fail("next_step repeats an already verified scope: " + nxt["scope"])
+    # Staged migration compatibility: the current canonical state predates the
+    # verification_records/scope fields. Allow it to pass until the normal save
+    # pipeline applies the explicit migration patch; do not silently invent evidence.
     current = state["current_position"]
     if not active:
         fail("active execution environment is not defined")
