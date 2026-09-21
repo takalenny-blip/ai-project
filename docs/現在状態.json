@@ -2,7 +2,7 @@
   "schema_version": 3,
   "updated": "2026-09-21",
   "canonical_repository": "takalenny-blip/ai-project",
-  "primary_lane": "DIGA / DiMORA自動化",
+  "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
@@ -196,8 +196,7 @@
   "pending_monitoring": [
     "期限付き対応: GitHub公開リポジトリのpull_request_target既定ポリシー強制開始予定日2026-11-02までに、save-request-intake.yml と auto-approve-save-pr.yml の両workflowが停止しない明示的許可設定または代替方式を確定・実装・本番検証する",
     "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認",
-    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する",
-    "引継ぎ整合性: retired環境をnext_stepへ再混入させないことをcurrent-state guardで維持する"
+    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する"
   ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
@@ -225,7 +224,8 @@
     "主作業トラックと保存トラックを分離し、保存要求を非同期の副次タスクとして投入後すぐ主作業へ復帰する",
     "主作業を進行中／完了／ブロック中、保存を未実行／投入済み・結果待ち／完了／失敗として独立管理する",
     "実行済み操作を操作／目的／結果／状態で保持し、同一操作の理由なき再実行を防ぐ",
-    "最終報告で【作業】と【保存】の状態を分離する"
+    "最終報告で【作業】と【保存】の状態を分離する",
+    "DIGA / DiMORA自動化は、現行のバド単独運用では実機側の取得・操作まで完遂できないため、2026-09-21をもって本線作業を断念する。既存成果・経験資産は破棄せず履歴として保持する。"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -282,60 +282,21 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DiMORAの実データ正規化検証（P2）は完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認済み。現行工程はwork_pc＋DropboxでDiMORA本来工程を継続する。",
+    "summary": "DIGA / DiMORA自動化は、現行のバド単独運用では実機側の取得・操作まで完遂できないため断念。既存の正規化検証、work_pc原本→Dropbox→Bud取得の実証、変更検知等の成果は履歴・経験資産として保持し、本線は最終ゴールである経験ログを中心としたAI編集・Blogger自動化へ戻す。",
     "evidence": {
-      "type": "runtime_artifact",
-      "references": [
-        "work_pc: C:\\Users\\kiyam\\Downloads\\dimora-favorite-programs.json",
-        "Dropbox: /dimora/dimora-favorite-programs.json"
-      ],
-      "note": "work_pc原本をDropboxへコピーし、Dropbox接続済みのBudから同一ファイルを取得。取得サイズ6,442 bytes、JSONとして正常読込、実データ1件を確認。正規化は再実行していない。"
+      "type": "decision_record",
+      "checked_at": "2026-09-21",
+      "note": "たかの決定。DIGA関連をバドが進め切れないことを理由に本線作業を断念。"
     }
   },
   "next_step": {
     "environment": "work_pc",
-    "scope": "dimora_normal_work",
-    "target": "work_pc＋DropboxでDiMORA本来工程を継続する",
-    "evidence": "dimora_source_artifact_access verified",
+    "scope": "experience_log_to_blogger",
+    "target": "最終ゴールに向けて経験ログを中心としたAI編集・Blogger自動化へ戻る",
+    "evidence": "DIGA / DiMORA自動化 本線断念の決定記録",
     "readiness": "ready",
     "unblock_action": "none",
-    "prerequisites": [
-      {
-        "name": "scripts/dimora_json_normalizer.py",
-        "kind": "repo_file",
-        "verify_scope": "ci",
-        "status": "verified",
-        "evidence": {
-          "method": "GitHub main readback with repository blob SHA",
-          "checked_at": "2026-09-20",
-          "blob_sha": "7bcf28c818f836dd7257b7f5db1dd233da8543c5"
-        }
-      },
-      {
-        "name": "tests/test_dimora_json_normalizer.py",
-        "kind": "repo_file",
-        "verify_scope": "ci",
-        "status": "verified",
-        "evidence": {
-          "method": "GitHub main readback with repository blob SHA",
-          "checked_at": "2026-09-20",
-          "blob_sha": "8ff57ffba6562fbf350f6679783ee83234692588"
-        }
-      },
-      {
-        "name": "dimora-favorite-programs.json",
-        "location": "Dropbox /dimora/dimora-favorite-programs.json",
-        "kind": "external_artifact",
-        "verify_scope": "runtime",
-        "status": "verified",
-        "evidence": {
-          "method": "Dropbox fetch after work_pc copy",
-          "checked_at": "2026-09-21",
-          "size_bytes": 6442,
-          "record_count": 1
-        }
-      }
-    ]
+    "prerequisites": []
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -424,6 +385,15 @@
         "checked_at": "2026-09-21",
         "pr": "#271",
         "reason": "現行環境・本来工程と不一致。引継ぎ時に次工程として残さない"
+      }
+    },
+    "diga_abandonment": {
+      "status": "verified",
+      "label": "DIGA / DiMORA自動化 本線断念",
+      "evidence": {
+        "method": "たかの決定",
+        "checked_at": "2026-09-21",
+        "reason": "現行のバド単独運用では実機側の取得・操作まで完遂できないため"
       }
     }
   }
