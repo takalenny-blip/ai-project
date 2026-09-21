@@ -280,7 +280,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DiMORAの実データ正規化検証（P2）は完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認済み。現行工程はwork_pc＋DropboxでDiMORA本来工程を継続する。",
+    "summary": "DiMORAの実データ正規化検証（P2）は完了済み。work_pc上の原本JSONはDropbox Desktop経由でBudから直接取得できることを確認済み。Dropbox原本を通常処理へ渡す非破壊入口チェックも実装・原本1件で内容確認済み。現行工程はwork_pc＋DropboxでDiMORA本来工程を継続する。",
     "evidence": {
       "type": "runtime_artifact",
       "references": [
@@ -420,6 +420,17 @@
         "checked_at": "2026-09-21",
         "pr": "#271",
         "reason": "現行環境・本来工程と不一致。引継ぎ時に次工程として残さない"
+      }
+    },
+    "dimora_dropbox_intake_check": {
+      "status": "verified",
+      "label": "Dropbox同期DiMORA原本の通常工程入口チェック",
+      "evidence": {
+        "method": "接続済みDropboxから原本JSONを取得し、JSON構造・record件数1・通常処理必須項目(title/startDate/endDate/bcsNm/chNo/mode)を確認。入口チェックは原本を変更せず判定のみ行う。",
+        "checked_at": "2026-09-21",
+        "dropbox_path": "/dimora/dimora-favorite-programs.json",
+        "record_count": 1,
+        "required_fields_missing": []
       }
     }
   }
