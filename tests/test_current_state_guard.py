@@ -51,6 +51,13 @@ class CurrentStateGuardTests(unittest.TestCase):
             },
         }
 
+
+    def test_legacy_verification_model_is_temporarily_accepted(self):
+        state = self.base_state()
+        state.pop("verification_records")
+        state["next_step"].pop("scope")
+        guard.validate_state(state)
+
     def test_active_work_pc_passes(self):
         guard.validate_state(self.base_state())
         guard.validate_next_step_no_retired(self.base_state())
