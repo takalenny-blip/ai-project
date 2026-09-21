@@ -14,7 +14,7 @@ class WorkflowSyntaxTests(unittest.TestCase):
     def test_workflow_yaml_and_run_blocks_are_parseable(self):
         ruby = shutil.which("ruby")
         self.assertIsNotNone(ruby, "ruby is required on the GitHub Actions runner")
-        script = r"""
+        yaml_script = r"""
 require "yaml"
 path = ARGV.fetch(0)
 data = YAML.load_file(path)
@@ -22,19 +22,38 @@ raise "empty workflow" if data.nil?
 """
         for path in WORKFLOWS:
             with self.subTest(path=path.name):
-                parsed = subprocess.run([ruby, "-e", script, str(path)], text=True, capture_output=True)
+                parsed = subprocess.run([ruby, "-e", yaml_script, str(path)], text=True, capture_output=True)
                 self.assertEqual(parsed.returncode, 0, parsed.stderr or parsed.stdout)
-                text = path.read_text(encoding="utf-8")
-                masked = re.sub(r"\$\{\{.*?\}\}", "GITHUB_EXPRESSION", text, flags=re.S)
-                blocks = re.findall(r"(?ms)^\s+run:\s*\|\n((?:^[ ]{10,}.*\n?)+)", masked)
-                for block in blocks:
-                    lines = block.splitlines()
-                    while lines and not lines[0].strip():
-                        lines.pop(0)
-                    if not lines:
+
+                lines = path.read_text(encoding="utf-8").splitlines()
+                i = 0
+                while i < len(lines):
+                    match = re.match(r"^( +)run:\s*\|\s*$", lines[i])
+                    if not match:
+                        i += 1
                         continue
-                    indent = min(len(line) - len(line.lstrip(" ")) for line in lines if line.strip())
-                    shell = "\n".join(line[indent:] for line in lines) + "\n"
+                    run_indent = len(match.group(1))
+                    i += 1
+                    block = []
+                    while i < len(lines):
+                        line = lines[i]
+                        if line.strip() and len(line) - len(line.lstrip(" ")) <= run_indent:
+                            break
+                        block.append(line)
+                        i += 1
+                    while block and not block[-1].strip():
+                        block.pop()
+                    if not block:
+                        continue
+
+                    content_indent = min(
+                        len(line) - len(line.lstrip(" "))
+                        for line in block
+                        if line.strip()
+                    )
+                    shell = "\n".join(line[content_indent:] for line in block) + "\n"
+                    # GitHub expressions are not Bash syntax; replace them before bash -n.
+                    shell = re.sub(r"\$\{\{.*?\}\}", "GITHUB_EXPRESSION", shell, flags=re.S)
                     with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".sh") as fh:
                         fh.write(shell)
                         fh.flush()
