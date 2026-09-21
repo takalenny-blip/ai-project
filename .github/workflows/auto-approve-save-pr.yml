@@ -30,10 +30,10 @@ jobs:
           set -euo pipefail
           api_files="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files?per_page=100")"
           changed_count="$(gh pr view "$PR_URL" --json changedFiles --jq '.changedFiles')"
-          api_file_count="$(printf '%s\\n' "$api_files" | jq -s 'map(.[]) | length')"
+          api_file_count="$(printf '%s\n' "$api_files" | jq -s 'map(.[]) | length')"
           test "$api_file_count" = "$changed_count"
           mapfile -t files < <(
-            printf '%s\\n' "$api_files" |
+            printf '%s\n' "$api_files" |
               jq -r '.[] | .filename, (.previous_filename // empty)'
           )
           for path in "${files[@]}"; do
@@ -55,10 +55,10 @@ jobs:
           set -euo pipefail
           mapfile -t files < <(gh pr view "$PR_URL" --json files --jq '.files[].path' | sort)
           test "${#files[@]}" = "4"
-          direct_chat_path="$(printf '%s\\n' "${files[@]}" | grep '^直チャット/')"
+          direct_chat_path="$(printf '%s\n' "${files[@]}" | grep '^直チャット/')"
           test -n "$direct_chat_path"
-          expected="$(printf '%s\\n' 'BUD.md' 'docs/現在状態.json' 'docs/引き継ぎ/現在の引き継ぎ.md' "$direct_chat_path" | sort)"
-          actual="$(printf '%s\\n' "${files[@]}" | sort)"
+          expected="$(printf '%s\n' 'BUD.md' 'docs/現在状態.json' 'docs/引き継ぎ/現在の引き継ぎ.md' "$direct_chat_path" | sort)"
+          actual="$(printf '%s\n' "${files[@]}" | sort)"
           test "$actual" = "$expected"
 
       - name: Wait for required PR checks
@@ -72,7 +72,7 @@ jobs:
           for attempt in $(seq 1 120); do
             checks="$(gh pr checks "$PR_URL" --json name,bucket,state)"
             failed="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select(.bucket == "fail" or .bucket == "cancel")] | length')"
-            [ "$failed" -eq 0 ] || { echo "A PR check failed or was cancelled."; printf '%s\\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'; exit 1; }
+            [ "$failed" -eq 0 ] || { echo "A PR check failed or was cancelled."; printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'; exit 1; }
 
             guard_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "guard")] | first | if . == null then "missing" elif .bucket == "pass" then "pass" elif .bucket == "pending" then "pending" else "fail" end')"
             progress_required="false"
@@ -86,7 +86,7 @@ jobs:
 
             if [ "$guard_ready" = "pass" ] && [ "$progress_ready" = "pass" ]; then
               echo "Required PR checks passed."
-              printf '%s\\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'
+              printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'
               break
             fi
             echo "Waiting for required checks: guard=$guard_ready progress=$progress_ready"
