@@ -156,3 +156,17 @@ main の自動承認は、全ファイルが除外対象の PR だけを止め�
 
 [Bud]
 【追記】#337 のマージで save-intake の新方式を main に反映した。#336 は既存の save-request を維持したまま、close/reopen の反復ではなく、queue branch の同期コミットを1回だけ追加して新しい current-state-guard → workflow_run 経路を起動する。これは保存内容の変更ではなく、正規入口を再評価させるための同期操作である。
+
+
+[Bud]
+【前回回答】
+進めた。ここで原因がはっきりした。
+
+- #336 の新SHA `b4eb03d...` に対して current-state-guard は実際に成功。
+- 実行ログでも `current-state-guard` は `success`、回帰テストも通過。
+- しかし、その完了を起点にする `Save request intake` の workflow_run が生成されていない。
+- #336自体はまだopenで、`save/direct-chat-*` PRも生成されていない。
+
+つまり、今回止まっているのは **PR解決処理ではなく、その前段の `workflow_run` トリガーそのもの**。
+
+ここで同じ空コミットやclose/reopenを繰り返すのはループになるので止める。次は `workflow_run` に依存しない、GitHub Actions上で確実にqueue PRを拾える起動方式へ修正する段階。
