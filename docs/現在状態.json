@@ -196,7 +196,8 @@
   "pending_monitoring": [
     "期限付き対応: GitHub公開リポジトリのpull_request_target既定ポリシー強制開始予定日2026-11-02までに、save-request-intake.yml と auto-approve-save-pr.yml の両workflowが停止しない明示的許可設定または代替方式を確定・実装・本番検証する",
     "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認",
-    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する"
+    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する",
+    "auto-approve-save-pr.yml / save-request-intake.yml の制御方針を反映後、CIと本番経路で検証する"
   ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
@@ -248,7 +249,13 @@
     "pr_creation_failure": "queue PR or final save PR creation failure is not success; report the failed stage",
     "direct_contents_api_for_save": "prohibited",
     "queue_entrypoint": "chat-save-request/** のキューbranch＋キューPR",
-    "final_save_branch_owned_by": "save-request-intake.yml"
+    "final_save_branch_owned_by": "save-request-intake.yml",
+    "intake_serialization": {
+      "concurrency_group": "save-intake",
+      "queue": "max",
+      "cancel_in_progress": false,
+      "wait_for_open_canonical_save_pr": true
+    }
   },
   "operation_separation": {
     "status": "implemented_in_rules",
@@ -267,7 +274,47 @@
     "scope": "同一リポジトリ・非Draftの全PR",
     "save_pr_extra_verification": "save/direct-chat-* の保存PRのみ4ファイル形状を検証してから承認",
     "workflow": "pull_request_target",
-    "security_guard": "github.event.pull_request.head.repo.full_name == github.repository を必須条件として維持"
+    "security_guard": "github.event.pull_request.head.repo.full_name == github.repository を必須条件として維持",
+    "control_plane_auto_merge_exclusions": [
+      ".github/* (except .github/save-queue/*)",
+      "tests/*",
+      "scripts/current_state_guard.py",
+      "scripts/main_work_progress_guard.py",
+      "scripts/resume_check.py",
+      "scripts/save_and_currentize.py",
+      "scripts/check_repo_integrity.py",
+      "scripts/check_atomic_save_commit.py",
+      "scripts/check_entry_docs.py",
+      "scripts/generate_current_views.py",
+      "scripts/resume_manifest.py",
+      "scripts/verify_save_request.py"
+    ],
+    "required_checks": {
+      "all_prs": [
+        "guard"
+      ],
+      "work/*": [
+        "guard",
+        "progress-gate"
+      ],
+      "wait_missing_or_pending": true,
+      "fail_or_cancel": "fail"
+    },
+    "changed_files_verification": {
+      "api": "REST pagination",
+      "object_count_must_equal_changedFiles": true,
+      "rename_fields": [
+        "filename",
+        "previous_filename"
+      ]
+    },
+    "head_integrity": {
+      "concurrency": "PR number",
+      "post_check_head_sha_match": true,
+      "merge_match_head_commit": true
+    },
+    "approval_order": "required_checks_and_head_verification_then_approval",
+    "tests_auto_merge": "blocked"
   },
   "execution_environment": {
     "active": "work_pc",
