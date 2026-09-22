@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-09-21",
+  "updated": "2026-09-22",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-21T16-36-47.941209+0900",
-    "latest_path": "直チャット/2026-09-21_直チャット即時保存_2026-09-21T16-36-47.941209+0900.md",
-    "latest_content_sha": "3aef456160cb8313a285ba46b049b1b1c3586fc0",
+    "latest_saved": "2026-09-22T11-03-23.653302+0900",
+    "latest_path": "直チャット/2026-09-22_直チャット即時保存_2026-09-22T11-03-23.653302+0900.md",
+    "latest_content_sha": "f0d9d37f16bf433dd2cd43a398f27570c5d27efe",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
