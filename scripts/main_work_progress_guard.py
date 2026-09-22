@@ -20,8 +20,12 @@ SUBSTANTIVE_PREFIXES = (
     "app/",
     "tools/",
     "docs/企画/",
+    "docs/設計/",
     "schemas/",
+    "rules/",
 )
+SUBSTANTIVE_FILES = {"README.md"}
+
 SUBSTANTIVE_WORKFLOW_PREFIX = ".github/workflows/"
 
 
@@ -41,8 +45,11 @@ def validate(branch: str, paths: list[str]) -> tuple[bool, str]:
     substantive = [
         path for path in paths
         if path not in ADMIN_ONLY
-        and path.startswith(SUBSTANTIVE_PREFIXES)
-        or path.startswith(SUBSTANTIVE_WORKFLOW_PREFIX)
+        and (
+            path in SUBSTANTIVE_FILES
+            or path.startswith(SUBSTANTIVE_PREFIXES)
+            or path.startswith(SUBSTANTIVE_WORKFLOW_PREFIX)
+        )
     ]
     if substantive:
         return True, "substantive main-work change detected: " + ", ".join(sorted(substantive))
