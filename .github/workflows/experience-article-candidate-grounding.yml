@@ -1,0 +1,29 @@
+name: Experience article candidate grounding
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/validate_experience_article_candidate.py'
+      - 'tests/test_validate_experience_article_candidate.py'
+      - 'docs/経験ログ→AI記事候補_第3実装_根拠照合.md'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/validate_experience_article_candidate.py'
+      - 'tests/test_validate_experience_article_candidate.py'
+      - 'docs/経験ログ→AI記事候補_第3実装_根拠照合.md'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Run grounding validator tests
+        run: python -m unittest tests/test_validate_experience_article_candidate.py
