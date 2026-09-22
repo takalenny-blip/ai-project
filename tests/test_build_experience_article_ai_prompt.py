@@ -21,6 +21,10 @@ class ExperienceArticleAiPromptTests(unittest.TestCase):
         self.assertIn("知見A", prompt)
         self.assertIn("推測せず「記録上不明」", prompt)
         self.assertIn("本人の発言を作らない", prompt)
+        self.assertIn("grounding", prompt)
+        self.assertIn("source_path", prompt)
+        self.assertIn("evidence", prompt)
+        self.assertIn("完全一致の文字列", prompt)
         self.assertIn("Bloggerへの投稿、公開、認証、外部通信は行わない", prompt)
 
     def test_rejects_unknown_schema(self):
