@@ -1,0 +1,29 @@
+name: Experience article AI prompt
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/build_experience_article_ai_prompt.py'
+      - 'tests/test_build_experience_article_ai_prompt.py'
+      - 'docs/経験ログ→AI記事候補_第2実装.md'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_experience_article_ai_prompt.py'
+      - 'tests/test_build_experience_article_ai_prompt.py'
+      - 'docs/経験ログ→AI記事候補_第2実装.md'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Run AI article prompt tests
+        run: python -m unittest tests/test_build_experience_article_ai_prompt.py
