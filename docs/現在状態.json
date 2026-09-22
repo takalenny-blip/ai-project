@@ -41,20 +41,22 @@
   "verification_required": [
     {
       "item": "第1実装: 生成スクリプトがdocs/現在状態.jsonから候補BUD/引き継ぎを生成できる",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "GitHub Actions current-state-views run #510 / Actions run 35686230970; render-and-check succeeded.",
+        "run": 35686230970
       }
     },
     {
       "item": "第1実装: 同一入力から同一出力になることをGitHub Actionsで確認する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "GitHub Actions current-state-views run #510 / Actions run 35686230970; 'Render candidate views and verify determinism' succeeded.",
+        "run": 35686230970
       }
     },
     {
@@ -68,20 +70,22 @@
     },
     {
       "item": "既存BUD/引き継ぎを生成ビューへ移行する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "GitHub Actions current-state-views run #510 / Actions run 35686230970; checked-in views verification succeeded.",
+        "run": 35686230970
       }
     },
     {
       "item": "生成結果とチェックイン済みBUD/引き継ぎが完全一致することをCIで確認する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "GitHub Actions current-state-views run #510 / Actions run 35686230970; 'Verify checked-in views match generated views' succeeded.",
+        "run": 35686230970
       }
     },
     {
@@ -104,11 +108,12 @@
     },
     {
       "item": "構造変更後のREADME・独立監査ガード・入口資料の機械検査を確認する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "GitHub Actions current-state-views run #510 / Actions run 35686230970 plus current-state-guard run #419 / 35686231025; AI entry documentation, repository integrity, guard and regression tests succeeded.",
+        "run": 35686230970
       }
     },
     {
@@ -140,56 +145,67 @@
     },
     {
       "item": "097の保存ミス（Contents API個別コミット）を再発防止対象として整理し、保存経路の事前強制策をClaude確認する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "Current save pipeline implementation in .github/workflows/save-request-intake.yml and scripts/save_and_currentize.py; current-state-views run #510 executed atomic-save enforcement and three disposable-clone save-script tests successfully.",
+        "run": 35686230970,
+        "workflow_sha": "654efe2c661447d720a767e97d9aeeeff4eca755",
+        "script_sha": "17b9597dcaf56610e5b5f45eaf45a03943bf5eb9"
       }
     },
     {
       "item": "直チャット新規保存をタイムスタンプ方式へ完全移行し、旧連番方式を新規保存経路から廃止する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "Current-state readback after canonical save PR #370: timestamp-named direct-chat record exists; current state latest_path is timestamp form; run #510 atomic save/render succeeded.",
+        "pr": "#370",
+        "run": 35686230970
       }
     },
     {
       "item": "Claude最終監査B1: rules/運用ルール.md 4-2をタイムスタンプ方式へ一致させる",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "Current rules/運用ルール.md §4-2 directly inspected; timestamp naming is the canonical new-save format and legacy serial files are retained only as existing records.",
+        "file_sha": "c1b4e330e6ff9f813c15e01f480ae3b2f085893c"
       }
     },
     {
       "item": "Claude最終監査B2: 正規保存経路をrules/運用ルール.mdへ明記する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "Current rules/運用ルール.md §4-12 directly inspected; save-request-intake.yml is the sole entrypoint and direct Contents API final-save updates are prohibited.",
+        "file_sha": "c1b4e330e6ff9f813c15e01f480ae3b2f085893c"
       }
     },
     {
       "item": "Claude最終監査B3: 実装済み保存経路・workflow・PR権限問題の現在状態をdocs/現在状態.jsonへ反映する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "Current docs/現在状態.json directly read back after PR #370; save pipeline, workflow, approval policy and current save state are reflected in the canonical state.",
+        "pr": "#370",
+        "commit": "f49c00aeb6c654d1f03eb2a766f2b5721705531a"
       }
     },
     {
       "item": "Claude最終監査D: save-request-intake.ymlのPR作成失敗をcontinue-on-errorで握り潰さず失敗として検知する",
-      "status": "recorded_unverified",
+      "status": "verified",
       "evidence": {
-        "type": "historical_record",
-        "source": "docs/現在状態.json",
-        "note": "過去の保存記録にdoneとして記録されているが、独立したRun/commit等の一次証拠をこの時点では紐付けていない。Claude指摘によりverifiedとは扱わない。"
+        "type": "primary_evidence",
+        "checked_at": "2026-09-22",
+        "method": "Current .github/workflows/save-request-intake.yml directly inspected: shell steps use set -euo pipefail; PR creation is a failing command with no continue-on-error. Current save pipeline run #370 completed successfully.",
+        "workflow_sha": "654efe2c661447d720a767e97d9aeeeff4eca755",
+        "run": 35686230970
       }
     }
   ],
