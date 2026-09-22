@@ -308,7 +308,7 @@
   "next_step": {
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "最終ゴールに向けて経験ログを中心としたAI編集・Blogger自動化へ戻る",
+    "target": "BLOG-0001の公開準備を進めつつ、経験ログを中心としたAI編集・Blogger自動化へ戻る",
     "evidence": "DIGA / DiMORA自動化 本線断念の決定記録",
     "readiness": "ready",
     "unblock_action": "none",
@@ -435,5 +435,14 @@
       "exit_code": 2
     },
     "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
+  },
+  "current_work": {
+    "project": "BLOG-0001",
+    "status": "completed",
+    "stage": "公開準備",
+    "article_text": "最終稿確定",
+    "collaboration_model": "AIと人間のブログ共同制作モデル v1",
+    "work_state": "docs/企画/BLOG-0001_作業状態.json",
+    "next_step": "Blogger掲載形式を準備し、公開結果を確認する"
   }
 }
