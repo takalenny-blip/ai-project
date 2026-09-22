@@ -31,11 +31,11 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "done",
-    "next_design_item": "通常のDiMORA本来工程へ復帰する"
+    "next_design_item": "experience-log → Blogger自動化へ戻る"
   },
   "migration": {
     "status": "complete",
-    "normal_work_policy": "大手術の独立検証が完了したためDiMORA本来工程へ復帰する",
+    "normal_work_policy": "DiMORA本来工程へは復帰せず、経験ログを中心としたAI編集・Blogger自動化へ戻る",
     "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
   "verification_required": [
