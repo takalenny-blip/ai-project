@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 import interaction_guard as guard
+import blog_work_state
 
 
 def main() -> int:
@@ -21,10 +22,13 @@ def main() -> int:
     parser.add_argument("--evidence-json", type=Path, required=True)
     parser.add_argument("--history", type=Path, required=True)
     parser.add_argument("--loop-threshold", type=int, default=2)
+    parser.add_argument("--work-state", type=Path)
     args = parser.parse_args()
 
     try:
         state = guard.load_json(args.state)
+        if args.work_state:
+            blog_work_state.load(args.work_state)
         evidence = json.loads(args.evidence_json.read_text(encoding="utf-8"))
         history = json.loads(args.history.read_text(encoding="utf-8"))
         if not isinstance(evidence, list):
