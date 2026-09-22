@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Enforce canonical state/view pairing
+        if: github.event_name == 'pull_request'
+        run: |
+          git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > /tmp/changed-paths.txt
+          python3 scripts/check_canonical_state_change.py --paths-file /tmp/changed-paths.txt
+
       - name: Run current-state guards
         run: python3 scripts/current_state_guard.py
       - name: Run full regression tests

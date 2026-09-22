@@ -23,7 +23,31 @@ jobs:
       github.event.pull_request.user.login == github.repository_owner &&
       !startsWith(github.event.pull_request.head.ref, 'chat-save-request/')
     runs-on: ubuntu-latest
+    concurrency:
+      group: auto-merge-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     steps:
+      - name: Block control-plane changes from auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          set -euo pipefail
+          api_files="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files?per_page=100")"
+          changed_count="$(gh pr view "$PR_URL" --json changedFiles --jq '.changedFiles')"
+          api_file_count="$(printf '%s\n' "$api_files" | jq -s 'map(.[]) | length')"
+          test "$api_file_count" = "$changed_count"
+          mapfile -t files < <(printf '%s\n' "$api_files" | jq -r '.[] | .filename, (.previous_filename // empty)')
+          for path in "${files[@]}"; do
+            case "$path" in
+              .github/save-queue/*) ;;
+              .github/*|tests/*|scripts/current_state_guard.py|scripts/main_work_progress_guard.py|scripts/resume_check.py|scripts/save_and_currentize.py|scripts/check_repo_integrity.py|scripts/check_atomic_save_commit.py|scripts/check_entry_docs.py|scripts/generate_current_views.py|scripts/resume_manifest.py|scripts/verify_save_request.py|scripts/check_canonical_state_change.py)
+                echo "Control-plane change detected: $path"
+                exit 1
+                ;;
+            esac
+          done
+
       - name: Verify canonical save PR shape (save PRs only)
         if: startsWith(github.event.pull_request.head.ref, 'save/direct-chat-')
         env:
@@ -39,50 +63,61 @@ jobs:
           actual="$(printf '%s\n' "${files[@]}" | sort)"
           test "$actual" = "$expected"
 
+      - name: Wait for required PR checks
+        env:
+          GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          guard_ready="missing"
+          progress_ready="pass"
+          for attempt in $(seq 1 120); do
+            checks="$(gh pr checks "$PR_URL" --json name,bucket,state)"
+            failed="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select((.bucket | ascii_upcase) == "FAIL" or (.bucket | ascii_upcase) == "CANCEL")] | length')"
+            [ "$failed" -eq 0 ] || { echo "A PR check failed or was cancelled."; printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'; exit 1; }
+
+            guard_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "guard")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
+            progress_ready="pass"
+            case "$HEAD_REF" in
+              work/*)
+                progress_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "progress-gate")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
+                ;;
+            esac
+
+            if [ "$guard_ready" = "pass" ] && [ "$progress_ready" = "pass" ]; then
+              echo "Required PR checks passed."
+              printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'
+              break
+            fi
+            echo "Waiting for required checks: guard=$guard_ready progress=$progress_ready"
+            sleep 5
+          done
+          if [ "$guard_ready" != "pass" ] || [ "$progress_ready" != "pass" ]; then
+            echo "Timed out waiting for required PR checks."
+            exit 1
+          fi
+          current_head="$(gh pr view "$PR_URL" --json headRefOid --jq '.headRefOid')"
+          test "$current_head" = "$HEAD_SHA"
+
       - name: Approve as taka2-dev
         env:
           GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: gh pr review "$PR_URL" --approve --body 'Same-repository PR auto-approved by taka2-dev.'
 
-      - name: Wait for all other PR checks
-        env:
-          GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-        run: |
-          set -euo pipefail
-          for attempt in $(seq 1 120); do
-            checks="$(gh pr checks "$PR_URL" --json name,bucket,state)"
-            pending="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select(.bucket == "PENDING")] | length')"
-            failed="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select(.bucket == "FAIL" or .bucket == "CANCEL")] | length')"
-            if [ "$failed" -gt 0 ]; then
-              echo "A non-merge PR check failed or was cancelled."
-              printf '%s\n' "$checks" | jq -r '.[] | select(.name != "approve-and-merge") | [.name, .bucket, .state] | @tsv'
-              exit 1
-            fi
-            if [ "$pending" -eq 0 ]; then
-              echo "All other PR checks completed successfully or were skipped."
-              printf '%s\n' "$checks" | jq -r '.[] | select(.name != "approve-and-merge") | [.name, .bucket, .state] | @tsv'
-              exit 0
-            fi
-            echo "Waiting for $pending non-merge PR check(s)..."
-            sleep 5
-          done
-          echo "Timed out waiting for non-merge PR checks."
-          exit 1
-
       - name: Merge as squash (retry after approval propagation)
         env:
           GH_TOKEN: ${{ secrets.SAVE_APPROVE_TAKA2_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -u
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
-            if gh pr merge "$PR_URL" --squash --delete-branch; then
+            if gh pr merge "$PR_URL" --squash --delete-branch --match-head-commit "$HEAD_SHA"; then
               exit 0
             fi
-            if [ "$attempt" -lt 10 ]; then
-              sleep 5
-            fi
+            if [ "$attempt" -lt 10 ]; then sleep 5; fi
           done
           exit 1
