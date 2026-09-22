@@ -41,7 +41,7 @@ jobs:
           for path in "${files[@]}"; do
             case "$path" in
               .github/save-queue/*) ;;
-              .github/*|tests/*|scripts/current_state_guard.py|scripts/main_work_progress_guard.py|scripts/resume_check.py|scripts/save_and_currentize.py|scripts/check_repo_integrity.py|scripts/check_atomic_save_commit.py|scripts/check_entry_docs.py|scripts/generate_current_views.py|scripts/resume_manifest.py|scripts/verify_save_request.py)
+              .github/*|tests/*|scripts/current_state_guard.py|scripts/main_work_progress_guard.py|scripts/resume_check.py|scripts/save_and_currentize.py|scripts/check_repo_integrity.py|scripts/check_atomic_save_commit.py|scripts/check_entry_docs.py|scripts/generate_current_views.py|scripts/resume_manifest.py|scripts/verify_save_request.py|scripts/check_canonical_state_change.py)
                 echo "Control-plane change detected: $path"
                 exit 1
                 ;;
