@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-22T12-26-31.713359+0900",
-    "latest_path": "直チャット/2026-09-22_直チャット即時保存_2026-09-22T12-26-31.713359+0900.md",
-    "latest_content_sha": "bb33bec06d6614c17fcf7a7d48f9932007a51d0d",
+    "latest_saved": "2026-09-22T12-52-16.180762+0900",
+    "latest_path": "直チャット/2026-09-22_直チャット即時保存_2026-09-22T12-52-16.180762+0900.md",
+    "latest_content_sha": "5046fbbd50836144cbdb6c54112a02995ad726ae",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -31,7 +31,7 @@
     "adoption": "complete",
     "bulk_refactor": "current_views_migrated_ci_guard_added",
     "verification": "done",
-    "next_design_item": "experience-log → Blogger自動化へ戻る"
+    "next_design_item": "通常のDiMORA本来工程へ復帰する"
   },
   "migration": {
     "status": "complete",
