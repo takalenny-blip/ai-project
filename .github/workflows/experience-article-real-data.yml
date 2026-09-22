@@ -35,3 +35,5 @@ jobs:
         run: python scripts/build_experience_article_material.py --exp EXP-0000000050 --output /tmp/experience_article_material.json
       - name: Validate actual-data candidate grounding
         run: python scripts/validate_experience_article_candidate.py --material /tmp/experience_article_material.json --candidate tests/fixtures/experience_article_candidate_EXP-0000000050.json
+
+# v2: rerun real-data verification after grounding contract correction
