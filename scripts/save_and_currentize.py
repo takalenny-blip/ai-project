@@ -127,8 +127,6 @@ def main() -> int:
         item for item in state.get("pending_monitoring", [])
         if item != "最終修正PR merge後のCI成功確認"
     ]
-    state["surgery"]["next_design_item"] = "通常のDiMORA本来工程へ復帰する"
-
     if args.state_patch_file:
         patch = json.loads(args.state_patch_file.read_text(encoding="utf-8"))
         if not isinstance(patch, dict):
