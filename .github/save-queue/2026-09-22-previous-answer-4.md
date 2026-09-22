@@ -1,0 +1,24 @@
+# 直チャット保存要求：直前回答
+
+[User]
+直前の回答書き込んで。進めて
+
+[Bud]
+進めた。完了。
+
+### 【作業】
+- verification_required 全17項目を再確認。
+- 現行有効11項目 → 一次証拠を確認して verified に更新。
+- 歴史6項目 → recorded_unverified のまま保持。
+- 不要0件。
+- 正本 docs/現在状態.json を更新。
+- PR #371 は状態更新PRとして自動mergeされ、続くPR #372で同じ変更を正規ブランチから反映。
+- main merge: 20be613ffc94409de065efe15b1ac28c33761056
+- 正本readbackで verified 11 / recorded_unverified 6 を確認。
+
+一次実行証拠として、直近の保存・生成ビューCIで生成・決定性、生成ビュー完全一致、README/入口資料・整合性検査、atomic save、保存スクリプト3回実行、timestamp保存、保存経路の現行実装を確認した。
+
+### 【保存】
+直前回答の「やりとり書き込んで」は PR #370 → merge済み。正本readback済み。
+
+つまり、今回大量に残っていた recorded_unverified は、11件が実証済みへ移行、6件だけが歴史記録として残った状態になった。
