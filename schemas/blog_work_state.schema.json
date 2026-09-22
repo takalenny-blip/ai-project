@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blog proposal work state",
+  "type": "object",
+  "required": ["schema_version","proposal_id","status","current_stage","current_position","confirmed_timeline","taka_statements","completed_interviews","unresolved_items","grounding","state_changes","operation_history","save_boundary"],
+  "properties": {
+    "schema_version": {"type":"integer","const":1},
+    "proposal_id": {"type":"string","minLength":1},
+    "status": {"enum":["active","paused","completed"]},
+    "current_stage": {"type":"string","minLength":1},
+    "current_position": {"type":"object"},
+    "confirmed_timeline": {"type":"array"},
+    "taka_statements": {"type":"array"},
+    "completed_interviews": {"type":"array"},
+    "unresolved_items": {"type":"array"},
+    "grounding": {"type":"array","minItems":1},
+    "state_changes": {"type":"array"},
+    "operation_history": {"type":"array"},
+    "save_boundary": {"type":"object","required":["direct_chat_path"],"properties":{"direct_chat_path":{"type":"string","minLength":1}},"additionalProperties":true}
+  },
+  "additionalProperties": false
+}
