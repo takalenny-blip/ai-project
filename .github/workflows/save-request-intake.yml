@@ -155,13 +155,3 @@ jobs:
         run: |
           set -euo pipefail
           git push origin --delete "$SOURCE_BRANCH" || true
-Canonical direct-chat save executed by scripts/save_and_currentize.py on an Actions runner.'
-
-      - name: Cleanup request branch
-        if: success()
-        env:
-          SOURCE_BRANCH: ${{ steps.pr.outputs.head_ref }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git push origin --delete "$SOURCE_BRANCH" || true
