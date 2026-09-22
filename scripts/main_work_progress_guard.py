@@ -19,6 +19,8 @@ SUBSTANTIVE_PREFIXES = (
     "src/",
     "app/",
     "tools/",
+    "docs/企画/",
+    "schemas/",
 )
 SUBSTANTIVE_WORKFLOW_PREFIX = ".github/workflows/"
 
