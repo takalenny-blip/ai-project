@@ -10,7 +10,7 @@ on:
       - 'scripts/save_and_currentize.py'
       - 'scripts/check_entry_docs.py'
       - 'scripts/check_atomic_save_commit.py'
-      - '.github/workflows/current-state-views.yml'
+      - '.github/workflows/**'
       - '.github/workflows/save-direct-chat.yml'
       - 'README.md'
       - 'rules/構造変更時・独立監査ガード.md'
@@ -62,6 +62,9 @@ jobs:
           cmp --silent generated/current-views/BUD.md BUD.md
           cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
           echo "OK: checked-in views match generated views"
+
+      - name: Run current-state guards
+        run: python scripts/current_state_guard.py
 
       - name: Verify AI entry documentation
         run: python scripts/check_entry_docs.py
