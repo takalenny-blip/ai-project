@@ -1,0 +1,37 @@
+name: Experience article real-data verification
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '経験ログ/EXP-0000000050.md'
+      - '経験ログ/EXP-0000000050_REC-*.md'
+      - 'scripts/build_experience_article_material.py'
+      - 'scripts/validate_experience_article_candidate.py'
+      - 'tests/fixtures/experience_article_candidate_EXP-0000000050.json'
+      - '.github/workflows/experience-article-real-data.yml'
+  push:
+    branches: [main]
+    paths:
+      - '経験ログ/EXP-0000000050.md'
+      - '経験ログ/EXP-0000000050_REC-*.md'
+      - 'scripts/build_experience_article_material.py'
+      - 'scripts/validate_experience_article_candidate.py'
+      - 'tests/fixtures/experience_article_candidate_EXP-0000000050.json'
+      - '.github/workflows/experience-article-real-data.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Build material from actual EXP/REC records
+        run: python scripts/build_experience_article_material.py --exp EXP-0000000050 --output /tmp/experience_article_material.json
+      - name: Validate actual-data candidate grounding
+        run: python scripts/validate_experience_article_candidate.py --material /tmp/experience_article_material.json --candidate tests/fixtures/experience_article_candidate_EXP-0000000050.json
