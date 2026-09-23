@@ -1,0 +1,29 @@
+# 直前回答の保存
+
+今回のやり取りで確認・実施した内容を保存する。
+
+## 【外部監査】
+Crowによる厳しめの監査（main `a7e4b18`、#519）で、以下を再確認。
+- guard・resume_check・全74テストはOK。
+- 重大な瑕疵として、`auto-approve-save-pr.yml` のcontrol-plane遮断が既知ファイル名列挙であり、新規 `scripts/*.py` を迂回経路にできることを実物で再現。
+- `scripts/json.py` による標準 `json` のshadowingで、壊れた `docs/現在状態.json` に対して `current_state_guard.py` がOKを返す再現を確認。
+- `interaction_guard.py` / `interaction_preflight.py` も遮断リスト外だった。
+- interaction controlが公開判断系スクリプトへ接続されていない点、保存PR/ブランチ滞留も指摘。
+- 前回指摘の複数項目は解消済みと確認された。
+
+## 【判断】
+Crow提案のうち最優先のcontrol-plane遮断を採用。
+既知ファイル名列挙をやめ、`scripts/*` 全体を自動承認・自動マージから遮断する方式へ変更する。
+現mainの `scripts/` 配下を実物確認した結果、製品コードは存在せず、製品コードを意図的に除外する必要がある領域は現時点ではない。将来製品コードを `scripts/` 配下へ置く場合は別途境界を設計する。
+
+## 【実施】
+PR #520 を作成。
+- title: Harden control-plane protection for all scripts
+- branch: `work/20260923-control-plane-scripts-wildcard`
+- head: `ae5b2f13cd488fb54c58a930d7127ab6eea8ff85`
+- base: main `a7e4b183cb62089ebe02a6e5015db02fcfef0374`
+- 変更: `auto-approve-save-pr.yml` の遮断対象を既知script列挙から `scripts/*` ワイルドカードへ変更。
+- これにより `interaction_guard.py` / `interaction_preflight.py` を含むscripts配下全体が自動承認・自動マージ対象外になる。
+
+## 【保存状態】
+この記録自体を正規保存経路へ投入するため、`chat-save-request/20260923-control-plane-audit` キューbranchを作成し、キューファイルを追加する。
