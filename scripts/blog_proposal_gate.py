@@ -2,7 +2,7 @@
 from __future__ import annotations
 import argparse, json
 from pathlib import Path
-import interaction_preflight
+from scripts import interaction_preflight
 
 def check(proposal: dict) -> dict:
     review = proposal.get("review", {})
