@@ -7,6 +7,8 @@ import html
 import json
 from pathlib import Path
 
+from scripts import interaction_preflight
+
 REQUIRED_FIELDS = ("title", "intro", "body", "insights", "uncertain_or_notes")
 
 
@@ -32,7 +34,24 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", required=True)
     parser.add_argument("--output", default="-")
+    parser.add_argument("--state", type=Path, required=True)
+    parser.add_argument("--text", required=True)
+    parser.add_argument("--evidence-json", type=Path, required=True)
+    parser.add_argument("--history", type=Path, required=True)
+    parser.add_argument("--loop-threshold", type=int, default=2)
+    parser.add_argument("--work-state", type=Path)
     args = parser.parse_args()
+    try:
+        interaction_preflight.run_preflight(
+            state_path=args.state,
+            text=args.text,
+            evidence_path=args.evidence_json,
+            history_path=args.history,
+            loop_threshold=args.loop_threshold,
+            work_state_path=args.work_state,
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+        raise SystemExit(f"STOP: interaction preflight failed: {exc}")
     candidate = json.loads(Path(args.candidate).read_text(encoding="utf-8"))
     payload = json.dumps(build_blogger_payload(candidate), ensure_ascii=False, indent=2) + "\n"
     if args.output == "-":
