@@ -73,6 +73,35 @@ def validate_prerequisites(next_step: dict) -> None:
     if readiness == "ready" and any(p["status"] != "verified" for p in prerequisites):
         fail("next_step.readiness=ready requires every prerequisite to be verified")
 
+def validate_open_threads(state: dict) -> None:
+    """Validate explicit main/sub-track bookkeeping in canonical state."""
+    threads = state.get("open_threads")
+    if not isinstance(threads, list):
+        fail("open_threads must be a list")
+    active = state.get("active_track")
+    if active is None:
+        fail("active_track is required")
+    ids = []
+    allowed = {"進行中", "完了", "保留", "未確認", "ブロック中"}
+    for index, thread in enumerate(threads):
+        if not isinstance(thread, dict):
+            fail(f"open_threads[{index}] must be an object")
+        for field in ("id", "title", "kind", "opened_at", "status", "next_action", "state_changes"):
+            if not thread.get(field):
+                fail(f"open_threads[{index}].{field} is missing")
+        if thread["id"] in ids or thread["id"] == "main":
+            fail("open_threads ids must be unique and cannot be main")
+        ids.append(thread["id"])
+        if thread["status"] not in allowed:
+            fail(f"invalid open_threads status: {thread['status']}")
+        if not isinstance(thread["state_changes"], list) or not thread["state_changes"]:
+            fail(f"open_threads[{index}].state_changes must contain at least one change")
+        for change in thread["state_changes"]:
+            if not isinstance(change, dict) or not all(change.get(k) for k in ("changed_by", "changed_at", "reason")):
+                fail(f"open_threads[{index}].state_changes entries require changed_by, changed_at, reason")
+    if active != "main" and active not in ids:
+        fail("active_track must be main or an existing open_threads id")
+
 def validate_external_response_gate(state: dict) -> None:
     gate = state.get("external_response_gate", {"status": "clear"})
     if not isinstance(gate, dict):
@@ -165,6 +194,7 @@ def validate_state(state: dict) -> None:
         fail("next_step.target is too abstract or stale; require current concrete work")
     validate_prerequisites(nxt)
     validate_external_response_gate(state)
+    validate_open_threads(state)
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
         fail("work_pc clone_status=cloned requires clone_evidence")
