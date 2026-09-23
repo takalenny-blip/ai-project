@@ -52,6 +52,33 @@ class CurrentStateGuardTests(unittest.TestCase):
         }
 
 
+    def test_open_threads_and_active_track_pass(self):
+        state = self.base_state()
+        state["active_track"] = "main"
+        state["open_threads"] = [{
+            "id": "thread-1", "title": "副線", "kind": "proposal", "opened_at": "2026-09-23",
+            "status": "進行中", "next_action": "確認する",
+            "state_changes": [{"changed_by": "taka", "changed_at": "2026-09-23", "reason": "test"}],
+        }]
+        guard.validate_open_threads(state)
+
+    def test_active_track_must_reference_thread(self):
+        state = self.base_state()
+        state["active_track"] = "missing-thread"
+        state["open_threads"] = []
+        with self.assertRaises(ValueError):
+            guard.validate_open_threads(state)
+
+    def test_thread_state_change_is_required(self):
+        state = self.base_state()
+        state["active_track"] = "main"
+        state["open_threads"] = [{
+            "id": "thread-1", "title": "副線", "kind": "proposal", "opened_at": "2026-09-23",
+            "status": "保留", "next_action": "確認する", "state_changes": [],
+        }]
+        with self.assertRaises(ValueError):
+            guard.validate_open_threads(state)
+
     def test_legacy_verification_model_is_temporarily_accepted(self):
         state = self.base_state()
         state.pop("verification_records")
