@@ -66,3 +66,11 @@ PR #533 の承認・マージ結果に関する直前の回答。
 """,
     ]
     assert all(not validate(content)[0] for content in contents)
+
+
+def test_save_request_template_is_valid():
+    from pathlib import Path
+
+    template = Path(__file__).resolve().parents[1] / "scripts" / "save_request_template.md"
+    ok, _ = validate(template.read_text(encoding="utf-8"))
+    assert ok
