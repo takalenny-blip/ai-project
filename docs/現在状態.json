@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-23T11-48-46.756260+0900",
-    "latest_path": "直チャット/2026-09-23_直チャット即時保存_2026-09-23T11-48-46.756260+0900.md",
-    "latest_content_sha": "a4feb35a31b2c4498c176eff452bdf0e7b62ae67",
+    "latest_saved": "2026-09-23T11-51-54.305872+0900",
+    "latest_path": "直チャット/2026-09-23_直チャット即時保存_2026-09-23T11-51-54.305872+0900.md",
+    "latest_content_sha": "44be5d62d69a6867326131c8210283933f550a1d",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -308,7 +308,7 @@
   "next_step": {
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "BLOG-0001の公開準備を進めつつ、経験ログを中心としたAI編集・Blogger自動化へ戻る",
+    "target": "BLOG-0001の公開準備を進めつつ、次回は実際の時系列を優先した第2回テーマ案「ブログを書くために、まず古いVAIOを動かすことにした」を企画化する（未確定）",
     "evidence": "DIGA / DiMORA自動化 本線断念の決定記録",
     "readiness": "ready",
     "unblock_action": "none",
@@ -444,5 +444,27 @@
     "collaboration_model": "AIと人間のブログ共同制作モデル v1",
     "work_state": "docs/企画/BLOG-0001_作業状態.json",
     "next_step": "Blogger掲載形式を準備し、公開結果を確認する"
+  },
+  "blog_series": {
+    "status": "active",
+    "current_article": "BLOG-0001",
+    "chronology_priority": true,
+    "rule": "次回以降は関連性の強いテーマへ飛ばず、実際の時系列を優先して、積み重ね・試行錯誤・発想転換が伝わる形で記事化する。",
+    "next_theme": {
+      "status": "proposed",
+      "title": "ブログを書くために、まず古いVAIOを動かすことにした",
+      "basis": "BLOG-0001の直後から、2026/9/1以降の実際の発想・試行の流れを追う第2回案。",
+      "confirmed": false
+    },
+    "known_sequence": [
+      "BLOG-0001：ブログを再開し、AIと一緒にブログを作ろうと思ったところまで",
+      "第2回案：VAIO Type P／環境づくりから始まる時系列を追う",
+      "第3回以降：AIとの情報共有、記録、経験ログ化へ広がった実際の順序を追う"
+    ],
+    "forget_prevention": {
+      "canonical_location": "docs/現在状態.json",
+      "resume_visibility": "next_step.targetに次回テーマを保持し、再開時に必ず見える状態にする",
+      "distinction": "次回テーマは提案段階。タイトル・記事化はたかの確定前に確定扱いしない。"
+    }
   }
 }
