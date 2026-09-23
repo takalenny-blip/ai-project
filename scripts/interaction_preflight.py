@@ -3,8 +3,12 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from scripts import interaction_guard as guard
-from scripts import blog_work_state
+try:
+    from scripts import interaction_guard as guard
+    from scripts import blog_work_state
+except ModuleNotFoundError:
+    import interaction_guard as guard
+    import blog_work_state
 
 def run_preflight(*, state_path: Path, text: str, evidence_path: Path, history_path: Path, loop_threshold: int = 2, work_state_path: Path | None = None) -> None:
     state = guard.load_json(state_path)
