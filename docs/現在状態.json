@@ -242,7 +242,8 @@
     "実行済み操作を操作／目的／結果／状態で保持し、同一操作の理由なき再実行を防ぐ",
     "最終報告で【作業】と【保存】の状態を分離する",
     "DIGA / DiMORA自動化は、現行のバド単独運用では実機側の取得・操作まで完遂できないため、2026-09-21をもって本線作業を断念する。既存成果・経験資産は破棄せず履歴として保持する。",
-    "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入"
+    "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入",
+    "既存の5-1-1『迷い・停滞時の相談ゲート』を例外時だけでなく、次の一手・判断主体・条件に迷いが生じた時の既定動作として扱う。新しいルールは追加しない。"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -299,13 +300,14 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "PR #545「Prevent save-request self-reference loops」を再承認後squash merge。merge SHA 5409f621008963e507c947056aab1e500b872210。main readbackで保存対象種別ゲート・validator・4-3-3を確認。PR head commit f5f8c07918da6839e35611095f101c392a68d192ではcurrent-state-guardがsuccess、merge commit自体のPR-triggered workflow runは取得結果なし。保存ループ対策の実装はmain反映済み。現在化・生成ビューreadbackをこの更新で確定する。",
+    "summary": "PR #545「Prevent save-request self-reference loops」を再承認後squash merge。保存対象種別ゲート・validator・4-3-3はmain反映済み。現在の運用上の判断として、外部レビューで示された『既存5-1-1を相談の既定動作にする』方針を採用し、ルールの新設は行わない。またBLOG-0001はたかの認識に基づき公開済みとして現在化し、公開準備を現在の次工程として扱わない。",
     "evidence": {
       "type": "repository_record",
       "checked_at": "2026-09-23",
       "references": [
         "PR #545",
-        "merge 5409f621008963e507c947056aab1e500b872210"
+        "merge 5409f621008963e507c947056aab1e500b872210",
+        "たかによるBLOG-0001公開済みの現在認識"
       ],
       "ci_head_commit": "f5f8c07918da6839e35611095f101c392a68d192",
       "ci": "current-state-guard success; Experience article Blogger draft payload success",
@@ -315,7 +317,7 @@
   "next_step": {
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "BLOG-0001の公開準備を進めつつ、経験ログを中心としたAI編集・Blogger自動化へ戻る",
+    "target": "次の作業をたかと確定する",
     "evidence": "DIGA / DiMORA自動化 本線断念の決定記録",
     "readiness": "ready",
     "unblock_action": "none",
@@ -445,11 +447,11 @@
   },
   "current_work": {
     "project": "BLOG-0001",
-    "status": "completed",
-    "stage": "公開準備",
+    "status": "published",
+    "stage": "公開済み",
     "article_text": "最終稿確定",
     "collaboration_model": "AIと人間のブログ共同制作モデル v1",
     "work_state": "docs/企画/BLOG-0001_作業状態.json",
-    "next_step": "Blogger掲載形式を準備し、公開結果を確認する"
+    "next_step": "次の作業をたかと確定する"
   }
 }
