@@ -16,7 +16,7 @@
 
 ## 現在地点
 
-**Crow監査で指摘されたcontrol-plane迂回を修正するPR #520を承認後squash merge。main readbackでscripts/*遮断を確認。CIは未確認。保存PR #521は未完了。**
+**PR #545「Prevent save-request self-reference loops」を再承認後squash merge。merge SHA 5409f621008963e507c947056aab1e500b872210。main readbackで保存対象種別ゲート・validator・4-3-3を確認。PR head commit f5f8c07918da6839e35611095f101c392a68d192ではcurrent-state-guardがsuccess、merge commit自体のPR-triggered workflow runは取得結果なし。保存ループ対策の実装はmain反映済み。現在化・生成ビューreadbackをこの更新で確定する。**
 
 ## 次の一手
 
