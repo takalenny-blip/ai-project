@@ -89,6 +89,12 @@ jobs:
           test -s "$RUNNER_TEMP/direct-chat.md"
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
 
+      - name: Validate save request category
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/check_save_request_category.py "$RUNNER_TEMP/direct-chat.md"
+
       - name: Create isolated save branch from main
         id: branch
         shell: bash
