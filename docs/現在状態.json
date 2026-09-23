@@ -444,5 +444,24 @@
     "collaboration_model": "AIと人間のブログ共同制作モデル v1",
     "work_state": "docs/企画/BLOG-0001_作業状態.json",
     "next_step": "Blogger掲載形式を準備し、公開結果を確認する"
-  }
+  },
+  "active_track": "main",
+  "open_threads": [
+    {
+      "id": "pr-330-auto-merge-control-plane",
+      "title": "PR #330 自動マージ制御・check gate",
+      "kind": "control-plane",
+      "opened_at": "2026-09-23",
+      "ref": "PR #330",
+      "status": "未確認",
+      "next_action": "PR #330の現在状態・必要対応・再開条件を確認し、本線へ戻す必要があるか判断する",
+      "state_changes": [
+        {
+          "changed_by": "バド",
+          "changed_at": "2026-09-23",
+          "reason": "クロウ提案を採用し、既存の迷子副線をopen_threadsで管理するため登録"
+        }
+      ]
+    }
+  ]
 }
