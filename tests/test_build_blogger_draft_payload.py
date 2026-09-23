@@ -47,7 +47,7 @@ class BloggerDraftPayloadTests(unittest.TestCase):
             state.write_text(json.dumps({"next_step": {"readiness": "ready"}, "current_position": {}}), encoding="utf-8")
             history = tmp / "history.json"
             history.write_text(json.dumps([{"state_fingerprint": "a", "progress": False}]), encoding="utf-8")
-            result = subprocess.run([sys.executable, str(SCRIPT), "--candidate", str(candidate), "--state", str(state), "--text", "証拠を確認する。", "--evidence-json", str(evidence), "--history", str(history)], capture_output=True, text=True)
+            result = subprocess.run([sys.executable, str(SCRIPT), "--candidate", str(candidate), "--state", str(state), "--text", "確認しました。", "--evidence-json", str(evidence), "--history", str(history)], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn('"title": "記事タイトル"', result.stdout)
 
