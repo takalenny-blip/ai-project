@@ -20,4 +20,7 @@ jobs:
           fetch-depth: 0
       - name: Check for substantive main-work change
         run: |
-          python3 scripts/main_work_progress_guard.py             --branch "${{ github.event.pull_request.head.ref }}"             --base "origin/${{ github.base_ref }}"             --head "HEAD"
+          python3 scripts/main_work_progress_guard.py \
+  --branch "${{ github.event.pull_request.head.ref }}" \
+  --base "origin/${{ github.base_ref }}" \
+  --head "${{ github.event.pull_request.head.sha }}"
