@@ -7,7 +7,10 @@ import html
 import json
 from pathlib import Path
 
-from scripts import interaction_preflight
+try:
+    from scripts import interaction_preflight
+except ModuleNotFoundError:
+    import interaction_preflight
 
 REQUIRED_FIELDS = ("title", "intro", "body", "insights", "uncertain_or_notes")
 
