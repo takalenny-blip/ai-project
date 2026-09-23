@@ -34,10 +34,35 @@ def test_unknown_kind_is_rejected():
     assert not ok
 
 
-def test_real_previous_queue_shape_without_kind_is_rejected():
-    content = (
-        "【Crow追加監査】#543の保存処理結果を確認した。"
-        "保存PRの状態を報告する。"
-    )
-    ok, _ = validate(content)
-    assert not ok
+def test_real_previous_queue_shapes_without_kind_are_rejected():
+    contents = [
+        """# 直前回答の保存依頼
+
+## 対象
+PR #533 の承認・マージ結果に関する直前の回答。
+
+## 記録
+- PR #533：taka2-dev APPROVED
+- squash merge：完了
+- main readback：確認済み
+""",
+        """# 直前回答の保存依頼
+
+## 対象
+#530 の停止原因を確認した直前回答。
+
+## 記録
+- #530 の当時のCI失敗は、PR #533 で修正した import 問題。
+- 次に必要なのは #530 の再チェック／再評価。
+""",
+        """# 直前回答の保存依頼
+
+## 対象
+保存処理がループしている可能性についての直前回答。
+
+## 記録
+- 保存処理の経路がループ気味になっていると判断。
+- #534、#536 と保存PRを増やしてしまった。
+""",
+    ]
+    assert all(not validate(content)[0] for content in contents)
