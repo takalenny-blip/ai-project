@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-23T18-26-52.063179+0900",
-    "latest_path": "直チャット/2026-09-23_直チャット即時保存_2026-09-23T18-26-52.063179+0900.md",
-    "latest_content_sha": "d8a8dd46cc9b626e097fa1ae8eb4e0cbe5c8cab3",
+    "latest_saved": "2026-09-23T18-31-35.338194+0900",
+    "latest_path": "直チャット/2026-09-23_直チャット即時保存_2026-09-23T18-31-35.338194+0900.md",
+    "latest_content_sha": "353a1e99ed5ba8705759bb6b9028abbe248e3efc",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -298,11 +298,16 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "DIGA / DiMORA自動化は、現行のバド単独運用では実機側の取得・操作まで完遂できないため断念。既存の正規化検証、work_pc原本→Dropbox→Bud取得の実証、変更検知等の成果は履歴・経験資産として保持し、本線は最終ゴールである経験ログを中心としたAI編集・Blogger自動化へ戻す。",
+    "summary": "Crow監査で指摘されたcontrol-plane迂回を修正するPR #520を承認後squash merge。main readbackでscripts/*遮断を確認。CIは未確認。保存PR #521は未完了。",
     "evidence": {
-      "type": "decision_record",
+      "type": "repository_record",
       "checked_at": "2026-09-21",
-      "note": "たかの決定。DIGA関連をバドが進め切れないことを理由に本線作業を断念。"
+      "note": "直前回答を保存。",
+      "references": [
+        "PR #520",
+        "merge 3e790d738bc789f17812ff6ba69f7254efd9a614",
+        "PR #521"
+      ]
     }
   },
   "next_step": {
