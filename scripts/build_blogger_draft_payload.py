@@ -24,9 +24,16 @@ def normalize_h3_spacing(content: str) -> str:
     """Ensure exactly one Blogger blank paragraph immediately before each H3."""
     import re
 
+    # Treat user-supplied empty H3 spacing markers as blank paragraphs.
+    content = re.sub(
+        r"<h3\b[^>]*>\s*(?:<br\s*/?>\s*)?</h3>\s*(?=<h3\b)",
+        "<p><br /></p>",
+        content,
+        flags=re.IGNORECASE,
+    )
     # Remove existing blank paragraphs immediately before H3, then add exactly one.
     content = re.sub(r"(?:<p>\s*<br\s*/?>\s*</p>\s*)+(?=<h3\b)", "", content, flags=re.IGNORECASE)
-    return re.sub(r"(?<!<p><br /></p>)(<h3\b)", r"<p><br /></p>\1", content, flags=re.IGNORECASE)
+    return re.sub(r"(<h3\b)", r"<p><br /></p>\1", content, flags=re.IGNORECASE)
 
 
 def build_blogger_payload(candidate: dict) -> dict:
