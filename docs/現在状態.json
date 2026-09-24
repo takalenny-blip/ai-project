@@ -299,13 +299,15 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "PR #545「Prevent save-request self-reference loops」を再承認後squash merge。merge SHA 5409f621008963e507c947056aab1e500b872210。main readbackで保存対象種別ゲート・validator・4-3-3を確認。PR head commit f5f8c07918da6839e35611095f101c392a68d192ではcurrent-state-guardがsuccess、merge commit自体のPR-triggered workflow runは取得結果なし。保存ループ対策の実装はmain反映済み。現在化・生成ビューreadbackをこの更新で確定する。",
+    "summary": "BLOG-0001は公開済み。保存系の直近処理は正規保存経路で完了。2026-09-24の本線は、公開後の作業を「改善→計測→二本目→収益化」の順に整理し、まず改善段階の次の1件を確定して進める。目次・参照URLはたかの判断により今後検討として保留。",
     "evidence": {
       "type": "repository_record",
-      "checked_at": "2026-09-23",
+      "checked_at": "2026-09-24",
       "references": [
         "PR #545",
-        "merge 5409f621008963e507c947056aab1e500b872210"
+        "PR #597",
+        "PR #596",
+        "2026-09-24時点のBLOG-0001公開後方針"
       ],
       "ci_head_commit": "f5f8c07918da6839e35611095f101c392a68d192",
       "ci": "current-state-guard success; Experience article Blogger draft payload success",
@@ -315,8 +317,8 @@
   "next_step": {
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "BLOG-0001公開後の改善・計測・二本目・収益化を優先順位をつけて順次検討",
-    "evidence": "BLOG-0001は公開済み。公開後は一度に複数を進めず、改善→計測→二本目→収益化の順を候補として整理した",
+    "target": "BLOG-0001公開後の作業を「改善 → 計測 → 二本目 → 収益化」の順で整理し、各段階を混ぜずに次に実施する1件を確定する",
+    "evidence": "2026-09-24時点でBLOG-0001は公開済み。目次・参照URLは今後検討として保留。次工程は公開後の改善を起点に、計測・二本目・収益化を順次検討する",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -450,6 +452,6 @@
     "article_text": "最終稿確定",
     "collaboration_model": "AIと人間のブログ共同制作モデル v1",
     "work_state": "docs/企画/BLOG-0001_作業状態.json",
-    "next_step": "まずBLOG-0001の改善（目次・他記事への参照リンク）を候補として検討し、その後Search Console、二本目、収益化を順次検討する"
+    "next_step": "改善候補を整理して次に実施する1件を確定 → 実施・確認 → 計測 → 二本目 → 収益化の順に進める。目次・参照URLは保留。"
   }
 }
