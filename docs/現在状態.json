@@ -315,8 +315,8 @@
   "next_step": {
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "BLOG-0001の公開準備を進めつつ、経験ログを中心としたAI編集・Blogger自動化へ戻る",
-    "evidence": "DIGA / DiMORA自動化 本線断念の決定記録",
+    "target": "BLOG-0001公開後の改善・計測・二本目・収益化を優先順位をつけて順次検討",
+    "evidence": "BLOG-0001は公開済み。公開後は一度に複数を進めず、改善→計測→二本目→収益化の順を候補として整理した",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -444,12 +444,12 @@
     "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
   },
   "current_work": {
-    "project": "BLOG-0001",
+    "project": "BLOG-0001公開後",
     "status": "completed",
-    "stage": "公開準備",
+    "stage": "公開済み・次工程整理",
     "article_text": "最終稿確定",
     "collaboration_model": "AIと人間のブログ共同制作モデル v1",
     "work_state": "docs/企画/BLOG-0001_作業状態.json",
-    "next_step": "Blogger掲載形式を準備し、公開結果を確認する"
+    "next_step": "まずBLOG-0001の改善（目次・他記事への参照リンク）を候補として検討し、その後Search Console、二本目、収益化を順次検討する"
   }
 }
