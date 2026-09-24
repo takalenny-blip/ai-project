@@ -25,8 +25,8 @@ def normalize_h3_spacing(content: str) -> str:
     import re
 
     # Remove existing blank paragraphs immediately before H3, then add exactly one.
-    content = re.sub(r"(?:<p>\\s*<br\\s*/?>\\s*</p>\\s*)+(?=<h3\\b)", "", content, flags=re.IGNORECASE)
-    return re.sub(r"(?<!<p><br /></p>)(<h3\\b)", r"<p><br /></p>\\1", content, flags=re.IGNORECASE)
+    content = re.sub(r"(?:<p>\s*<br\s*/?>\s*</p>\s*)+(?=<h3\b)", "", content, flags=re.IGNORECASE)
+    return re.sub(r"(?<!<p><br /></p>)(<h3\b)", r"<p><br /></p>\1", content, flags=re.IGNORECASE)
 
 
 def build_blogger_payload(candidate: dict) -> dict:
