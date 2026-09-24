@@ -20,16 +20,25 @@ def _paragraphs(value: str) -> str:
     return "".join(f"<p>{html.escape(part)}</p>" for part in parts)
 
 
+def normalize_h3_spacing(content: str) -> str:
+    """Ensure exactly one Blogger blank paragraph immediately before each H3."""
+    import re
+
+    # Remove existing blank paragraphs immediately before H3, then add exactly one.
+    content = re.sub(r"(?:<p>\\s*<br\\s*/?>\\s*</p>\\s*)+(?=<h3\\b)", "", content, flags=re.IGNORECASE)
+    return re.sub(r"(?<!<p><br /></p>)(<h3\\b)", r"<p><br /></p>\\1", content, flags=re.IGNORECASE)
+
+
 def build_blogger_payload(candidate: dict) -> dict:
     missing = [field for field in REQUIRED_FIELDS if not isinstance(candidate.get(field), str)]
     if missing:
         raise ValueError("missing candidate fields: " + ", ".join(missing))
     content = (
-        f"<p>{html.escape(candidate['intro'])}</p>"
+        normalize_h3_spacing(f"<p>{html.escape(candidate['intro'])}</p>"
         f"<h2>本文</h2>{_paragraphs(candidate['body'])}"
         f"<h2>得られた知見</h2>{_paragraphs(candidate['insights'])}"
         f"<h2>未確定・注意</h2>{_paragraphs(candidate['uncertain_or_notes'])}"
-    )
+    ))
     return {"title": candidate["title"], "content": content}
 
 
