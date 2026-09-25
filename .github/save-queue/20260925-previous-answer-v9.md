@@ -3,10 +3,20 @@
 
 ## 直前の回答
 
-書き込んだ。
+うん、**Full accessへの切り替え自体は成功してる**。
 
-- **PR #654**
-- 保存キュー：`20260925-previous-answer-v9`
-- 正規形式で投入済み
-- 状態：open / 未マージ
-- 今回は新規の内容を作らず、**直前の回答そのもの**を保存対象にした。
+こちらで再確認したところ、Googleアカウントの権限に
+
+`https://www.googleapis.com/auth/webmasters`
+
+が追加されている。これは以前の `webmasters.readonly` から変わっている。
+
+ただし、今すぐURL Inspectionを実行したところ、GSC側からまだ **「full webmasters scopeがない」** と拒否された。
+
+つまり現状は：
+
+- ✅ GSC Wizard側：Full access権限を取得済み
+- ❌ URL Inspection API：まだ新しい権限を受け付けていない
+- 🔎 次に必要：**GSC Wizard側の接続状態を更新／再認証してから再試行**
+
+いったんGSC Wizardを再読み込みして、Account Settingsで `Currently connected to: GSC` の表示を確認してから、もう一度ここで進めよう。
