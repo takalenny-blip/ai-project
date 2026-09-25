@@ -10,15 +10,15 @@ import save_lifecycle_status as mod
 
 class SaveLifecycleStatusTests(unittest.TestCase):
     def test_queue_closed_is_not_failure_when_downstream_save_merged(self):
-        result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False},"final_save_pr":{"number":554,"state":"closed","merged":True},"canonical_readback":{"verified":True}})
+        result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False},"intake":{"status":"success"},"final_save_pr":{"number":554,"state":"closed","merged":True},"canonical_readback":{"verified":True}})
         self.assertEqual(result.status, "completed")
 
-    def test_queue_closed_without_downstream_save_is_incomplete(self):
-        result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False}})
+    def test_queue_closed_without_downstream_save_is_incomplete_after_verified_intake(self):
+        result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False},"intake":{"status":"success"}})
         self.assertEqual(result.status, "failed_or_incomplete")
 
     def test_merged_save_without_readback_is_not_complete(self):
-        result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False},"final_save_pr":{"number":554,"state":"closed","merged":True},"canonical_readback":{"verified":False}})
+        result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False},"intake":{"status":"success"},"final_save_pr":{"number":554,"state":"closed","merged":True},"canonical_readback":{"verified":False}})
         self.assertEqual(result.status, "merged_readback_pending")
 
     def test_closed_queue_without_intake_evidence_is_pending_not_failure(self):
