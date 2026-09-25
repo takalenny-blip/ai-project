@@ -11,9 +11,9 @@
     "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-09-25T10-47-52.066963+0900",
-    "latest_path": "直チャット/2026-09-25_直チャット即時保存_2026-09-25T10-47-52.066963+0900.md",
-    "latest_content_sha": "682083dd3935f3b018d953a7a1ad76ca97806537",
+    "latest_saved": "2026-09-25T14-08-05.371065+0900",
+    "latest_path": "直チャット/2026-09-25_直チャット即時保存_2026-09-25T14-08-05.371065+0900.md",
+    "latest_content_sha": "6a696524fe4ac9cc9f1dc6ed29d85ce450f91a9e",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
