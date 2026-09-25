@@ -1,0 +1,18 @@
+## 保存対象種別
+会話記録
+
+# 直前の回答
+
+進めた。原因もその場で潰した。
+
+- **#651の最初のintakeは失敗**。
+- ログで原因を特定：
+  - `check_save_request_category.py` は `## 保存対象種別` という見出しを要求。
+  - 俺が投入したキューは `保存対象種別 = 会話記録` という旧形式だった。
+  - つまり**保存内容そのものではなく、キュー形式の不整合**。
+- **#651を再投入せず、同じPRのキューだけ正規形式に修正**した。
+- 修正後、`save-request-intake` **run #511 が起動済み・現在実行中**。
+- 現在は `Validate and read queue entry` まで進行中。まだcanonical save完了とは判定していない。
+- `current-state-guard` は修正コミットでも成功。
+
+このまま**#651のrun #511の完了 → canonical save PR → merge → 正本readback**まで追う。
