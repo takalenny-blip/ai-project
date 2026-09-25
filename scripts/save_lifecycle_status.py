@@ -18,6 +18,12 @@ def resolve(data: dict) -> SaveLifecycle:
     q = str(queue["number"]) if queue.get("number") is not None else None
     f = str(final["number"]) if final.get("number") is not None else None
     if not q: return SaveLifecycle("not_submitted", "queue PR is not present", None, f)
+    intake = data.get("intake") or {}
+    intake_status = intake.get("status")
+    if intake_status in {"failure", "cancelled", "timed_out", "startup_failure"}:
+        return SaveLifecycle("failed_or_incomplete", f"save-request-intake reported terminal failure: {intake_status}", q, f)
+    if queue.get("state") == "closed" and intake_status != "success":
+        return SaveLifecycle("submitted_pending", "queue PR is closed but save-request-intake success is not verified", q, f)
     if queue.get("state") == "open": return SaveLifecycle("submitted_pending", "queue PR is still open", q, f)
     if queue.get("state") == "closed" and not f: return SaveLifecycle("failed_or_incomplete", "queue PR closed but no canonical save PR is recorded", q, None)
     if final.get("state") == "open": return SaveLifecycle("final_save_pending", "canonical save PR is open", q, f)
