@@ -18,6 +18,18 @@ class InteractionGuardTests(unittest.TestCase):
             },
         }
 
+    def test_continue_instruction_stays_on_active_main_track(self):
+        self.assertEqual(guard.resolve_instruction_track("進んで", "main"), "main")
+        self.assertEqual(guard.resolve_instruction_track("やれ", "main"), "main")
+
+    def test_explicit_save_instruction_routes_to_save_track(self):
+        self.assertEqual(guard.resolve_instruction_track("保存のほうを進めて", "main"), "save")
+        self.assertEqual(guard.resolve_instruction_track("PR #668を進めて", "main"), "save")
+
+    def test_wrong_track_selection_is_rejected(self):
+        with self.assertRaises(ValueError):
+            guard.validate_instruction_routing("進んで", "main", "save")
+
     def test_blocked_rejects_completion_claim(self):
         with self.assertRaises(ValueError):
             guard.validate_blocked_output(self.state("blocked"), "検証しました。")
