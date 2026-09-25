@@ -24,6 +24,33 @@ BLOCKED_PROGRESS_PATTERNS = (
     r"merged",
 )
 
+CONTINUE_INSTRUCTIONS = (
+    "進んで", "進めろ", "進めて", "やれ", "続けて", "そのまま進める",
+)
+
+SAVE_TARGET_PATTERNS = (
+    r"保存(?:のほう|側|トラック)?を(?:進めて|進めろ|続けて)",
+    r"保存PR(?:を|のほうを)(?:進めて|進めろ|確認して)",
+    r"PR\s*#\d+.*(?:進めて|進めろ|確認して|マージして)",
+    r"保存(?:して|を書き込んで|を進めて)",
+)
+
+def resolve_instruction_track(instruction: str, active_track: str) -> str:
+    """Route a new instruction without letting an unfinished save track hijack main work."""
+    text = instruction.strip()
+    if not active_track:
+        raise ValueError("active_track is required")
+    if any(re.search(pattern, text, re.IGNORECASE) for pattern in SAVE_TARGET_PATTERNS):
+        return "save"
+    if text in CONTINUE_INSTRUCTIONS:
+        return active_track
+    return active_track
+
+def validate_instruction_routing(instruction: str, active_track: str, selected_track: str) -> None:
+    expected = resolve_instruction_track(instruction, active_track)
+    if selected_track != expected:
+        raise ValueError(f"instruction routed to {selected_track!r}, but expected {expected!r}")
+
 CLAIM_PATTERNS = BLOCKED_PROGRESS_PATTERNS + (
     r"問題(?:ありません|なし)",
     r"対応(?:済み|しました|した)",
