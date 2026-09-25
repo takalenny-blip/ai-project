@@ -6,7 +6,6 @@ on:
 
 concurrency:
   group: save-intake-global
-  queue: max
   cancel-in-progress: false
 
 permissions:
