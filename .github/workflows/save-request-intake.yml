@@ -158,6 +158,16 @@ jobs:
           test -n "$final_pr_number"
           echo "number=$final_pr_number" >> "$GITHUB_OUTPUT"
 
+      - name: Close queue PR after canonical save PR creation
+        if: ${{ success() && steps.final_pr.outputs.number != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh pr close "$QUEUE_PR_NUMBER" --repo "$GITHUB_REPOSITORY" --delete-branch
+          echo "Closed queue PR #$QUEUE_PR_NUMBER after canonical save PR creation."
       - name: Resolve save lifecycle after verified intake
         env:
           QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number }}
