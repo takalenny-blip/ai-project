@@ -141,6 +141,7 @@ jobs:
           git push --set-upstream origin "$BRANCH"
 
       - name: Open canonical save pull request
+        id: final_pr
         env:
           GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
@@ -148,11 +149,53 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$GH_TOKEN" || { echo "SAVE_PR_TOKEN repository secret is required." >&2; exit 1; }
-          gh api "repos/${GITHUB_REPOSITORY}/pulls" \
+          final_pr_json="$(gh api "repos/${GITHUB_REPOSITORY}/pulls" \
             -f base=main \
             -f head="$BRANCH" \
             -f title='直チャット保存＋現在状態と生成ビューを一括同期' \
-            -f body=
+            -f body=)"
+          final_pr_number="$(printf '%s' "$final_pr_json" | jq -r '.number')"
+          test -n "$final_pr_number"
+          echo "number=$final_pr_number" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve save lifecycle after verified intake
+        env:
+          QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number }}
+          FINAL_PR_NUMBER: ${{ steps.final_pr.outputs.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+          sys.path.insert(0, "scripts")
+          from save_lifecycle_status import resolve
+
+          data = {
+              "queue_pr": {
+                  "number": int(os.environ["QUEUE_PR_NUMBER"]),
+                  "state": "open",
+                  "merged": False,
+              },
+              "intake": {
+                  "status": "success",
+                  "source": "save-request-intake",
+              },
+              "final_save_pr": {
+                  "number": int(os.environ["FINAL_PR_NUMBER"]),
+                  "state": "open",
+                  "merged": False,
+              },
+              "canonical_readback": {
+                  "verified": False,
+              },
+          }
+          result = resolve(data)
+          assert result.status == "final_save_pending", result
+          print(json.dumps(result.__dict__, ensure_ascii=False, indent=2))
+          PY
 
       - name: Cleanup request branch
         if: success()
