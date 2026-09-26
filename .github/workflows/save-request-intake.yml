@@ -84,7 +84,9 @@ jobs:
             *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
           esac
           head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq '.head.sha')"
-          blob_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/trees/${head_sha}?recursive=1" --jq --arg path "$queue_file" '.tree[] | select(.path == $path) | .sha')"
+          tree_url="repos/${GITHUB_REPOSITORY}/git/trees/${head_sha}?recursive=1"
+          tree_json="$(gh api "$tree_url")"
+          blob_sha="$(printf '%s' "$tree_json" | jq -r --arg path "$queue_file" '.tree[] | select(.path == $path) | .sha')"
           test -n "$blob_sha"
           gh api "repos/${GITHUB_REPOSITORY}/git/blobs/${blob_sha}" --jq '.content' |
             tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
