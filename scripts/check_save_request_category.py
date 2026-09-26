@@ -11,11 +11,22 @@ ALLOWED_KINDS = {"会話記録", "保存機構メタ報告"}
 
 
 def section(content: str, heading: str) -> str | None:
-    pattern = re.compile(
-        rf"(?ms)^##[ \t]+{re.escape(heading)}[ \t]*\n(.*?)(?=^#{1,2}[ \t]+|\Z)"
-    )
-    match = pattern.search(content)
-    return match.group(1).strip() if match else None
+    heading_pattern = re.compile(rf"^##[ \\t]+{re.escape(heading)}[ \\t]*$")
+    boundary_pattern = re.compile(r"^#{1,2}[ \\t]+")
+    lines = content.splitlines()
+    start = None
+    for index, line in enumerate(lines):
+        if heading_pattern.fullmatch(line):
+            start = index + 1
+            break
+    if start is None:
+        return None
+    end = len(lines)
+    for index in range(start, len(lines)):
+        if boundary_pattern.match(lines[index]):
+            end = index
+            break
+    return "\n".join(lines[start:end]).strip()
 
 
 def validate(content: str) -> tuple[bool, str]:
