@@ -89,6 +89,15 @@ jobs:
           test -s "$RUNNER_TEMP/direct-chat.md"
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
 
+      - name: Diagnose runtime save category files
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "runtime_head=$(git rev-parse HEAD)"
+          echo "runtime_script_hash=$(git hash-object scripts/check_save_request_category.py)"
+          echo "expected_script_hash=$(git show HEAD:scripts/check_save_request_category.py | git hash-object --stdin)"
+          grep -n "re.escape(heading)" scripts/check_save_request_category.py
+
       - name: Validate save request category
         shell: bash
         run: |
