@@ -1,4 +1,5 @@
 name: Save request intake
+# Workflow definition refresh: keep pull_request_target intake aligned with current main.
 
 on:
   pull_request_target:
