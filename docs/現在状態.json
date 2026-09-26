@@ -242,7 +242,8 @@
     "実行済み操作を操作／目的／結果／状態で保持し、同一操作の理由なき再実行を防ぐ",
     "最終報告で【作業】と【保存】の状態を分離する",
     "DIGA / DiMORA自動化は、現行のバド単独運用では実機側の取得・操作まで完遂できないため、2026-09-21をもって本線作業を断念する。既存成果・経験資産は破棄せず履歴として保持する。",
-    "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入"
+    "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入",
+    "Dropboxに保存した直チャット原本をバドが読み取り、GitHubのchat-save-request正規保存経路へ投入する標準運用"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -265,7 +266,9 @@
     "pr_creation_failure": "queue PR or final save PR creation failure is not success; report the failed stage",
     "direct_contents_api_for_save": "prohibited",
     "queue_entrypoint": "chat-save-request/** のキューbranch＋キューPR",
-    "final_save_branch_owned_by": "save-request-intake.yml"
+    "final_save_branch_owned_by": "save-request-intake.yml",
+    "dropbox_source": "Dropbox直チャット原本 → バドが読み取り → chat-save-request/** キューPR → save-request-intake.yml → canonical save PR → merge → docs/現在状態.json readback",
+    "dropbox_is_not_final_store": true
   },
   "operation_separation": {
     "status": "implemented_in_rules",
