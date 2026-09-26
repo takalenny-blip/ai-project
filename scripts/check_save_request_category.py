@@ -12,7 +12,7 @@ ALLOWED_KINDS = {"会話記録", "保存機構メタ報告"}
 
 def section(content: str, heading: str) -> str | None:
     pattern = re.compile(
-        rf"(?ms)^##[ \t]+{re.escape(heading)}[ \t]*\n(.*?)(?=^##[ \t]+|\Z)"
+        rf"(?ms)^##[ \t]+{re.escape(heading)}[ \t]*\n(.*?)(?=^#{1,2}[ \t]+|\Z)"
     )
     match = pattern.search(content)
     return match.group(1).strip() if match else None

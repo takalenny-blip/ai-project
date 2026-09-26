@@ -66,3 +66,10 @@ PR #533 の承認・マージ結果に関する直前の回答。
 """,
     ]
     assert all(not validate(content)[0] for content in contents)
+
+
+def test_conversation_record_real_queue_shape_passes():
+    ok, _ = validate(
+        "## 保存対象種別\n会話記録\n\n# 20260925\n本文"
+    )
+    assert ok
