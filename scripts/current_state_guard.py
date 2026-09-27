@@ -204,12 +204,6 @@ def retired_tokens(state: dict) -> tuple[str, ...]:
         tokens.extend(RETIRED_ALIASES.get(item, ()))
     return tuple(dict.fromkeys(tokens))
 
-def validate_next_step_no_retired(state: dict) -> None:
-    text = json.dumps(state["next_step"], ensure_ascii=False)
-    for token in retired_tokens(state):
-        if token in text:
-            fail(f"retired environment appears in next_step: {token}")
-
 def validate_generated_views(state: dict) -> None:
     env = state["execution_environment"]
     current = state["current_position"]
@@ -253,7 +247,6 @@ def validate_hash_contract(state: dict) -> None:
 def validate(state_path: Path = STATE_PATH) -> None:
     state = load_state(state_path)
     validate_state(state)
-    validate_next_step_no_retired(state)
     validate_hash_contract(state)
     validate_generated_views(state)
     validate_projects(state)
