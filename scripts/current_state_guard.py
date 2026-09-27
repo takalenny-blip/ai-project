@@ -8,11 +8,14 @@ import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+import sys
+sys.path.insert(0, str(ROOT / "scripts"))
+from work_queue import validate_work_items, derived_next_step, select_actionable
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 BUD_PATH = ROOT / "BUD.md"
 HANDOVER_PATH = ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md"
 
-REQUIRED = ("execution_environment", "current_position", "next_step")
+REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
 ABSTRACT_NEXT_STEP = (
     "本来工程へ復帰",
     "通常のDiMORA本来工程へ復帰",
@@ -126,6 +129,30 @@ def validate_completed_verifications(state: dict) -> None:
                 fail(f"verified verification record requires method and checked_at: {scope}")
 
 
+def validate_work_queue(state: dict) -> None:
+    items = state.get("work_items")
+    if not isinstance(items, list) or not items:
+        fail("work_items must be a non-empty list")
+    try:
+        validate_work_items(items)
+    except ValueError as exc:
+        fail(str(exc))
+    derived = derived_next_step(items, state.get("updated"))
+    cached = state.get("next_step")
+    if derived is None:
+        if cached not in (None, {}):
+            fail("next_step must be empty when no actionable work exists")
+        return
+    if not isinstance(cached, dict):
+        fail("next_step must be an object derived from work_items")
+    if cached.get("id") != derived.get("id"):
+        fail("next_step does not match the highest-priority actionable work item")
+    for key in ("target", "evidence", "environment", "scope", "readiness", "unblock_action"):
+        if cached.get(key) != derived.get(key):
+            fail("next_step is not an exact derived view of work_items: " + key)
+    if derived.get("readiness") == "blocked" and cached.get("blocked_reason") != derived.get("blocked_reason"):
+        fail("next_step blocked_reason is not derived from work_items")
+
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
     if missing:
@@ -137,6 +164,7 @@ def validate_state(state: dict) -> None:
     legacy_verification_model = "verification_records" not in state
     if not legacy_verification_model:
         validate_completed_verifications(state)
+        validate_work_queue(state)
         if not nxt.get("scope"):
             fail("next_step.scope is missing")
         completed = state["verification_records"].get(nxt["scope"])
@@ -184,24 +212,26 @@ def validate_next_step_no_retired(state: dict) -> None:
 
 def validate_generated_views(state: dict) -> None:
     env = state["execution_environment"]
-    nxt = state["next_step"]
     current = state["current_position"]
-    expected = [
-        f"現在：**{env['active']}**",
-        f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
-        f"環境：**{nxt['environment']}**",
-        f"目的：**{nxt['target']}**",
-        f"根拠：{nxt['evidence']}",
-        f"**{current['summary']}**",
-    ]
-    retired_line = f"退役：{', '.join(env.get('retired', [])) or '(なし)'}"
+    actionable_items = select_actionable(state["work_items"], state.get("updated"))
+    actionable = actionable_items[0] if actionable_items else None
     for path in (BUD_PATH, HANDOVER_PATH):
         text = path.read_text(encoding="utf-8")
-        for fragment in expected:
+        required = [
+            f"現在：**{env['active']}**",
+            f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
+            f"**{current['summary']}**",
+            f"actionable：{len(actionable_items)}件",
+        ]
+        for fragment in required:
             if fragment not in text:
                 fail(f"generated view is stale or incomplete: {path} missing {fragment}")
+        if actionable:
+            marker = f"- [{actionable['id']}] priority={actionable['priority']}：{actionable['title']}"
+            if marker not in text:
+                fail(f"generated view is missing actionable work item: {path}: {actionable['id']}")
         for token in retired_tokens(state):
-            if token in text and token not in retired_line:
+            if token in text and token not in f"退役：{', '.join(env.get('retired', [])) or '(なし)'}":
                 fail(f"retired environment leaked into generated view outside retired list: {path}: {token}")
 
 def validate_projects(state: dict) -> None:

@@ -7,8 +7,11 @@ import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+import sys
+sys.path.insert(0, str(ROOT / "scripts"))
+from work_queue import validate_work_items, derived_next_step
 STATE = ROOT / "docs" / "現在状態.json"
-REQUIRED = ("execution_environment", "current_position", "next_step")
+REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
 
 def repo_blob_sha(path):
     data = path.read_bytes()
@@ -78,6 +81,24 @@ def main():
         print("STOP: external proposal response is pending; react before any other work")
         return 3
 
+    try:
+        validate_work_items(state["work_items"])
+    except ValueError as exc:
+        return fail("work queue invalid: " + str(exc))
+    derived = derived_next_step(state["work_items"], state.get("updated"))
+    cached = state["next_step"]
+    if derived is None:
+        if cached not in (None, {}):
+            return fail("next_step must be empty when no actionable work exists")
+        blocked_items = [x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"]
+        if blocked_items:
+            blocked_items.sort(key=lambda x: (x["priority"], x["created_at"], x["id"]))
+            blocked = blocked_items[0]
+            print("BLOCKED: work item is blocked: " + blocked["target"])
+            print("UNBLOCK: " + blocked["unblock_action"])
+            return 2
+    elif cached.get("id") != derived.get("id"):
+        return fail("next_step is stale; it does not match the actionable work queue")
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])

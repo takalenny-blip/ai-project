@@ -15,6 +15,8 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from work_queue import derived_next_step
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 DIRECT_CHAT_DIR = ROOT / "直チャット"
 BUD_PATH = ROOT / "BUD.md"
@@ -66,6 +68,19 @@ def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | No
         raise SystemExit("embedded state patch must be a JSON object")
     cleaned = (content[:match.start()] + content[match.end():]).strip() + "\n"
     return cleaned, patch
+
+
+def sync_next_step(state: dict) -> None:
+    item = derived_next_step(state["work_items"], state.get("updated"))
+    if item is None:
+        state["next_step"] = {}
+        return
+    fields = ("id", "title", "priority", "depends_on", "not_before", "environment",
+              "scope", "target", "evidence", "readiness", "unblock_action")
+    state["next_step"] = {key: item[key] for key in fields}
+    if item.get("readiness") == "blocked":
+        state["next_step"]["blocked_reason"] = item["blocked_reason"]
+    state["next_step"]["prerequisites"] = item.get("prerequisites", [])
 
 
 def render_views() -> None:
@@ -123,10 +138,6 @@ def main() -> int:
 
     # Keep canonical save metadata aligned with the sole live entrypoint.
     state["save_pipeline"]["normal_entrypoints"] = ["save-request-intake.yml (pull_request_target; queue PR required)"]
-    state["pending_monitoring"] = [
-        item for item in state.get("pending_monitoring", [])
-        if item != "最終修正PR merge後のCI成功確認"
-    ]
     if args.state_patch_file:
         patch = json.loads(args.state_patch_file.read_text(encoding="utf-8"))
         if not isinstance(patch, dict):
@@ -135,6 +146,7 @@ def main() -> int:
     if embedded_patch is not None:
         merge_patch(state, embedded_patch)
 
+    sync_next_step(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render_views()
 

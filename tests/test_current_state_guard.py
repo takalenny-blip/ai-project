@@ -26,12 +26,34 @@ class CurrentStateGuardTests(unittest.TestCase):
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "current"},
             "verification_records": {"resume_check": {"status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20"}}},
+            "work_items": [{
+                "id": "WORK-TEST",
+                "title": "test work",
+                "priority": 10,
+                "status": "queued",
+                "depends_on": [],
+                "not_before": None,
+                "scope": "new_scope",
+                "target": "work_pcで再開確認を実施する",
+                "evidence": "resume_check.py",
+                "readiness": "ready",
+                "unblock_action": "none",
+                "environment": "work_pc",
+                "created_at": "2026-09-27",
+                "updated_at": "2026-09-27",
+            }],
             "next_step": {
+                "id": "WORK-TEST",
+                "title": "test work",
+                "priority": 10,
+                "depends_on": [],
+                "not_before": None,
                 "environment": "work_pc",
                 "scope": "new_scope",
                 "target": "work_pcで再開確認を実施する",
                 "evidence": "resume_check.py",
                 "readiness": "ready",
+                "unblock_action": "none",
                 "prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": git_blob_sha(resume_check)}}],
             },
             "work_pc": {"clone_status": "unverified"},
@@ -114,8 +136,11 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_blocked_with_unverified_prerequisite_passes(self):
         state = self.base_state()
         state["next_step"]["readiness"] = "blocked"
+        state["work_items"][0]["readiness"] = "blocked"
+        state["work_items"][0]["blocked_reason"] = "artifact missing"
         state["next_step"]["blocked_reason"] = "artifact missing"
         state["next_step"]["unblock_action"] = "run preflight"
+        state["work_items"][0]["unblock_action"] = "run preflight"
         state["next_step"]["prerequisites"][0]["status"] = "unverified"
         guard.validate_state(state)
 
@@ -192,6 +217,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["next_step"]["readiness"] = "blocked"
         state["next_step"]["blocked_reason"] = "blocked"
         state["next_step"]["unblock_action"] = "preflight"
+        state["work_items"][0]["unblock_action"] = "preflight"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 

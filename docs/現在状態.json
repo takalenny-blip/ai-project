@@ -8,7 +8,8 @@
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
     "status": "structurally_complete",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。"
+    "generation_flow": "第2実装済み。work_itemsを唯一の作業キュー正本とし、next_stepはwork_itemsから導出する互換ビュー。生成ビューでactionable一覧を表示し、依存関係・期限・優先順位を機械検証する。",
+    "work_queue": "work_items: priority/depends_on/not_before/statusを持つ。waitingは保存せず導出する。"
   },
   "direct_chat": {
     "latest_saved": "2026-09-26T14-54-20.134554+0900",
@@ -209,12 +210,6 @@
       }
     }
   ],
-  "pending_monitoring": [
-    "期限付き対応: GitHub公開リポジトリのpull_request_target既定ポリシー強制開始予定日2026-11-02までに、save-request-intake.yml と auto-approve-save-pr.yml の両workflowが停止しない明示的許可設定または代替方式を確定・実装・本番検証する",
-    "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることの本番経路確認",
-    "save-request-intake.ymlのpushトリガー非発火問題をpull_request_target＋キューPR方式へ変更後、本番経路で確認する",
-    "BLOG-0001のGSC「Redirect error」：Blogger標準の`?m=1`リダイレクトが原因候補。カスタムリダイレクトはなし。現時点でBlogger設定変更は行わず、数日〜1週間後にGSCで再確認する。`google.com/sorry/` HTTP 429は原因未確認。"
-  ],
   "adopted_improvements": [
     "構造化された現在状態と一次記録の分離",
     "現在状態.jsonを唯一の現在状態正本としBUD/引き継ぎを自動生成ビューにする",
@@ -316,10 +311,15 @@
     "next_focus": "BLOG-0001のGSC「Redirect error」について、経過観察期間後にURL検査とインデックス状況を再確認する。"
   },
   "next_step": {
+    "id": "WORK-0001",
+    "title": "GitHub公開リポジトリのpull_request_target既定ポリシー変更への対応を確定・実装・本番検証する",
+    "priority": 10,
+    "depends_on": [],
+    "not_before": "2026-09-27",
     "environment": "work_pc",
-    "scope": "experience_log_to_blogger",
-    "target": "2026-10-01以降にGSC WizardでBLOG-0001 URLのURL検査とインデックス状況を再確認する",
-    "evidence": "BLOG-0001のmeta description設定・確認まで完了。現在残っている確認事項はGSC「Redirect error」の経過観察。",
+    "scope": "save_pipeline",
+    "target": "2026-11-02までにsave-request-intake.ymlとauto-approve-save-pr.ymlの継続運用方式を確定・実装・本番検証する",
+    "evidence": "既存のpending_monitoring項目。期限付き対応として未完了。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -445,5 +445,75 @@
       "exit_code": 2
     },
     "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
-  }
+  },
+  "work_items": [
+    {
+      "id": "WORK-0001",
+      "title": "GitHub公開リポジトリのpull_request_target既定ポリシー変更への対応を確定・実装・本番検証する",
+      "priority": 10,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": "2026-09-27",
+      "scope": "save_pipeline",
+      "target": "2026-11-02までにsave-request-intake.ymlとauto-approve-save-pr.ymlの継続運用方式を確定・実装・本番検証する",
+      "evidence": "既存のpending_monitoring項目。期限付き対応として未完了。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-09-27",
+      "updated_at": "2026-09-27",
+      "prerequisites": []
+    },
+    {
+      "id": "WORK-0002",
+      "title": "save-request-intake.ymlのPR作成失敗を本番経路で確認する",
+      "priority": 20,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "save_pipeline",
+      "target": "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることを本番経路で確認する",
+      "evidence": "既存のpending_monitoring項目。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-09-27",
+      "updated_at": "2026-09-27",
+      "prerequisites": []
+    },
+    {
+      "id": "WORK-0003",
+      "title": "save-request-intake.ymlのpushトリガー非発火問題を本番経路で確認する",
+      "priority": 20,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "save_pipeline",
+      "target": "pull_request_target＋キューPR方式への変更後、save-request-intake.ymlの本番経路を確認する",
+      "evidence": "既存のpending_monitoring項目。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-09-27",
+      "updated_at": "2026-09-27",
+      "prerequisites": []
+    },
+    {
+      "id": "WORK-0004",
+      "title": "BLOG-0001のGSC Redirect errorを経過観察後に再確認する",
+      "priority": 30,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": "2026-10-01",
+      "scope": "experience_log_to_blogger",
+      "target": "2026-10-01以降にGSC WizardでBLOG-0001 URLのURL検査とインデックス状況を再確認する",
+      "evidence": "BLOG-0001のmeta description設定・確認まで完了。現在残っている確認事項はGSC「Redirect error」の経過観察。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-09-27",
+      "updated_at": "2026-09-27",
+      "prerequisites": []
+    }
+  ]
 }

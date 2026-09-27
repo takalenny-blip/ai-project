@@ -7,6 +7,9 @@ import json
 import shutil
 import tempfile
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[0]))
+from work_queue import select_actionable
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "docs" / "現在状態.json"
@@ -22,7 +25,8 @@ def render(state: dict) -> tuple[str, str]:
     migration = state["migration"]
     env = state["execution_environment"]
     current = state["current_position"]
-    nxt = state["next_step"]
+    nxt = state.get("next_step")
+    actionable = select_actionable(state["work_items"], state.get("updated"))
     verification_records = state.get("verification_records", {})
 
     header = f"""更新日：{state["updated"]}
@@ -43,12 +47,15 @@ def render(state: dict) -> tuple[str, str]:
 
 **{current["summary"]}**
 
-## 次の一手
+## 作業キュー
 
-- 環境：**{nxt["environment"]}**
-- 目的：**{nxt["target"]}**
-- 根拠：{nxt["evidence"]}
-- 状態：{nxt["readiness"]}
+- actionable：{len(actionable)}件
+- 一覧：
+{chr(10).join("- [" + item["id"] + "] priority=" + str(item["priority"]) + "：" + item["title"] for item in actionable) or "- actionableな作業なし"}
+
+## 次の一手（互換ビュー）
+
+{("- [" + nxt["id"] + "] " + nxt["target"]) if nxt else "- actionableな作業なし"}
 """.rstrip("\n")
 
     bud = f"""# BUD — バドのための最上位ダッシュボード
