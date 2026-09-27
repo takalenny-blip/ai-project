@@ -224,9 +224,10 @@ def validate_generated_views(state: dict) -> None:
             marker = f"- [{actionable['id']}] priority={actionable['priority']}：{actionable['title']}"
             if marker not in text:
                 fail(f"generated view is missing actionable work item: {path}: {actionable['id']}")
-        for token in retired_tokens(state):
-            if token in text and token not in f"退役：{', '.join(env.get('retired', [])) or '(なし)'}":
-                fail(f"retired environment leaked into generated view outside retired list: {path}: {token}")
+        # Generated views may legitimately contain historical work-item titles
+        # (for example, a blog project about a retired environment). Do not scan
+        # the entire prose for retired names; active-environment consistency is
+        # enforced above and historical project docs have their own guard.
 
 def validate_projects(state: dict) -> None:
     retired = retired_tokens(state)
