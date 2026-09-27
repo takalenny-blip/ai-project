@@ -22,8 +22,18 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                 "blocked_output": {"exit_code": 2},
             },
             "current_position": {"summary": "current"},
+            "updated": "2026-09-27",
+            "work_items": [{
+                "id": "WORK-TEST", "title": "test", "priority": 10, "status": "queued",
+                "depends_on": [], "not_before": None, "scope": "test",
+                "target": "target", "evidence": "evidence", "readiness": readiness,
+                "unblock_action": "none", "environment": "work_pc",
+                "created_at": "2026-09-27", "updated_at": "2026-09-27",
+            }],
             "next_step": {
+                "id": "WORK-TEST",
                 "environment": "work_pc",
+                "scope": "test",
                 "target": "target",
                 "evidence": "evidence",
                 "readiness": readiness,
