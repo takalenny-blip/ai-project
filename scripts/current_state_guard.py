@@ -210,24 +210,25 @@ def validate_next_step_no_retired(state: dict) -> None:
 
 def validate_generated_views(state: dict) -> None:
     env = state["execution_environment"]
-    nxt = state["next_step"]
     current = state["current_position"]
-    expected = [
-        f"現在：**{env['active']}**",
-        f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
-        f"環境：**{nxt['environment']}**",
-        f"目的：**{nxt['target']}**",
-        f"根拠：{nxt['evidence']}",
-        f"**{current['summary']}**",
-    ]
-    retired_line = f"退役：{', '.join(env.get('retired', [])) or '(なし)'}"
+    actionable = derived_next_step(state["work_items"], state.get("updated"))
     for path in (BUD_PATH, HANDOVER_PATH):
         text = path.read_text(encoding="utf-8")
-        for fragment in expected:
+        required = [
+            f"現在：**{env['active']}**",
+            f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
+            f"**{current['summary']}**",
+            f"actionable：{len([x for x in state['work_items'] if x['status'] not in {'done','held'}])}件",
+        ]
+        for fragment in required:
             if fragment not in text:
                 fail(f"generated view is stale or incomplete: {path} missing {fragment}")
+        if actionable:
+            marker = f"- [{actionable['id']}] priority={actionable['priority']}：{actionable['title']}"
+            if marker not in text:
+                fail(f"generated view is missing actionable work item: {path}: {actionable['id']}")
         for token in retired_tokens(state):
-            if token in text and token not in retired_line:
+            if token in text and token not in f"退役：{', '.join(env.get('retired', [])) or '(なし)'}":
                 fail(f"retired environment leaked into generated view outside retired list: {path}: {token}")
 
 def validate_projects(state: dict) -> None:
