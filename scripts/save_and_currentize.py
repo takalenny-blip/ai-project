@@ -108,6 +108,12 @@ def main() -> int:
     # Keep canonical save metadata aligned with the sole live entrypoint.
     state["save_pipeline"]["normal_entrypoints"] = ["save-request-intake.yml (pull_request_target; queue PR required)"]
 
+    if args.state_patch_file:
+        patch = json.loads(args.state_patch_file.read_text(encoding="utf-8"))
+        if not isinstance(patch, dict):
+            raise SystemExit("state patch must be a JSON object")
+        merge_patch(state, patch)
+
     sync_next_step(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render_views()
