@@ -73,3 +73,16 @@ def test_conversation_record_real_queue_shape_passes():
         "## 保存対象種別\n会話記録\n\n# 20260925\n本文"
     )
     assert ok
+
+
+def test_template_default_is_valid():
+    from pathlib import Path
+    template = Path(__file__).resolve().parents[1] / "scripts" / "save_request_template.md"
+    ok, message = validate(template.read_text(encoding="utf-8"))
+    assert ok, message
+
+
+def test_missing_category_error_is_explicit():
+    ok, message = validate("# 直チャット保存要求\n\n## 本文\nテスト")
+    assert not ok
+    assert "保存対象種別 is required" in message
