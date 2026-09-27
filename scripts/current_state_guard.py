@@ -150,6 +150,8 @@ def validate_work_queue(state: dict) -> None:
     for key in ("target", "evidence", "environment", "scope", "readiness", "unblock_action"):
         if cached.get(key) != derived.get(key):
             fail("next_step is not an exact derived view of work_items: " + key)
+    if derived.get("readiness") == "blocked" and cached.get("blocked_reason") != derived.get("blocked_reason"):
+        fail("next_step blocked_reason is not derived from work_items")
 
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
