@@ -320,17 +320,15 @@
     "id": "WORK-0001",
     "title": "GitHub公開リポジトリのpull_request_target既定ポリシー変更への対応を確定・実装・本番検証する",
     "priority": 10,
-    "status": "queued",
     "depends_on": [],
     "not_before": "2026-09-27",
+    "environment": "work_pc",
     "scope": "save_pipeline",
     "target": "2026-11-02までにsave-request-intake.ymlとauto-approve-save-pr.ymlの継続運用方式を確定・実装・本番検証する",
     "evidence": "既存のpending_monitoring項目。期限付き対応として未完了。",
     "readiness": "ready",
     "unblock_action": "none",
-    "environment": "work_pc",
-    "created_at": "2026-09-27",
-    "updated_at": "2026-09-27"
+    "prerequisites": []
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -469,7 +467,8 @@
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-27",
-      "updated_at": "2026-09-27"
+      "updated_at": "2026-09-27",
+      "prerequisites": []
     },
     {
       "id": "WORK-0002",
@@ -485,7 +484,8 @@
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-27",
-      "updated_at": "2026-09-27"
+      "updated_at": "2026-09-27",
+      "prerequisites": []
     },
     {
       "id": "WORK-0003",
@@ -501,7 +501,8 @@
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-27",
-      "updated_at": "2026-09-27"
+      "updated_at": "2026-09-27",
+      "prerequisites": []
     },
     {
       "id": "WORK-0004",
@@ -517,7 +518,8 @@
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-27",
-      "updated_at": "2026-09-27"
+      "updated_at": "2026-09-27",
+      "prerequisites": []
     }
   ]
 }
