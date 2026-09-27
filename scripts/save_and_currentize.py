@@ -8,11 +8,9 @@ import hashlib
 import json
 import subprocess
 import sys
-import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
-from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -30,44 +28,6 @@ def run(*args: str) -> str:
 def git_blob_sha(data: bytes) -> str:
     header = f"blob {len(data)}\0".encode("utf-8")
     return hashlib.sha1(header + data).hexdigest()
-
-
-def merge_patch(target: dict[str, Any], patch: dict[str, Any]) -> None:
-    """Recursively merge a JSON object patch into the current state."""
-    for key, value in patch.items():
-        if isinstance(value, dict) and isinstance(target.get(key), dict):
-            merge_patch(target[key], value)
-        else:
-            target[key] = value
-
-
-
-STATE_PATCH_BEGIN = "<!-- BUD_STATE_PATCH_BEGIN"
-STATE_PATCH_END = "BUD_STATE_PATCH_END -->"
-
-
-def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | None]:
-    """Extract an optional canonical-state patch from a save-queue markdown payload.
-
-    The patch is transport metadata, not direct-chat content, so it is removed before
-    the saved chat record is written. This keeps canonical state changes on the normal
-    atomic save path while allowing the queue entry to request an explicit state patch.
-    """
-    pattern = re.compile(
-        re.escape(STATE_PATCH_BEGIN) + r"\s*\n(.*?)\n" + re.escape(STATE_PATCH_END),
-        re.DOTALL,
-    )
-    match = pattern.search(content)
-    if not match:
-        return content, None
-    try:
-        patch = json.loads(match.group(1))
-    except json.JSONDecodeError as exc:
-        raise SystemExit(f"invalid embedded state patch JSON: {exc}") from exc
-    if not isinstance(patch, dict):
-        raise SystemExit("embedded state patch must be a JSON object")
-    cleaned = (content[:match.start()] + content[match.end():]).strip() + "\n"
-    return cleaned, patch
 
 
 def sync_next_step(state: dict) -> None:
@@ -111,7 +71,6 @@ def main() -> int:
         raise SystemExit("refusing to run with pre-staged changes")
 
     content = (args.content_file.read_text(encoding="utf-8") if args.content_file else sys.stdin.read())
-    content, embedded_patch = extract_embedded_state_patch(content)
     if not content.endswith("\n"):
         content += "\n"
 
@@ -138,13 +97,6 @@ def main() -> int:
 
     # Keep canonical save metadata aligned with the sole live entrypoint.
     state["save_pipeline"]["normal_entrypoints"] = ["save-request-intake.yml (pull_request_target; queue PR required)"]
-    if args.state_patch_file:
-        patch = json.loads(args.state_patch_file.read_text(encoding="utf-8"))
-        if not isinstance(patch, dict):
-            raise SystemExit("state patch must be a JSON object")
-        merge_patch(state, patch)
-    if embedded_patch is not None:
-        merge_patch(state, embedded_patch)
 
     sync_next_step(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
