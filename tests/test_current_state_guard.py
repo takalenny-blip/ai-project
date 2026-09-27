@@ -216,6 +216,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["next_step"]["readiness"] = "blocked"
         state["next_step"]["blocked_reason"] = "blocked"
         state["next_step"]["unblock_action"] = "preflight"
+        state["work_items"][0]["unblock_action"] = "preflight"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
