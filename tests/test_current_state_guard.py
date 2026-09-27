@@ -82,7 +82,7 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     def test_active_work_pc_passes(self):
         guard.validate_state(self.base_state())
-        guard.validate_next_step_no_retired(self.base_state())
+        guard.validate_state(self.base_state())
 
 
     def test_next_step_repeating_verified_scope_fails(self):
@@ -109,11 +109,11 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
-    def test_retired_alias_in_next_step_fails(self):
+    def test_retired_name_in_historical_target_is_allowed(self):
         state = self.base_state()
-        state["next_step"]["target"] = "VAIO Pで取得テスト"
-        with self.assertRaises(ValueError):
-            guard.validate_next_step_no_retired(state)
+        state["next_step"]["target"] = "VAIO Pのサーバー化の経験を記事として整理する"
+        guard.validate_state(state)
+
 
     def test_abstract_next_step_fails(self):
         state = self.base_state()
