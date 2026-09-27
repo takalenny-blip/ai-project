@@ -136,6 +136,7 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_blocked_with_unverified_prerequisite_passes(self):
         state = self.base_state()
         state["next_step"]["readiness"] = "blocked"
+        state["work_items"][0]["readiness"] = "blocked"
         state["next_step"]["blocked_reason"] = "artifact missing"
         state["next_step"]["unblock_action"] = "run preflight"
         state["next_step"]["prerequisites"][0]["status"] = "unverified"
