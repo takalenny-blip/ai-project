@@ -13,6 +13,8 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any
+sys.path.insert(0, str(ROOT / "scripts"))
+from work_queue import derived_next_step
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs" / "現在状態.json"
@@ -66,6 +68,17 @@ def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | No
         raise SystemExit("embedded state patch must be a JSON object")
     cleaned = (content[:match.start()] + content[match.end():]).strip() + "\n"
     return cleaned, patch
+
+
+def sync_next_step(state: dict) -> None:
+    item = derived_next_step(state["work_items"], state.get("updated"))
+    if item is None:
+        state["next_step"] = {}
+        return
+    fields = ("id", "title", "priority", "depends_on", "not_before", "environment",
+              "scope", "target", "evidence", "readiness", "unblock_action")
+    state["next_step"] = {key: item[key] for key in fields}
+    state["next_step"]["prerequisites"] = item.get("prerequisites", [])
 
 
 def render_views() -> None:
@@ -131,6 +144,7 @@ def main() -> int:
     if embedded_patch is not None:
         merge_patch(state, embedded_patch)
 
+    sync_next_step(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render_views()
 
