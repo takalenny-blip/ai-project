@@ -6,13 +6,16 @@ import argparse
 import json
 import hashlib
 from pathlib import Path
+import sys
+sys.path.insert(0, str(ROOT / "scripts"))
+from work_queue import validate_work_items, derived_next_step
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 BUD_PATH = ROOT / "BUD.md"
 HANDOVER_PATH = ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md"
 
-REQUIRED = ("execution_environment", "current_position", "next_step")
+REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
 ABSTRACT_NEXT_STEP = (
     "本来工程へ復帰",
     "通常のDiMORA本来工程へ復帰",
@@ -126,6 +129,28 @@ def validate_completed_verifications(state: dict) -> None:
                 fail(f"verified verification record requires method and checked_at: {scope}")
 
 
+def validate_work_queue(state: dict) -> None:
+    items = state.get("work_items")
+    if not isinstance(items, list) or not items:
+        fail("work_items must be a non-empty list")
+    try:
+        validate_work_items(items)
+    except ValueError as exc:
+        fail(str(exc))
+    derived = derived_next_step(items, state.get("updated"))
+    cached = state.get("next_step")
+    if derived is None:
+        if cached not in (None, {}):
+            fail("next_step must be empty when no actionable work exists")
+        return
+    if not isinstance(cached, dict):
+        fail("next_step must be an object derived from work_items")
+    if cached.get("id") != derived.get("id"):
+        fail("next_step does not match the highest-priority actionable work item")
+    for key in ("target", "evidence", "environment", "scope", "readiness", "unblock_action"):
+        if cached.get(key) != derived.get(key):
+            fail("next_step is not an exact derived view of work_items: " + key)
+
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
     if missing:
@@ -137,6 +162,7 @@ def validate_state(state: dict) -> None:
     legacy_verification_model = "verification_records" not in state
     if not legacy_verification_model:
         validate_completed_verifications(state)
+        validate_work_queue(state)
         if not nxt.get("scope"):
             fail("next_step.scope is missing")
         completed = state["verification_records"].get(nxt["scope"])
