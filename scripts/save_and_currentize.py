@@ -78,6 +78,8 @@ def sync_next_step(state: dict) -> None:
     fields = ("id", "title", "priority", "depends_on", "not_before", "environment",
               "scope", "target", "evidence", "readiness", "unblock_action")
     state["next_step"] = {key: item[key] for key in fields}
+    if item.get("readiness") == "blocked":
+        state["next_step"]["blocked_reason"] = item["blocked_reason"]
     state["next_step"]["prerequisites"] = item.get("prerequisites", [])
 
 
