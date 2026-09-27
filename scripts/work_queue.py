@@ -37,8 +37,8 @@ def validate_work_items(items: Iterable[dict]) -> None:
                 raise ValueError(f"{item['id']} missing {field}")
         if item["readiness"] not in {"ready", "blocked"}:
             raise ValueError(f"invalid readiness in {item['id']}")
-        if item["readiness"] == "blocked" and not item["unblock_action"]:
-            raise ValueError(f"blocked item requires unblock_action: {item['id']}")
+        if item["readiness"] == "blocked" and (not item["unblock_action"] or not item.get("blocked_reason")):
+            raise ValueError(f"blocked item requires blocked_reason and unblock_action: {item['id']}")
     graph = {item["id"]: item.get("depends_on", []) for item in items}
     visiting: set[str] = set()
     visited: set[str] = set()
