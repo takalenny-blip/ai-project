@@ -13,10 +13,10 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any
-sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import derived_next_step
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from work_queue import derived_next_step
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 DIRECT_CHAT_DIR = ROOT / "直チャット"
 BUD_PATH = ROOT / "BUD.md"
