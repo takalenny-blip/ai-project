@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import validate_work_items, derived_next_step
+from work_queue import validate_work_items, derived_next_step, select_actionable
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 BUD_PATH = ROOT / "BUD.md"
 HANDOVER_PATH = ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md"
@@ -211,14 +211,15 @@ def validate_next_step_no_retired(state: dict) -> None:
 def validate_generated_views(state: dict) -> None:
     env = state["execution_environment"]
     current = state["current_position"]
-    actionable = derived_next_step(state["work_items"], state.get("updated"))
+    actionable_items = select_actionable(state["work_items"], state.get("updated"))
+    actionable = actionable_items[0] if actionable_items else None
     for path in (BUD_PATH, HANDOVER_PATH):
         text = path.read_text(encoding="utf-8")
         required = [
             f"現在：**{env['active']}**",
             f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
             f"**{current['summary']}**",
-            f"actionable：{1 if actionable else 0}件",
+            f"actionable：{len(actionable_items)}件",
         ]
         for fragment in required:
             if fragment not in text:
