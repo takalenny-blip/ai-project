@@ -443,14 +443,5 @@
       "exit_code": 2
     },
     "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
-  },
-  "current_work": {
-    "project": "BLOG-0001公開後",
-    "status": "completed",
-    "stage": "公開済み・meta description候補作成済み",
-    "article_text": "最終稿確定",
-    "collaboration_model": "AIと人間のブログ共同制作モデル v1",
-    "work_state": "docs/企画/BLOG-0001_作業状態.json",
-    "next_step": "作成済みmeta description候補文をたかが確認 → 承認後にBloggerへ設定・確認。目次・参照URLは保留。"
   }
 }
