@@ -300,15 +300,13 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0001は公開済み。保存系の直近処理は正規保存経路で完了。改善候補の整理と次に実施する1件の確定まで完了。次はBlogger側の検索向け説明（meta description）候補文を作成し、たかの確認後に設定する。目次・参照URLは今後検討として保留。",
+    "summary": "BLOG-0001は公開済み。保存系の直近処理は正規保存経路で完了。改善候補の整理、次に実施する1件の確定、Blogger側の検索向け説明（meta description）候補文の作成まで完了。次は候補文をたかが確認し、承認後にBloggerへ設定・確認する。目次・参照URLは今後検討として保留。",
     "evidence": {
       "type": "repository_record",
-      "checked_at": "2026-09-24",
+      "checked_at": "2026-09-27",
       "references": [
-        "PR #545",
-        "PR #597",
-        "PR #596",
-        "2026-09-24時点のBLOG-0001公開後方針"
+        "PR #727",
+        "2026-09-27時点のBLOG-0001改善進捗"
       ],
       "ci_head_commit": "f5f8c07918da6839e35611095f101c392a68d192",
       "ci": "current-state-guard success; Experience article Blogger draft payload success",
@@ -318,8 +316,8 @@
   "next_step": {
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "BLOG-0001のBlogger側の検索向け説明（meta description）候補文を作成し、たかの確認後に設定する",
-    "evidence": "2026-09-27時点で改善候補を整理し、次に実施する1件としてmeta description候補文の作成を確定",
+    "target": "作成済みのBLOG-0001 meta description候補文をたかが確認し、承認後にBloggerへ設定・確認する",
+    "evidence": "2026-09-27時点でmeta description候補文の作成が完了。次工程はたかの確認と承認後のBlogger設定",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -449,10 +447,10 @@
   "current_work": {
     "project": "BLOG-0001公開後",
     "status": "completed",
-    "stage": "公開済み・改善項目確定",
+    "stage": "公開済み・meta description候補作成済み",
     "article_text": "最終稿確定",
     "collaboration_model": "AIと人間のブログ共同制作モデル v1",
     "work_state": "docs/企画/BLOG-0001_作業状態.json",
-    "next_step": "Blogger側の検索向け説明（meta description）候補文を作成 → たかの確認 → 設定・確認。目次・参照URLは保留。"
+    "next_step": "作成済みmeta description候補文をたかが確認 → 承認後にBloggerへ設定・確認。目次・参照URLは保留。"
   }
 }
