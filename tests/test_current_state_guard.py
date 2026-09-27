@@ -114,6 +114,33 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["next_step"]["target"] = "VAIO Pのサーバー化の経験を記事として整理する"
         guard.validate_state(state)
 
+    def test_retired_name_in_generated_historical_work_item_is_allowed(self):
+        state = self.base_state()
+        state["work_items"][0]["title"] = "VAIO Pのサーバー化の経験を記事として整理する"
+        state["work_items"][0]["target"] = "VAIO Pの経験を記事として整理する"
+        state["next_step"]["title"] = state["work_items"][0]["title"]
+        state["next_step"]["target"] = state["work_items"][0]["target"]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            bud = tmp_path / "BUD.md"
+            handover = tmp_path / "handover.md"
+            body = "\n".join([
+                "現在：**work_pc**",
+                "退役：vaio_p",
+                "**current**",
+                "actionable：1件",
+                "- [WORK-TEST] priority=10：VAIO Pのサーバー化の経験を記事として整理する",
+            ])
+            bud.write_text(body, encoding="utf-8")
+            handover.write_text(body, encoding="utf-8")
+            old_bud, old_handover = guard.BUD_PATH, guard.HANDOVER_PATH
+            try:
+                guard.BUD_PATH, guard.HANDOVER_PATH = bud, handover
+                guard.validate_generated_views(state)
+            finally:
+                guard.BUD_PATH, guard.HANDOVER_PATH = old_bud, old_handover
+
 
     def test_abstract_next_step_fails(self):
         state = self.base_state()
