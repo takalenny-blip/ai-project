@@ -90,6 +90,13 @@ def main():
     if derived is None:
         if cached not in (None, {}):
             return fail("next_step must be empty when no actionable work exists")
+        blocked_items = [x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"]
+        if blocked_items:
+            blocked_items.sort(key=lambda x: (x["priority"], x["created_at"], x["id"]))
+            blocked = blocked_items[0]
+            print("BLOCKED: work item is blocked: " + blocked["target"])
+            print("UNBLOCK: " + blocked["unblock_action"])
+            return 2
     elif cached.get("id") != derived.get("id"):
         return fail("next_step is stale; it does not match the actionable work queue")
     env = state["execution_environment"]
