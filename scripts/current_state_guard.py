@@ -218,7 +218,7 @@ def validate_generated_views(state: dict) -> None:
             f"現在：**{env['active']}**",
             f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
             f"**{current['summary']}**",
-            f"actionable：{len([x for x in state['work_items'] if x['status'] not in {'done','held'}])}件",
+            f"actionable：{1 if actionable else 0}件",
         ]
         for fragment in required:
             if fragment not in text:
