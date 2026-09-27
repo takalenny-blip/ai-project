@@ -11,6 +11,7 @@ import sys
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -28,6 +29,15 @@ def run(*args: str) -> str:
 def git_blob_sha(data: bytes) -> str:
     header = f"blob {len(data)}\0".encode("utf-8")
     return hashlib.sha1(header + data).hexdigest()
+
+
+def merge_patch(target: dict[str, Any], patch: dict[str, Any]) -> None:
+    """Recursively merge an explicitly supplied canonical-state patch."""
+    for key, value in patch.items():
+        if isinstance(value, dict) and isinstance(target.get(key), dict):
+            merge_patch(target[key], value)
+        else:
+            target[key] = value
 
 
 def sync_next_step(state: dict) -> None:
