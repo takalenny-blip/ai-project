@@ -16,14 +16,19 @@
 
 ## 現在地点
 
-**BLOG-0001は公開済み。保存系の直近処理は正規保存経路で完了。2026-09-24の本線は、公開後の作業を「改善→計測→二本目→収益化」の順に整理し、まず改善段階の次の1件を確定して進める。目次・参照URLはたかの判断により今後検討として保留。**
+**BLOG-0001は公開済み。改善候補の整理、次に実施する1件の確定、Blogger側の検索向け説明（meta description）候補文の作成・確認・設定・確認まで完了。現在はGSC「Redirect error」の経過観察中。**
 
-## 次の一手
+## 作業キュー
 
-- 環境：**work_pc**
-- 目的：**BLOG-0001公開後の作業を「改善 → 計測 → 二本目 → 収益化」の順で整理し、各段階を混ぜずに次に実施する1件を確定する**
-- 根拠：2026-09-24時点でBLOG-0001は公開済み。目次・参照URLは今後検討として保留。次工程は公開後の改善を起点に、計測・二本目・収益化を順次検討する
-- 状態：ready
+- actionable：3件
+- 一覧：
+- [WORK-0001] priority=10：GitHub公開リポジトリのpull_request_target既定ポリシー変更への対応を確定・実装・本番検証する
+- [WORK-0002] priority=20：save-request-intake.ymlのPR作成失敗を本番経路で確認する
+- [WORK-0003] priority=20：save-request-intake.ymlのpushトリガー非発火問題を本番経路で確認する
+
+## 次の一手（互換ビュー）
+
+- [WORK-0001] 2026-11-02までにsave-request-intake.ymlとauto-approve-save-pr.ymlの継続運用方式を確定・実装・本番検証する
 ## 現在の作業レーン
 
 **experience-log → Blogger自動化**
@@ -41,7 +46,7 @@
 ## 現在状態モデル
 
 - docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする
-- 自動生成：第1実装済み。scripts/generate_current_views.pyが候補ビューを決定的に生成し、GitHub Actionsで決定性と完全一致を検証する。
+- 自動生成：第2実装済み。work_itemsを唯一の作業キュー正本とし、next_stepはwork_itemsから導出する互換ビュー。生成ビューでactionable一覧を表示し、依存関係・期限・優先順位を機械検証する。
 
 ## 直チャット
 
