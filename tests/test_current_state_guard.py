@@ -140,6 +140,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["work_items"][0]["blocked_reason"] = "artifact missing"
         state["next_step"]["blocked_reason"] = "artifact missing"
         state["next_step"]["unblock_action"] = "run preflight"
+        state["work_items"][0]["unblock_action"] = "run preflight"
         state["next_step"]["prerequisites"][0]["status"] = "unverified"
         guard.validate_state(state)
 
