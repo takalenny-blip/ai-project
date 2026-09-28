@@ -12,11 +12,12 @@
 </nav>
 
 <p><br /></p>
+
 <h3 id="toc-1">VAIO Pをサーバーに、という流れになった経緯</h3>
 <p>BLOG-0001では、AIとのやりとりから「ブログを作ってみよう」と思ったところまでを書いた。</p>
 <p>最初に考えていたのは、AIとのやりとりでブログ記事を作り、それをBloggerなどにアップロードする仕組みだった。</p>
 <p>最初のChatGPTへの相談は、こうだった。</p>
-<blockquote style="margin:.8em 0;padding:.8em 1em;border-left:4px solid #ccc;"><p>「AIとのやりとりで手軽にブログ記事を作成し、それを無料のワードプレスやブロガーなどにアップロードする仕組みを作りたい。何かよい方法はあるか？」</p></blockquote>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「AIとのやりとりで手軽にブログ記事を作成し、それを無料のワードプレスやブロガーなどにアップロードする仕組みを作りたい。何かよい方法はあるか？」</p></blockquote>
 <p>この時点では、AIに記事を書いてもらい、自分が確認して公開する。その一連の作業を、自宅のPCなどからできるようにする、というイメージだった。</p>
 <p>その方法を考えていく中で、LinuxやPython、Blogger APIなどの話が出てきた。そして、どうせなら家にある古いVAIO Pを使ってみたらどうか、という話になっていった。</p>
 <p>VAIO Pは、以前から家にあった小さなノートPCだ。</p>
@@ -31,6 +32,9 @@
 <p>「動くかどうか試したい」</p>
 <p>VAIO PにDebianを入れて、実際に使えるところまで持っていけるのか。</p>
 <p>まずはそこから始めることにした。</p>
+
+<p><br /></p>
+
 <h3 id="toc-2">Debianを入れて、VAIO Pを動かしていく</h3>
 <p>VAIO Pを実際に動かしてみる。</p>
 <p>使っているのはVGN-P70H/W。Atom Z520の32bit機なので、Debianもi386版を選ぶことになった。</p>
@@ -55,7 +59,7 @@
 <p>充電ランプを見ると赤点滅している。</p>
 <p>古いVAIOなので、バッテリーの状態も怪しい。</p>
 <p>そこで、バッテリーを外してACアダプターだけで起動してみることになった。</p>
-<p>「バッテリー外したら起動。」</p>
+<p><strong style="color: red; background-color: yellow;">「バッテリー外したら起動。」</strong></p>
 <p>さっきまで電源が入らなかったVAIO Pが起動した。</p>
 <p>しかも、USBからDebianのインストーラーまで立ち上がった。</p>
 <p>いきなり「古いPCだから壊れているのか？」と思わせられたが、実際にはバッテリーを外すことで先へ進めた。</p>
@@ -94,7 +98,7 @@
 <p>再起動する。</p>
 <p>ここまで来ても、本当にHDDからDebianが起動するのかはまだ分からない。</p>
 <p>そして、</p>
-<p>「うまく起動したぜ！」</p>
+<p><strong style="color: red; background-color: yellow;">「うまく起動したぜ！」</strong></p>
 <p>VAIO Pが起動した。</p>
 <p>デスクトップにはLXDEが表示された。</p>
 <p>「LXDEシンプルでいいな！」</p>
@@ -144,14 +148,14 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <pre><code>sudo nmtui</code></pre>
 <p>を起動する。</p>
 <p>今度はWi-FiのSSIDが表示された。</p>
-<p>「出たーーー」</p>
+<p><strong style="color: red; background-color: yellow;">「出たーーー」</strong></p>
 <p>ここからWi-Fiを選択して接続。</p>
 <p>接続後、iPhoneのUSBテザリングを外して、Wi-Fiだけで本当にインターネットにつながっているか確認する。</p>
 <pre><code>ping -c 3 8.8.8.8</code></pre>
 <p>そして、</p>
 <p>「繋がった。画面はとじていいの？」</p>
 <p>画面を閉じて、最終確認。</p>
-<p>「オケ」</p>
+<p><strong style="color: red;">「オケ」</strong></p>
 <p>Wi-Fiも復旧した。</p>
 <p>ここまで来ると、VAIO Pが少しずつ「使える機械」になってきた感じがする。</p>
 <p>ただ、実際に使ってみると、また問題が出た。</p>
@@ -167,24 +171,27 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>という具合に、一つ問題を解決すると、また次の問題が出てくる状態になった。</p>
 <p>それでも、最初の「VAIO Pをサーバーにしてみたい」というところから考えれば、かなり前に進んでいる。</p>
 <p>そして、この一連の作業をAIとの会話と一緒に記録していくこと自体が、あとになって重要な意味を持つことになる。</p>
+
+<p><br /></p>
+
 <h3 id="toc-3">DIGA／DiMORAを使った自動化テスト</h3>
 <p>VAIO Pを動かしていく一方で、以前からDIGAの録画管理についてClaudeといろいろ試していた。</p>
 <p>このころは、まだ自動化しようなんて考えていなかった。</p>
 <p>スプレッドシートとGASを使って、DIGA 3台の予約情報を管理する仕組みを作っていた。</p>
 <p>最初にClaudeに投げたのは、こんな相談だった。</p>
-<blockquote style="margin:.8em 0;padding:.8em 1em;border-left:4px solid #ccc;"><p>「Diga3台の予約情報を見て、録画の管理データベースを作りたい。ネットからもってくる一例はこちら。データは機種ごとにグーグルドライブ内のグーグルドキュメントに貼り付けようと思う。日時変更など警告メールを出すようにしてほしい。また、次回の予約がないよ、とか。現在の録画話数の自動更新もほしい。シリーズ終了の連絡もほしい。今までの録画志向から、番組おすすめもほしい。あと他に提案とか質問とかある？」</p></blockquote>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「Diga3台の予約情報を見て、録画の管理データベースを作りたい。ネットからもってくる一例はこちら。データは機種ごとにグーグルドライブ内のグーグルドキュメントに貼り付けようと思う。日時変更など警告メールを出すようにしてほしい。また、次回の予約がないよ、とか。現在の録画話数の自動更新もほしい。シリーズ終了の連絡もほしい。今までの録画志向から、番組おすすめもほしい。あと他に提案とか質問とかある？」</p></blockquote>
 <p>Claudeと相談しながら、貼り付けたDIGAの情報を使って、予約の変化をチェックする仕組みを作っていった。</p>
 <p>お気に入り番組についても、最初はDiMORAからコピーした内容をGoogleドキュメントの機種毎ファイルに必ず貼り付け、それを「その時点のお気に入り」として扱う方式だった。</p>
 <p>ところが、実際に使っていると、手を抜きたくなる。</p>
 <p>たとえば、お気に入りが変わった場合だけGoogleドキュメントに貼り付け、変更が無い場合は貼り付けない。</p>
 <p>そこでClaudeに対して、</p>
-<blockquote style="margin:.8em 0;padding:.8em 1em;border-left:4px solid #ccc;"><p>「待って。お気に入りの中身が空の場合は、内部で持ったお気に入り情報で進める。中身があるときだけ、お気に入りの加除チェックをする。これは機種ごとに制御したい。（例えば、diga1,2のお気に入りは空だったから加除チェックは走らない。diga3に入ってるから加除チェックを走らす。）内部情報でお気に入りに機種情報も加える必要あり。」</p></blockquote>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「待って。お気に入りの中身が空の場合は、内部で持ったお気に入り情報で進める。中身があるときだけ、お気に入りの加除チェックをする。これは機種ごとに制御したい。（例えば、diga1,2のお気に入りは空だったから加除チェックは走らない。diga3に入ってるから加除チェックを走らす。）内部情報でお気に入りに機種情報も加える必要あり。」</p></blockquote>
 <p>と仕様を修正した。</p>
 <p>さらに、実際にチェック結果のメールを見ると、今度は別のところが気になった。</p>
-<blockquote style="margin:.8em 0;padding:.8em 1em;border-left:4px solid #ccc;"><p>「これは、今日のチェック結果メール。内容はいいんだけど、いつの放送分なのか、日時と曜日を加えてほしい。」</p></blockquote>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「これは、今日のチェック結果メール。内容はいいんだけど、いつの放送分なのか、日時と曜日を加えてほしい。」</p></blockquote>
 <p>Claudeに修正してもらう。</p>
 <p>すると次には、</p>
-<blockquote style="margin:.8em 0;padding:.8em 1em;border-left:4px solid #ccc;"><p>「ゴメン。あとチャンネルも必須。可能であれば機種も。」</p></blockquote>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「ゴメン。あとチャンネルも必須。可能であれば機種も。」</p></blockquote>
 <p>となった。</p>
 <p>こうやって、作って、使って、気になったところを直す。</p>
 <p>DIGAの録画管理は、少しずつ自分が欲しい形になっていった。</p>
@@ -199,9 +206,9 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>「あ、これDIGAでも使えるかも」</p>
 <p>そう思った。</p>
 <p>コピペしなくて済む。</p>
-<p><strong>うまくしたらラクになるぞー。</strong></p>
+<p><strong style="color: red;">うまくしたらラクになるぞー。</strong></p>
 <p>でも、すぐに次の疑問が出てきた。</p>
-<p><strong>DiMORAからうまく情報とれるの？</strong></p>
+<p><strong style="color: red;">DiMORAからうまく情報とれるの？</strong></p>
 <p>そこで、AIと一緒にDiMORAの画面を調べ始めた。</p>
 <p>まず目を付けたのが、お気に入り番組一覧の「もっと見る」だった。</p>
 <p>画面には番組が並んでいて、さらに先を見るための「もっと見る」がある。</p>
@@ -229,7 +236,7 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>AIがまた「ここを見てみよう」と指示する。</p>
 <p>そんなやりとりを何度か繰り返して、ようやくお気に入り番組のデータが見えてきた。</p>
 <p>そして、</p>
-<p><strong>「おお、取れた！」</strong></p>
+<p><strong style="color: red; background-color: yellow;">「おお、取れた！」</strong></p>
 <p>実際にDiMORAのお気に入り番組の情報を取得できた。</p>
 <p>そこには、番組の日付や時間、放送局、タイトル、録画モード、曜日、番組URLなど、録画管理に使えそうな情報が入っていた。</p>
 <p>ここで初めて、「コピペしなくてもいけるかもしれない」が、実際のデータを見て確認できた。</p>
