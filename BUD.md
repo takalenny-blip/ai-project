@@ -1,6 +1,6 @@
 # BUD — バドのための最上位ダッシュボード
 
-更新日：2026-09-27
+更新日：2026-09-28
 
 ## 正本
 
@@ -16,19 +16,19 @@
 
 ## 現在地点
 
-**BLOG-0001は公開済み。改善候補の整理、次に実施する1件の確定、Blogger側の検索向け説明（meta description）候補文の作成・確認・設定・確認まで完了。現在はGSC「Redirect error」の経過観察中。**
+**BLOG-0001は公開済み。GSC「Redirect error」は経過観察中。BLOG-0002「VAIO Pをサーバーにしてみたい」はブロック3まで完成し、PR #756をマージして一区切り。次はBLOG-0003としてGitHub編へ進む。**
 
 ## 作業キュー
 
 - actionable：3件
 - 一覧：
-- [BLOG-0002] priority=10：BLOG-0002「VAIO Pをサーバーにしてみたい」を作業稿から完成へ進める
+- [BLOG-0003] priority=10：BLOG-0003「GitHub編」を作成する
 - [WORK-0002] priority=20：save-request-intake.ymlのPR作成失敗を本番経路で確認する
 - [WORK-0003] priority=20：save-request-intake.ymlのpushトリガー非発火問題を本番経路で確認する
 
 ## 次の一手（互換ビュー）
 
-- [BLOG-0002] DIGA／DiMORA部分を含む未完部分を肉付けし、本文を完成・確認して公開可能な状態にする
+- [BLOG-0003] BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する
 ## 現在の作業レーン
 
 **experience-log → Blogger自動化**
