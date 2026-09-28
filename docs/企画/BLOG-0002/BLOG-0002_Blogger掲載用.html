@@ -1,6 +1,18 @@
 <h2>たまたまVAIO Pだった</h2>
 <div style="margin:1.5em 0;padding:1em;border:1px solid #ddd;border-radius:10px;"><p style="margin:0 0 .8em;font-size:.9em;color:#666;"><strong>前の記事</strong></p><a href="https://taka-since2025.blogspot.com/2026/09/ai-blog-start.html" style="display:block;text-decoration:none;color:inherit;"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhcie7P9vI8U2AYUZFEbB6uu24vV8HuGx5ISjzQeot7W1vYM1lTbvh71sKDeibhyJ3hNOw4NpayjF9BTz0DDAb5bO3sUcmxYOyhuim9AlLAnHUdbm_qArj6rRJQN9Itezg7FOIKpCTfN_DlOkgEAi_F3JHt1aWHcmM0hocj5ylfhgPd3HzomJ1ZEYcZZNd6/s320/blog001-01.jpg" alt="窓辺の木製の机に開いた本とペン、コーヒーカップ、鉢植えが置かれ、魔法のような光の輪が浮かぶ部屋のイラスト" style="display:block;width:100%;max-width:320px;height:auto;margin:0 auto 1em;"><p style="margin:0;font-weight:bold;">「便利そうだな」から始まった。AIと一緒にブログを作ろうと思うまで</p></a></div>
-<h3>VAIO Pをサーバーに、という流れになった経緯</h3>
+
+<p><br /></p>
+
+<nav aria-label="目次">
+<ul>
+<li><a href="#toc-1">VAIO Pをサーバーに、という流れになった経緯</a></li>
+<li><a href="#toc-2">Debianを入れて、VAIO Pを動かしていく</a></li>
+<li><a href="#toc-3">DIGA／DiMORAを使った自動化テスト</a></li>
+</ul>
+</nav>
+
+<p><br /></p>
+<h3 id="toc-1">VAIO Pをサーバーに、という流れになった経緯</h3>
 <p>BLOG-0001では、AIとのやりとりから「ブログを作ってみよう」と思ったところまでを書いた。</p>
 <p>最初に考えていたのは、AIとのやりとりでブログ記事を作り、それをBloggerなどにアップロードする仕組みだった。</p>
 <p>最初のChatGPTへの相談は、こうだった。</p>
@@ -19,7 +31,7 @@
 <p>「動くかどうか試したい」</p>
 <p>VAIO PにDebianを入れて、実際に使えるところまで持っていけるのか。</p>
 <p>まずはそこから始めることにした。</p>
-<h3>Debianを入れて、VAIO Pを動かしていく</h3>
+<h3 id="toc-2">Debianを入れて、VAIO Pを動かしていく</h3>
 <p>VAIO Pを実際に動かしてみる。</p>
 <p>使っているのはVGN-P70H/W。Atom Z520の32bit機なので、Debianもi386版を選ぶことになった。</p>
 <p>ここからは、母艦PCでDebianのインストールメディアを作り、VAIO Pに入れていく。</p>
@@ -155,7 +167,7 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>という具合に、一つ問題を解決すると、また次の問題が出てくる状態になった。</p>
 <p>それでも、最初の「VAIO Pをサーバーにしてみたい」というところから考えれば、かなり前に進んでいる。</p>
 <p>そして、この一連の作業をAIとの会話と一緒に記録していくこと自体が、あとになって重要な意味を持つことになる。</p>
-<h3>DIGA／DiMORAを使った自動化テスト</h3>
+<h3 id="toc-3">DIGA／DiMORAを使った自動化テスト</h3>
 <p>VAIO Pを動かしていく一方で、以前からDIGAの録画管理についてClaudeといろいろ試していた。</p>
 <p>このころは、まだ自動化しようなんて考えていなかった。</p>
 <p>スプレッドシートとGASを使って、DIGA 3台の予約情報を管理する仕組みを作っていた。</p>
