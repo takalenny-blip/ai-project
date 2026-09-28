@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-09-27",
+  "updated": "2026-09-28",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -295,31 +295,31 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0001は公開済み。改善候補の整理、次に実施する1件の確定、Blogger側の検索向け説明（meta description）候補文の作成・確認・設定・確認まで完了。現在はGSC「Redirect error」の経過観察中。",
+    "summary": "BLOG-0001は公開済み。GSC「Redirect error」は経過観察中。BLOG-0002「VAIO Pをサーバーにしてみたい」はブロック3まで完成し、PR #756をマージして一区切り。次はBLOG-0003としてGitHub編へ進む。",
     "evidence": {
       "type": "repository_record",
-      "checked_at": "2026-09-27",
+      "checked_at": "2026-09-28",
       "references": [
-        "PR #727",
-        "2026-09-27時点のBLOG-0001改善進捗"
+        "PR #756",
+        "2026-09-28 BLOG-0002終了判断"
       ],
-      "ci_head_commit": "f5f8c07918da6839e35611095f101c392a68d192",
-      "ci": "current-state-guard success; Experience article Blogger draft payload success",
-      "merge_commit_workflow_runs": "PR-triggered runs returned none"
+      "ci_head_commit": "182677715d398cc763f67f4ea204c39a5a08f8cd",
+      "ci": "PR #756 merged; current-state update prepared from canonical main state",
+      "merge_commit_workflow_runs": "not separately rechecked in this closeout"
     },
-    "next_stage_boundary": "BLOG-0001本文・公開・meta description設定は完了。次はGSCの経過観察結果を再確認する。",
-    "next_focus": "BLOG-0001のGSC「Redirect error」について、経過観察期間後にURL検査とインデックス状況を再確認する。"
+    "next_stage_boundary": "BLOG-0002はブロック3までで一区切り。続きはBLOG-0003としてGitHub編へ進む。",
+    "next_focus": "BLOG-0003で、AIとのやりとり・記録・GitHub運用がどうつながったかを一次記録中心で記事化する。"
   },
   "next_step": {
-    "id": "BLOG-0002",
-    "title": "BLOG-0002「VAIO Pをサーバーにしてみたい」を作業稿から完成へ進める",
+    "id": "BLOG-0003",
+    "title": "BLOG-0003「GitHub編」を作成する",
     "priority": 10,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "DIGA／DiMORA部分を含む未完部分を肉付けし、本文を完成・確認して公開可能な状態にする",
-    "evidence": "PR #723で現時点の本文229行を保存済み。PR本文に「次回のDIGA／DiMORA部分の肉付けを前提とした途中稿」と明記。",
+    "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
+    "evidence": "BLOG-0002はPR #756のマージでブロック3まで一区切り。2026-09-28の終了判断で、続きはBLOG-0003としてGitHub編へ進めることを確定。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -468,17 +468,17 @@
       "id": "BLOG-0002",
       "title": "BLOG-0002「VAIO Pをサーバーにしてみたい」を作業稿から完成へ進める",
       "priority": 10,
-      "status": "queued",
+      "status": "done",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "DIGA／DiMORA部分を含む未完部分を肉付けし、本文を完成・確認して公開可能な状態にする",
-      "evidence": "PR #723で現時点の本文229行を保存済み。PR本文に「次回のDIGA／DiMORA部分の肉付けを前提とした途中稿」と明記。",
+      "evidence": "PR #756をマージ済み。BLOG-0002はブロック3までで一区切りとする。merge commit 182677715d398cc763f67f4ea204c39a5a08f8cd。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-27",
-      "updated_at": "2026-09-27",
+      "updated_at": "2026-09-28",
       "prerequisites": []
     },
     {
@@ -530,6 +530,23 @@
       "environment": "work_pc",
       "created_at": "2026-09-27",
       "updated_at": "2026-09-27",
+      "prerequisites": []
+    },
+    {
+      "id": "BLOG-0003",
+      "title": "BLOG-0003「GitHub編」を作成する",
+      "priority": 10,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "experience_log_to_blogger",
+      "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
+      "evidence": "BLOG-0002はPR #756のマージでブロック3まで一区切り。2026-09-28の終了判断で、続きはBLOG-0003としてGitHub編へ進めることを確定。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-09-28",
+      "updated_at": "2026-09-28",
       "prerequisites": []
     }
   ]
