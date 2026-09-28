@@ -4,7 +4,7 @@
 <p>BLOG-0001では、AIとのやりとりから「ブログを作ってみよう」と思ったところまでを書いた。</p>
 <p>最初に考えていたのは、AIとのやりとりでブログ記事を作り、それをBloggerなどにアップロードする仕組みだった。</p>
 <p>最初のChatGPTへの相談は、こうだった。</p>
-<p>「AIとのやりとりで手軽にブログ記事を作成し、それを無料のワードプレスやブロガーなどにアップロードする仕組みを作りたい。何かよい方法はあるか？」</p>
+<blockquote style="margin:.8em 0;padding:.8em 1em;border-left:4px solid #ccc;"><p>「AIとのやりとりで手軽にブログ記事を作成し、それを無料のワードプレスやブロガーなどにアップロードする仕組みを作りたい。何かよい方法はあるか？」</p></blockquote>
 <p>この時点では、AIに記事を書いてもらい、自分が確認して公開する。その一連の作業を、自宅のPCなどからできるようにする、というイメージだった。</p>
 <p>その方法を考えていく中で、LinuxやPython、Blogger APIなどの話が出てきた。そして、どうせなら家にある古いVAIO Pを使ってみたらどうか、という話になっていった。</p>
 <p>VAIO Pは、以前から家にあった小さなノートPCだ。</p>
@@ -106,7 +106,7 @@
 <p>そこで、NetworkManagerの状態を確認する。</p>
 <pre><code>nmcli device</code></pre>
 <p>すると、無線LANインターフェース wlp2s0 が「unmanaged」、つまり「管理なし」になっていた。</p>
-<p>たか：</p>
+<p><strong>たか：</strong></p>
 <p>「管理なし」</p>
 <p>ここから原因を切り分ける。</p>
 <p>まずNetworkManagerに管理させてみる。</p>
@@ -197,16 +197,16 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>ここを追えば、DiMORAがどこから番組情報を持ってきているのか分かるかもしれない。</p>
 <p>AIから指示をもらいながら、実際のHTMLを確認していく。</p>
 <p>すると、ページの中には、</p>
-<p>`favoriteProgram-14.6.0.js`</p>
+<p><code>favoriteProgram-14.6.0.js</code></p>
 <p>というJavaScriptが読み込まれていることが分かった。</p>
 <p>「このJavaScriptを見てみよう」</p>
 <p>そんな具合に、一つ分かると次を調べる。</p>
 <p>その中で「もっと見る」の処理を追っていくと、</p>
-<p>`FavoriteProgramController.prototype.addFavPgm()`</p>
+<p><code>FavoriteProgramController.prototype.addFavPgm()</code></p>
 <p>が出てきた。</p>
 <p>さらに追う。</p>
 <p>すると、その処理が参照していたのが、</p>
-<p>`GL_FAVPGM_DATA.record`</p>
+<p><code>GL_FAVPGM_DATA.record</code></p>
 <p>だった。</p>
 <p>ここで、だんだん見えてきた。</p>
 <p>「もっと見る」を押したから、次の10件を新しくサーバーから取りに行っているのではない。</p>
