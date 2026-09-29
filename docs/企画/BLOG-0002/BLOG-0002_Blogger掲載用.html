@@ -41,7 +41,7 @@
 <p>VAIO Pを実際に動かしてみる。</p>
 <p>使っているのはVGN-P70H/W。Atom Z520の32bit機なので、Debianもi386版を選ぶことになった。</p>
 <p>ここからは、母艦PCでDebianのインストールメディアを作り、VAIO Pに入れていく。</p>
-<p>このとき、JUNから「写真で残したら？」というアドバイスもあった。</p>
+<p>このとき、JUN（Gemini）から「写真で残したら？」というアドバイスもあった。</p>
 <p>そこで、たかもこう返している。</p>
 <p>「写真で残したら？のアドバイスもよろしく！母艦PCはある。debianのダウンロードからだね。ここから一緒にやろうぜ！」</p>
 <p>ただ、単に写真を撮るだけではなく、あとからこの経験そのものを記事にできないか、ということも考えていた。</p>
@@ -127,7 +127,6 @@
 <pre><code>nmcli device</code></pre>
 <figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1790667244445.jpg" alt="VAIO PのDebian環境でネットワーク確認コマンドを実行しているターミナル画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">VAIO P上のDebian環境にて、無線LANやネットワークデバイスの状況を確認するため各種コマンド（rfkill、ip link、nmcliなど）を実行している様子。</figcaption></figure>
 <p>すると、無線LANインターフェース wlp2s0 が「unmanaged」、つまり「管理なし」になっていた。</p>
-<p><strong>たか：</strong></p>
 <p>「管理なし」</p>
 <p>ここから原因を切り分ける。</p>
 <p>まずNetworkManagerに管理させてみる。</p>
