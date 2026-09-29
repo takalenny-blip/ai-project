@@ -1,0 +1,284 @@
+<h2>そういえば、VAIO Pがあった</h2>
+<div style="margin:1.5em 0;padding:1em;border:1px solid #ddd;border-radius:10px;"><p style="margin:0 0 .8em;font-size:.9em;color:#666;"><strong>前の記事</strong></p><a href="https://taka-since2025.blogspot.com/2026/09/ai-blog-start.html" style="display:block;text-decoration:none;color:inherit;"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhcie7P9vI8U2AYUZFEbB6uu24vV8HuGx5ISjzQeot7W1vYM1lTbvh71sKDeibhyJ3hNOw4NpayjF9BTz0DDAb5bO3sUcmxYOyhuim9AlLAnHUdbm_qArj6rRJQN9Itezg7FOIKpCTfN_DlOkgEAi_F3JHt1aWHcmM0hocj5ylfhgPd3HzomJ1ZEYcZZNd6/s320/blog001-01.jpg" alt="窓辺の木製の机に開いた本とペン、コーヒーカップ、鉢植えが置かれ、魔法のような光の輪が浮かぶ部屋のイラスト" style="display:block;width:100%;max-width:320px;height:auto;margin:0 auto 1em;"><p style="margin:0;font-weight:bold;">「便利そうだな」から始まった。AIと一緒にブログを作ろうと思うまで</p></a></div>
+
+<p><br /></p>
+
+<nav aria-label="目次">
+<ul>
+<li><a href="#toc-1">VAIO Pをサーバーに、という流れになった経緯</a></li>
+<li><a href="#toc-2">Debianを入れて、VAIO Pを動かしていく</a></li>
+<li><a href="#toc-3">DIGA／DiMORAの自動化を考えてみる</a></li>
+</ul>
+</nav>
+
+<p><br /></p>
+
+<h3 id="toc-1">VAIO Pをサーバーに、という流れになった経緯</h3>
+<p>BLOG-0001では、AIとのやりとりから「ブログを作ってみよう」と思ったところまでを書いた。</p>
+<p>そういえば、家にVAIO Pがあった。以前はサーバーとして使っていたが、いつの間にか使わなくなっていた。</p>
+<p>せっかくあるのだから、もう一度何かに使えないだろうか。</p>
+<p>最初に考えていたのは、AIとのやりとりでブログ記事を作り、それをBloggerなどにアップロードする仕組みだった。</p>
+<p>最初のChatGPTへの相談は、こうだった。</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「AIとのやりとりで手軽にブログ記事を作成し、それを無料のワードプレスやブロガーなどにアップロードする仕組みを作りたい。何かよい方法はあるか？」</p></blockquote>
+<p>この時点では、AIに記事を書いてもらい、自分が確認して公開する。その一連の作業を、自宅のPCなどからできるようにする、というイメージだった。</p>
+<p>その方法を考えていく中で、LinuxやPython、Blogger APIなどの話が出てきた。そこで、以前サーバーとして使っていたVAIO Pを、もう一度使ってみたらどうかと考えた。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「使えるかな？」</div></div>
+<blockquote style="margin:0.8em 0;padding:0.8em 1em;border-left:4px solid #ccc;"><p>「お、いけるかも」</p></blockquote>
+<p>そんな感じで、VAIO Pをもう一度サーバーとして使ってみることになった。</p>
+<p>そこで、次に気になったのがストレージだった。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「vaiopのssd換装だけど、前にlarkboxというミニpcで使ったssdならあるんだけど、再利用可能かな？」</div></div>
+<p>LarkBoxで使っていたSSDをVAIO Pに移せるのか。</p>
+<p>せっかくならSSDに換装して、VAIO Pを少しでも快適にできないかと考えた。</p>
+<p>ただ、実際に確認していくと、SSD換装には失敗する可能性もある。そこで、最初からSSD換装に賭けるのではなく、まずは現在のHDDを使ってDebianを入れ、動かしてみることにした。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「動くかどうか試したい」</div></div>
+<p>VAIO PにDebianを入れて、実際に使えるところまで持っていけるのか。</p>
+<p>まずは、そこから始めることにした。</p><p><br /></p>
+
+<h3 id="toc-2">Debianを入れて、VAIO Pを動かしていく</h3>
+<p>いよいよVAIO Pを実際に動かしてみる。</p>
+<p>使っているのはVGN-P70H/W。Atom Z520の32bit機なので、Debianもi386版を選ぶことになった。</p>
+<p>ここからは、母艦PCでDebianのインストールメディアを作り、VAIO Pにインストールしていく。</p>
+<p>このとき、JUN（Gemini）から「写真で残したら？」というアドバイスもあった。</p>
+<p>そこで、たかはこう返している。</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「写真で残したら？のアドバイスもよろしく！母艦PCはある。debianのダウンロードからだね。ここから一緒にやろうぜ！」</p></blockquote>
+<p><strong style="color:red;background:#fff59d;">ただ、単に作業の写真を残すだけではなく、その経験そのものをあとから記事にできないか、ということも考えていた。</strong></p>
+<p>まずはDebianをダウンロードする。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「今、Debianダウンロード中」</div></div>
+<p>ダウンロードしたのは、Debian 12.12.0のi386版netinstイメージ。</p>
+<p>次にRufusを使って、USBメモリに書き込む。</p>
+<p>画面を見ながら進めていると、AIが一度、Windowsの通常のフォーマット画面だと勘違いした。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「ん？rufasだよ」</div></div>
+<p>AIもすぐに勘違いを認めた。</p>
+<p>Rufusの画面には、ボリュームラベルとして「Debian 12.12.0 i386 n」と表示されていた。</p>
+<p>USBメディアができた。</p>
+<p>いよいよVAIO Pを起動する。</p>
+<p>ところが、ここで最初のトラブル。</p>
+<blockquote style="margin:0.8em 0;padding:0.8em 1em;border-left:4px solid #ccc;"><p>「何だろ？電源入らん」</p></blockquote>
+<p>電源が入らない。</p>
+<p>充電ランプを見ると赤点滅している。</p>
+<p>古いVAIOなので、バッテリーの状態も気になる。</p>
+<p>そこで、バッテリーを外してACアダプターだけで起動してみることになった。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「バッテリー外したら起動。」</div></div>
+<p>さっきまで電源が入らなかったVAIO Pが起動した。</p>
+<p>しかも、USBからDebianのインストーラーまで立ち上がった。</p>
+<p>いきなり「古いPCだから壊れているのか？」と思ったが、実際にはバッテリーを外すことで先へ進めた。</p>
+<p>ここからDebianのインストールが始まる。</p>
+<p>言語やキーボード、ネットワークなどを、画面に従って設定していく。</p>
+<p>途中で、VAIO Pの無線LANも認識された。</p>
+<p>インストール先のストレージについては、以前のSSD換装の話があったため、ここでも確認が必要だった。</p>
+<p>実際には、SSD換装は見送り、今回は元のHDDにDebianを入れることにした。</p>
+<p>ところが、ここでAIが以前の状況を取り違えた。</p>
+<p>JUNが、VAIO PにはKingdataの64GB SSDが入っているという前提で話し始めた。</p>
+<p>そこで、たかが訂正する。</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「換装は見送り、HDDにインストールする方針にしたんだぜ？SSDは外付けで活用しようかって話したじゃん」</p></blockquote>
+<p>この場面は、単なるインストール手順では終わらなかった。</p>
+<p>AIと一緒に作業していると、以前の会話を正確に引き継げているとは限らない。</p>
+<p>だから、実際の作業をしている人間が「今どうなっているか」を確認しながら進める必要がある。</p>
+<p>今回は、その訂正をして、元のHDDへのインストールを続けた。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「今はベースシステムのインストール中」</div></div>
+<p>あとは待つしかない。</p>
+<p>HDDなので、とにかく時間がかかる。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「ソフトウェアの選択とインストール、5%」</div></div>
+<p>少しずつ数字が進む。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「今はソフトウェアの選択とインストール、50%」</div></div>
+<p>途中で、インストールそのものだけでなく、この先の最終的なゴールについても気になってきた。</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「それってインストールでしょ？そうじゃなくて、最終ゴールまでの。」</p></blockquote>
+<p>Debianを入れること自体が目的ではない。</p>
+<p>VAIO Pをサーバーとして使い、その先でブログや自動化につなげていきたい。</p>
+<p>そのための最初の一歩が、今やっているDebianのインストールである。</p>
+<p>インストールはさらに進んでいく。</p>
+<p>57%。</p>
+<p>94%。</p>
+<p>そしてGRUBの設定。</p>
+<p>「インストールを終了しています」が25%まで進んだところで、ようやく終わりが見えてきた。</p>
+<p>長かった。</p>
+<p>そして、ついにインストールが完了した。</p>
+<p>再起動する。</p>
+<p>ここまで来ても、本当にHDDからDebianが起動するのかはまだ分からない。</p>
+<blockquote style="margin:0.8em 0;padding:0.8em 1em;border-left:4px solid #ccc;"><p>「うまく起動したぜ！」</p></blockquote>
+<p>VAIO Pが起動した。</p>
+<p>デスクトップにはLXDEが表示された。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「LXDEシンプルでいいな！」</div></div>
+<p>古いVAIO Pで、DebianとLXDEが動いた。</p>
+<p>まずは、Debianのインストール成功だ。</p>
+<p>ただ、ここで終わりではなかった。</p>
+<p>次に確認したかったのは、ネットワークだった。</p>
+<p>ところが、Wi-Fiが使えない。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「Wi-Fiない？」</div></div>
+<p>無線LANが見えない。</p>
+<p>ここからは、画面を見ながらコマンドを一つずつ試していく。</p>
+<p>まず、ネットワークインターフェースを確認する。</p>
+<pre><code>rfkill list</code></pre>
+<p>続いて、</p>
+<pre><code>ip link</code></pre>
+<p>ネットワーク管理にはNetworkManagerを使うことにして、</p>
+<pre><code>sudo nmtui</code></pre>
+<p>を起動する。</p>
+<p>しかし、Wi-Fiが出てこない。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「見えねー」</div></div>
+<p>そこで、NetworkManagerの状態を確認する。</p>
+<pre><code>nmcli device</code></pre>
+<p>すると、無線LANインターフェース wlp2s0 が「unmanaged」、つまり「管理なし」になっていた。</p>
+<p>たか：</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「管理なし」</div></div>
+<p>ここから原因を切り分ける。</p>
+<p>まずNetworkManagerに管理させてみる。</p>
+<pre><code>sudo nmcli device set wlp2s0 managed yes</code></pre>
+<p>それでも変わらない。</p>
+<p>そこで、設定ファイルを確認する。</p>
+<pre><code>cat /etc/network/interfaces</code></pre>
+<p>すると、wlp2s0 に関する設定が残っていることが分かった。</p>
+<p>NetworkManagerと、以前のネットワーク設定がぶつかっているらしい。</p>
+<p>そこで、無線LAN関連の設定をコメントアウトする。</p>
+<pre><code>sudo sed -i '/wlp2s0/s/^/#/' /etc/network/interfaces
+
+sudo sed -i '/wpa-ssid/s/^/#/' /etc/network/interfaces
+
+sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
+<p>続いてNetworkManagerを再起動。</p>
+<pre><code>sudo systemctl restart NetworkManager</code></pre>
+<p>そして、もう一度確認する。</p>
+<pre><code>nmcli device</code></pre>
+<p>今度は wlp2s0 が「管理なし」ではなく、「切断済み」に変わった。</p>
+<p>少なくとも、NetworkManagerが無線LANを管理できる状態になった。</p>
+<p>そして、</p>
+<pre><code>sudo nmtui</code></pre>
+<p>を起動する。</p>
+<p>今度はWi-FiのSSIDが表示された。</p>
+<blockquote style="margin:0.8em 0;padding:0.8em 1em;border-left:4px solid #ccc;"><p>「出たーーー」</p></blockquote>
+<p>ここからWi-Fiを選択して、接続する。</p>
+<p>接続後、iPhoneのUSBテザリングを外して、Wi-Fiだけで本当にインターネットにつながっているか確認する。</p>
+<pre><code>ping -c 3 8.8.8.8</code></pre>
+<p>そして、</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「繋がった。画面はとじていいの？」</div></div>
+<p>画面を閉じて、最後に確認する。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「オケ」</div></div>
+<p>これで、Wi-Fiも復旧した。</p>
+<p>ここまで来ると、VAIO Pが少しずつ「使える機械」になってきた。</p>
+<p>ただ、実際に使ってみると、また問題が出てきた。</p>
+<p>そこで、Firefoxを起動する。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「firefoxは変わらず重い。。。」</div></div>
+<p>Debianは起動した。</p>
+<p>LXDEも動いた。</p>
+<p>Wi-Fiもつながった。</p>
+<p>でも、Firefoxは重い。</p>
+<p>そこで、次は軽量なブラウザを探すことになった。</p>
+<p>こうしてVAIO Pは、</p>
+<div style="margin:1.5em 0;padding:1em;border:1px solid #ddd;border-radius:10px;">
+<p style="margin:0 0 .8em;font-weight:bold;">VAIO Pを動かしていく中で起きたこと</p>
+<div style="text-align:center;">
+<p>電源が入らない</p>
+<p>↓</p>
+<p>バッテリーを外す</p>
+<p>↓</p>
+<p>Debianを入れる</p>
+<p>↓</p>
+<p>Wi-Fiが見えない</p>
+<p>↓</p>
+<p>コマンドで原因を切り分ける</p>
+<p>↓</p>
+<p>NetworkManagerで復旧</p>
+<p>↓</p>
+<p>Firefoxが重い</p>
+</div>
+</div>
+<p>という具合に、一つ問題を解決すると、また次の問題が出てくる。</p>
+<p>それでも、最初に「VAIO Pをサーバーにしてみたい」と考えたところから、かなり前に進んだ。</p>
+<p>そして、この一連の作業をAIとの会話と一緒に記録していくことが、あとになって重要な意味を持つ。</p><p><br /></p>
+
+<h3 id="toc-3">DIGA／DiMORAの自動化を考えてみる</h3>
+<p>VAIO Pを動かしていく一方で、以前からDIGAの録画管理についてもクロウ（Claude）と試していた。</p>
+<p>このころは、まだ自動化まで考えていなかった。</p>
+<p>スプレッドシートとGASを使って、DIGA 3台の予約情報を管理していた。</p>
+<p>最初にクロウに相談したのは、こんな内容だった。</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「Diga3台の予約情報を見て、録画の管理データベースを作りたい。ネットからもってくる一例はこちら。データは機種ごとにグーグルドライブ内のグーグルドキュメントに貼り付けようと思う。日時変更など警告メールを出すようにしてほしい。また、次回の予約がないよ、とか。現在の録画話数の自動更新もほしい。シリーズ終了の連絡もほしい。今までの録画志向から、番組おすすめもほしい。あと他に提案とか質問とかある？」</p></blockquote>
+<p>クロウと相談しながら、貼り付けたDIGAの情報を使って、予約の変化をチェックしていった。</p>
+<p>お気に入り番組についても、最初はDiMORAからコピーした内容を、機種ごとのGoogleドキュメントに必ず貼り付け、それを「その時点のお気に入り」として扱っていた。</p>
+<p>ところが、実際に使っていると、もっと手間を減らしたくなってきた。</p>
+<p>たとえば、お気に入りに変更があったときだけGoogleドキュメントに貼り付けるようにした。</p>
+<p>そこでクロウに、仕様を修正してもらった。</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「待って。お気に入りの中身が空の場合は、内部で持ったお気に入り情報で進める。中身があるときだけ、お気に入りの加除チェックをする。これは機種ごとに制御したい。（例えば、diga1,2のお気に入りは空だったから加除チェックは走らない。diga3に入ってるから加除チェックを走らす。）内部情報でお気に入りに機種情報も加える必要あり。」</p></blockquote>
+<p>さらに、実際にチェック結果のメールを見ると、別のところも気になった。</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「これは、今日のチェック結果メール。内容はいいんだけど、いつの放送分なのか、日時と曜日を加えてほしい。」</p></blockquote>
+<p>クロウに修正してもらった。</p>
+<p>すると次に、</p>
+<blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「ゴメン。あとチャンネルも必須。可能であれば機種も。」</p></blockquote>
+<p>となった。</p>
+<p>こうやって、作って、使って、気になったところを直していった。</p>
+<p>ただ、一つだけ面倒なことが残っていた。</p>
+<p><strong>毎回、DiMORAの画面をコピーして貼り付けること。</strong></p>
+<p>ここが単純に面倒だった。</p>
+<p>この時点では、まだDIGAの自動化を考えていたわけではない。</p>
+<p>そんな中で、別のところから「ブラウザを使って情報を取得する」という発想を知ることになった。</p>
+<p>クロウのブラウザ連携を知ったことをきっかけに、Geminiにも聞いてみた。</p>
+<p><strong style="color:red;background:#fff59d;">Pythonでブラウザから情報を取得できる。それを知ったとき、DIGAのことと急につながった。</strong></p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「あ、これDIGAでも使えるかも」</div></div>
+<p>そう思った。</p>
+<p>これなら、コピペしなくて済む。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">うまくしたらラクになるぞー。</div></div>
+<p>でも、すぐに次の疑問が出てきた。</p>
+<div style="margin:1.5em 0;"><div style="display:inline-block;position:relative;margin-left:1em;padding:.8em 1.1em;background:#fff8e7;border:1px solid #ccc;border-radius:12px;">「DiMORAからうまく情報とれる？」</div></div>
+<p>そこで、AIと一緒にDiMORAの画面を調べることにした。</p>
+<p>まず目を付けたのは、お気に入り番組一覧の「もっと見る」だった。</p>
+<p>画面には番組が並んでいて、さらに先を見るための「もっと見る」が表示されている。</p>
+<p>「次の10件」がどうやって表示されているのかを調べる。</p>
+<p>ここを追えば、DiMORAがどこから番組情報を持ってきているのか分かるかもしれない。</p>
+<p>AIから指示をもらいながら、実際のHTMLを確認していった。</p>
+<p>すると、ページの中に、</p>
+<p><code>favoriteProgram-14.6.0.js</code></p>
+<p>というJavaScriptが読み込まれていることが分かった。</p>
+<p>「このJavaScriptを見てみよう」</p>
+<p>そんな具合に、一つ分かると、次を調べる。</p>
+<p>その中で、「もっと見る」の処理を追っていくと、</p>
+<p><code>FavoriteProgramController.prototype.addFavPgm()</code></p>
+<p>が出てきた。</p>
+<p>さらに追っていく。</p>
+<p>すると、その処理が参照していたのは、</p>
+<p><code>GL_FAVPGM_DATA.record</code></p>
+<p>だった。</p>
+<p>ここで、だんだん仕組みが見えてきた。</p>
+<p>「もっと見る」を押したから、次の10件を新しくサーバーから取りに行っているのではない。</p>
+<p>ページには、すでにお気に入り番組のデータが入っている。</p>
+<p>「もっと見る」は、そのデータを10件ずつ表示している。</p>
+<p>そこでAIから、ページ内に持っているデータを実際に確認する方法を教えてもらい、実行してみる。</p>
+<p>結果をAIに返してみる。</p>
+<p>AIがまた「ここを見てみよう」と指示してくる。</p>
+<p>そんなやりとりを何度か繰り返して、ようやくお気に入り番組のデータが見えてきた。</p>
+<p>そして、</p>
+<blockquote style="margin:0.8em 0;padding:0.8em 1em;border-left:4px solid #ccc;"><p>「おお、取れた！」</p></blockquote>
+<p>実際に、DiMORAのお気に入り番組の情報を取得できた。</p>
+<p>そこには、番組の日付や時間、放送局、タイトル、録画モード、曜日、番組URLなど、録画管理に使えそうな情報が入っている。</p>
+<p>ここで初めて、実際のデータを見て「コピペしなくてもいけるかもしれない」と確認できた。</p>
+<p>それまでのGASの仕組みは、</p>
+<div style="margin:1.5em 0;padding:1em;border:1px solid #ddd;border-radius:10px;">
+<p style="margin:0 0 .8em;font-weight:bold;">以前の方法</p>
+<div style="text-align:center;">
+<p>DiMORAを開く</p>
+<p>↓</p>
+<p>お気に入りをコピーする</p>
+<p>↓</p>
+<p>Googleドキュメントに貼る</p>
+<p>↓</p>
+<p>GASでチェックする</p>
+</div>
+</div>
+<p>だった。</p>
+<p>それが今度は、こう変わった。</p>
+<div style="margin:1.5em 0;padding:1em;border:1px solid #ddd;border-radius:10px;">
+<p style="margin:0 0 .8em;font-weight:bold;">今回の方法</p>
+<div style="text-align:center;">
+<p>DiMORA</p>
+<p>↓</p>
+<p>ブラウザから情報を取得</p>
+<p>↓</p>
+<p>必要なデータを取り出す</p>
+<p>↓</p>
+<p>保存・比較する</p>
+</div>
+</div>
+<p>という形になった。</p>
+<p>ただ、この時点では「VAIO Pですべて自動化できた」わけではない。</p>
+<p>まず別のPCでDiMORAのHTMLとJavaScriptを調べ、AIの指示を受けながらページ内部のデータを追いかけていった。</p>
+<p>次に必要なのは、ログインしたDiMORAのページからそのデータを安全に読み出し、VAIO P上のPythonで扱えるようにすることだった。</p>
+<p>最初はただ、「コピペが面倒だな」と思っていただけだった。</p>
+<p>それが、クロウ、Gemini、Python、ブラウザ、DiMORAと話をつないでいくうちに、いつの間にかWebページの中身まで掘ることになった。</p>
