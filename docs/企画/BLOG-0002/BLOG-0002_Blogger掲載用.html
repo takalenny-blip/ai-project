@@ -27,7 +27,9 @@
 <p>そこで、まず気になったのがストレージだった。</p>
 <p>「vaiopのssd換装だけど、前にlarkboxというミニpcで使ったssdならあるんだけど、再利用可能かな？」</p>
 <p>LarkBoxで使っていたSSDをVAIO Pに移せるのか。</p>
+<figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1788348193187.jpg" alt="LarkBoxで使われていたKINGDATA製64GBのSSD単体" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">LarkBoxから取り外したKINGDATA製64GBのSSD。これをVAIO Pに流用できないか検討した。</figcaption></figure>
 <p>せっかくならSSDに換装して、VAIO Pを少しでも快適にできないかと考えた。</p>
+<figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1788348193194.jpg" alt="分解中のミニPC LarkBoxの内部とKINGDATA製SSD、精密ドライバー" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">LarkBoxの分解作業中の様子。内部に収められたKINGDATA製SSDと取り外したネジ、ドライバー。</figcaption></figure>
 <p>ただ、実際に確認していくと、SSD換装には失敗する可能性もある。そこで、最初からSSD換装に賭けるのではなく、まずは現在のHDDを使ってDebianを入れて動かしてみることにした。</p>
 <p>「動くかどうか試したい」</p>
 <p>VAIO PにDebianを入れて、実際に使えるところまで持っていけるのか。</p>
@@ -51,6 +53,7 @@
 <p>「ん？rufasだよ」</p>
 <p>AIもすぐに勘違いを認めた。</p>
 <p>Rufusの画面には、ボリュームラベルとして「Debian 12.12.0 i386 n」と表示されていた。</p>
+<figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1788348193181.jpg" alt="RufusでDebian 12.12.0 i386の書き込みを行っている画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">Rufusを使ってUSBメモリにDebian 12.12.0 i386版の書き込みを行っている様子。ボリュームラベルに「Debian 12.12.0 i386 n」が表示されている。</figcaption></figure>
 <p>USBメディアができた。</p>
 <p>いよいよVAIO Pを起動する。</p>
 <p>ところが、ここで最初のトラブル。</p>
@@ -103,6 +106,7 @@
 <p>デスクトップにはLXDEが表示された。</p>
 <p>「LXDEシンプルでいいな！」</p>
 <p>古いVAIO Pに、DebianとLXDEが動いている。</p>
+<figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1790667299791.jpg" alt="VAIO P上のDebian環境でシステム情報やメモリ・ディスク容量を確認しているターミナル画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">VAIO P（VGN-P70H_W）上のDebian環境にて、カーネルバージョン、メモリ使用量（free -h）、ディスク使用量（df -h）、およびマウント構成やデバイス（lsblk）を確認している様子。</figcaption></figure>
 <p>まずは成功だ。</p>
 <p>ただし、ここで終わりではなかった。</p>
 <p>次に確認したかったのはネットワーク。</p>
@@ -121,6 +125,7 @@
 <p>「見えねー」</p>
 <p>そこで、NetworkManagerの状態を確認する。</p>
 <pre><code>nmcli device</code></pre>
+<figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1790667244445.jpg" alt="VAIO PのDebian環境でネットワーク確認コマンドを実行しているターミナル画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">VAIO P上のDebian環境にて、無線LANやネットワークデバイスの状況を確認するため各種コマンド（rfkill、ip link、nmcliなど）を実行している様子。</figcaption></figure>
 <p>すると、無線LANインターフェース wlp2s0 が「unmanaged」、つまり「管理なし」になっていた。</p>
 <p><strong>たか：</strong></p>
 <p>「管理なし」</p>
