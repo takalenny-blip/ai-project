@@ -22,15 +22,15 @@
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「AIとのやりとりで手軽にブログ記事を作成し、それを無料のワードプレスやブロガーなどにアップロードする仕組みを作りたい。何かよい方法はあるか？」</p></blockquote>
 <p>この時点では、AIに記事を書いてもらい、自分が確認して公開する。その一連の作業を、自宅のPCなどからできるようにする、というイメージだった。</p>
 <p>その方法を考えていく中で、LinuxやPython、Blogger APIなどの話が出てきた。そこで、以前サーバーとして使っていたVAIO Pを、もう一度使ってみたらどうかと考えた。</p>
-<p>「使えるかな？」</p>
-<p>「お、いけるかも」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「使えるかな？」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「お、いけるかも」</p>
 <p>そんな感じで、VAIO Pをもう一度サーバーとして使ってみることになった。</p>
 <p>そこで、次に気になったのがストレージだった。</p>
-<p>「vaiopのssd換装だけど、前にlarkboxというミニpcで使ったssdならあるんだけど、再利用可能かな？」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「vaiopのssd換装だけど、前にlarkboxというミニpcで使ったssdならあるんだけど、再利用可能かな？」</p>
 <p>LarkBoxで使っていたSSDをVAIO Pに移せるのか。</p>
 <p>せっかくならSSDに換装して、VAIO Pを少しでも快適にできないかと考えた。</p>
 <p>ただ、実際に確認していくと、SSD換装には失敗する可能性もある。そこで、最初からSSD換装に賭けるのではなく、まずは現在のHDDを使ってDebianを入れ、動かしてみることにした。</p>
-<p>「動くかどうか試したい」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「動くかどうか試したい」</p>
 <p>VAIO PにDebianを入れて、実際に使えるところまで持っていけるのか。</p>
 <p>まずは、そこから始めることにした.</p><p><br /></p>
 
@@ -43,22 +43,22 @@
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「写真で残したら？のアドバイスもよろしく！母艦PCはある。debianのダウンロードからだね。ここから一緒にやろうぜ！」</p></blockquote>
 <p>ただ、単に作業の写真を残すだけではなく、その経験そのものをあとから記事にできないか、ということも考えていた。</p>
 <p>まずはDebianをダウンロードする。</p>
-<p>「今、Debianダウンロード中」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「今、Debianダウンロード中」</p>
 <p>ダウンロードしたのは、Debian 12.12.0のi386版netinstイメージ。</p>
 <p>次にRufusを使って、USBメモリに書き込む。</p>
 <p>画面を見ながら進めていると、AIが一度、Windowsの通常のフォーマット画面だと勘違いした。</p>
-<p>「ん？rufasだよ」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「ん？rufasだよ」</p>
 <p>AIもすぐに勘違いを認めた。</p>
 <p>Rufusの画面には、ボリュームラベルとして「Debian 12.12.0 i386 n」と表示されていた。</p>
 <p>USBメディアができた。</p>
 <p>いよいよVAIO Pを起動する。</p>
 <p>ところが、ここで最初のトラブル。</p>
-<p>「何だろ？電源入らん」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「何だろ？電源入らん」</p>
 <p>電源が入らない。</p>
 <p>充電ランプを見ると赤点滅している。</p>
 <p>古いVAIOなので、バッテリーの状態も気になる。</p>
 <p>そこで、バッテリーを外してACアダプターだけで起動してみることになった。</p>
-<p><strong style="color: red; background-color: yellow;">「バッテリー外したら起動。」</strong></p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「バッテリー外したら起動。」</p>
 <p>さっきまで電源が入らなかったVAIO Pが起動した。</p>
 <p>しかも、USBからDebianのインストーラーまで立ち上がった。</p>
 <p>いきなり「古いPCだから壊れているのか？」と思ったが、実際にはバッテリーを外すことで先へ進めた。</p>
@@ -75,12 +75,12 @@
 <p>AIと一緒に作業していると、以前の会話を正確に引き継げているとは限らない。</p>
 <p>だから、実際の作業をしている人間が「今どうなっているか」を確認しながら進める必要がある。</p>
 <p>今回は、その訂正をして、元のHDDへのインストールを続けた。</p>
-<p>「今はベースシステムのインストール中」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「今はベースシステムのインストール中」</p>
 <p>あとは待つしかない。</p>
 <p>HDDなので、とにかく時間がかかる。</p>
-<p>「ソフトウェアの選択とインストール、5%」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「ソフトウェアの選択とインストール、5%」</p>
 <p>少しずつ数字が進む。</p>
-<p>「今はソフトウェアの選択とインストール、50%」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「今はソフトウェアの選択とインストール、50%」</p>
 <p>途中で、インストールそのものだけでなく、この先の最終的なゴールについても気になってきた。</p>
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「それってインストールでしょ？そうじゃなくて、最終ゴールまでの。」</p></blockquote>
 <p>Debianを入れること自体が目的ではない。</p>
@@ -98,13 +98,13 @@
 <p>そして、「うまく起動したぜ！」</p>
 <p>VAIO Pが起動した。</p>
 <p>デスクトップにはLXDEが表示された。</p>
-<p>「LXDEシンプルでいいな！」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「LXDEシンプルでいいな！」</p>
 <p>古いVAIO Pで、DebianとLXDEが動いた。</p>
 <p>まずは、Debianのインストール成功だ。</p>
 <p>ただ、ここで終わりではなかった。</p>
 <p>次に確認したかったのは、ネットワークだった。</p>
 <p>ところが、Wi-Fiが使えない。</p>
-<p>「Wi-Fiない？」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「Wi-Fiない？」</p>
 <p>無線LANが見えない。</p>
 <p>ここからは、画面を見ながらコマンドを一つずつ試していく。</p>
 <p>まず、ネットワークインターフェースを確認する。</p>
@@ -115,12 +115,12 @@
 <pre><code>sudo nmtui</code></pre>
 <p>を起動する。</p>
 <p>しかし、Wi-Fiが出てこない。</p>
-<p>「見えねー」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「見えねー」</p>
 <p>そこで、NetworkManagerの状態を確認する。</p>
 <pre><code>nmcli device</code></pre>
 <p>すると、無線LANインターフェース wlp2s0 が「unmanaged」、つまり「管理なし」になっていた。</p>
 <p>たか：</p>
-<p>「管理なし」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「管理なし」</p>
 <p>ここから原因を切り分ける。</p>
 <p>まずNetworkManagerに管理させてみる。</p>
 <pre><code>sudo nmcli device set wlp2s0 managed yes</code></pre>
@@ -145,19 +145,19 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <pre><code>sudo nmtui</code></pre>
 <p>を起動する。</p>
 <p>今度はWi-FiのSSIDが表示された。</p>
-<p>「出たーーー」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「出たーーー」</p>
 <p>ここからWi-Fiを選択して、接続する。</p>
 <p>接続後、iPhoneのUSBテザリングを外して、Wi-Fiだけで本当にインターネットにつながっているか確認する。</p>
 <pre><code>ping -c 3 8.8.8.8</code></pre>
 <p>そして、</p>
-<p>「繋がった。画面はとじていいの？」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「繋がった。画面はとじていいの？」</p>
 <p>画面を閉じて、最後に確認する。</p>
-<p>「オケ」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「オケ」</p>
 <p>これで、Wi-Fiも復旧した。</p>
 <p>ここまで来ると、VAIO Pが少しずつ「使える機械」になってきた。</p>
 <p>ただ、実際に使ってみると、また問題が出てきた。</p>
 <p>そこで、Firefoxを起動する。</p>
-<p>「firefoxは変わらず重い。。。」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「firefoxは変わらず重い。。。」</p>
 <p>Debianは起動した。</p>
 <p>LXDEも動いた。</p>
 <p>Wi-Fiもつながった。</p>
@@ -196,10 +196,10 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>Claudeのブラウザ連携を知ったことをきっかけに、Geminiにも聞いてみた。</p>
 <p>Pythonでブラウザから情報を取得できる。</p>
 <p>それを知ったとき、DIGAのことと急につながった。</p>
-<p>「あ、これDIGAでも使えるかも」</p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「あ、これDIGAでも使えるかも」</p>
 <p>そう思った。</p>
 <p>これなら、コピペしなくて済む。</p>
-<p><strong>うまくしたらラクになるぞー。</strong></p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">うまくしたらラクになるぞー。</p>
 <p>でも、すぐに次の疑問が出てきた。</p>
 <p><strong>DiMORAからうまく情報とれるの？</strong></p>
 <p>そこで、AIと一緒にDiMORAの画面を調べることにした。</p>
@@ -229,7 +229,7 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>AIがまた「ここを見てみよう」と指示してくる。</p>
 <p>そんなやりとりを何度か繰り返して、ようやくお気に入り番組のデータが見えてきた。</p>
 <p>そして、</p>
-<p><strong>「おお、取れた！」</strong></p>
+<p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「おお、取れた！」</p>
 <p>実際に、DiMORAのお気に入り番組の情報を取得できた。</p>
 <p>そこには、番組の日付や時間、放送局、タイトル、録画モード、曜日、番組URLなど、録画管理に使えそうな情報が入っている。</p>
 <p>ここで初めて、実際のデータを見て「コピペしなくてもいけるかもしれない」と確認できた。</p>
