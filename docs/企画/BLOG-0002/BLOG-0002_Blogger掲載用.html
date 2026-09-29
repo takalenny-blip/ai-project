@@ -38,7 +38,7 @@
 <p>いよいよVAIO Pを実際に動かしてみる。</p>
 <p>使っているのはVGN-P70H/W。Atom Z520の32bit機なので、Debianもi386版を選ぶことになった。</p>
 <p>ここからは、母艦PCでDebianのインストールメディアを作り、VAIO Pにインストールしていく。</p>
-<p>このとき、JUNから「写真で残したら？」というアドバイスもあった。</p>
+<p>このとき、JUN（Gemini）から「写真で残したら？」というアドバイスもあった。</p>
 <p>そこで、たかはこう返している。</p>
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「写真で残したら？のアドバイスもよろしく！母艦PCはある。debianのダウンロードからだね。ここから一緒にやろうぜ！」</p></blockquote>
 <p><strong style="color:red;background:#fff59d;">ただ、単に作業の写真を残すだけではなく、その経験そのものをあとから記事にできないか、ということも考えていた。</strong></p>
@@ -187,20 +187,20 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>そして、この一連の作業をAIとの会話と一緒に記録していくことが、あとになって重要な意味を持つ。</p><p><br /></p>
 
 <h3 id="toc-3">DIGA／DiMORAの自動化を考えてみる</h3>
-<p>VAIO Pを動かしていく一方で、以前からDIGAの録画管理についてもClaudeと試していた。</p>
+<p>VAIO Pを動かしていく一方で、以前からDIGAの録画管理についてもクロウ（Claude）と試していた。</p>
 <p>このころは、まだ自動化まで考えていなかった。</p>
 <p>スプレッドシートとGASを使って、DIGA 3台の予約情報を管理していた。</p>
-<p>最初にClaudeに相談したのは、こんな内容だった。</p>
+<p>最初にクロウに相談したのは、こんな内容だった。</p>
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「Diga3台の予約情報を見て、録画の管理データベースを作りたい。ネットからもってくる一例はこちら。データは機種ごとにグーグルドライブ内のグーグルドキュメントに貼り付けようと思う。日時変更など警告メールを出すようにしてほしい。また、次回の予約がないよ、とか。現在の録画話数の自動更新もほしい。シリーズ終了の連絡もほしい。今までの録画志向から、番組おすすめもほしい。あと他に提案とか質問とかある？」</p></blockquote>
-<p>Claudeと相談しながら、貼り付けたDIGAの情報を使って、予約の変化をチェックしていった。</p>
+<p>クロウと相談しながら、貼り付けたDIGAの情報を使って、予約の変化をチェックしていった。</p>
 <p>お気に入り番組についても、最初はDiMORAからコピーした内容を、機種ごとのGoogleドキュメントに必ず貼り付け、それを「その時点のお気に入り」として扱っていた。</p>
 <p>ところが、実際に使っていると、もっと手間を減らしたくなってきた。</p>
 <p>たとえば、お気に入りに変更があったときだけGoogleドキュメントに貼り付けるようにした。</p>
-<p>そこでClaudeに、仕様を修正してもらった。</p>
+<p>そこでクロウに、仕様を修正してもらった。</p>
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「待って。お気に入りの中身が空の場合は、内部で持ったお気に入り情報で進める。中身があるときだけ、お気に入りの加除チェックをする。これは機種ごとに制御したい。（例えば、diga1,2のお気に入りは空だったから加除チェックは走らない。diga3に入ってるから加除チェックを走らす。）内部情報でお気に入りに機種情報も加える必要あり。」</p></blockquote>
 <p>さらに、実際にチェック結果のメールを見ると、別のところも気になった。</p>
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「これは、今日のチェック結果メール。内容はいいんだけど、いつの放送分なのか、日時と曜日を加えてほしい。」</p></blockquote>
-<p>Claudeに修正してもらった。</p>
+<p>クロウに修正してもらった。</p>
 <p>すると次に、</p>
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「ゴメン。あとチャンネルも必須。可能であれば機種も。」</p></blockquote>
 <p>となった。</p>
@@ -210,7 +210,7 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>ここが単純に面倒だった。</p>
 <p>この時点では、まだDIGAの自動化を考えていたわけではない。</p>
 <p>そんな中で、別のところから「ブラウザを使って情報を取得する」という発想を知ることになった。</p>
-<p>Claudeのブラウザ連携を知ったことをきっかけに、Geminiにも聞いてみた。</p>
+<p>クロウのブラウザ連携を知ったことをきっかけに、Geminiにも聞いてみた。</p>
 <p><strong style="color:red;background:#fff59d;">Pythonでブラウザから情報を取得できる。それを知ったとき、DIGAのことと急につながった。</strong></p>
 <p style="margin:1em 0;padding-left:1em;border-left:3px solid #aaa;">「あ、これDIGAでも使えるかも」</p>
 <p>そう思った。</p>
@@ -281,4 +281,4 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>まず別のPCでDiMORAのHTMLとJavaScriptを調べ、AIの指示を受けながらページ内部のデータを追いかけていった。</p>
 <p>次に必要なのは、ログインしたDiMORAのページからそのデータを安全に読み出し、VAIO P上のPythonで扱えるようにすることだった。</p>
 <p>最初はただ、「コピペが面倒だな」と思っていただけだった。</p>
-<p>それが、Claude、Gemini、Python、ブラウザ、DiMORAと話をつないでいくうちに、いつの間にかWebページの中身まで掘ることになった。</p>
+<p>それが、クロウ、Gemini、Python、ブラウザ、DiMORAと話をつないでいくうちに、いつの間にかWebページの中身まで掘ることになった。</p>
