@@ -1,0 +1,75 @@
+name: Direct chat large-file intake
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_url:
+        description: "One-time source download URL (do not log or echo)"
+        required: true
+        type: string
+      filename:
+        description: "Filename to place under .github/save-queue/"
+        required: true
+        type: string
+      expected_size:
+        description: "Expected byte size; 0 skips the size check"
+        required: false
+        default: "0"
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate inputs
+        env:
+          FILENAME: ${{ inputs.filename }}
+          EXPECTED_SIZE: ${{ inputs.expected_size }}
+        run: |
+          set -euo pipefail
+          case "$FILENAME" in
+            ""|*/|*..*|*/*) echo "Invalid filename" >&2; exit 1 ;;
+            *.md) ;;
+            *) echo "Filename must end in .md" >&2; exit 1 ;;
+          esac
+          case "$EXPECTED_SIZE" in
+            ''|*[!0-9]*) echo "expected_size must be numeric" >&2; exit 1 ;;
+          esac
+
+      - name: Download source on runner
+        env:
+          SOURCE_URL: ${{ inputs.source_url }}
+          EXPECTED_SIZE: ${{ inputs.expected_size }}
+          FILENAME: ${{ inputs.filename }}
+        run: |
+          set -euo pipefail
+          out="${RUNNER_TEMP}/$FILENAME"
+          curl --fail --location --silent --show-error --retry 2 --output "$out" "$SOURCE_URL"
+          test -s "$out"
+          actual="$(stat -c '%s' "$out")"
+          if [ "$EXPECTED_SIZE" != "0" ] && [ "$actual" != "$EXPECTED_SIZE" ]; then
+            echo "size mismatch: expected $EXPECTED_SIZE, got $actual" >&2
+            exit 1
+          fi
+          printf '%s\n' "$actual" > "${RUNNER_TEMP}/source-size"
+
+      - name: Create queue PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILENAME: ${{ inputs.filename }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B "chat-save-request/direct-large-${GITHUB_RUN_ID}" origin/main
+          mkdir -p .github/save-queue
+          cp "${RUNNER_TEMP}/$FILENAME" ".github/save-queue/$FILENAME"
+          git add ".github/save-queue/$FILENAME"
+          git commit -m "Save direct chat: $FILENAME"
+          git push --set-upstream origin "chat-save-request/direct-large-${GITHUB_RUN_ID}"
+          gh pr create             --repo "${GITHUB_REPOSITORY}"             --base main             --head "chat-save-request/direct-large-${GITHUB_RUN_ID}"             --title "Save direct chat: $FILENAME"             --body "Automated large-file intake. Source was downloaded on the GitHub Actions runner; the existing save-request-intake.yml path remains responsible for canonical save processing."
