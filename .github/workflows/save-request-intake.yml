@@ -3,6 +3,12 @@ name: Save request intake
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      queue_filename:
+        description: "Queue filename under .github/save-queue/"
+        required: true
+        type: string
 
 concurrency:
   group: save-intake-global
@@ -15,13 +21,17 @@ permissions:
 jobs:
   intake:
     if: >-
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      startsWith(github.event.pull_request.head.ref, 'chat-save-request/') &&
-      github.event.pull_request.draft == false
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.pull_request.head.repo.full_name == github.repository &&
+        startsWith(github.event.pull_request.head.ref, 'chat-save-request/') &&
+        github.event.pull_request.draft == false
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Resolve triggering pull request
         id: pr
+        if: ${{ github.event_name == 'pull_request_target' }}
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -43,6 +53,19 @@ jobs:
           echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
           echo "head_ref=$head_ref" >> "$GITHUB_OUTPUT"
           echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve manual queue input
+        id: manual
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          queue_file=".github/save-queue/${{ inputs.queue_filename }}"
+          case "$queue_file" in
+            .github/save-queue/*.md) ;;
+            *) echo "Invalid queue filename: $queue_file" >&2; exit 1 ;;
+          esac
+          echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
 
       - name: Checkout trusted base branch
         uses: actions/checkout@v4
@@ -76,6 +99,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            queue_file="${{ steps.manual.outputs.queue_file }}"
+            head_sha="$(git rev-parse HEAD)"
+          else
           mapfile -t changed < <(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" --paginate --jq '.[].filename' | sort)
           test "${#changed[@]}" = "1"
           queue_file="${changed[0]}"
@@ -84,6 +111,7 @@ jobs:
             *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
           esac
           head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq '.head.sha')"
+          fi
           tree_url="repos/${GITHUB_REPOSITORY}/git/trees/${head_sha}?recursive=1"
           tree_json="$(gh api "$tree_url")"
           blob_sha="$(printf '%s' "$tree_json" | jq -r --arg path "$queue_file" '.tree[] | select(.path == $path) | .sha')"
@@ -172,7 +200,7 @@ jobs:
 
       - name: Resolve save lifecycle after verified intake
         env:
-          QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number }}
+          QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number || '' }}
           FINAL_PR_NUMBER: ${{ steps.final_pr.outputs.number }}
         shell: bash
         run: |
@@ -187,7 +215,7 @@ jobs:
 
           data = {
               "queue_pr": {
-                  "number": int(os.environ["QUEUE_PR_NUMBER"]),
+                  "number": int(os.environ["QUEUE_PR_NUMBER"]) if os.environ["QUEUE_PR_NUMBER"] else None,
                   "state": "open",
                   "merged": False,
               },
