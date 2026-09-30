@@ -25,6 +25,9 @@ jobs:
   intake:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Validate inputs
         env:
           FILENAME: ${{ inputs.filename }}
