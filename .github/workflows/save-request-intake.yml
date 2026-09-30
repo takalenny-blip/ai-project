@@ -199,6 +199,7 @@ jobs:
           echo "number=$final_pr_number" >> "$GITHUB_OUTPUT"
 
       - name: Resolve save lifecycle after verified intake
+        if: ${{ github.event_name == 'pull_request_target' }}
         env:
           QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number || '' }}
           FINAL_PR_NUMBER: ${{ steps.final_pr.outputs.number }}
@@ -238,7 +239,7 @@ jobs:
           PY
 
       - name: Cleanup request branch
-        if: success()
+        if: ${{ success() && github.event_name == 'pull_request_target' }}
         env:
           SOURCE_BRANCH: ${{ steps.pr.outputs.head_ref }}
         shell: bash
