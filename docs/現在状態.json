@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-09-30",
+  "updated": "2026-10-01",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -295,7 +295,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0001は公開済み。GSC「Redirect error」は経過観察中。BLOG-0002「VAIO Pをサーバーにしてみたい」はブロック3まで完成し、PR #756をマージして一区切り。次はBLOG-0003としてGitHub編へ進む。",
+    "summary": "BLOG-0001は公開済み、GSC「Redirect error」は経過観察中。BLOG-0002はブロック3まで完成しPR #756をマージして一区切り。BLOG-0003は9/4〜9/30の一次資料を時系列確認し、記事化の主軸・代表例・Dropboxの位置づけまで整理済み。次回は第1章の一次資料・引用候補を具体的に確定する。",
     "evidence": {
       "type": "repository_record",
       "checked_at": "2026-09-28",
@@ -307,19 +307,19 @@
       "ci": "PR #756 merged; current-state update prepared from canonical main state",
       "merge_commit_workflow_runs": "not separately rechecked in this closeout"
     },
-    "next_stage_boundary": "BLOG-0002はブロック3までで一区切り。続きはBLOG-0003としてGitHub編へ進む。",
-    "next_focus": "BLOG-0003で、AIとのやりとり・記録・GitHub運用がどうつながったかを一次記録中心で記事化する。"
+    "next_stage_boundary": "BLOG-0003の一次資料時系列確認と全体材料選別は一区切り。次は各章の一次資料・引用候補を順番に確定する。",
+    "next_focus": "BLOG-0003第1章「AIとのやりとりを残したい」について、元の直チャットへ戻って採用会話・配置・地の文・除外材料を確定する。構成を再検討するループには戻らない。"
   },
   "next_step": {
-    "id": "BLOG-0003",
-    "title": "BLOG-0003「GitHub編」を作成する",
+    "id": "BLOG-0003-CH1",
+    "title": "BLOG-0003第1章の一次資料・引用候補を確定する",
     "priority": 10,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
-    "evidence": "BLOG-0002はPR #756のマージでブロック3まで一区切り。2026-09-28の終了判断で、続きはBLOG-0003としてGitHub編へ進めることを確定。",
+    "target": "第1章「AIとのやりとりを残したい」について、元の直チャットを確認し、採用する会話・配置・地の文・除外材料を確定する",
+    "evidence": "2026-10-01時点で9/4〜9/30の一次資料を時系列確認済み。全体構成は現行8章を維持し、記事化の選別方針まで整理済み。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -536,18 +536,19 @@
       "id": "BLOG-0003",
       "title": "BLOG-0003「GitHub編」を作成する",
       "priority": 10,
-      "status": "queued",
+      "status": "in_progress",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
-      "evidence": "BLOG-0002はPR #756のマージでブロック3まで一区切り。2026-09-28の終了判断で、続きはBLOG-0003としてGitHub編へ進めることを確定。",
+      "evidence": "2026-10-01確認。9/4〜9/30の一次資料を時系列で確認し、記事の主軸・代表例・Dropboxの位置づけ・現行8章構成の維持を整理済み。次は第1章の元直チャットへ戻り、引用候補を確定する。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-28",
       "updated_at": "2026-09-28",
-      "prerequisites": []
+      "prerequisites": [],
+      "updated": "2026-10-01"
     }
   ]
 }
