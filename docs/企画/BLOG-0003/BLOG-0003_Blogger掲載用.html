@@ -14,7 +14,7 @@
 <p>たかが最初にバドへ相談したのは、こんなことだった。</p>
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「AIとのやりとりで手軽にブログ記事を作成し、それを無料のワードプレスやブロガーなどにアップロードする仕組みを作りたい。何かよい方法はあるか？」</p></blockquote>
 <p>この時点で考えていたのは、AIとの会話を保存するシステムではない。</p>
-<p>AIと話しながら記事を作る。&lt;br&gt;自分で確認する。&lt;br&gt;できれば自宅の古いPCなどを使って、Bloggerへ投稿する。</p>
+<p>AIと話しながら記事を作る。<br />自分で確認する。<br />できれば自宅の古いPCなどを使って、Bloggerへ投稿する。</p>
 <p>最初の目的は、<strong>AIを使ってブログを書き、情報発信すること</strong>だった。</p>
 <p>ところが、AIと一緒にいろいろなことをやっていくうちに、別のことが気になり始めた。</p>
 <p>完成した記事だけを残して、本当にそれでいいのか。</p>
@@ -34,7 +34,7 @@
 <blockquote style="margin: 0.8em 0; padding: 0.8em 1em; border-left: 4px solid #ccc;"><p>「ブログにして情報を発信したかったから。」</p></blockquote>
 <p>だった。</p>
 <p>つまり、最初から「経験DBを作ろう」と設計していたわけではない。</p>
-<p><strong>自分とAIでやったことを残したい。  &lt;br&gt;それをブログにして発信したい。</strong></p>
+<p><strong>自分とAIでやったことを残したい。  <br />それをブログにして発信したい。</strong></p>
 <p>そこが入口だった。</p>
 <p>そして、たかにとってAIとのチャットには、単なる情報だけではなく、その場の経験そのものが残っていた。</p>
 <p>後のインタビューでは、</p>
@@ -64,7 +64,7 @@
 <p><strong>実際に共有場所の候補として試していた。</strong></p>
 <p>そして、ここには当時の事情がある。</p>
 <p>たかは後のインタビューで、</p>
-<p>- GitHubは当時「聞いたこともなかった」&lt;br&gt;- GeminiがGoogle系に強いので、Google Driveでできるかなと思った&lt;br&gt;- しかし、バドがGoogle Driveを扱うにはChatGPTの有料版が必要だと分かった&lt;br&gt;- たかは「あえて全部無料でやりたかった」</p>
+<p>- GitHubは当時「聞いたこともなかった」<br />- GeminiがGoogle系に強いので、Google Driveでできるかなと思った<br />- しかし、バドがGoogle Driveを扱うにはChatGPTの有料版が必要だと分かった<br />- たかは「あえて全部無料でやりたかった」</p>
 <p>と振り返っている。</p>
 <p>ここで、単純に「Google DriveはダメだったからGitHubにした」とだけ書くと、少し違う。</p>
 <p>Google系を試した。</p>
@@ -104,7 +104,7 @@
 <p>という考え方が具体的になった。</p>
 <p>ただし、この時点では、今のGitHubとはまったく違う。</p>
 <p>まだ、</p>
-<p>- <code>docs/現在状態.json</code> が唯一の正本でもない&lt;br&gt;- 直チャット保存のワークフローもない&lt;br&gt;- CIもない&lt;br&gt;- 保存監査もない&lt;br&gt;- 現在状態と生成ビューを分けてもいない</p>
+<p>- <code>docs/現在状態.json</code> が唯一の正本でもない<br />- 直チャット保存のワークフローもない<br />- CIもない<br />- 保存監査もない<br />- 現在状態と生成ビューを分けてもいない</p>
 <p>単純に、</p>
 <p><strong>「ここなら3者で同じ情報を見られるかもしれない」</strong></p>
 <p>という段階だった。</p>
@@ -148,27 +148,22 @@
 <p>だから、まとめた記事だけでは足りない。</p>
 <p>生の会話が必要になる。</p>
 <p>こうして、最初は単純だったブログ構想が、少しずつ変わっていった。</p>
-<p><strong>ブログを作って発信したい</strong></p>
-<p>↓</p>
-<p><strong>自分とAIでやったことを残したい</strong></p>
-<p>↓</p>
-<p><strong>AIとの会話には、その時の経験・感情・気づきが残っている</strong></p>
-<p>↓</p>
-<p><strong>AI同士でも同じ情報を共有したい</strong></p>
-<p>↓</p>
-<p><strong>Google系を試す</strong></p>
-<p>↓</p>
-<p><strong>無料でやりたいという条件から、GitHubを試す</strong></p>
-<p>↓</p>
-<p><strong>GitHubが共有情報庫として使えそうだと分かる</strong></p>
-<p>↓</p>
-<p><strong>でも、残したいのは整理された報告書ではなく、会話そのものだった</strong></p>
-<p>↓</p>
-<p><strong>「直チャット」を残すという考えにつながる</strong></p>
+<div class="flow-diagram" style="display:flex; flex-direction:column; align-items:center; gap:0.5em; margin:1em 0;">
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>ブログを作って発信したい</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>自分とAIでやったことを残したい</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>AIとの会話には、その時の経験・感情・気づきが残っている</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>AI同士でも同じ情報を共有したい</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>Google系を試す</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>無料でやりたいという条件から、GitHubを試す</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>GitHubが共有情報庫として使えそうだと分かる</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>でも、残したいのは整理された報告書ではなく、会話そのものだった</strong></div><div class="flow-arrow" aria-hidden="true" style="text-align:center; line-height:1.2;">↓</div>
+<div class="flow-box" style="width:90%; max-width:42em; box-sizing:border-box; padding:0.7em 1em; border:1px solid #999; border-radius:0.7em; text-align:center;"><strong>「直チャット」を残すという考えにつながる</strong></div>
+</div>
 <p>ここから先は、別の問題が待っていた。</p>
 <p><strong>「残したい」と思ってGitHubに置き始めたら、今度は「本当に保存できているのか？」が問題になった。</strong></p>
 <p>そして、単なるファイル置き場だったGitHubは、やがて保存の仕組みそのものを作らなければならない場所へ変わっていく。</p>
 <h2>第2章 GitHubを試してみた</h2>
+<p><br /></p>
 <h3 id="toc-1">「共有できる場所」を探して</h3>
 <p>第1章で、「AIとのやりとりを残したい」という気持ちがはっきりしてきた。</p>
 <p>ただ、残したいと思っても、たか一人の手元に置いておくだけでは、JUN（Gemini）やバド（ChatGPT）と共有できない。</p>
@@ -179,6 +174,7 @@
 <p>ここで、別の候補として出てきたのがGitHubだった。</p>
 <p>たかにとってGitHubは、この時点では「聞いたこともなかった」ものだった。</p>
 <p>それでも、バドから「GitHubはいけた」と示され、実際に試してみることになった。</p>
+<p><br /></p>
 <h3 id="toc-2">本当に読めるのか</h3>
 <p>GitHubに ai-project という場所を作り、まずは「本当に、たかが置いた記録をバドが読めるのか」を試した。</p>
 <p>そこで使ったのが、すでに置いてあった VAIO_P/REC-001.md と VAIO_P/REC-002.md だった。</p>
@@ -190,12 +186,14 @@
 <p>だった。</p>
 <p>それまで「AI同士で共通の情報を持つ」ということが具体的にできるのか分からなかった。それが、実際のファイルを読ませることで、一気に現実味を持った。</p>
 <p>GitHubは、たかにとって「コードを置く場所」から、AIたちが共有して使える情報の置き場所へと意味を変え始めた。</p>
+<p><br /></p>
 <h3 id="toc-3">3人の共有知識ベースへ</h3>
 <p>こうしてGitHubは、たか・JUN・バドの3人で使う共有知識ベースの候補になった。</p>
 <p>JUNが見つけたこと、たかが経験したこと、バドとのやりとりで決まったこと。</p>
 <p>そうしたものを同じ場所に置いておけば、AIが変わっても、それまでの経緯を参照できる。</p>
 <p>この時点では、まだ現在のような保存システムが完成していたわけではない。</p>
 <p>むしろ、ここから「何を残すのか」という問題がはっきりしてきた。</p>
+<p><br /></p>
 <h3 id="toc-4">ところが、ここでも問題が出てきた</h3>
 <p>最初は、情報をまとめてGitHubに置けばよいと思っていた。</p>
 <p>しかし、たかが本当に残したかったものは、完成したまとめだけではなかった。</p>
@@ -398,8 +396,8 @@
 <p>保存用の仕組みが受け取る。</p>
 <p>決められたスクリプトで処理する。</p>
 <p>一つの保存単位としてコミットする。</p>
-<p>PR（プルリクエスト）にする。&lt;br&gt;PR とは、GitHubで、「この変更を取り込んでください」と確認・承認を依頼するものだ。</p>
-<p>CI（継続的インテグレーション）で確認する。&lt;br&gt;CIとは、変更した内容に問題がないかを、自動でチェックする仕組みだ。</p>
+<p>PR（プルリクエスト）にする。<br />PR とは、GitHubで、「この変更を取り込んでください」と確認・承認を依頼するものだ。</p>
+<p>CI（継続的インテグレーション）で確認する。<br />CIとは、変更した内容に問題がないかを、自動でチェックする仕組みだ。</p>
 <p>そして、最後にGitHubの実体を読み戻す。</p>
 <p>ここまでを一つの流れにする。</p>
 <p>「保存」は、単なるファイル書き込みではなくなった。</p>
@@ -485,7 +483,7 @@
 <h2>第9章 経験を残す仕組みそのものが、経験になった</h2>
 <p>最初は、ただAIとのやりとりを残したかった。</p>
 <p>でも、今振り返ると、残したかったのはチャットそのものだけではなかった。</p>
-<p><strong>自分が何を考えていたのか。  &lt;br&gt;そして、やっていることがどう変わっていったのか。</strong></p>
+<p><strong>自分が何を考えていたのか。  <br />そして、やっていることがどう変わっていったのか。</strong></p>
 <p>そこを残したかったんだと思う。</p>
 <p>AIとやりとりしていると、自分の考えも変わる。</p>
 <p>最初はこう思っていたのに、話しているうちに別の考え方になっていく。</p>
@@ -545,7 +543,7 @@
 <p>「でも、ここで活路を見つけたんだな」</p>
 <p>そんなことを思い出す。</p>
 <p>そして、</p>
-<p><strong>「やってよかったな」  &lt;br&gt;「すごいことをやってたんだな」</strong></p>
+<p><strong>「やってよかったな」  <br />「すごいことをやってたんだな」</strong></p>
 <p>と思う。</p>
 <p>当時のワクワク感まで蘇ってくる。</p>
 <p>だから、記録を読み返すこと自体が楽しい。</p>
