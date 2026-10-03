@@ -12,9 +12,9 @@
     "work_queue": "work_items: priority/depends_on/not_before/statusを持つ。waitingは保存せず導出する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-10-02T13-45-04.886077+0900",
-    "latest_path": "直チャット/2026-10-02_直チャット即時保存_2026-10-02T13-45-04.886077+0900.md",
-    "latest_content_sha": "ef10a89de2ff52899e10be5d0bcc56dd5237a40e",
+    "latest_saved": "2026-10-02T13-54-49.229449+0900",
+    "latest_path": "直チャット/2026-10-02_直チャット即時保存_2026-10-02T13-54-49.229449+0900.md",
+    "latest_content_sha": "0e7aa54440e16ced749b387d6c54921d5222fa28",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
