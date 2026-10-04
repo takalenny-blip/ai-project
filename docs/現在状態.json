@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-10-03",
+  "updated": "2026-10-04",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -12,9 +12,9 @@
     "work_queue": "work_items: priority/depends_on/not_before/statusを持つ。waitingは保存せず導出する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-10-03T09-42-21.882498+0900",
-    "latest_path": "直チャット/2026-10-03_直チャット即時保存_2026-10-03T09-42-21.882498+0900.md",
-    "latest_content_sha": "ffaa2f7d88a639029114de3193d3a22481ad45d0",
+    "latest_saved": "2026-10-04T09-51-36.327552+0900",
+    "latest_path": "直チャット/2026-10-04_直チャット即時保存_2026-10-04T09-51-36.327552+0900.md",
+    "latest_content_sha": "16f2baa7390a1803a817ef43e7a0a2eb219f850d",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
