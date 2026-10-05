@@ -305,8 +305,8 @@
         "Crow再レビュー",
         "BLOG-0003制作工程_状態.md"
       ],
-      "ci_head_commit": "b22e484278db8139f459a2651d778397bc4294bf",
-      "note": "PR #856はマージ済み。バックアップファイルをmainからreadbackし、元HTMLと同一SHA 29fafefda8e1751cd486325ffd0caf521e5264adを確認。"
+      "ci_head_commit": "7880178de89fbcf962dc1ff1483ed87a7855da75",
+      "note": "PR #856がマージ済み。main HEAD 7880178de89fbcf962dc1ff1483ed87a7855da75で、バックアップファイルをreadbackし、元HTMLと同一SHA 29fafefda8e1751cd486325ffd0caf521e5264adを確認。"
     },
     "next_stage_boundary": "BLOG-0003 HTML・レビュー・バックアップまで完了。公開工程は未着手。",
     "next_focus": "BLOG-0003の残工程（Blogger下書き投入、実表示確認、公開、公開後確認）を制作工程台帳に従って判断する。"
@@ -315,14 +315,17 @@
     "id": "BLOG-0003残工程",
     "title": "BLOG-0003の公開工程へ進むか判断する",
     "priority": 10,
+    "status": "queued",
     "depends_on": [],
     "not_before": null,
-    "environment": "work_pc",
     "scope": "experience_log_to_blogger",
     "target": "完成・レビュー済み・バックアップ済みのBLOG-0003について、制作工程台帳の残工程を確認し、Blogger投入以降へ進む。",
-    "evidence": "2026-10-05時点でPR #855・#856がマージ済み。Crow再レビューで現行HTML一致を確認。公開関連工程は未完了。",
+    "evidence": "2026-10-05時点でPR #855・#856がマージ済み。Crow再レビューで現行HTML一致を確認。Blogger下書き投入・実表示確認・公開・公開後確認は未完了。",
     "readiness": "ready",
     "unblock_action": "none",
+    "environment": "work_pc",
+    "created_at": "2026-10-05",
+    "updated_at": "2026-10-05",
     "prerequisites": []
   },
   "current_state_guards": {
@@ -537,17 +540,34 @@
       "id": "BLOG-0003",
       "title": "BLOG-0003「GitHub編」を作成する",
       "priority": 10,
-      "status": "queued",
+      "status": "done",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
-      "evidence": "BLOG-0002はPR #756のマージでブロック3まで一区切り。2026-09-28の終了判断で、続きはBLOG-0003としてGitHub編へ進めることを確定。",
+      "evidence": "PR #855・#856をマージ済み。Crow再レビューで現行HTML一致を確認。HTML・レビュー・バックアップまで完了し、Blogger公開工程は別の残工程へ分離。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-28",
-      "updated_at": "2026-09-28",
+      "updated_at": "2026-10-05",
+      "prerequisites": []
+    },
+    {
+      "id": "BLOG-0003残工程",
+      "title": "BLOG-0003の公開工程へ進むか判断する",
+      "priority": 10,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "experience_log_to_blogger",
+      "target": "完成・レビュー済み・バックアップ済みのBLOG-0003について、制作工程台帳の残工程を確認し、Blogger投入以降へ進む。",
+      "evidence": "2026-10-05時点でPR #855・#856がマージ済み。Crow再レビューで現行HTML一致を確認。Blogger下書き投入・実表示確認・公開・公開後確認は未完了。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-05",
+      "updated_at": "2026-10-05",
       "prerequisites": []
     }
   ]
