@@ -323,7 +323,7 @@
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
     "target": "公開済みBLOG-0003の実ページ取得・表示状態を確認し、確認できない場合は未確認として記録する。その後GSC確認へ進む。",
-    "evidence": "2026-10-05時点で公開済み。たかによる実表示確認済み。公開URLの直接取得はInternal Error/Cache missで未確認。",
+    "evidence": "公開済み。たかによる実表示確認済み。公開URLの直接取得はInternal Error/Cache missで未確認。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
