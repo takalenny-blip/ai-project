@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-10-04",
+  "updated": "2026-10-05",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -295,33 +295,37 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0001は公開済み。GSC「Redirect error」は経過観察中。BLOG-0002「VAIO Pをサーバーにしてみたい」はブロック3まで完成し、PR #756をマージして一区切り。次はBLOG-0003としてGitHub編へ進む。",
+    "summary": "BLOG-0003は第1章〜第9章のHTMLが完成し、Crow再レビューで現行mainとの一致・HTML構造・画像・強調を確認済み。PR #855のユーザー手直し、PR #856のHTMLバックアップまで完了。Blogger投入・実表示確認・公開・公開後確認は未完了。",
     "evidence": {
       "type": "repository_record",
-      "checked_at": "2026-09-28",
+      "checked_at": "2026-10-05",
       "references": [
-        "PR #756",
-        "2026-09-28 BLOG-0002終了判断"
+        "PR #855",
+        "PR #856",
+        "Crow再レビュー",
+        "BLOG-0003制作工程_状態.md"
       ],
-      "ci_head_commit": "182677715d398cc763f67f4ea204c39a5a08f8cd",
-      "ci": "PR #756 merged; current-state update prepared from canonical main state",
-      "merge_commit_workflow_runs": "not separately rechecked in this closeout"
+      "ci_head_commit": "7880178de89fbcf962dc1ff1483ed87a7855da75",
+      "note": "PR #856がマージ済み。main HEAD 7880178de89fbcf962dc1ff1483ed87a7855da75で、バックアップファイルをreadbackし、元HTMLと同一SHA 29fafefda8e1751cd486325ffd0caf521e5264adを確認。"
     },
-    "next_stage_boundary": "BLOG-0002はブロック3までで一区切り。続きはBLOG-0003としてGitHub編へ進む。",
-    "next_focus": "BLOG-0003で、AIとのやりとり・記録・GitHub運用がどうつながったかを一次記録中心で記事化する。"
+    "next_stage_boundary": "BLOG-0003 HTML・レビュー・バックアップまで完了。公開工程は未着手。",
+    "next_focus": "BLOG-0003の残工程（Blogger下書き投入、実表示確認、公開、公開後確認）を制作工程台帳に従って判断する。"
   },
   "next_step": {
-    "id": "BLOG-0003",
-    "title": "BLOG-0003「GitHub編」を作成する",
+    "id": "BLOG-0003残工程",
+    "title": "BLOG-0003の公開工程へ進むか判断する",
     "priority": 10,
+    "status": "queued",
     "depends_on": [],
     "not_before": null,
-    "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
-    "evidence": "BLOG-0002はPR #756のマージでブロック3まで一区切り。2026-09-28の終了判断で、続きはBLOG-0003としてGitHub編へ進めることを確定。",
+    "target": "完成・レビュー済み・バックアップ済みのBLOG-0003について、制作工程台帳の残工程を確認し、Blogger投入以降へ進む。",
+    "evidence": "2026-10-05時点でPR #855・#856がマージ済み。Crow再レビューで現行HTML一致を確認。Blogger下書き投入・実表示確認・公開・公開後確認は未完了。",
     "readiness": "ready",
     "unblock_action": "none",
+    "environment": "work_pc",
+    "created_at": "2026-10-05",
+    "updated_at": "2026-10-05",
     "prerequisites": []
   },
   "current_state_guards": {
@@ -536,17 +540,34 @@
       "id": "BLOG-0003",
       "title": "BLOG-0003「GitHub編」を作成する",
       "priority": 10,
-      "status": "queued",
+      "status": "done",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
-      "evidence": "BLOG-0002はPR #756のマージでブロック3まで一区切り。2026-09-28の終了判断で、続きはBLOG-0003としてGitHub編へ進めることを確定。",
+      "evidence": "PR #855・#856をマージ済み。Crow再レビューで現行HTML一致を確認。HTML・レビュー・バックアップまで完了し、Blogger公開工程は別の残工程へ分離。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-09-28",
-      "updated_at": "2026-09-28",
+      "updated_at": "2026-10-05",
+      "prerequisites": []
+    },
+    {
+      "id": "BLOG-0003残工程",
+      "title": "BLOG-0003の公開工程へ進むか判断する",
+      "priority": 10,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "experience_log_to_blogger",
+      "target": "完成・レビュー済み・バックアップ済みのBLOG-0003について、制作工程台帳の残工程を確認し、Blogger投入以降へ進む。",
+      "evidence": "2026-10-05時点でPR #855・#856がマージ済み。Crow再レビューで現行HTML一致を確認。Blogger下書き投入・実表示確認・公開・公開後確認は未完了。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-05",
+      "updated_at": "2026-10-05",
       "prerequisites": []
     }
   ]
