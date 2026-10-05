@@ -16,20 +16,20 @@
 
 ## 現在地点
 
-**BLOG-0003は第1章〜第9章のHTMLが完成し、Crow再レビューで現行mainとの一致・HTML構造・画像・強調を確認済み。PR #855のユーザー手直し、PR #856のHTMLバックアップまで完了。Blogger下書き投入はたかが実施済み。残りはBloggerへの画像組み込み、実表示確認、公開、公開後確認。**
+**BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ取得確認は未確認。**
 
 ## 作業キュー
 
 - actionable：4件
 - 一覧：
-- [BLOG-0003残工程] priority=10：BLOG-0003のBlogger画像組み込みを進める
+- [BLOG-0003公開後確認] priority=10：BLOG-0003の公開後確認を進める
 - [WORK-0002] priority=20：save-request-intake.ymlのPR作成失敗を本番経路で確認する
 - [WORK-0003] priority=20：save-request-intake.ymlのpushトリガー非発火問題を本番経路で確認する
 - [WORK-0004] priority=30：BLOG-0001のGSC Redirect errorを経過観察後に再確認する
 
 ## 次の一手（互換ビュー）
 
-- [BLOG-0003残工程] たかが投入済みのBLOG-0003 Blogger下書きへ、GitHub保存済み画像をアップロードし、確認済みの所定位置へ組み込む。
+- [BLOG-0003公開後確認] 公開済みBLOG-0003の実ページ取得・表示状態を確認し、確認できない場合は未確認として記録する。その後GSC確認へ進む。
 ## 現在の作業レーン
 
 **experience-log → Blogger自動化**
