@@ -295,7 +295,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0003は第1章〜第9章のHTMLが完成し、Crow再レビューで現行mainとの一致・HTML構造・画像・強調を確認済み。PR #855のユーザー手直し、PR #856のHTMLバックアップまで完了。Blogger投入・実表示確認・公開・公開後確認は未完了。",
+    "summary": "BLOG-0003は第1章〜第9章のHTMLが完成し、Crow再レビューで現行mainとの一致・HTML構造・画像・強調を確認済み。PR #855のユーザー手直し、PR #856のHTMLバックアップまで完了。Blogger下書き投入はたかが実施済み。残りはBloggerへの画像組み込み、実表示確認、公開、公開後確認。",
     "evidence": {
       "type": "repository_record",
       "checked_at": "2026-10-05",
@@ -308,19 +308,19 @@
       "ci_head_commit": "7880178de89fbcf962dc1ff1483ed87a7855da75",
       "note": "PR #856がマージ済み。main HEAD 7880178de89fbcf962dc1ff1483ed87a7855da75で、バックアップファイルをreadbackし、元HTMLと同一SHA 29fafefda8e1751cd486325ffd0caf521e5264adを確認。"
     },
-    "next_stage_boundary": "BLOG-0003 HTML・レビュー・バックアップまで完了。公開工程は未着手。",
-    "next_focus": "BLOG-0003の残工程（Blogger下書き投入、実表示確認、公開、公開後確認）を制作工程台帳に従って判断する。"
+    "next_stage_boundary": "BLOG-0003 HTML・レビュー・バックアップ・Blogger下書き投入まで完了。Bloggerへの画像組み込み以降が残り。",
+    "next_focus": "BLOG-0003のBlogger画像組み込みを行い、その後に実表示確認・公開・公開後確認へ進む。"
   },
   "next_step": {
     "id": "BLOG-0003残工程",
-    "title": "BLOG-0003の公開工程へ進むか判断する",
+    "title": "BLOG-0003のBlogger画像組み込みを進める",
     "priority": 10,
     "status": "queued",
     "depends_on": [],
     "not_before": null,
     "scope": "experience_log_to_blogger",
-    "target": "完成・レビュー済み・バックアップ済みのBLOG-0003について、制作工程台帳の残工程を確認し、Blogger投入以降へ進む。",
-    "evidence": "2026-10-05時点でPR #855・#856がマージ済み。Crow再レビューで現行HTML一致を確認。Blogger下書き投入・実表示確認・公開・公開後確認は未完了。",
+    "target": "たかが投入済みのBLOG-0003 Blogger下書きへ、GitHubに保存済みの画像をダウンロードしてアップロードし、確認済みの所定位置へ組み込む。",
+    "evidence": "2026-10-05時点でBlogger下書き投入はたかが実施済み。画像を実際に入れる位置も確認済み。残作業はGitHubから画像をダウンロード→Bloggerへアップロード→所定位置へ組み込み。",
     "readiness": "ready",
     "unblock_action": "none",
     "environment": "work_pc",
@@ -555,14 +555,14 @@
     },
     {
       "id": "BLOG-0003残工程",
-      "title": "BLOG-0003の公開工程へ進むか判断する",
+      "title": "BLOG-0003のBlogger画像組み込みを進める",
       "priority": 10,
       "status": "queued",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
-      "target": "完成・レビュー済み・バックアップ済みのBLOG-0003について、制作工程台帳の残工程を確認し、Blogger投入以降へ進む。",
-      "evidence": "2026-10-05時点でPR #855・#856がマージ済み。Crow再レビューで現行HTML一致を確認。Blogger下書き投入・実表示確認・公開・公開後確認は未完了。",
+      "target": "たかが投入済みのBLOG-0003 Blogger下書きへ、GitHub保存済み画像をアップロードし、確認済みの所定位置へ組み込む。",
+      "evidence": "2026-10-05時点でBlogger下書き投入はたかが実施済み。画像を実際に入れる位置も確認済み。残作業はGitHubから画像をダウンロード→Bloggerへアップロード→所定位置へ組み込み。その後、実表示確認・公開・公開後確認へ進む。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
