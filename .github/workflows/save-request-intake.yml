@@ -1,6 +1,9 @@
 name: Save request intake
 
 on:
+  push:
+    paths:
+      - '.github/save-queue/*.md'
   pull_request_target:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
@@ -22,6 +25,7 @@ jobs:
   intake:
     if: >-
       github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
       (
         github.event.pull_request.head.repo.full_name == github.repository &&
         startsWith(github.event.pull_request.head.ref, 'chat-save-request/') &&
@@ -53,6 +57,218 @@ jobs:
           echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
           echo "head_ref=$head_ref" >> "$GITHUB_OUTPUT"
           echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve pushed queue input
+        id: push
+        if: ${{ github.event_name == 'push' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep '^\.github/save-queue/.*\.md
+        id: manual
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          queue_file=".github/save-queue/${{ inputs.queue_filename }}"
+          case "$queue_file" in
+            .github/save-queue/*.md) ;;
+            *) echo "Invalid queue filename: $queue_file" >&2; exit 1 ;;
+          esac
+          echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout trusted base branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Check canonical save backlog
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t saves < <(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --json number,headRefName,createdAt --jq '.[] | select(.headRefName | startswith("save/direct-chat-")) | [.number,.createdAt] | @tsv')
+          if [ "${#saves[@]}" -eq 0 ]; then
+            exit 0
+          fi
+          echo "Existing canonical save PRs: ${saves[*]}"
+          echo "Stale canonical save PRs do not block intake; concurrency serializes intake runs."
+
+      - name: Validate and read queue entry
+        id: queue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            queue_file="${{ steps.manual.outputs.queue_file }}"
+            head_sha="$(git rev-parse HEAD)"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            queue_file="${{ steps.push.outputs.queue_file }}"
+            head_sha="$GITHUB_SHA"
+          else
+          mapfile -t changed < <(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" --paginate --jq '.[].filename' | sort)
+          test "${#changed[@]}" = "1"
+          queue_file="${changed[0]}"
+          case "$queue_file" in
+            .github/save-queue/*.md) ;;
+            *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;;
+          esac
+          head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq '.head.sha')"
+          fi
+          tree_url="repos/${GITHUB_REPOSITORY}/git/trees/${head_sha}?recursive=1"
+          tree_json="$(gh api "$tree_url")"
+          blob_sha="$(printf '%s' "$tree_json" | jq -r --arg path "$queue_file" '.tree[] | select(.path == $path) | .sha')"
+          test -n "$blob_sha"
+          gh api "repos/${GITHUB_REPOSITORY}/git/blobs/${blob_sha}" --jq '.content' |
+            tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
+          test -s "$RUNNER_TEMP/direct-chat.md"
+          echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
+
+      - name: Diagnose runtime save category files
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "runtime_head=$(git rev-parse HEAD)"
+          echo "runtime_script_hash=$(git hash-object scripts/check_save_request_category.py)"
+          echo "expected_script_hash=$(git show HEAD:scripts/check_save_request_category.py | git hash-object --stdin)"
+          grep -n "re.escape(heading)" scripts/check_save_request_category.py
+
+      - name: Validate save request category
+        shell: bash
+        run: |
+          set -euo pipefail
+          validation_file="$RUNNER_TEMP/save-request-category.md"
+          {
+            printf '%s\n' '## 保存対象種別'
+            printf '%s\n' '会話記録'
+            printf '\n'
+            cat "$RUNNER_TEMP/direct-chat.md"
+          } > "$validation_file"
+          python scripts/check_save_request_category.py "$validation_file"
+
+      - name: Create isolated save branch from main
+        id: branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          base_sha="$(git rev-parse FETCH_HEAD)"
+          branch="save/direct-chat-${GITHUB_RUN_ID}"
+          git switch -c "$branch" "$base_sha"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "base_sha=$base_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Run canonical save script
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/save_and_currentize.py             --content-file "$RUNNER_TEMP/direct-chat.md"             --message '直チャット保存＋現在状態と生成ビューを一括同期'
+
+      - name: Verify atomic save result
+        env:
+          BASE_SHA: ${{ steps.branch.outputs.base_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse HEAD^)" = "$BASE_SHA"
+          mapfile -t changed < <(git -c core.quotepath=false show --format='' --name-only HEAD | sed '/^$/d')
+          test "${#changed[@]}" = "4"
+          direct_chat_path="$(printf '%s\n' "${changed[@]}" | grep '^直チャット/')"
+          test -n "$direct_chat_path"
+          expected="$(printf '%s\n'             'BUD.md'             'docs/現在状態.json'             'docs/引き継ぎ/現在の引き継ぎ.md'             "$direct_chat_path")"
+          actual="$(printf '%s\n' "${changed[@]}" | sort)"
+          test "$actual" = "$(printf '%s\n' "$expected" | sort)"
+
+      - name: Push save branch
+        env:
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push --set-upstream origin "$BRANCH"
+
+      - name: Open canonical save pull request
+        id: final_pr
+        env:
+          GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "SAVE_PR_TOKEN repository secret is required." >&2; exit 1; }
+          final_pr_json="$(gh api "repos/${GITHUB_REPOSITORY}/pulls" \
+            -f base=main \
+            -f head="$BRANCH" \
+            -f title='直チャット保存＋現在状態と生成ビューを一括同期' \
+            -f body=)"
+          final_pr_number="$(printf '%s' "$final_pr_json" | jq -r '.number')"
+          test -n "$final_pr_number"
+          echo "number=$final_pr_number" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve save lifecycle after verified intake
+        if: ${{ github.event_name == 'pull_request_target' }}
+        env:
+          QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number || '' }}
+          FINAL_PR_NUMBER: ${{ steps.final_pr.outputs.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+          sys.path.insert(0, "scripts")
+          from save_lifecycle_status import resolve
+
+          data = {
+              "queue_pr": {
+                  "number": int(os.environ["QUEUE_PR_NUMBER"]) if os.environ["QUEUE_PR_NUMBER"] else None,
+                  "state": "open",
+                  "merged": False,
+              },
+              "intake": {
+                  "status": "success",
+                  "source": "save-request-intake",
+              },
+              "final_save_pr": {
+                  "number": int(os.environ["FINAL_PR_NUMBER"]),
+                  "state": "open",
+                  "merged": False,
+              },
+              "canonical_readback": {
+                  "verified": False,
+              },
+          }
+          result = resolve(data)
+          assert result.status == "final_save_pending", result
+          print(json.dumps(result.__dict__, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Cleanup request branch
+        if: ${{ success() && github.event_name == 'pull_request_target' }}
+        env:
+          SOURCE_BRANCH: ${{ steps.pr.outputs.head_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin --delete "$SOURCE_BRANCH" || true
+ || true)
+          test "\${#changed[@]}" = "1"
+          echo "queue_file=\${changed[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Resolve manual queue input
         id: manual
