@@ -315,15 +315,15 @@
     "next_focus": "GitHub Pagesの本番反映後表示を確認し、その後GSCを確認する。確認完了後、次のブログ制作へ進む。"
   },
   "next_step": {
-    "id": "GITHUB-PAGES-POST-PUBLISH-CHECK",
-    "title": "GitHub Pages公開後確認 → GSC確認 → 次のブログ制作へ進む",
+    "id": "BLOG-0003公開後確認",
+    "title": "GitHub Pages公開後確認を行う",
     "priority": 10,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "今回のGitHub Pagesデザインを本番反映済みとして、公開後の実表示を確認し、続いてGSCのインデックス状況を確認した後、次のブログ制作へ進む。",
-    "evidence": "2026-10-06、GitHub Pagesの今回デザイン本番反映をたかが確認。Cloudflareは次工程から除外。",
+    "target": "今回のGitHub Pagesデザイン本番反映後の実表示を確認する。確認できない場合は未確認として記録する。完了後にGSC確認へ進む。",
+    "evidence": "2026-10-06、今回のGitHub Pagesデザインを本番反映済み。公開後の実表示確認はこれから。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
