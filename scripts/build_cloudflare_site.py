@@ -60,7 +60,7 @@ page = f"""<!doctype html>
 <style>
 * {{ box-sizing: border-box; }}
 html {{ scroll-behavior: smooth; }}
-:root {{ --ink:#292824; --muted:#746f67; --paper:#fbf8f3; --cream:#eee8df; --line:#d8d0c5; --accent:#9a7b4f; }}
+:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#171717; --cream:#22201d; --line:#3d3933; --accent:#b3945a; }}
 body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }}
 .site-header {{ background:var(--paper); }}
 .header-inner {{ max-width:1120px; margin:0 auto; padding:42px 28px 30px; }}
@@ -78,19 +78,19 @@ article h1 {{ font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-
 article h2 {{ margin-top:3.4em; padding-bottom:.45em; border-bottom:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; line-height:1.5; }}
 article h3 {{ margin-top:2.4em; line-height:1.55; }}
 article p {{ margin:1.15em 0; }}
-blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#e7ded1; border-left:3px solid var(--accent); }}
-nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#e9dfd1; border:1px solid var(--line); }}
+blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#25231f; border-left:3px solid var(--accent); }}
+nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#211f1c; border:1px solid var(--line); }}
 nav ul {{ margin:0; padding-left:1.4em; }}
 nav li {{ margin:.35em 0; }}
-a {{ color:#65471f; }}
+a {{ color:#c4a46a; }}
 figure {{ margin:2.8em auto !important; }}
 figure img {{ display:block; height:auto; max-width:100%; }}
 figcaption {{ margin-top:.65em; color:var(--muted); font-size:.82em; }}
-.flow-box {{ background:#e9dfd1; }}
-code {{ background:#e1d6c7; padding:.1em .3em; border-radius:2px; }}
+.flow-box {{ background:#211f1c; }}
+code {{ background:#2b2823; padding:.1em .3em; border-radius:2px; }}
 .profile {{ position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }}
 .profile-label {{ margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }}
-.profile-icon {{ width:58px; height:58px; margin-bottom:14px; border:1px solid #c9bda9; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }}
+.profile-icon {{ width:58px; height:58px; margin-bottom:14px; border:1px solid #806b4a; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }}
 .profile-name {{ color:var(--ink); font-family:Georgia,"Noto Serif JP",serif; font-size:1.05rem; }}
 .site-footer {{ border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }}
 @media (max-width:760px) {{
@@ -145,7 +145,7 @@ home = """<!doctype html>
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/">
 <style>
 * { box-sizing:border-box; }
-:root { --ink:#24211d; --muted:#5f584f; --paper:#f5efe6; --cream:#dfd3c2; --line:#b9aa96; --accent:#805c2f; }
+:root { --ink:#eee7db; --muted:#aaa093; --paper:#171717; --cream:#22201d; --line:#3d3933; --accent:#b3945a; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.8; }
 .site-header { background:var(--paper); }
 .header-inner { max-width:1120px; margin:0 auto; padding:48px 28px 34px; }
@@ -164,7 +164,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .card { display:block; min-height:210px; padding:28px 0 10px; border-top:1px solid var(--line); color:inherit; text-decoration:none; }
 .card h2 { margin:0 0 14px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:1.35rem; line-height:1.55; }
 .card p { margin:0; color:var(--muted); font-size:.88rem; }
-.card:hover h2, .feature:hover h2 { color:#765a35; }
+.card:hover h2, .feature:hover h2 { color:#c4a46a; }
 .profile { position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }
 .profile-label { margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }
 .profile-icon { width:58px; height:58px; margin-bottom:14px; border:1px solid #c9bda9; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }
