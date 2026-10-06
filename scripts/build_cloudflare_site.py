@@ -12,22 +12,38 @@ DIST = ROOT / "dist"
 
 TITLE = "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか"
 PERMALINK = "github-ai-conversation.html"
+BLOG1_SOURCE = ROOT / "docs/企画/BLOG-0001_Blogger掲載用.html"
+BLOG2_SOURCE = ROOT / "docs/企画/BLOG-0002/BLOG-0002_Blogger掲載用.html"
+BLOG2_IMAGE_DIR = ROOT / "docs/企画/BLOG-0002/画像"
+BLOG1_TITLE = "AIとのやりとりを残してみる――それは「便利そうだな」から始まった"
+BLOG2_TITLE = "もう一度動かしてみた――その先で考えたこと"
+BLOG1_PERMALINK = "ai-blog-start.html"
+BLOG2_PERMALINK = "vaio-p-again-and-beyond.html"
 
-if not SOURCE.is_file():
-    raise SystemExit(f"missing source: {SOURCE}")
+for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE):
+    if not required_source.is_file():
+        raise SystemExit(f"missing source: {required_source}")
 
 if DIST.exists():
     shutil.rmtree(DIST)
 (DIST / "images").mkdir(parents=True)
+(DIST / "images" / "blog-0002").mkdir(parents=True)
 
 html = SOURCE.read_text(encoding="utf-8")
+blog1_html = BLOG1_SOURCE.read_text(encoding="utf-8")
+blog2_html = BLOG2_SOURCE.read_text(encoding="utf-8")
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
+blog2_raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/"
+blog2_html = blog2_html.replace(blog2_raw_base, "images/blog-0002/")
 
 for image in sorted(IMAGE_DIR.iterdir()):
     if image.is_file():
         shutil.copy2(image, DIST / "images" / image.name)
+for image in sorted(BLOG2_IMAGE_DIR.iterdir()):
+    if image.is_file():
+        shutil.copy2(image, DIST / "images" / "blog-0002" / image.name)
 
 page = f"""<!doctype html>
 <html lang="ja">
@@ -137,8 +153,8 @@ body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system,
 <div class="layout">
 <section class="content">
 <h1>記事一覧</h1>
-<a class="card" href="https://taka-since2025.blogspot.com/2026/09/ai-blog-start.html"><p class="part">第1部｜経験ログ</p><h2>AIとのやりとりを残してみる――それは「便利そうだな」から始まった</h2><p>AIと一緒にブログを作ろうと思うまでの始まり。</p></a>
-<a class="card" href="https://taka-since2025.blogspot.com/2026/09/vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>AIと一緒に進める中で、VAIO Pをもう一度動かしていった記録。</p></a>
+<a class="card" href="ai-blog-start.html"><p class="part">第1部｜経験ログ</p><h2>AIとのやりとりを残してみる――それは「便利そうだな」から始まった</h2><p>AIと一緒にブログを作ろうと思うまでの始まり。</p></a>
+<a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>AIと一緒に進める中で、VAIO Pをもう一度動かしていった記録。</p></a>
 <a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった――GitHubで作った仕組み</h2><p>AIとのやりとりを保存し、現在を間違えない仕組みにしていった経験。</p></a>
 </section>
 <aside class="profile" aria-label="プロフィール"><div class="profile-icon" aria-hidden="true">た</div><p><strong>たか</strong></p><p>AIとのやりとりと、その過程を記録しています。</p></aside>
@@ -149,6 +165,20 @@ body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system,
 """
 (DIST / "index.html").write_text(home, encoding="utf-8")
 (DIST / PERMALINK).write_text(page, encoding="utf-8")
+
+def article_variant(base_page, title, permalink, body_html):
+    start = base_page.index("      <h1>")
+    end = base_page.index("    </article>", start)
+    replacement = f"""      <h1>{title}</h1>
+      <p class="post-meta">固定ページ：{permalink}</p>
+      {body_html}
+"""
+    return base_page[:start] + replacement + base_page[end:]
+
+page1 = article_variant(page, BLOG1_TITLE, BLOG1_PERMALINK, blog1_html)
+page2 = article_variant(page, BLOG2_TITLE, BLOG2_PERMALINK, blog2_html)
+(DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
+(DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
@@ -162,4 +192,6 @@ if missing:
 
 print(f"built {DIST / 'index.html'}")
 print(f"built {DIST / PERMALINK}")
+print(f"built {DIST / BLOG1_PERMALINK}")
+print(f"built {DIST / BLOG2_PERMALINK}")
 print(f"images: {len(list((DIST / 'images').iterdir()))}")
