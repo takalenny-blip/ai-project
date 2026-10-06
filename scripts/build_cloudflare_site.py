@@ -219,6 +219,15 @@ sitemap = """<?xml version="1.0" encoding="UTF-8"?>
 (DIST / PERMALINK).write_text(page, encoding="utf-8")
 
 def article_variant(base_page, title, permalink, body_html):
+    labels = {
+        BLOG1_PERMALINK: "FIRST PART / EXPERIENCE",
+        BLOG2_PERMALINK: "SECOND PART / VAIO P",
+        PERMALINK: "THIRD PART / GITHUB",
+    }
+    base_page = base_page.replace(
+        '<p class="eyebrow">THIRD PART / GITHUB</p>',
+        f'<p class="eyebrow">{labels.get(permalink, "ARTICLE / RECORD")}</p>',
+    )
     start = base_page.index("      <h1>")
     end = base_page.index("    </article>", start)
     replacement = f"""      <h1>{title}</h1>
