@@ -61,7 +61,7 @@
 <p>充電ランプを見ると赤点滅している。</p>
 <p>古いVAIOなので、バッテリーの状態も怪しい。</p>
 <p>そこで、バッテリーを外してACアダプターだけで起動してみることになった。</p>
-<p><strong style="color: red; background-color: yellow;">「バッテリー外したら起動。」</strong></p>
+<p class="dialogue human">「バッテリー外したら起動。」</p>
 <p>さっきまで電源が入らなかったVAIO Pが起動した。</p>
 <p>しかも、USBからDebianのインストーラーまで立ち上がった。</p>
 <p>いきなり「古いPCだから壊れているのか？」と思わせられたが、実際にはバッテリーを外すことで先へ進めた。</p>
@@ -100,7 +100,7 @@
 <p>再起動する。</p>
 <p>ここまで来ても、本当にHDDからDebianが起動するのかはまだ分からない。</p>
 <p>そして、</p>
-<p><strong style="color: red; background-color: yellow;">「うまく起動したぜ！」</strong></p>
+<p class="dialogue human">「うまく起動したぜ！」</p>
 <p>VAIO Pが起動した。</p>
 <p>デスクトップにはLXDEが表示された。</p>
 <p class="dialogue human">「LXDEシンプルでいいな！」</p>
@@ -151,14 +151,14 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <pre><code>sudo nmtui</code></pre>
 <p>を起動する。</p>
 <p>今度はWi-FiのSSIDが表示された。</p>
-<p><strong style="color: red; background-color: yellow;">「出たーーー」</strong></p>
+<p class="dialogue human">「出たーーー」</p>
 <p>ここからWi-Fiを選択して接続。</p>
 <p>接続後、iPhoneのUSBテザリングを外して、Wi-Fiだけで本当にインターネットにつながっているか確認する。</p>
 <pre><code>ping -c 3 8.8.8.8</code></pre>
 <p>そして、</p>
 <p class="dialogue human">「繋がった。画面はとじていいの？」</p>
 <p>画面を閉じて、最終確認。</p>
-<p><strong style="color: red;">「オケ」</strong></p>
+<p class="dialogue ai">「オケ」</p>
 <p>Wi-Fiも復旧した。</p>
 <p>ここまで来ると、VAIO Pが少しずつ「使える機械」になってきた感じがする。</p>
 <p>ただ、実際に使ってみると、また問題が出た。</p>
@@ -170,7 +170,15 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>でも、Firefoxは重い。</p>
 <p>そこで次は、軽量なブラウザを探すことになった。</p>
 <p>こうしてVAIO Pは、</p>
-<p><strong>電源が入らない → バッテリーを外す → Debianを入れる → Wi-Fiが見えない → コマンドで原因を切り分ける → NetworkManagerで復旧 → Firefoxが重い</strong></p>
+<div class="flow-diagram">
+  <div class="flow-box">電源が入らない</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">バッテリーを外す</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">Debianを入れる</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">Wi-Fiが見えない</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">コマンドで原因を切り分ける</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">NetworkManagerで復旧</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">Firefoxが重い</div>
+</div>
 <p>という具合に、一つ問題を解決すると、また次の問題が出てくる状態になった。</p>
 <p>それでも、最初の「VAIO Pをサーバーにしてみたい」というところから考えれば、かなり前に進んでいる。</p>
 <p>そして、この一連の作業をAIとの会話と一緒に記録していくこと自体が、あとになって重要な意味を持つことになる。</p>
@@ -252,6 +260,15 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>実際にDiMORAのお気に入り番組の情報を取得できた。</p>
 <p>そこには、番組の日付や時間、放送局、タイトル、録画モード、曜日、番組URLなど、録画管理に使えそうな情報が入っていた。</p>
 <p>ここで初めて、「コピペしなくてもいけるかもしれない」が、実際のデータを見て確認できた。</p>
+<div class="flow-diagram">
+  <div class="flow-box">お気に入り番組をコピペしていた</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">「もっと見る」の仕組みに注目する</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">JavaScriptの処理を追う</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">次の10件をサーバーから取り直しているのではないと分かる</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">表示処理を確認する</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">AIの指示を受けながらデータ取得を試す</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">「おお、取れた！」</div>
+</div>
 <p>最初に作ったGASの仕組みでは、</p>
 <p>DiMORAを開く</p>
 <p>↓</p>
