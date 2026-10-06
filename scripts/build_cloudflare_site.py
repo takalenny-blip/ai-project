@@ -46,7 +46,7 @@ html {{ scroll-behavior: smooth; }}
 body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; line-height: 1.9; }}
 .site-header {{ background: #fff; border-bottom: 1px solid #ddd; }}
 .header-inner {{ max-width: 1040px; margin: 0 auto; padding: 30px 22px 24px; }}
-.blog-name {{ margin: 0; font-size: 1rem; color: #777; letter-spacing: .08em; }}
+.blog-name {{ margin: 0; font-size: 1.35rem; color: #333; letter-spacing: .04em; font-weight: 600; }}
 .banner {{ background: #4a4a4a; color: #fff; }}
 .banner-inner {{ max-width: 1040px; margin: 0 auto; padding: 12px 22px; font-size: .9rem; }}
 .layout {{ display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; }}
@@ -95,7 +95,7 @@ code {{ background: #f1f1f1; padding: .1em .3em; border-radius: 3px; }}
     </aside>
   </div>
 </main>
-<footer class="site-footer">たかのブログ</footer>
+<footer class="site-footer">たか’sブログ</footer>
 </body>
 </html>
 """
