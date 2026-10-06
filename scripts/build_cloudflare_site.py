@@ -216,6 +216,34 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </body>
 </html>
 """
+quote_samples = """<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>引用表示サンプル</title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#363636;color:#eee7db;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;line-height:1.9}
+main{max-width:900px;margin:auto;padding:50px 28px 80px} h1{font-family:Georgia,"Noto Serif JP",serif;font-weight:500} h2{font-size:1rem;color:#b3945a;margin-top:42px}
+.sample{margin:18px 0 44px} .label{color:#aaa093;font-size:.72rem;letter-spacing:.12em;margin-bottom:8px}
+blockquote{margin:0;font-size:1rem;color:#eee7db}
+.v1{padding:18px 22px;background:#302e2a;border-left:3px solid #b3945a}
+.v2{padding:18px 0;border-top:1px solid #5a554d;border-bottom:1px solid #5a554d}
+.v3{padding:18px 22px;background:#403e3a}
+.v4{padding:20px 24px;border:1px solid #5a554d;border-radius:4px;background:#2d2b28}
+.v5{padding:10px 0 10px 22px;color:#d8d1c5;font-style:italic}
+.note{color:#aaa093;font-size:.8rem;margin-top:8px}
+a{color:#c4a46a}
+</style></head><body><main>
+<h1>引用表示サンプル</h1>
+<p>現在のブログ背景色 <strong>#363636</strong> に合わせた5パターン。これは比較用の一時ページ。</p>
+<h2>01｜現在の左縦線</h2><div class="sample"><div class="label">BLOCKQUOTE</div><blockquote class="v1">AIとのやりとりは、その場で消えてしまうものではなく、あとから読み返せる経験として残していく。</blockquote></div>
+<h2>02｜上下線</h2><div class="sample"><div class="label">BLOCKQUOTE</div><blockquote class="v2">AIとのやりとりは、その場で消えてしまうものではなく、あとから読み返せる経験として残していく。</blockquote></div>
+<h2>03｜背景だけ</h2><div class="sample"><div class="label">BLOCKQUOTE</div><blockquote class="v3">AIとのやりとりは、その場で消えてしまうものではなく、あとから読み返せる経験として残していく。</blockquote></div>
+<h2>04｜カード型</h2><div class="sample"><div class="label">BLOCKQUOTE</div><blockquote class="v4">AIとのやりとりは、その場で消えてしまうものではなく、あとから読み返せる経験として残していく。</blockquote></div>
+<h2>05｜線なし・インデント</h2><div class="sample"><div class="label">BLOCKQUOTE</div><blockquote class="v5">AIとのやりとりは、その場で消えてしまうものではなく、あとから読み返せる経験として残していく。</blockquote></div>
+<p class="note">※ 本番の引用表示はまだ変更していません。</p>
+</main></body></html>
+"""
+(DIST / "quote-samples.html").write_text(quote_samples, encoding="utf-8")
+
 sitemap = """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://takalenny-blip.github.io/ai-project/</loc></url>
