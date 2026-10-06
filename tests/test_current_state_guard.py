@@ -23,8 +23,15 @@ class CurrentStateGuardTests(unittest.TestCase):
     def base_state(self):
         resume_check = ROOT / "scripts" / "resume_check.py"
         return {
+            "updated": "2026-10-06",
+            "canonical_repository": "takalenny-blip/ai-project",
+            "primary_lane": "test lane",
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "current"},
+            "direct_chat": {"latest_saved": "2026-10-05T20-53-20.081260+0900", "latest_path": "直チャット/test.md", "legacy_serial_files_preserved": True, "new_timestamp_naming_allowed": True},
+            "surgery": {"inventory": "test", "design": "test", "adoption": "test", "bulk_refactor": "test", "verification": "test"},
+            "current_state_model": {"target": "test", "generation_flow": "test", "status": "test"},
+            "migration": {"status": "test", "normal_work_policy": "test", "temporary_manual_sync": "test"},
             "verification_records": {"resume_check": {"status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20"}}},
             "work_items": [{
                 "id": "WORK-TEST",
@@ -122,25 +129,9 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["next_step"]["title"] = state["work_items"][0]["title"]
         state["next_step"]["target"] = state["work_items"][0]["target"]
 
-        with tempfile.TemporaryDirectory() as tmp:
-            tmp_path = Path(tmp)
-            bud = tmp_path / "BUD.md"
-            handover = tmp_path / "handover.md"
-            body = "\n".join([
-                "現在：**work_pc**",
-                "退役：vaio_p",
-                "**current**",
-                "actionable：1件",
-                "- [WORK-TEST] priority=10：VAIO Pのサーバー化の経験を記事として整理する",
-            ])
-            bud.write_text(body, encoding="utf-8")
-            handover.write_text(body, encoding="utf-8")
-            old_bud, old_handover = guard.BUD_PATH, guard.HANDOVER_PATH
-            try:
-                guard.BUD_PATH, guard.HANDOVER_PATH = bud, handover
-                guard.validate_generated_views(state)
-            finally:
-                guard.BUD_PATH, guard.HANDOVER_PATH = old_bud, old_handover
+        bud_text, handover_text = guard.render(state)
+        for text in (bud_text, handover_text):
+            self.assertIn("VAIO Pのサーバー化の経験を記事として整理する", text)
 
 
     def test_abstract_next_step_fails(self):
