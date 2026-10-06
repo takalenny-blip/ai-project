@@ -43,6 +43,22 @@ jobs:
             ''|*[!0-9]*) echo "expected_size must be numeric" >&2; exit 1 ;;
           esac
 
+      - name: Check duplicate large-file queue PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FILENAME: ${{ inputs.filename }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          prs_json="$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --json number,headRefName,title)"
+          existing="$(printf '%s' "$prs_json" | jq -r --arg filename "$FILENAME" '.[] | select(.headRefName | startswith("chat-save-request/direct-large-")) | select(.title == ("Save direct chat: " + $filename)) | [.number,.headRefName,.title] | @tsv')"
+          if [ -n "$existing" ]; then
+            echo "Existing large-file queue PR found for $FILENAME:" >&2
+            printf '%s\n' "$existing" >&2
+            echo "Do not re-run intake for the same save request." >&2
+            exit 1
+          fi
+
       - name: Download source on runner
         env:
           SOURCE_URL: ${{ inputs.source_url }}
@@ -53,6 +69,10 @@ jobs:
           out="${RUNNER_TEMP}/$FILENAME"
           curl --fail --location --silent --show-error --retry 2 --output "$out" "$SOURCE_URL"
           test -s "$out"
+          if head -c 256 "$out" | grep -Eiq '<!doctype[[:space:]]+html|<html([[:space:]>]|$)'; then
+            echo "Dropbox preview HTML detected; refusing to queue this file." >&2
+            exit 1
+          fi
           actual="$(stat -c '%s' "$out")"
           if [ "$EXPECTED_SIZE" != "0" ] && [ "$actual" != "$EXPECTED_SIZE" ]; then
             echo "size mismatch: expected $EXPECTED_SIZE, got $actual" >&2
