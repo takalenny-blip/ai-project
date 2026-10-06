@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-10-06",
+  "updated": "2026-10-07",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -319,17 +319,17 @@
     "next_focus": "GitHub Pagesの本番反映後表示を確認し、その後GSCを確認する。確認完了後、次のブログ制作へ進む。"
   },
   "next_step": {
-    "id": "JUN・クロウ確認",
-    "title": "BUD二重管理解消・巨大直チャット保存マニュアルの外部レビュー確認",
+    "id": "BLOG-0003公開後確認",
+    "title": "GitHub Pages公開後確認を行う",
     "priority": 10,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "PR #924とPR #927で追加した運用マニュアルについて、JUN・クロウの確認結果を受け、問題があれば修正し、問題がなければ完了とする。",
-    "evidence": "2026-10-06、PR #924とPR #927をmerge済み。JUN・クロウへの確認依頼文を準備済み。外部レビュー結果は未確認。",
+    "target": "今回のGitHub Pagesデザイン本番反映後の実表示を確認する。確認できない場合は未確認として記録する。完了後にGSC確認へ進む。",
+    "evidence": "2026-10-07、PR #924・#927についてJUNは問題なし、クロウは2点の実装不足を指摘。クロウ指摘を採用しPR #929でDropboxプレビューHTML自動検出と同一filenameの未完了巨大直チャットキューPR重複投入防止を実装し、merge commit a5d7d1c4ccf68ba9a38f900ac21bdcbdfa8f9f6d でmainへ反映。mainのworkflow実体を読み戻し、2点の実装を確認。Run workflowボタンのUI表示は未確認。",
     "readiness": "ready",
-    "unblock_action": "JUN・クロウ確認",
+    "unblock_action": "GitHub Pages公開後確認",
     "prerequisites": []
   },
   "current_state_guards": {
