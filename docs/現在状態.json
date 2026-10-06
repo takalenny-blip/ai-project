@@ -297,7 +297,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ直接取得はこの環境からできず未確認として記録済み。次はGSC確認。",
+    "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ直接取得はこの環境からできず未確認として記録済み。GSCはたかがURL検査を実施済みだが、現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況は未確定。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-05",
@@ -316,7 +316,7 @@
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。"
     },
     "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
-    "next_focus": "GSCでトップページとBLOG-0001〜0003のインデックス状況を確認し、その後次のブログ制作へ進む。"
+    "next_focus": "GSCの処理結果が出た後、トップページとBLOG-0001〜0003のインデックス状況を確認し、その後次のブログ制作へ進む。"
   },
   "next_step": {
     "id": "GSC-確認",
@@ -329,7 +329,7 @@
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
     "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
-    "evidence": "BLOG-0003公開後確認は完了。GitHub Pages公開後の実ページ直接取得はこの環境からできず未確認として記録。たかによる実表示確認済みの既存記録は維持。次はGSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。",
+    "evidence": "2026-10-07、たかが前日にGSC URL検査を実施。現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況・未登録理由は未確定。登録リクエストは既に実施済みのため同一操作は繰り返さない。処理結果が出た後に確認を継続する。",
     "readiness": "ready",
     "unblock_action": "GSC確認",
     "prerequisites": [
@@ -606,12 +606,12 @@
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
-      "evidence": "URL検査による登録リクエストは実施済み。sitemap再送信は取得不可が継続しているため、同一操作の反復は行わず、現在の登録状況を確認する。",
+      "evidence": "2026-10-07、たかが前日にGSCのURL検査を実施。現在のGSC表示は「データを処理しています。1日後にもう一度ご確認ください」。インデックス登録済み／未登録、未登録理由はまだ確定していないため、GSC-確認は未完了のまま維持する。登録リクエストは既に実施済みで、同一操作は繰り返さない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-06",
-      "updated_at": "2026-10-06",
+      "updated_at": "2026-10-07",
       "prerequisites": []
     },
     {
