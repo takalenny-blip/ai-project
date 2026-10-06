@@ -20,17 +20,17 @@
 <p>この時点では、AIに記事を書いてもらい、自分が確認して公開する。その一連の作業を、自宅のPCなどからできるようにする、というイメージだった。</p>
 <p>その方法を考えていく中で、LinuxやPython、Blogger APIなどの話が出てきた。そして、どうせなら家にある古いVAIO Pを使ってみたらどうか、という話になっていった。</p>
 <p>VAIO Pは、以前から家にあった小さなノートPCだ。</p>
-<p>「使えるかな？」</p>
-<p>「お、いけるかも」</p>
+<p class="dialogue human">「使えるかな？」</p>
+<p class="dialogue ai">「お、いけるかも」</p>
 <p>そんな感じで、VAIO Pをサーバーのように使うことを考え始めた。</p>
 <p>そこで、まず気になったのがストレージだった。</p>
-<p>「vaiopのssd換装だけど、前にlarkboxというミニpcで使ったssdならあるんだけど、再利用可能かな？」</p>
+<p class="dialogue human">「vaiopのssd換装だけど、前にlarkboxというミニpcで使ったssdならあるんだけど、再利用可能かな？」</p>
 <p>LarkBoxで使っていたSSDをVAIO Pに移せるのか。</p>
 <figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1788348193194.jpg" alt="分解中のミニPC LarkBoxの内部とKINGDATA製SSD、精密ドライバー" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">LarkBoxの分解作業中の様子。内部に収められたKINGDATA製SSDと取り外したネジ、ドライバー。</figcaption></figure>
 <p>せっかくならSSDに換装して、VAIO Pを少しでも快適にできないかと考えた。</p>
 <figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1788348193187.jpg" alt="LarkBoxで使われていたKINGDATA製64GBのSSD単体" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">LarkBoxから取り外したKINGDATA製64GBのSSD。これをVAIO Pに流用できないか検討した。</figcaption></figure>
 <p>ただ、実際に確認していくと、SSD換装には失敗する可能性もある。そこで、最初からSSD換装に賭けるのではなく、まずは現在のHDDを使ってDebianを入れて動かしてみることにした。</p>
-<p>「動くかどうか試したい」</p>
+<p class="dialogue human">「動くかどうか試したい」</p>
 <p>VAIO PにDebianを入れて、実際に使えるところまで持っていけるのか。</p>
 <p>まずはそこから始めることにした。</p>
 
@@ -42,21 +42,21 @@
 <p>ここからは、母艦PCでDebianのインストールメディアを作り、VAIO Pに入れていく。</p>
 <p>このとき、JUN（Gemini）から「写真で残したら？」というアドバイスもあった。</p>
 <p>そこで、たかもこう返している。</p>
-<p>「写真で残したら？のアドバイスもよろしく！母艦PCはある。debianのダウンロードからだね。ここから一緒にやろうぜ！」</p>
+<p class="dialogue human">「写真で残したら？のアドバイスもよろしく！母艦PCはある。debianのダウンロードからだね。ここから一緒にやろうぜ！」</p>
 <p>ただ、単に写真を撮るだけではなく、あとからこの経験そのものを記事にできないか、ということも考えていた。</p>
 <p>まずはDebianをダウンロードする。</p>
-<p>「今、debianダウンロード中」</p>
+<p class="dialogue human">「今、debianダウンロード中」</p>
 <p>ダウンロードしたのは、Debian 12.12.0のi386版netinst。</p>
 <p>次にRufusを使ってUSBメモリに書き込む。</p>
 <p>画面を見ながら進めていると、AIが一度、Windowsの通常フォーマット画面だと勘違いした。</p>
-<p>「ん？rufasだよ」</p>
+<p class="dialogue human">「ん？rufasだよ」</p>
 <p>AIもすぐに勘違いを認めた。</p>
 <p>Rufusの画面には、ボリュームラベルとして「Debian 12.12.0 i386 n」と表示されていた。</p>
 <figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1788348193181.jpg" alt="RufusでDebian 12.12.0 i386の書き込みを行っている画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">Rufusを使ってUSBメモリにDebian 12.12.0 i386版の書き込みを行っている様子。ボリュームラベルに「Debian 12.12.0 i386 n」が表示されている。</figcaption></figure>
 <p>USBメディアができた。</p>
 <p>いよいよVAIO Pを起動する。</p>
 <p>ところが、ここで最初のトラブル。</p>
-<p>「何だろ？電源入らん」</p>
+<p class="dialogue human">「何だろ？電源入らん」</p>
 <p>電源が入らない。</p>
 <p>充電ランプを見ると赤点滅している。</p>
 <p>古いVAIOなので、バッテリーの状態も怪しい。</p>
@@ -74,19 +74,19 @@
 <p>ところが、ここでAI側に記憶違いが起きた。</p>
 <p>JUNが、VAIO PにはKingdataの64GB SSDが入っているという前提で話し始めた。</p>
 <p>そこで、たかが訂正する。</p>
-<p>「換装は見送り、HDDにインストールする方針にしたんだぜ？SSDは外付けで活用しようかって話したじゃん」</p>
+<p class="dialogue human">「換装は見送り、HDDにインストールする方針にしたんだぜ？SSDは外付けで活用しようかって話したじゃん」</p>
 <p>この場面は、単なるインストール手順では終わらなかった。</p>
 <p>AIと一緒に作業していると、以前の会話を正確に引き継げているとは限らない。</p>
 <p>だから、実際の作業現場にいる人間が「今どうなっているか」を確認しながら進める必要がある。</p>
 <p>今回は、その訂正を入れて、元のHDDへのインストールを続けた。</p>
-<p>「今はベースシステムのインストール中」</p>
+<p class="dialogue human">「今はベースシステムのインストール中」</p>
 <p>あとは待つしかない。</p>
 <p>HDDなので、とにかく時間がかかる。</p>
-<p>「ソフトウェアの選択とインストール、5%」</p>
+<p class="dialogue human">「ソフトウェアの選択とインストール、5%」</p>
 <p>少しずつ数字が進む。</p>
-<p>「今はソフトウェアの選択とインストール50%」</p>
+<p class="dialogue human">「今はソフトウェアの選択とインストール50%」</p>
 <p>途中で、インストールそのものだけでなく、この先の最終ゴールについても気になってきた。</p>
-<p>「それってインストールでしょ？そうじゃなくて、最終ゴールまでの。」</p>
+<p class="dialogue human">「それってインストールでしょ？そうじゃなくて、最終ゴールまでの。」</p>
 <p>Debianを入れること自体が目的ではない。</p>
 <p>VAIO Pをサーバーとして使い、その先でブログや自動化につなげたい。</p>
 <p>そのための最初の一歩が、今やっているDebianのインストールだった。</p>
@@ -103,14 +103,14 @@
 <p><strong style="color: red; background-color: yellow;">「うまく起動したぜ！」</strong></p>
 <p>VAIO Pが起動した。</p>
 <p>デスクトップにはLXDEが表示された。</p>
-<p>「LXDEシンプルでいいな！」</p>
+<p class="dialogue human">「LXDEシンプルでいいな！」</p>
 <p>古いVAIO Pに、DebianとLXDEが動いている。</p>
 <figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1790667299791.jpg" alt="VAIO P上のDebian環境でシステム情報やメモリ・ディスク容量を確認しているターミナル画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">VAIO P（VGN-P70H_W）上のDebian環境にて、カーネルバージョン、メモリ使用量（free -h）、ディスク使用量（df -h）、およびマウント構成やデバイス（lsblk）を確認している様子。</figcaption></figure>
 <p>まずは成功だ。</p>
 <p>ただし、ここで終わりではなかった。</p>
 <p>次に確認したかったのはネットワーク。</p>
 <p>ところが、Wi-Fiが使えない。</p>
-<p>「Wi-Fiない？」</p>
+<p class="dialogue human">「Wi-Fiない？」</p>
 <p>無線LANが見えない。</p>
 <p>ここからは、画面を見ながらコマンドを一つずつ試していく。</p>
 <p>まず、ネットワークインターフェースを確認する。</p>
@@ -121,12 +121,12 @@
 <pre><code>sudo nmtui</code></pre>
 <p>を起動する。</p>
 <p>しかし、Wi-Fiが出てこない。</p>
-<p>「見えねー」</p>
+<p class="dialogue human">「見えねー」</p>
 <p>そこで、NetworkManagerの状態を確認する。</p>
 <pre><code>nmcli device</code></pre>
 <figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1790667244445.jpg" alt="VAIO PのDebian環境でネットワーク確認コマンドを実行しているターミナル画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">VAIO P上のDebian環境にて、無線LANやネットワークデバイスの状況を確認するため各種コマンド（rfkill、ip link、nmcliなど）を実行している様子。</figcaption></figure>
 <p>すると、無線LANインターフェース wlp2s0 が「unmanaged」、つまり「管理なし」になっていた。</p>
-<p>「管理なし」</p>
+<p class="dialogue ai">「管理なし」</p>
 <p>ここから原因を切り分ける。</p>
 <p>まずNetworkManagerに管理させてみる。</p>
 <pre><code>sudo nmcli device set wlp2s0 managed yes</code></pre>
@@ -156,14 +156,14 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>接続後、iPhoneのUSBテザリングを外して、Wi-Fiだけで本当にインターネットにつながっているか確認する。</p>
 <pre><code>ping -c 3 8.8.8.8</code></pre>
 <p>そして、</p>
-<p>「繋がった。画面はとじていいの？」</p>
+<p class="dialogue human">「繋がった。画面はとじていいの？」</p>
 <p>画面を閉じて、最終確認。</p>
 <p><strong style="color: red;">「オケ」</strong></p>
 <p>Wi-Fiも復旧した。</p>
 <p>ここまで来ると、VAIO Pが少しずつ「使える機械」になってきた感じがする。</p>
 <p>ただ、実際に使ってみると、また問題が出た。</p>
 <p>Firefoxを起動する。</p>
-<p>「firefoxは変わらず重い。。。」</p>
+<p class="dialogue human">「firefoxは変わらず重い。。。」</p>
 <p>Debianは起動した。</p>
 <p>LXDEも動いた。</p>
 <p>Wi-Fiもつながった。</p>
@@ -174,6 +174,15 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>という具合に、一つ問題を解決すると、また次の問題が出てくる状態になった。</p>
 <p>それでも、最初の「VAIO Pをサーバーにしてみたい」というところから考えれば、かなり前に進んでいる。</p>
 <p>そして、この一連の作業をAIとの会話と一緒に記録していくこと自体が、あとになって重要な意味を持つことになる。</p>
+<div class="flow-diagram">
+  <div class="flow-box">VAIO Pを動かしたい</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">Debianを入れて起動する</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">Wi-Fiが使えない</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">コマンドで状態を確認する</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">NetworkManagerの設定を見直す</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">Wi-Fi接続を確認する</div><div aria-hidden="true" class="flow-arrow">↓</div>
+  <div class="flow-box">次の問題（Firefoxの重さ）へ進む</div>
+</div>
 
 <p><br /></p>
 
