@@ -161,12 +161,9 @@ jobs:
           set -euo pipefail
           validation_file="$RUNNER_TEMP/save-request-category.md"
           {
-            printf '%s
-' '## 保存対象種別'
-            printf '%s
-' '会話記録'
-            printf '
-'
+            printf '%s\n' '## 保存対象種別'
+            printf '%s\n' '会話記録'
+            printf '\n'
             cat "$RUNNER_TEMP/direct-chat.md"
           } > "$validation_file"
           python scripts/check_save_request_category.py "$validation_file"
