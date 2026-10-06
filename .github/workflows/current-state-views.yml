@@ -37,7 +37,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   render-and-check:
@@ -57,11 +57,13 @@ jobs:
       - name: Render candidate views and verify determinism
         run: python scripts/generate_current_views.py --out-dir generated/current-views --check-deterministic
 
-      - name: Verify checked-in views match generated views
+      - name: Validate generated views from canonical state
         run: |
-          cmp --silent generated/current-views/BUD.md BUD.md
-          cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
-          echo "OK: checked-in views match generated views"
+          test -s generated/current-views/BUD.md
+          test -s generated/current-views/現在の引き継ぎ.md
+          echo "OK: generated views rendered from docs/現在状態.json"
+
+
 
       - name: Run current-state guards
         run: python scripts/current_state_guard.py
@@ -102,11 +104,40 @@ jobs:
 
           python scripts/check_repo_integrity.py
           python scripts/generate_current_views.py --out-dir generated/save-test --check-deterministic
-          cmp --silent generated/save-test/BUD.md BUD.md
-          cmp --silent generated/save-test/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
           rm -rf generated/save-test
           test -z "$(git status --porcelain)"
           echo "OK: three atomic save operations produced three commits and clean trees"
 
       - name: Show candidate files
         run: git diff --no-index -- /dev/null generated/current-views/BUD.md || true; git diff --no-index -- /dev/null generated/current-views/現在の引き継ぎ.md || true
+
+  sync-generated-views:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Regenerate tracked views from canonical state
+        run: python scripts/generate_current_views.py --out-dir generated/current-views
+
+      - name: Sync generated views when needed
+        run: |
+          set -euo pipefail
+          if cmp --silent generated/current-views/BUD.md BUD.md &&
+             cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md; then
+            echo "OK: tracked generated views are already synchronized"
+            exit 0
+          fi
+          cp generated/current-views/BUD.md BUD.md
+          cp generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BUD.md docs/引き継ぎ/現在の引き継ぎ.md
+          git commit -m "chore: sync generated current-state views"
+          git push
