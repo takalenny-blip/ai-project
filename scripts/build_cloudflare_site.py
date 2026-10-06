@@ -92,6 +92,11 @@ pre code {{ display:block; background:transparent; padding:0; color:inherit; whi
 .flow-diagram {{ display:flex; flex-direction:column; align-items:center; gap:.5em; margin:1.5em 0; }}
 .flow-box {{ width:90%; max-width:42em; box-sizing:border-box; padding:.7em 1em; text-align:center; border:1px solid #999; border-radius:.7em; background:#2b2926; }}
 .flow-arrow {{ line-height:1.2; text-align:center; color:var(--muted); }}
+.flow-comparison {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2em; margin:1.5em 0; }}
+.flow-comparison-column {{ box-sizing:border-box; padding:1em; border:1px solid var(--line); border-radius:.7em; background:#2b2926; }}
+.flow-comparison-column h4 {{ margin:.1em 0 1em; text-align:center; }}
+.flow-comparison-column .flow-box {{ width:100%; max-width:none; background:#302e2a; }}
+@media (max-width:700px) {{ .flow-comparison {{ grid-template-columns:1fr; }} }}
 blockquote p {{ transform:skewX(-8deg); transform-origin:left center; }}
 blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#302e2a; border-left:3px solid var(--accent); font-style:italic; }}
 nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#2b2926; border:1px solid var(--line); }}
