@@ -52,6 +52,7 @@ page = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{TITLE}</title>
 <meta name="description" content="{TITLE}">
+<meta name="google-site-verification" content="Iaufdzv8o8vilCmpJ1WqXyjSyYZtNh13gEXbhYTgV0Y">
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/{PERMALINK}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="{TITLE}">
