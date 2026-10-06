@@ -593,7 +593,7 @@
       "priority": 20,
       "status": "queued",
       "depends_on": [
-        "GITHUB-PAGES-POST-PUBLISH-CHECK"
+        "BLOG-0003公開後確認"
       ],
       "not_before": null,
       "scope": "experience_log_to_blogger",
