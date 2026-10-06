@@ -21,7 +21,7 @@
 <p>その方法を考えていく中で、LinuxやPython、Blogger APIなどの話が出てきた。そして、どうせなら家にある古いVAIO Pを使ってみたらどうか、という話になっていった。</p>
 <p>VAIO Pは、以前から家にあった小さなノートPCだ。</p>
 <p class="dialogue human">「使えるかな？」</p>
-<p class="dialogue ai">「お、いけるかも」</p>
+<p class="dialogue human">「お、いけるかも」</p>
 <p>そんな感じで、VAIO Pをサーバーのように使うことを考え始めた。</p>
 <p>そこで、まず気になったのがストレージだった。</p>
 <p class="dialogue human">「vaiopのssd換装だけど、前にlarkboxというミニpcで使ったssdならあるんだけど、再利用可能かな？」</p>
@@ -126,7 +126,7 @@
 <pre><code>nmcli device</code></pre>
 <figure style="margin:1.5em 0;text-align:center;"><img src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/1790667244445.jpg" alt="VAIO PのDebian環境でネットワーク確認コマンドを実行しているターミナル画面" style="display:block;width:100%;height:auto;margin:0 auto;"><figcaption style="margin-top:.5em;font-size:.9em;color:#666;">VAIO P上のDebian環境にて、無線LANやネットワークデバイスの状況を確認するため各種コマンド（rfkill、ip link、nmcliなど）を実行している様子。</figcaption></figure>
 <p>すると、無線LANインターフェース wlp2s0 が「unmanaged」、つまり「管理なし」になっていた。</p>
-<p class="dialogue ai">「管理なし」</p>
+<p>「管理なし」</p>
 <p>ここから原因を切り分ける。</p>
 <p>まずNetworkManagerに管理させてみる。</p>
 <pre><code>sudo nmcli device set wlp2s0 managed yes</code></pre>
@@ -158,7 +158,7 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>そして、</p>
 <p class="dialogue human">「繋がった。画面はとじていいの？」</p>
 <p>画面を閉じて、最終確認。</p>
-<p class="dialogue ai">「オケ」</p>
+<p class="dialogue human">「オケ」</p>
 <p>Wi-Fiも復旧した。</p>
 <p>ここまで来ると、VAIO Pが少しずつ「使える機械」になってきた感じがする。</p>
 <p>ただ、実際に使ってみると、また問題が出た。</p>
@@ -223,7 +223,7 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>Claudeのブラウザ連携を知り、それをきっかけにGeminiにも聞いてみたときである。</p>
 <p>Pythonでブラウザから情報を取得する。</p>
 <p>それを知ったとき、急につながった。</p>
-<p>「あ、これDIGAでも使えるかも」</p>
+<p class="dialogue human">「あ、これDIGAでも使えるかも」</p>
 <p>そう思った。</p>
 <p>コピペしなくて済む。</p>
 <p><strong style="color: red;">うまくしたらラクになるぞー。</strong></p>
@@ -236,16 +236,16 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
 <p>ここを追えば、DiMORAがどこから番組情報を持ってきているのか分かるかもしれない。</p>
 <p>AIから指示をもらいながら、実際のHTMLを確認していく。</p>
 <p>すると、ページの中には、</p>
-<p><code>favoriteProgram-14.6.0.js</code></p>
+<pre><code>favoriteProgram-14.6.0.js</code></pre>
 <p>というJavaScriptが読み込まれていることが分かった。</p>
-<p>「このJavaScriptを見てみよう」</p>
+<p class="dialogue human">「このJavaScriptを見てみよう」</p>
 <p>そんな具合に、一つ分かると次を調べる。</p>
 <p>その中で「もっと見る」の処理を追っていくと、</p>
-<p><code>FavoriteProgramController.prototype.addFavPgm()</code></p>
+<pre><code>FavoriteProgramController.prototype.addFavPgm()</code></pre>
 <p>が出てきた。</p>
 <p>さらに追う。</p>
 <p>すると、その処理が参照していたのが、</p>
-<p><code>GL_FAVPGM_DATA.record</code></p>
+<pre><code>GL_FAVPGM_DATA.record</code></pre>
 <p>だった。</p>
 <p>ここで、だんだん見えてきた。</p>
 <p>「もっと見る」を押したから、次の10件を新しくサーバーから取りに行っているのではない。</p>
