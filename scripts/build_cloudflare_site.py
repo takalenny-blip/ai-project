@@ -27,6 +27,9 @@ for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE):
 if DIST.exists():
     shutil.rmtree(DIST)
 (DIST / "images").mkdir(parents=True)
+BANNER = ROOT / "docs/site/images/taka-blog-banner.jpg"
+if not BANNER.is_file():
+    raise SystemExit(f"missing banner: {BANNER}")
 (DIST / "images" / "blog-0002").mkdir(parents=True)
 
 html = SOURCE.read_text(encoding="utf-8")
@@ -41,6 +44,7 @@ blog2_html = blog2_html.replace(blog2_raw_base, "images/blog-0002/")
 for image in sorted(IMAGE_DIR.iterdir()):
     if image.is_file():
         shutil.copy2(image, DIST / "images" / image.name)
+shutil.copy2(BANNER, DIST / "images" / "taka-blog-banner.jpg")
 for image in sorted(BLOG2_IMAGE_DIR.iterdir()):
     if image.is_file():
         shutil.copy2(image, DIST / "images" / "blog-0002" / image.name)
@@ -63,7 +67,9 @@ html {{ scroll-behavior: smooth; }}
 :root {{ --ink:#eee7db; --muted:#aaa093; --paper:#171717; --cream:#22201d; --line:#3d3933; --accent:#b3945a; }}
 body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }}
 .site-header {{ background:var(--paper); }}
-.header-inner {{ max-width:1120px; margin:0 auto; padding:42px 28px 30px; }}
+.header-inner {{ max-width:1120px; margin:0 auto; padding:30px 28px 26px; }}
+.site-signboard {{ display:block; border:0; text-decoration:none; }}
+.site-signboard img {{ display:block; width:100%; height:auto; max-height:300px; object-fit:cover; border:1px solid var(--line); }}
 .blog-name {{ margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.55rem; letter-spacing:.08em; font-weight:500; }}
 .header-kicker {{ margin:.55rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; }}
 .banner {{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }}
@@ -94,7 +100,8 @@ code {{ background:#2b2823; padding:.1em .3em; border-radius:2px; }}
 .profile-name {{ color:var(--ink); font-family:Georgia,"Noto Serif JP",serif; font-size:1.05rem; }}
 .site-footer {{ border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }}
 @media (max-width:760px) {{
-  .header-inner {{ padding:28px 18px 22px; }}
+  .header-inner {{ padding:22px 18px 18px; }}
+  .site-signboard img {{ max-height:180px; }}
   .banner-inner {{ padding:11px 18px; }}
   main {{ padding:38px 18px 60px; }}
   .layout {{ grid-template-columns:1fr; gap:42px; }}
@@ -106,8 +113,9 @@ code {{ background:#2b2823; padding:.1em .3em; border-radius:2px; }}
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <p class="blog-name">たか’sブログ</p>
-    <p class="header-kicker">AI / EXPERIENCE / RECORD</p>
+    <a class="site-signboard" href="./" aria-label="たか’sブログ ホーム">
+      <img src="images/taka-blog-banner.jpg" alt="たか’sブログ">
+    </a>
   </div>
 </header>
 <div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
@@ -148,7 +156,9 @@ home = """<!doctype html>
 :root { --ink:#eee7db; --muted:#aaa093; --paper:#171717; --cream:#22201d; --line:#3d3933; --accent:#b3945a; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.8; }
 .site-header { background:var(--paper); }
-.header-inner { max-width:1120px; margin:0 auto; padding:48px 28px 34px; }
+.header-inner { max-width:1120px; margin:0 auto; padding:30px 28px 26px; }
+.site-signboard { display:block; border:0; text-decoration:none; }
+.site-signboard img { display:block; width:100%; height:auto; max-height:300px; object-fit:cover; border:1px solid var(--line); }
 .blog-name { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(2rem,4vw,3rem); font-weight:500; letter-spacing:.08em; }
 .header-kicker { margin:.7rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.2em; }
 .banner { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
@@ -171,7 +181,8 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .profile p { margin:0 0 .35em; }
 .site-footer { border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }
 @media (max-width:760px) {
-  .header-inner { padding:34px 18px 26px; }
+  .header-inner { padding:22px 18px 18px; }
+  .site-signboard img { max-height:180px; }
   .banner-inner { padding:11px 18px; }
   .layout { grid-template-columns:1fr; gap:42px; padding:42px 18px 60px; }
   .feature { padding:30px 0 34px; }
@@ -183,7 +194,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </style>
 </head>
 <body>
-<header class="site-header"><div class="header-inner"><p class="blog-name">たか’sブログ</p><p class="header-kicker">AI / EXPERIENCE / RECORD</p></div></header>
+<header class="site-header"><div class="header-inner"><a class="site-signboard" href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></div></header>
 <div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
 <div class="layout">
 <section class="content">
