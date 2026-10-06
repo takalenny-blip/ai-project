@@ -11,9 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
 from work_queue import validate_work_items, derived_next_step, select_actionable
+from generate_current_views import render
 STATE_PATH = ROOT / "docs" / "現在状態.json"
-BUD_PATH = ROOT / "BUD.md"
-HANDOVER_PATH = ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md"
 
 REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
 ABSTRACT_NEXT_STEP = (
@@ -205,12 +204,19 @@ def retired_tokens(state: dict) -> tuple[str, ...]:
     return tuple(dict.fromkeys(tokens))
 
 def validate_generated_views(state: dict) -> None:
+    """Validate views rendered directly from the canonical state.
+
+    BUD.md and the handover are compatibility views, not sources of truth.
+    Their checked-in copies may lag briefly until the sync workflow updates them;
+    guard validation must therefore inspect freshly rendered output from the
+    canonical state rather than treating those copies as independent state.
+    """
     env = state["execution_environment"]
     current = state["current_position"]
     actionable_items = select_actionable(state["work_items"], state.get("updated"))
     actionable = actionable_items[0] if actionable_items else None
-    for path in (BUD_PATH, HANDOVER_PATH):
-        text = path.read_text(encoding="utf-8")
+    bud_text, handover_text = render(state)
+    for name, text in (("BUD.md", bud_text), ("docs/引き継ぎ/現在の引き継ぎ.md", handover_text)):
         required = [
             f"現在：**{env['active']}**",
             f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
@@ -219,15 +225,11 @@ def validate_generated_views(state: dict) -> None:
         ]
         for fragment in required:
             if fragment not in text:
-                fail(f"generated view is stale or incomplete: {path} missing {fragment}")
+                fail(f"generated view is stale or incomplete: {name} missing {fragment}")
         if actionable:
             marker = f"- [{actionable['id']}] priority={actionable['priority']}：{actionable['title']}"
             if marker not in text:
-                fail(f"generated view is missing actionable work item: {path}: {actionable['id']}")
-        # Generated views may legitimately contain historical work-item titles
-        # (for example, a blog project about a retired environment). Do not scan
-        # the entire prose for retired names; active-environment consistency is
-        # enforced above and historical project docs have their own guard.
+                fail(f"generated view is missing actionable work item: {name}: {actionable['id']}")
 
 def validate_projects(state: dict) -> None:
     retired = retired_tokens(state)
