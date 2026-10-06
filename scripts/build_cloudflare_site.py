@@ -165,6 +165,16 @@ body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system,
 </body>
 </html>
 """
+sitemap = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://takalenny-blip.github.io/ai-project/</loc></url>
+  <url><loc>https://takalenny-blip.github.io/ai-project/ai-blog-start.html</loc></url>
+  <url><loc>https://takalenny-blip.github.io/ai-project/vaio-p-again-and-beyond.html</loc></url>
+  <url><loc>https://takalenny-blip.github.io/ai-project/github-ai-conversation.html</loc></url>
+</urlset>
+"""
+(DIST / "sitemap.xml").write_text(sitemap, encoding="utf-8")
+
 (DIST / "index.html").write_text(home, encoding="utf-8")
 (DIST / PERMALINK).write_text(page, encoding="utf-8")
 
