@@ -58,49 +58,49 @@ page = f"""<!doctype html>
 <meta property="og:title" content="{TITLE}">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/{PERMALINK}">
 <style>
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-:root { --ink:#292824; --muted:#746f67; --paper:#fbf8f3; --cream:#eee8df; --line:#d8d0c5; --accent:#9a7b4f; }
-body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }
-.site-header { background:var(--paper); }
-.header-inner { max-width:1120px; margin:0 auto; padding:42px 28px 30px; }
-.blog-name { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.55rem; letter-spacing:.08em; font-weight:500; }
-.header-kicker { margin:.55rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; }
-.banner { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
-.banner-inner { max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }
-main { max-width:1120px; margin:0 auto; padding:58px 28px 90px; }
-.layout { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; }
-article { min-width:0; }
-.article-intro { border-bottom:1px solid var(--line); padding:0 0 34px; margin-bottom:38px; }
-.eyebrow { margin:0 0 13px; color:var(--accent); font-size:.74rem; font-weight:600; letter-spacing:.18em; }
-article h1 { font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:clamp(2rem,4.4vw,3.35rem); line-height:1.35; letter-spacing:.01em; margin:0; }
-.post-meta { margin:17px 0 0; color:var(--muted); font-size:.78rem; letter-spacing:.04em; }
-article h2 { margin-top:3.4em; padding-bottom:.45em; border-bottom:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; line-height:1.5; }
-article h3 { margin-top:2.4em; line-height:1.55; }
-article p { margin:1.15em 0; }
-blockquote { margin:2em 0; padding:1.1em 1.4em; background:#f2eee8; border-left:3px solid var(--accent); }
-nav { margin:2.4em 0; padding:1.25em 1.4em; background:#f5f1eb; border:1px solid var(--line); }
-nav ul { margin:0; padding-left:1.4em; }
-nav li { margin:.35em 0; }
-a { color:#765a35; }
-figure { margin:2.8em auto !important; }
-figure img { display:block; height:auto; max-width:100%; }
-figcaption { margin-top:.65em; color:var(--muted); font-size:.82em; }
-.flow-box { background:#f5f1eb; }
-code { background:#eee9e1; padding:.1em .3em; border-radius:2px; }
-.profile { position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }
-.profile-label { margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }
-.profile-icon { width:58px; height:58px; margin-bottom:14px; border:1px solid #c9bda9; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }
-.profile-name { color:var(--ink); font-family:Georgia,"Noto Serif JP",serif; font-size:1.05rem; }
-.site-footer { border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }
-@media (max-width:760px) {
-  .header-inner { padding:28px 18px 22px; }
-  .banner-inner { padding:11px 18px; }
-  main { padding:38px 18px 60px; }
-  .layout { grid-template-columns:1fr; gap:42px; }
-  article h1 { font-size:2rem; }
-  .profile { position:static; padding:24px 0 0; border-left:0; border-top:1px solid var(--line); }
-}
+* {{ box-sizing: border-box; }}
+html {{ scroll-behavior: smooth; }}
+:root {{ --ink:#292824; --muted:#746f67; --paper:#fbf8f3; --cream:#eee8df; --line:#d8d0c5; --accent:#9a7b4f; }}
+body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }}
+.site-header {{ background:var(--paper); }}
+.header-inner {{ max-width:1120px; margin:0 auto; padding:42px 28px 30px; }}
+.blog-name {{ margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.55rem; letter-spacing:.08em; font-weight:500; }}
+.header-kicker {{ margin:.55rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; }}
+.banner {{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }}
+.banner-inner {{ max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }}
+main {{ max-width:1120px; margin:0 auto; padding:58px 28px 90px; }}
+.layout {{ display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; }}
+article {{ min-width:0; }}
+.article-intro {{ border-bottom:1px solid var(--line); padding:0 0 34px; margin-bottom:38px; }}
+.eyebrow {{ margin:0 0 13px; color:var(--accent); font-size:.74rem; font-weight:600; letter-spacing:.18em; }}
+article h1 {{ font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:clamp(2rem,4.4vw,3.35rem); line-height:1.35; letter-spacing:.01em; margin:0; }}
+.post-meta {{ margin:17px 0 0; color:var(--muted); font-size:.78rem; letter-spacing:.04em; }}
+article h2 {{ margin-top:3.4em; padding-bottom:.45em; border-bottom:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; line-height:1.5; }}
+article h3 {{ margin-top:2.4em; line-height:1.55; }}
+article p {{ margin:1.15em 0; }}
+blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#f2eee8; border-left:3px solid var(--accent); }}
+nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#f5f1eb; border:1px solid var(--line); }}
+nav ul {{ margin:0; padding-left:1.4em; }}
+nav li {{ margin:.35em 0; }}
+a {{ color:#765a35; }}
+figure {{ margin:2.8em auto !important; }}
+figure img {{ display:block; height:auto; max-width:100%; }}
+figcaption {{ margin-top:.65em; color:var(--muted); font-size:.82em; }}
+.flow-box {{ background:#f5f1eb; }}
+code {{ background:#eee9e1; padding:.1em .3em; border-radius:2px; }}
+.profile {{ position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }}
+.profile-label {{ margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }}
+.profile-icon {{ width:58px; height:58px; margin-bottom:14px; border:1px solid #c9bda9; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }}
+.profile-name {{ color:var(--ink); font-family:Georgia,"Noto Serif JP",serif; font-size:1.05rem; }}
+.site-footer {{ border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }}
+@media (max-width:760px) {{
+  .header-inner {{ padding:28px 18px 22px; }}
+  .banner-inner {{ padding:11px 18px; }}
+  main {{ padding:38px 18px 60px; }}
+  .layout {{ grid-template-columns:1fr; gap:42px; }}
+  article h1 {{ font-size:2rem; }}
+  .profile {{ position:static; padding:24px 0 0; border-left:0; border-top:1px solid var(--line); }}
+}}
 </style>
 </head>
 <body>
@@ -134,7 +134,7 @@ code { background:#eee9e1; padding:.1em .3em; border-radius:2px; }
 </html>
 """
 
-home = f"""<!doctype html>
+home = """<!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
