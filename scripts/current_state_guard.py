@@ -8,6 +8,8 @@ import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+BUD_PATH = ROOT / "BUD.md"
+HANDOVER_PATH = ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md"
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
 from work_queue import validate_work_items, derived_next_step, select_actionable
