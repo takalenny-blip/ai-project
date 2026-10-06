@@ -100,7 +100,54 @@ code {{ background: #f1f1f1; padding: .1em .3em; border-radius: 3px; }}
 </html>
 """
 
-(DIST / "index.html").write_text(page, encoding="utf-8")
+home = f"""<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>たか’sブログ</title>
+<meta name="description" content="AIとのやりとりと、そこから生まれた経験を残していくブログです。">
+<link rel="canonical" href="https://takalenny-blip.github.io/ai-project/">
+<style>
+* {{ box-sizing: border-box; }}
+body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; line-height: 1.8; }}
+.site-header {{ background: #fff; border-bottom: 1px solid #ddd; }}
+.header-inner {{ max-width: 1040px; margin: 0 auto; padding: 30px 22px 24px; }}
+.blog-name {{ margin: 0; font-size: 1.35rem; font-weight: 600; letter-spacing: .04em; }}
+.banner {{ background: #4a4a4a; color: #fff; }}
+.banner-inner {{ max-width: 1040px; margin: 0 auto; padding: 12px 22px; font-size: .9rem; }}
+.layout {{ display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; max-width: 1040px; margin: 0 auto; padding: 34px 22px 72px; }}
+.content {{ background: #fff; padding: 36px 40px; border-radius: 10px; box-shadow: 0 2px 14px rgba(0,0,0,.07); }}
+.content h1 {{ margin: 0 0 1.4em; font-size: 2rem; }}
+.card {{ display: block; margin: 0 0 18px; padding: 22px 24px; border: 1px solid #e3ded8; border-radius: 10px; background: #faf8f5; color: inherit; text-decoration: none; }}
+.card:hover {{ border-color: #bbb; }}
+.part {{ margin: 0 0 .35em; font-size: .82rem; color: #777; }}
+.card h2 {{ margin: 0 0 .5em; font-size: 1.25rem; line-height: 1.5; }}
+.card p {{ margin: 0; color: #666; font-size: .92rem; }}
+.profile {{ padding: 18px 16px; background: #faf8f5; border: 1px solid #e5e0da; border-radius: 8px; position: sticky; top: 20px; }}
+.profile-icon {{ width: 54px; height: 54px; margin-bottom: 12px; border-radius: 50%; display: grid; place-items: center; background: #ddd; font-weight: 700; }}
+.profile p {{ margin: 0; }}
+.site-footer {{ border-top: 1px solid #ddd; background: #fff; color: #777; text-align: center; padding: 28px 18px; font-size: .85rem; }}
+@media (max-width: 760px) {{ .layout {{ grid-template-columns: 1fr; padding: 12px 8px 40px; }} .content {{ padding: 24px 18px; }} .header-inner {{ padding: 22px 16px; }} .profile {{ position: static; }} }}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><p class="blog-name">たか’sブログ</p></div></header>
+<div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
+<div class="layout">
+<section class="content">
+<h1>記事一覧</h1>
+<a class="card" href="https://taka-since2025.blogspot.com/2026/09/ai-blog-start.html"><p class="part">第1部｜経験ログ</p><h2>AIとのやりとりを残してみる――それは「便利そうだな」から始まった</h2><p>AIと一緒にブログを作ろうと思うまでの始まり。</p></a>
+<a class="card" href="https://taka-since2025.blogspot.com/2026/09/vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>AIと一緒に進める中で、VAIO Pをもう一度動かしていった記録。</p></a>
+<a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった――GitHubで作った仕組み</h2><p>AIとのやりとりを保存し、現在を間違えない仕組みにしていった経験。</p></a>
+</section>
+<aside class="profile" aria-label="プロフィール"><div class="profile-icon" aria-hidden="true">た</div><p><strong>たか</strong></p><p>AIとのやりとりと、その過程を記録しています。</p></aside>
+</div>
+<footer class="site-footer">たか’sブログ</footer>
+</body>
+</html>
+"""
+(DIST / "index.html").write_text(home, encoding="utf-8")
 (DIST / PERMALINK).write_text(page, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
