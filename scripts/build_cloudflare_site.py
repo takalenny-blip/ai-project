@@ -64,7 +64,7 @@ page = f"""<!doctype html>
 <style>
 * {{ box-sizing: border-box; }}
 html {{ scroll-behavior: smooth; }}
-:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#303030; --cream:#2d2b28; --line:#3d3933; --accent:#b3945a; }}
+:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#363636; --cream:#2d2b28; --line:#3d3933; --accent:#b3945a; }}
 body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }}
 .site-header {{ background:var(--paper); }}
 .header-inner {{ max-width:1120px; margin:0 auto; padding:30px 28px 26px; }}
@@ -153,7 +153,7 @@ home = """<!doctype html>
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/">
 <style>
 * { box-sizing:border-box; }
-:root { --ink:#eee7db; --muted:#aaa093; --paper:#303030; --cream:#2d2b28; --line:#3d3933; --accent:#b3945a; }
+:root { --ink:#eee7db; --muted:#aaa093; --paper:#363636; --cream:#2d2b28; --line:#3d3933; --accent:#b3945a; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.8; }
 .site-header { background:var(--paper); }
 .header-inner { max-width:1120px; margin:0 auto; padding:30px 28px 26px; }
