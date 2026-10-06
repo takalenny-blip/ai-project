@@ -297,7 +297,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ取得確認は未確認。",
+    "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ直接取得はこの環境からできず未確認として記録済み。次はGSC確認。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-05",
@@ -315,22 +315,26 @@
       "ci_head_commit": "4113e27ca3c433f27f15285164b3d0a6f51ea465",
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。"
     },
-    "next_stage_boundary": "BLOG-0003は公開まで完了。GitHub Pagesの今回デザイン本番反映も完了。残作業はPages公開後確認 → GSC確認 → 次のブログ制作。",
-    "next_focus": "GitHub Pagesの本番反映後表示を確認し、その後GSCを確認する。確認完了後、次のブログ制作へ進む。"
+    "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
+    "next_focus": "GSCでトップページとBLOG-0001〜0003のインデックス状況を確認し、その後次のブログ制作へ進む。"
   },
   "next_step": {
-    "id": "BLOG-0003公開後確認",
-    "title": "GitHub Pages公開後確認を行う",
-    "priority": 10,
-    "depends_on": [],
+    "id": "GSC-確認",
+    "title": "GSCのインデックス状況を確認する",
+    "priority": 20,
+    "depends_on": [
+      "BLOG-0003公開後確認"
+    ],
     "not_before": null,
     "environment": "work_pc",
-    "scope": "experience_log_to_blogger",
-    "target": "今回のGitHub Pagesデザイン本番反映後の実表示を確認する。確認できない場合は未確認として記録する。完了後にGSC確認へ進む。",
-    "evidence": "2026-10-07、PR #924・#927についてJUNは問題なし、クロウは2点の実装不足を指摘。クロウ指摘を採用しPR #929でDropboxプレビューHTML自動検出と同一filenameの未完了巨大直チャットキューPR重複投入防止を実装し、merge commit a5d7d1c4ccf68ba9a38f900ac21bdcbdfa8f9f6d でmainへ反映。mainのworkflow実体を読み戻し、2点の実装を確認。Run workflowボタンのUI表示は未確認。",
+    "scope": "experience-log_to_Blogger",
+    "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
+    "evidence": "BLOG-0003公開後確認は完了。GitHub Pages公開後の実ページ直接取得はこの環境からできず未確認として記録。たかによる実表示確認済みの既存記録は維持。次はGSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。",
     "readiness": "ready",
-    "unblock_action": "GitHub Pages公開後確認",
-    "prerequisites": []
+    "unblock_action": "GSC確認",
+    "prerequisites": [
+      "BLOG-0003公開後確認"
+    ]
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -578,17 +582,17 @@
       "id": "BLOG-0003公開後確認",
       "title": "GitHub Pages公開後確認を行う",
       "priority": 10,
-      "status": "queued",
+      "status": "done",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "今回のGitHub Pagesデザイン本番反映後の実表示を確認する。確認できない場合は未確認として記録する。完了後にGSC確認へ進む。",
-      "evidence": "2026-10-06、今回のGitHub Pagesデザインを本番反映済み。公開後の実表示確認はこれから。",
+      "evidence": "2026-10-07、GitHub Pages公開後の実ページ直接取得を試行したが、この環境から公開URLを特定・正常取得できず、実ページ直接取得は未確認として確定。たかのブラウザでの実表示確認済みという既存記録は維持。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-05",
-      "updated_at": "2026-10-06",
+      "updated_at": "2026-10-07",
       "prerequisites": []
     },
     {
