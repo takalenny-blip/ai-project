@@ -47,13 +47,13 @@ body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system,
 .site-header {{ background: #fff; border-bottom: 1px solid #ddd; }}
 .header-inner {{ max-width: 1040px; margin: 0 auto; padding: 30px 22px 24px; }}
 .blog-name {{ margin: 0; font-size: 1rem; color: #777; letter-spacing: .08em; }}
-.site-title {{ margin: .25em 0 0; font-size: clamp(1.7rem, 4vw, 2.5rem); line-height: 1.35; }}
 .banner {{ background: #4a4a4a; color: #fff; }}
 .banner-inner {{ max-width: 1040px; margin: 0 auto; padding: 12px 22px; font-size: .9rem; }}
-.profile {{ display: flex; gap: 14px; align-items: center; margin: 0 0 28px; padding: 14px 16px; background: #faf8f5; border: 1px solid #e5e0da; border-radius: 8px; }}
-.profile-icon {{ width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: #ddd; font-weight: 700; }}
+.layout {{ display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; }}
+.profile {{ display: block; margin: 0; padding: 18px 16px; background: #faf8f5; border: 1px solid #e5e0da; border-radius: 8px; position: sticky; top: 20px; }}
+.profile-icon {{ width: 54px; height: 54px; margin-bottom: 12px; border-radius: 50%; display: grid; place-items: center; background: #ddd; font-weight: 700; }}
 .profile p {{ margin: 0; }}
-main {{ max-width: 900px; margin: 0 auto; padding: 34px 18px 72px; }}
+main {{ max-width: 1040px; margin: 0 auto; padding: 34px 22px 72px; }}
 article {{ background: #fff; padding: 42px 52px; border-radius: 10px; box-shadow: 0 2px 14px rgba(0,0,0,.07); }}
 h1 {{ font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.4; margin: 0 0 1.2em; }}
 h2 {{ margin-top: 3em; padding-bottom: .35em; border-bottom: 2px solid #ddd; line-height: 1.45; }}
@@ -71,26 +71,29 @@ figcaption {{ margin-top: .55em; color: #666; font-size: .9em; }}
 code {{ background: #f1f1f1; padding: .1em .3em; border-radius: 3px; }}
 .post-meta {{ margin: -1em 0 2em; color: #777; font-size: .9rem; }}
 .site-footer {{ border-top: 1px solid #ddd; background: #fff; color: #777; text-align: center; padding: 28px 18px; font-size: .85rem; }}
-@media (max-width: 650px) {{ main {{ padding: 12px 8px 40px; }} article {{ padding: 24px 18px; border-radius: 6px; }} .header-inner {{ padding: 22px 16px; }} }}
+@media (max-width: 760px) {{ main {{ padding: 12px 8px 40px; }} .layout {{ grid-template-columns: 1fr; gap: 16px; }} article {{ padding: 24px 18px; border-radius: 6px; }} .header-inner {{ padding: 22px 16px; }} .profile {{ position: static; }} }}
 </style>
 </head>
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <p class="blog-name">たかのブログ</p>
-    <p class="site-title">{TITLE}</p>
+    <p class="blog-name">たか’sブログ</p>
   </div>
 </header>
 <div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
 <main>
-  <article>
-    <div class="profile">
+  <div class="layout">
+    <article>
+      <h1>{TITLE}</h1>
+      <p class="post-meta">固定ページ：{PERMALINK}</p>
+      {html}
+    </article>
+    <aside class="profile" aria-label="プロフィール">
       <div class="profile-icon" aria-hidden="true">た</div>
-      <p><strong>たか</strong><br>AIとのやりとりと、その過程を記録しています。</p>
-    </div>
-    <p class="post-meta">固定ページ：{PERMALINK}</p>
-    {html}
-  </article>
+      <p>たか</p>
+      <p>AIとのやりとりと、その過程を記録しています。</p>
+    </aside>
+  </div>
 </main>
 <footer class="site-footer">たかのブログ</footer>
 </body>
