@@ -238,7 +238,9 @@
     "実行済み操作を操作／目的／結果／状態で保持し、同一操作の理由なき再実行を防ぐ",
     "最終報告で【作業】と【保存】の状態を分離する",
     "DIGA / DiMORA自動化は、現行のバド単独運用では実機側の取得・操作まで完遂できないため、2026-09-21をもって本線作業を断念する。既存成果・経験資産は破棄せず履歴として保持する。",
-    "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入"
+    "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入",
+    "BUD.md二重管理解消の運用マニュアルを追加し、docs/現在状態.jsonを唯一の現在状態正本とする手順を次回も再現可能にした",
+    "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -306,7 +308,9 @@
         "#869",
         "#870",
         "Blogger公開",
-        "たかによる実表示確認"
+        "たかによる実表示確認",
+        "PR #924",
+        "PR #927"
       ],
       "ci_head_commit": "4113e27ca3c433f27f15285164b3d0a6f51ea465",
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。"
@@ -315,17 +319,17 @@
     "next_focus": "GitHub Pagesの本番反映後表示を確認し、その後GSCを確認する。確認完了後、次のブログ制作へ進む。"
   },
   "next_step": {
-    "id": "BLOG-0003公開後確認",
-    "title": "GitHub Pages公開後確認を行う",
+    "id": "JUN・クロウ確認",
+    "title": "BUD二重管理解消・巨大直チャット保存マニュアルの外部レビュー確認",
     "priority": 10,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "今回のGitHub Pagesデザイン本番反映後の実表示を確認する。確認できない場合は未確認として記録する。完了後にGSC確認へ進む。",
-    "evidence": "2026-10-06、今回のGitHub Pagesデザインを本番反映済み。公開後の実表示確認はこれから。",
+    "target": "PR #924とPR #927で追加した運用マニュアルについて、JUN・クロウの確認結果を受け、問題があれば修正し、問題がなければ完了とする。",
+    "evidence": "2026-10-06、PR #924とPR #927をmerge済み。JUN・クロウへの確認依頼文を準備済み。外部レビュー結果は未確認。",
     "readiness": "ready",
-    "unblock_action": "none",
+    "unblock_action": "JUN・クロウ確認",
     "prerequisites": []
   },
   "current_state_guards": {
