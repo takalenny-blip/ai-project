@@ -269,24 +269,22 @@ sudo sed -i '/wpa-psk/s/^/#/' /etc/network/interfaces</code></pre>
   <div class="flow-box">AIの指示を受けながらデータ取得を試す</div><div aria-hidden="true" class="flow-arrow">↓</div>
   <div class="flow-box">「おお、取れた！」</div>
 </div>
-<p>最初に作ったGASの仕組みでは、</p>
-<p>DiMORAを開く</p>
-<p>↓</p>
-<p>お気に入りをコピーする</p>
-<p>↓</p>
-<p>Googleドキュメントに貼る</p>
-<p>↓</p>
-<p>GASでチェックする</p>
-<p>だった。</p>
-<p>それが今度は、</p>
-<p>DiMORA</p>
-<p>↓</p>
-<p>ブラウザから情報を取得</p>
-<p>↓</p>
-<p>必要なデータを取り出す</p>
-<p>↓</p>
-<p>保存・比較する</p>
-<p>という方向に変わり始めた。</p>
+<div class="flow-comparison">
+  <div class="flow-comparison-column">
+    <h4>最初に作ったGASの仕組み</h4>
+    <div class="flow-box">DiMORAを開く</div><div aria-hidden="true" class="flow-arrow">↓</div>
+    <div class="flow-box">お気に入りをコピーする</div><div aria-hidden="true" class="flow-arrow">↓</div>
+    <div class="flow-box">Googleドキュメントに貼る</div><div aria-hidden="true" class="flow-arrow">↓</div>
+    <div class="flow-box">GASでチェックする</div>
+  </div>
+  <div class="flow-comparison-column">
+    <h4>変わり始めた新しい方向</h4>
+    <div class="flow-box">DiMORA</div><div aria-hidden="true" class="flow-arrow">↓</div>
+    <div class="flow-box">ブラウザから情報を取得</div><div aria-hidden="true" class="flow-arrow">↓</div>
+    <div class="flow-box">必要なデータを取り出す</div><div aria-hidden="true" class="flow-arrow">↓</div>
+    <div class="flow-box">保存・比較する</div>
+  </div>
+</div>
 <p>ただ、この時点で「VAIO Pですべて自動化できた」わけではない。</p>
 <p>まず別のPCでDiMORAのHTMLとJavaScriptを調べ、AIの指示を受けながらページ内部のデータを追いかけ、実際にお気に入り番組の情報を取得できるところまで来た。</p>
 <p>次に必要なのは、ログインしたDiMORAのページからそのデータを安全に読み出し、それをVAIO P上のPythonで扱えるようにすることだった。</p>
