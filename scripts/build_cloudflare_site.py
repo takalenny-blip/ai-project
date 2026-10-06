@@ -124,6 +124,7 @@ home = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>たか’sブログ</title>
 <meta name="description" content="AIとのやりとりと、そこから生まれた経験を残していくブログです。">
+<meta name="google-site-verification" content="Iaufdzv8o8vilCmpJ1WqXyjSyYZtNh13gEXbhYTgV0Y">
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/">
 <style>
 * {{ box-sizing: border-box; }}
