@@ -58,54 +58,71 @@ page = f"""<!doctype html>
 <meta property="og:title" content="{TITLE}">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/{PERMALINK}">
 <style>
-* {{ box-sizing: border-box; }}
-html {{ scroll-behavior: smooth; }}
-body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; line-height: 1.9; }}
-.site-header {{ background: #fff; border-bottom: 1px solid #ddd; }}
-.header-inner {{ max-width: 1040px; margin: 0 auto; padding: 30px 22px 24px; }}
-.blog-name {{ margin: 0; font-size: 1.35rem; color: #333; letter-spacing: .04em; font-weight: 600; }}
-.banner {{ background: #4a4a4a; color: #fff; }}
-.banner-inner {{ max-width: 1040px; margin: 0 auto; padding: 12px 22px; font-size: .9rem; }}
-.layout {{ display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; }}
-.profile {{ display: block; margin: 0; padding: 18px 16px; background: #faf8f5; border: 1px solid #e5e0da; border-radius: 8px; position: sticky; top: 20px; }}
-.profile-icon {{ width: 54px; height: 54px; margin-bottom: 12px; border-radius: 50%; display: grid; place-items: center; background: #ddd; font-weight: 700; }}
-.profile p {{ margin: 0; }}
-main {{ max-width: 1040px; margin: 0 auto; padding: 34px 22px 72px; }}
-article {{ background: #fff; padding: 42px 52px; border-radius: 10px; box-shadow: 0 2px 14px rgba(0,0,0,.07); }}
-h1 {{ font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.4; margin: 0 0 1.2em; }}
-h2 {{ margin-top: 3em; padding-bottom: .35em; border-bottom: 2px solid #ddd; line-height: 1.45; }}
-h3 {{ margin-top: 2.2em; line-height: 1.5; }}
-p {{ margin: 1em 0; }}
-blockquote {{ background: #fafafa; }}
-nav {{ margin: 2em 0; padding: 1.2em 1.4em; background: #f7f7f7; border: 1px solid #e5e5e5; border-radius: 8px; }}
-nav ul {{ margin: 0; padding-left: 1.4em; }}
-nav li {{ margin: .35em 0; }}
-a {{ color: #1769aa; }}
-figure {{ margin: 2em auto !important; }}
-figure img {{ border-radius: 6px; display: block; height: auto; max-width: 100%; }}
-figcaption {{ margin-top: .55em; color: #666; font-size: .9em; }}
-.flow-box {{ background: #fafafa; }}
-code {{ background: #f1f1f1; padding: .1em .3em; border-radius: 3px; }}
-.post-meta {{ margin: -1em 0 2em; color: #777; font-size: .9rem; }}
-.site-footer {{ border-top: 1px solid #ddd; background: #fff; color: #777; text-align: center; padding: 28px 18px; font-size: .85rem; }}
-@media (max-width: 760px) {{ main {{ padding: 12px 8px 40px; }} .layout {{ grid-template-columns: 1fr; gap: 16px; }} article {{ padding: 24px 18px; border-radius: 6px; }} .header-inner {{ padding: 22px 16px; }} .profile {{ position: static; }} }}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root { --ink:#292824; --muted:#746f67; --paper:#fbf8f3; --cream:#eee8df; --line:#d8d0c5; --accent:#9a7b4f; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }
+.site-header { background:var(--paper); }
+.header-inner { max-width:1120px; margin:0 auto; padding:42px 28px 30px; }
+.blog-name { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.55rem; letter-spacing:.08em; font-weight:500; }
+.header-kicker { margin:.55rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; }
+.banner { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
+.banner-inner { max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }
+main { max-width:1120px; margin:0 auto; padding:58px 28px 90px; }
+.layout { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; }
+article { min-width:0; }
+.article-intro { border-bottom:1px solid var(--line); padding:0 0 34px; margin-bottom:38px; }
+.eyebrow { margin:0 0 13px; color:var(--accent); font-size:.74rem; font-weight:600; letter-spacing:.18em; }
+article h1 { font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:clamp(2rem,4.4vw,3.35rem); line-height:1.35; letter-spacing:.01em; margin:0; }
+.post-meta { margin:17px 0 0; color:var(--muted); font-size:.78rem; letter-spacing:.04em; }
+article h2 { margin-top:3.4em; padding-bottom:.45em; border-bottom:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; line-height:1.5; }
+article h3 { margin-top:2.4em; line-height:1.55; }
+article p { margin:1.15em 0; }
+blockquote { margin:2em 0; padding:1.1em 1.4em; background:#f2eee8; border-left:3px solid var(--accent); }
+nav { margin:2.4em 0; padding:1.25em 1.4em; background:#f5f1eb; border:1px solid var(--line); }
+nav ul { margin:0; padding-left:1.4em; }
+nav li { margin:.35em 0; }
+a { color:#765a35; }
+figure { margin:2.8em auto !important; }
+figure img { display:block; height:auto; max-width:100%; }
+figcaption { margin-top:.65em; color:var(--muted); font-size:.82em; }
+.flow-box { background:#f5f1eb; }
+code { background:#eee9e1; padding:.1em .3em; border-radius:2px; }
+.profile { position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }
+.profile-label { margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }
+.profile-icon { width:58px; height:58px; margin-bottom:14px; border:1px solid #c9bda9; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }
+.profile-name { color:var(--ink); font-family:Georgia,"Noto Serif JP",serif; font-size:1.05rem; }
+.site-footer { border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }
+@media (max-width:760px) {
+  .header-inner { padding:28px 18px 22px; }
+  .banner-inner { padding:11px 18px; }
+  main { padding:38px 18px 60px; }
+  .layout { grid-template-columns:1fr; gap:42px; }
+  article h1 { font-size:2rem; }
+  .profile { position:static; padding:24px 0 0; border-left:0; border-top:1px solid var(--line); }
+}
 </style>
 </head>
 <body>
 <header class="site-header">
   <div class="header-inner">
     <p class="blog-name">たか’sブログ</p>
+    <p class="header-kicker">AI / EXPERIENCE / RECORD</p>
   </div>
 </header>
 <div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
 <main>
   <div class="layout">
     <article>
-      <h1>{TITLE}</h1>
-      <p class="post-meta">固定ページ：{PERMALINK}</p>
+      <div class="article-intro">
+        <p class="eyebrow">THIRD PART / GITHUB</p>
+        <h1>{TITLE}</h1>
+        <p class="post-meta">固定ページ：{PERMALINK}</p>
+      </div>
       {html}
     </article>
     <aside class="profile" aria-label="プロフィール">
+      <p class="profile-label">PROFILE</p>
       <div class="profile-icon" aria-hidden="true">た</div>
       <p>たか</p>
       <p>AIとのやりとりと、その過程を記録しています。</p>
@@ -127,39 +144,62 @@ home = f"""<!doctype html>
 <meta name="google-site-verification" content="Iaufdzv8o8vilCmpJ1WqXyjSyYZtNh13gEXbhYTgV0Y">
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/">
 <style>
-* {{ box-sizing: border-box; }}
-body {{ margin: 0; background: #f3f0eb; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; line-height: 1.8; }}
-.site-header {{ background: #fff; border-bottom: 1px solid #ddd; }}
-.header-inner {{ max-width: 1040px; margin: 0 auto; padding: 30px 22px 24px; }}
-.blog-name {{ margin: 0; font-size: 1.35rem; font-weight: 600; letter-spacing: .04em; }}
-.banner {{ background: #4a4a4a; color: #fff; }}
-.banner-inner {{ max-width: 1040px; margin: 0 auto; padding: 12px 22px; font-size: .9rem; }}
-.layout {{ display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; max-width: 1040px; margin: 0 auto; padding: 34px 22px 72px; }}
-.content {{ background: #fff; padding: 36px 40px; border-radius: 10px; box-shadow: 0 2px 14px rgba(0,0,0,.07); }}
-.content h1 {{ margin: 0 0 1.4em; font-size: 2rem; }}
-.card {{ display: block; margin: 0 0 18px; padding: 22px 24px; border: 1px solid #e3ded8; border-radius: 10px; background: #faf8f5; color: inherit; text-decoration: none; }}
-.card:hover {{ border-color: #bbb; }}
-.part {{ margin: 0 0 .35em; font-size: .82rem; color: #777; }}
-.card h2 {{ margin: 0 0 .5em; font-size: 1.25rem; line-height: 1.5; }}
-.card p {{ margin: 0; color: #666; font-size: .92rem; }}
-.profile {{ padding: 18px 16px; background: #faf8f5; border: 1px solid #e5e0da; border-radius: 8px; position: sticky; top: 20px; }}
-.profile-icon {{ width: 54px; height: 54px; margin-bottom: 12px; border-radius: 50%; display: grid; place-items: center; background: #ddd; font-weight: 700; }}
-.profile p {{ margin: 0; }}
-.site-footer {{ border-top: 1px solid #ddd; background: #fff; color: #777; text-align: center; padding: 28px 18px; font-size: .85rem; }}
-@media (max-width: 760px) {{ .layout {{ grid-template-columns: 1fr; padding: 12px 8px 40px; }} .content {{ padding: 24px 18px; }} .header-inner {{ padding: 22px 16px; }} .profile {{ position: static; }} }}
+* { box-sizing:border-box; }
+:root { --ink:#292824; --muted:#746f67; --paper:#fbf8f3; --cream:#eee8df; --line:#d8d0c5; --accent:#9a7b4f; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.8; }
+.site-header { background:var(--paper); }
+.header-inner { max-width:1120px; margin:0 auto; padding:48px 28px 34px; }
+.blog-name { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(2rem,4vw,3rem); font-weight:500; letter-spacing:.08em; }
+.header-kicker { margin:.7rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.2em; }
+.banner { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
+.banner-inner { max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }
+.layout { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; max-width:1120px; margin:0 auto; padding:62px 28px 90px; }
+.content h1 { margin:0 0 36px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1rem; font-weight:500; letter-spacing:.18em; color:var(--accent); }
+.feature { position:relative; display:block; padding:42px 0 40px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); color:inherit; text-decoration:none; }
+.feature .part, .card .part { margin:0 0 14px; color:var(--accent); font-size:.72rem; letter-spacing:.16em; font-weight:600; }
+.feature h2 { max-width:760px; margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:clamp(1.9rem,4vw,3rem); line-height:1.45; }
+.feature p { max-width:650px; margin:18px 0 0; color:var(--muted); font-size:.92rem; }
+.feature-arrow { position:absolute; right:4px; bottom:38px; color:var(--accent); font-size:1.4rem; }
+.others { display:grid; grid-template-columns:1fr 1fr; gap:34px; margin-top:34px; }
+.card { display:block; min-height:210px; padding:28px 0 10px; border-top:1px solid var(--line); color:inherit; text-decoration:none; }
+.card h2 { margin:0 0 14px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:1.35rem; line-height:1.55; }
+.card p { margin:0; color:var(--muted); font-size:.88rem; }
+.card:hover h2, .feature:hover h2 { color:#765a35; }
+.profile { position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }
+.profile-label { margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }
+.profile-icon { width:58px; height:58px; margin-bottom:14px; border:1px solid #c9bda9; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }
+.profile p { margin:0 0 .35em; }
+.site-footer { border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }
+@media (max-width:760px) {
+  .header-inner { padding:34px 18px 26px; }
+  .banner-inner { padding:11px 18px; }
+  .layout { grid-template-columns:1fr; gap:42px; padding:42px 18px 60px; }
+  .feature { padding:30px 0 34px; }
+  .feature h2 { font-size:1.8rem; }
+  .feature-arrow { display:none; }
+  .others { grid-template-columns:1fr; gap:0; }
+  .profile { position:static; padding:24px 0 0; border-left:0; border-top:1px solid var(--line); }
+}
 </style>
 </head>
 <body>
-<header class="site-header"><div class="header-inner"><p class="blog-name">たか’sブログ</p></div></header>
+<header class="site-header"><div class="header-inner"><p class="blog-name">たか’sブログ</p><p class="header-kicker">AI / EXPERIENCE / RECORD</p></div></header>
 <div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
 <div class="layout">
 <section class="content">
-<h1>記事一覧</h1>
-<a class="card" href="ai-blog-start.html"><p class="part">第1部｜経験ログ</p><h2>AIとのやりとりを残してみる――それは「便利そうだな」から始まった</h2><p>AIと一緒にブログを作ろうと思うまでの始まり。</p></a>
-<a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>AIと一緒に進める中で、VAIO Pをもう一度動かしていった記録。</p></a>
-<a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった――GitHubで作った仕組み</h2><p>AIとのやりとりを保存し、現在を間違えない仕組みにしていった経験。</p></a>
+<h1>THREE PARTS / ONE STORY</h1>
+<a class="feature" href="ai-blog-start.html">
+  <p class="part">第1部｜経験ログ</p>
+  <h2>AIとのやりとりを残してみる――それは「便利そうだな」から始まった</h2>
+  <p>AIと一緒にブログを作ろうと思うまで。その最初の気持ちから始まった記録。</p>
+  <span class="feature-arrow" aria-hidden="true">→</span>
+</a>
+<div class="others">
+  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>VAIO Pをもう一度動かしていった記録。</p></a>
+  <a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった――GitHubで作った仕組み</h2><p>保存し、現在を間違えない仕組みにしていった経験。</p></a>
+</div>
 </section>
-<aside class="profile" aria-label="プロフィール"><div class="profile-icon" aria-hidden="true">た</div><p><strong>たか</strong></p><p>AIとのやりとりと、その過程を記録しています。</p></aside>
+<aside class="profile" aria-label="プロフィール"><p class="profile-label">PROFILE</p><div class="profile-icon" aria-hidden="true">た</div><p><strong>たか</strong></p><p>AIとのやりとりと、その過程を記録しています。</p></aside>
 </div>
 <footer class="site-footer">たか’sブログ</footer>
 </body>
