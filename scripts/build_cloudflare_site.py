@@ -84,7 +84,8 @@ article h1 {{ font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-
 article h2 {{ margin-top:3.4em; padding-bottom:.45em; border-bottom:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; line-height:1.5; }}
 article h3 {{ margin-top:2.4em; line-height:1.55; }}
 article p {{ margin:1.15em 0; }}
-blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#302e2a; border-left:3px solid var(--accent); font-family:"Noto Serif JP","Hiragino Mincho ProN","Yu Mincho",serif; font-style:oblique 8deg; font-synthesis:style; }}
+blockquote p {{ transform:skewX(-8deg); transform-origin:left center; }}
+blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#302e2a; border-left:3px solid var(--accent); font-style:italic; }}
 nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#2b2926; border:1px solid var(--line); }}
 nav ul {{ margin:0; padding-left:1.4em; }}
 nav li {{ margin:.35em 0; }}
