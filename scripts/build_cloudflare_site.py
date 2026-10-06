@@ -84,6 +84,14 @@ article h1 {{ font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-
 article h2 {{ margin-top:3.4em; padding-bottom:.45em; border-bottom:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; line-height:1.5; }}
 article h3 {{ margin-top:2.4em; line-height:1.55; }}
 article p {{ margin:1.15em 0; }}
+.dialogue {{ margin:1.2em 0; padding:.85em 1.1em; border-radius:1.1em; max-width:88%; }}
+.dialogue.human {{ margin-right:auto; background:#f3ead8; color:#3f392f; }}
+.dialogue.ai {{ margin-left:auto; background:#dfeaf4; color:#2f3b46; }}
+pre {{ margin:1.2em 0; padding:1em 1.15em; overflow-x:auto; background:#242424; border:1px solid var(--line); border-radius:.45em; color:#eee7db; line-height:1.6; }}
+pre code {{ display:block; background:transparent; padding:0; color:inherit; white-space:pre; font-family:"SFMono-Regular",Consolas,"Liberation Mono","Courier New",monospace; }}
+.flow-diagram {{ display:flex; flex-direction:column; align-items:center; gap:.5em; margin:1.5em 0; }}
+.flow-box {{ width:90%; max-width:42em; box-sizing:border-box; padding:.7em 1em; text-align:center; border:1px solid #999; border-radius:.7em; background:#2b2926; }}
+.flow-arrow {{ line-height:1.2; text-align:center; color:var(--muted); }}
 blockquote p {{ transform:skewX(-8deg); transform-origin:left center; }}
 blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#302e2a; border-left:3px solid var(--accent); font-style:italic; }}
 nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#2b2926; border:1px solid var(--line); }}
