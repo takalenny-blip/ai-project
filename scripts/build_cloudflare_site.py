@@ -60,7 +60,7 @@ page = f"""<!doctype html>
 <style>
 * {{ box-sizing: border-box; }}
 html {{ scroll-behavior: smooth; }}
-:root {{ --ink:#292824; --muted:#746f67; --paper:#fbf8f3; --cream:#eee8df; --line:#d8d0c5; --accent:#9a7b4f; }}
+:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#171717; --cream:#22201d; --line:#3d3933; --accent:#b3945a; }}
 body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }}
 .site-header {{ background:var(--paper); }}
 .header-inner {{ max-width:1120px; margin:0 auto; padding:42px 28px 30px; }}
