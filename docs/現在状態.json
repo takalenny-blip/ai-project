@@ -315,15 +315,15 @@
     "next_focus": "BLOG-0003公開後確認を行い、取得できない場合は未確認として扱う。その後、GSC確認へ進む。"
   },
   "next_step": {
-    "id": "BLOG-0003公開後確認",
-    "title": "BLOG-0003の公開後確認を進める",
+    "id": "CLOUDFLARE-MIGRATION",
+    "title": "Cloudflare Pages移行の基本設計を検証する",
     "priority": 10,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "公開済みBLOG-0003の実ページ取得・表示状態を確認し、確認できない場合は未確認として記録する。その後GSC確認へ進む。",
-    "evidence": "公開済み。たかによる実表示確認済み。公開URLの直接取得はInternal Error/Cache missで未確認。",
+    "target": "GitHubを唯一の正本・制作・レビュー場所とし、Cloudflare Pages Previewを自動、Productionを明示操作でのみ公開する方式を小さな検証単位で確認する。",
+    "evidence": "2026-10-06基本設計採用。実装・接続・公開検証は未実施。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -585,6 +585,23 @@
       "environment": "work_pc",
       "created_at": "2026-10-05",
       "updated_at": "2026-10-05",
+      "prerequisites": []
+    },
+    {
+      "id": "CLOUDFLARE-MIGRATION",
+      "title": "Cloudflare Pages移行の基本設計を確定し検証する",
+      "priority": 10,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "experience_log_to_blogger",
+      "target": "GitHubを唯一の正本・制作・レビュー場所とし、Cloudflare Pagesを公開先とする。Previewは自動、Productionは明示操作でのみ公開する方式を設計・検証する。",
+      "evidence": "2026-10-06基本設計採用。GitHub mainの完成と公開を分離し、Preview自動・Production手動の公開方式を採用する方針を確定。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06",
       "prerequisites": []
     }
   ]
