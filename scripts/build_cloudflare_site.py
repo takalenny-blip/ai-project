@@ -64,7 +64,7 @@ page = f"""<!doctype html>
 <style>
 * {{ box-sizing: border-box; }}
 html {{ scroll-behavior: smooth; }}
-:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#171717; --cream:#22201d; --line:#3d3933; --accent:#b3945a; }}
+:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#242424; --cream:#2d2b28; --line:#3d3933; --accent:#b3945a; }}
 body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.95; }}
 .site-header {{ background:var(--paper); }}
 .header-inner {{ max-width:1120px; margin:0 auto; padding:30px 28px 26px; }}
@@ -84,16 +84,16 @@ article h1 {{ font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-
 article h2 {{ margin-top:3.4em; padding-bottom:.45em; border-bottom:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; line-height:1.5; }}
 article h3 {{ margin-top:2.4em; line-height:1.55; }}
 article p {{ margin:1.15em 0; }}
-blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#25231f; border-left:3px solid var(--accent); }}
-nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#211f1c; border:1px solid var(--line); }}
+blockquote {{ margin:2em 0; padding:1.1em 1.4em; background:#302e2a; border-left:3px solid var(--accent); }}
+nav {{ margin:2.4em 0; padding:1.25em 1.4em; background:#2b2926; border:1px solid var(--line); }}
 nav ul {{ margin:0; padding-left:1.4em; }}
 nav li {{ margin:.35em 0; }}
 a {{ color:#c4a46a; }}
 figure {{ margin:2.8em auto !important; }}
 figure img {{ display:block; height:auto; max-width:100%; }}
 figcaption {{ margin-top:.65em; color:var(--muted); font-size:.82em; }}
-.flow-box {{ background:#211f1c; }}
-code {{ background:#2b2823; padding:.1em .3em; border-radius:2px; }}
+.flow-box {{ background:#2b2926; }}
+code {{ background:#35322e; padding:.1em .3em; border-radius:2px; }}
 .profile {{ position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }}
 .profile-label {{ margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }}
 .profile-icon {{ width:58px; height:58px; margin-bottom:14px; border:1px solid #806b4a; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }}
@@ -153,7 +153,7 @@ home = """<!doctype html>
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/">
 <style>
 * { box-sizing:border-box; }
-:root { --ink:#eee7db; --muted:#aaa093; --paper:#171717; --cream:#22201d; --line:#3d3933; --accent:#b3945a; }
+:root { --ink:#eee7db; --muted:#aaa093; --paper:#242424; --cream:#2d2b28; --line:#3d3933; --accent:#b3945a; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.8; }
 .site-header { background:var(--paper); }
 .header-inner { max-width:1120px; margin:0 auto; padding:30px 28px 26px; }
