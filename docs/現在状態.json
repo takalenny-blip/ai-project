@@ -536,6 +536,23 @@
       "created_at": "2026-10-07",
       "updated_at": "2026-10-07",
       "prerequisites": []
+    },
+    {
+      "id": "WP無料ホスティング検証",
+      "title": "完全無料のWordPress公開環境を検証する",
+      "priority": 23,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "experience-log_to_Blogger",
+      "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。",
+      "evidence": "2026-10-07、Google登録がGitHub Pages/Bloggerでうまくいかない場合の分岐として、WordPress.org＋無料ホスティングを検討する方針をたかと決定。候補調査ではInfinityFree、Byet Host、AwardSpace等が完全無料・WordPress対応を公式に掲示している。まずは1環境を検証し、Google登録を含めて実測する。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-07",
+      "updated_at": "2026-10-07",
+      "prerequisites": []
     }
   ]
 }
