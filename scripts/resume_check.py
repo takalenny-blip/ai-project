@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import validate_work_items, derived_next_step
+from work_queue import validate_work_items, derived_next_step, select_actionable
 STATE = ROOT / "docs" / "現在状態.json"
 REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
 
@@ -85,6 +85,11 @@ def main():
         validate_work_items(state["work_items"])
     except ValueError as exc:
         return fail("work queue invalid: " + str(exc))
+    actionable = select_actionable(state["work_items"], state.get("updated"))
+    if actionable:
+        print("actionable_work_items: " + ", ".join(f"{item['id']} (priority={item['priority']})" for item in actionable))
+    else:
+        print("actionable_work_items: (none)")
     derived = derived_next_step(state["work_items"], state.get("updated"))
     cached = state["next_step"]
     if derived is None:

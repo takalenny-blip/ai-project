@@ -62,3 +62,14 @@ class WorkQueueTests(unittest.TestCase):
     def test_no_actionable_work_is_empty(self):
         items = [item("A", status="done"), item("B", status="held")]
         self.assertEqual(select_actionable(items, "2026-09-27"), [])
+
+    def test_independent_ready_candidate_is_not_lost_behind_higher_priority_work(self):
+        items = [
+            item("GSC", priority=20),
+            item("WP", priority=23),
+            item("BLOG", priority=30, deps=["GSC"]),
+        ]
+        candidates = select_actionable(items, "2026-10-08")
+        self.assertEqual([x["id"] for x in candidates], ["GSC", "WP"])
+        self.assertIn("WP", [x["id"] for x in candidates])
+
