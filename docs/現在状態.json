@@ -300,7 +300,7 @@
     "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ直接取得はこの環境からできず未確認として記録済み。GSCはたかがURL検査を実施済みだが、現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況は未確定。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
-      "checked_at": "2026-10-05",
+      "checked_at": "2026-10-07",
       "references": [
         "PR #855",
         "#856",
@@ -312,8 +312,8 @@
         "PR #924",
         "PR #927"
       ],
-      "ci_head_commit": "4113e27ca3c433f27f15285164b3d0a6f51ea465",
-      "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。"
+      "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
+      "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。このevidenceのchecked_at/ci_head_commitは現在の正本readback基準へ更新。"
     },
     "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
     "next_focus": "GSCの処理結果が出た後、トップページとBLOG-0001〜0003のインデックス状況を確認し、その後次のブログ制作へ進む。"
@@ -325,13 +325,13 @@
     "depends_on": [
       "BLOG-0003公開後確認"
     ],
-    "not_before": null,
+    "not_before": "2026-10-08",
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
-    "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
+    "target": "GSCの処理結果が出た後、たかがGSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
     "evidence": "2026-10-07、たかが前日にGSC URL検査を実施。現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況・未登録理由は未確定。登録リクエストは既に実施済みのため同一操作は繰り返さない。処理結果が出た後に確認を継続する。",
-    "readiness": "ready",
-    "unblock_action": "GSC確認",
+    "readiness": "blocked",
+    "unblock_action": "GSC確認"
     "prerequisites": [
       "BLOG-0003公開後確認"
     ]
@@ -535,8 +535,8 @@
       "depends_on": [],
       "not_before": "2026-10-01",
       "scope": "experience_log_to_blogger",
-      "target": "2026-10-01以降にGSC WizardでBLOG-0001 URLのURL検査とインデックス状況を再確認する",
-      "evidence": "BLOG-0001のmeta description設定・確認まで完了。現在残っている確認事項はGSC「Redirect error」の経過観察。",
+      "target": "GSC-確認の一環として、たかがGSCでBLOG-0001 URLのURL検査とインデックス状況を再確認する",
+      "evidence": "BLOG-0001のmeta description設定・確認まで完了。残っているGSC「Redirect error」の経過観察は、GSC-確認のトップページ／BLOG-0001〜0003確認に統合して扱う。GSC Wizardをバドやクロウの直接操作代替として使用しない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
