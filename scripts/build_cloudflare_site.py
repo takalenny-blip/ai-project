@@ -268,6 +268,9 @@ sitemap = """<?xml version="1.0" encoding="UTF-8"?>
 """
 (DIST / "sitemap.xml").write_text(sitemap, encoding="utf-8")
 
+robots_txt = """User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.io/ai-project/sitemap.xml\n"""
+(DIST / "robots.txt").write_text(robots_txt, encoding="utf-8")
+
 (DIST / "index.html").write_text(home, encoding="utf-8")
 (DIST / PERMALINK).write_text(page, encoding="utf-8")
 
