@@ -494,57 +494,6 @@
       "prerequisites": []
     },
     {
-      "id": "WORK-0002",
-      "title": "save-request-intake.ymlのPR作成失敗を本番経路で確認する",
-      "priority": 20,
-      "status": "queued",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "save_pipeline",
-      "target": "save-request-intake.ymlのPR作成失敗がジョブ失敗として可視化されることを本番経路で確認する",
-      "evidence": "既存のpending_monitoring項目。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-09-27",
-      "updated_at": "2026-09-27",
-      "prerequisites": []
-    },
-    {
-      "id": "WORK-0003",
-      "title": "save-request-intake.ymlのpushトリガー非発火問題を本番経路で確認する",
-      "priority": 20,
-      "status": "queued",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "save_pipeline",
-      "target": "pull_request_target＋キューPR方式への変更後、save-request-intake.ymlの本番経路を確認する",
-      "evidence": "既存のpending_monitoring項目。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-09-27",
-      "updated_at": "2026-09-27",
-      "prerequisites": []
-    },
-    {
-      "id": "WORK-0004",
-      "title": "BLOG-0001のGSC Redirect errorを経過観察後に再確認する",
-      "priority": 30,
-      "status": "queued",
-      "depends_on": [],
-      "not_before": "2026-10-01",
-      "scope": "experience_log_to_blogger",
-      "target": "GSC-確認の一環として、たかがGSCでBLOG-0001 URLのURL検査とインデックス状況を再確認する",
-      "evidence": "BLOG-0001のmeta description設定・確認まで完了。残っているGSC「Redirect error」の経過観察は、GSC-確認のトップページ／BLOG-0001〜0003確認に統合して扱う。GSC Wizardをバドやクロウの直接操作代替として使用しない。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-09-27",
-      "updated_at": "2026-09-27",
-      "prerequisites": []
-    },
-    {
       "id": "BLOG-0003",
       "title": "BLOG-0003「GitHub編」を作成する",
       "priority": 10,
@@ -615,23 +564,25 @@
       "prerequisites": []
     },
     {
-      "id": "NEXT-BLOG-PRODUCTION",
-      "title": "次のブログ制作を開始する",
+      "id": "BLOG-0004",
+      "title": "BLOG-0004を作成する",
       "priority": 30,
       "status": "queued",
       "depends_on": [
         "GSC-確認"
       ],
       "not_before": null,
-      "scope": "experience_log_to_blogger",
-      "target": "BLOG-0003公開後確認とGSC確認を終えた後、次のブログ企画・一次資料確認・制作工程へ進む。",
-      "evidence": "次のブログ制作は未着手。",
-      "readiness": "ready",
-      "unblock_action": "none",
+      "scope": "experience_log_to_Blogger",
+      "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作・公開工程へ進む。",
+      "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。",
+      "readiness": "blocked",
+      "unblock_action": "GSC確認",
       "environment": "work_pc",
-      "created_at": "2026-10-06",
-      "updated_at": "2026-10-06",
-      "prerequisites": []
+      "created_at": "2026-10-07",
+      "updated_at": "2026-10-07",
+      "prerequisites": [
+        "GSC-確認"
+      ]
     }
   ]
 }
