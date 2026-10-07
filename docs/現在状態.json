@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-10-08",
+  "updated": "2026-10-07",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -240,8 +240,7 @@
     "DIGA / DiMORA自動化は、現行のバド単独運用では実機側の取得・操作まで完遂できないため、2026-09-21をもって本線作業を断念する。既存成果・経験資産は破棄せず履歴として保持する。",
     "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入",
     "BUD.md二重管理解消の運用マニュアルを追加し、docs/現在状態.jsonを唯一の現在状態正本とする手順を次回も再現可能にした",
-    "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した",
-    "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_items・next_stepの stale 状態を開始前に検出する。"
+    "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -298,7 +297,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ直接取得はこの環境からできず未確認として記録済み。GSCはたかがURL検査を実施済みで、現在は処理結果待ち。GitHub Pagesのsitemap.xml実体確認、生成・公開経路確認、robots.txt追加・実公開確認まで完了している。",
+    "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ直接取得はこの環境からできず未確認として記録済み。GSCはたかがURL検査を実施済みだが、現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況は未確定。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-07",
@@ -317,26 +316,25 @@
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。このevidenceのchecked_at/ci_head_commitは現在の正本readback基準へ更新。"
     },
     "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
-    "next_focus": "GSCの処理結果とサイトマップ取得結果をたかが確認し、その後BLOG-0004の制作へ進む。"
+    "next_focus": "GSCの処理結果が出た後、トップページとBLOG-0001〜0003のインデックス状況を確認し、その後次のブログ制作へ進む。"
   },
   "next_step": {
     "id": "GSC-確認",
     "title": "GSCのインデックス状況を確認する",
     "priority": 20,
-    "status": "queued",
     "depends_on": [
       "BLOG-0003公開後確認"
     ],
-    "not_before": null,
-    "scope": "experience_log_to_blogger",
-    "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
-    "evidence": "2026-10-07、たかが前日にGSCのURL検査を実施。現在のGSC表示は「データを処理しています。1日後にもう一度ご確認ください」。インデックス登録済み／未登録、未登録理由はまだ確定していないため、GSC-確認は未完了のまま維持する。登録リクエストは既に実施済みで、同一操作は繰り返さない。",
-    "readiness": "ready",
-    "unblock_action": "none",
+    "not_before": "2026-10-08",
     "environment": "work_pc",
-    "created_at": "2026-10-06",
-    "updated_at": "2026-10-07",
-    "prerequisites": []
+    "scope": "experience-log_to_Blogger",
+    "target": "GSCの処理結果が出た後、たかがGSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。別立てのGSC-サイトマップ確認では、実体XMLが正常に表示されることを確認済み。GSC取得失敗の原因は未確定のため、robots.txt等のクロール条件とHTTP応答条件を切り分ける。",
+    "evidence": "2026-10-07、たかが前日にGSC URL検査を実施。現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況・未登録理由は未確定。登録リクエストは既に実施済みのため同一操作は繰り返さない。処理結果が出た後に確認を継続する。 別立てのGSC-サイトマップ確認では、送信済み /sitemap.xml が「取得できませんでした」となっており、原因確認を独立作業として管理する。 2026-10-07、/sitemap.xmlの実体をブラウザで確認したところXMLとして正常表示され、4 URLを確認。GSC側の「取得できませんでした」は継続しているため原因は未確定。",
+    "readiness": "blocked",
+    "unblock_action": "GSC確認",
+    "prerequisites": [
+      "BLOG-0003公開後確認"
+    ]
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -350,8 +348,7 @@
     "generator": "scripts/resume_manifest.py",
     "source": "docs/現在状態.json",
     "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・next_stepを一括確認するための生成manifest",
-    "required_first_check": "scripts/resume_check.py",
-    "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、生成ビューより優先する。前回作業後のPR/merge/commitがwork_itemsとnext_stepへ反映済みか確認してから作業を開始する。"
+    "required_first_check": "scripts/resume_check.py"
   },
   "verification_contract": {
     "status": "implemented",
@@ -513,12 +510,12 @@
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "GSCで送信した /sitemap.xml の実体・取得状況・取得できない原因を確認し、GitHub Pagesの生成・公開経路も含めて必要な対処と再送信の要否を判断する。",
-      "evidence": "2026-10-07、たかが実際の https://takalenny-blip.github.io/ai-project/sitemap.xml をブラウザで確認。XMLとして正常に表示され、トップページとBLOG-0001〜0003の4 URLを確認。GSC側の送信済みサイトマップは「型: 不明」「取得できませんでした」「検出されたページ数: 0」のまま。GitHub側ではsitemap.xmlがscripts/build_cloudflare_site.pyによりdist/sitemap.xmlとして生成され、GitHub Pages公開workflowからdeployされる構成を確認。2026-10-07、PR #941（commit bd061a4d668fc3dd0f73cd74eb50605b13332ba6）でrobots.txt生成とSitemap明示を実装・mergeし、/robots.txt の実公開も確認済み。GSC取得失敗の根本原因は未確定。",
+      "evidence": "2026-10-07、たかが実際の https://takalenny-blip.github.io/ai-project/sitemap.xml をブラウザで確認。XMLとして正常に表示され、<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"> 配下にトップページとBLOG-0001〜0003の4 URLが含まれている。GSC Live Testでは「URLはGoogleに登録できます」「ページをインデックスに登録可能です」と表示され、インデックス可能性は確認済み。ただし送信済みサイトマップは「型: 不明」「取得できませんでした」「検出されたページ数: 0」のまま。再送信後も同じ結果。GitHub側を確認したところ、sitemap.xmlはリポジトリ直下の静的ファイルではなく、GitHub Pages公開workflowが scripts/build_cloudflare_site.py を実行して dist/sitemap.xml を生成して公開する構成であることを確認。したがって次はGitHub Pagesでの生成・公開経路と実配信条件を切り分ける。原因は未確定。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-07",
-      "updated_at": "2026-10-08",
+      "updated_at": "2026-10-07",
       "prerequisites": []
     },
     {
@@ -527,17 +524,18 @@
       "priority": 22,
       "status": "queued",
       "depends_on": [
-        "GSC-サイトマップ確認"
+        "GSC-サイトマップ確認",
+        "GSC-robots.txt"
       ],
       "not_before": null,
       "scope": "experience-log_to_Blogger",
-      "target": "GitHub Pages公開workflowとサイト生成スクリプトを確認し、/sitemap.xmlの生成元・公開物・配信経路を確認する。robots.txt追加・実配信確認まで完了したため、次はGSC側のサイトマップ取得結果をたかが確認できる状態にする。",
-      "evidence": "2026-10-07、mainの .github/workflows/github-pages-manual-publish.yml と scripts/build_cloudflare_site.py を確認。公開workflowはmainをcheckout後、build_cloudflare_site.pyでdistを生成し、そのdistをGitHub Pagesへdeployする。sitemap.xmlはbuild script内でdist/sitemap.xmlとして生成され、リポジトリ直下のsitemap.xmlとしては管理されていない。2026-10-07、/sitemap.xml はHTTP 200 OK、XML本文は正常。2026-10-07、PR #941（commit bd061a4d668fc3dd0f73cd74eb50605b13332ba6）でrobots.txt生成とSitemap明示を実装・mergeし、その後 /robots.txt の実公開を確認済み。GSCのサイトマップ取得失敗の根本原因は未確定。",
+      "target": "GitHub Pages公開workflowとサイト生成スクリプトを確認し、/sitemap.xmlの生成元・公開物・配信経路を確認する。robots.txt追加後は実配信を確認し、GSCのサイトマップ取得失敗が解消するかをたかがGSCで確認できる状態にする。",
+      "evidence": "2026-10-07、mainの .github/workflows/github-pages-manual-publish.yml と scripts/build_cloudflare_site.py を確認。公開workflowはmainをcheckout後、build_cloudflare_site.pyでdistを生成し、そのdistをGitHub Pagesへdeployする。sitemap.xmlはbuild script内でdist/sitemap.xmlとして生成され、リポジトリ直下のsitemap.xmlとしては管理されていない。GSC取得失敗の根本原因は未確定。 2026-10-07、作業PCで /sitemap.xml はHTTP 200 OK、XML本文は正常。一方 /robots.txt はGitHub Pagesの404。robots.txt追加を独立作業として登録し、公開後の再確認を次段階とする。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-07",
-      "updated_at": "2026-10-08",
+      "updated_at": "2026-10-07",
       "prerequisites": []
     },
     {
@@ -550,6 +548,25 @@
       "scope": "experience-log_to_Blogger",
       "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。",
       "evidence": "2026-10-07、Google登録がGitHub Pages/Bloggerでうまくいかない場合の分岐として、WordPress.org＋無料ホスティングを検討する方針をたかと決定。候補調査ではInfinityFree、Byet Host、AwardSpace等が完全無料・WordPress対応を公式に掲示している。まずは1環境を検証し、Google登録を含めて実測する。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-07",
+      "updated_at": "2026-10-07",
+      "prerequisites": []
+    },
+    {
+      "id": "GSC-robots.txt",
+      "title": "GitHub Pagesにrobots.txtを追加してsitemapを明示する",
+      "priority": 22,
+      "status": "queued",
+      "depends_on": [
+        "GSC-サイトマップ確認"
+      ],
+      "not_before": null,
+      "scope": "experience_log_to_Blogger",
+      "target": "GitHub Pagesの公開物にrobots.txtを追加し、全クローラーを許可した上でsitemap.xmlのURLを明示する。公開後に実配信を確認し、GSCサイトマップ取得への影響を検証する。",
+      "evidence": "2026-10-07、作業PCで https://takalenny-blip.github.io/ai-project/robots.txt を確認したところ404。sitemap.xmlは200 OKで標準XMLとして取得できるため、robots.txt不在を独立した対処事項として登録する。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
