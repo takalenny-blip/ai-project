@@ -524,12 +524,13 @@
       "priority": 22,
       "status": "queued",
       "depends_on": [
-        "GSC-サイトマップ確認"
+        "GSC-サイトマップ確認",
+        "GSC-robots.txt"
       ],
       "not_before": null,
       "scope": "experience-log_to_Blogger",
-      "target": "GitHub Pages公開workflowとサイト生成スクリプトを確認し、/sitemap.xmlの生成元・公開物・配信経路にGSC取得失敗につながる要因がないかを確認する。必要な修正がある場合は別途実装し、修正不要ならGSC再確認の条件を整理する。",
-      "evidence": "2026-10-07、mainの .github/workflows/github-pages-manual-publish.yml と scripts/build_cloudflare_site.py を確認。公開workflowはmainをcheckout後、build_cloudflare_site.pyでdistを生成し、そのdistをGitHub Pagesへdeployする。sitemap.xmlはbuild script内でdist/sitemap.xmlとして生成され、リポジトリ直下のsitemap.xmlとしては管理されていない。GSC取得失敗の根本原因は未確定。",
+      "target": "GitHub Pages公開workflowとサイト生成スクリプトを確認し、/sitemap.xmlの生成元・公開物・配信経路を確認する。robots.txt追加後は実配信を確認し、GSCのサイトマップ取得失敗が解消するかをたかがGSCで確認できる状態にする。",
+      "evidence": "2026-10-07、mainの .github/workflows/github-pages-manual-publish.yml と scripts/build_cloudflare_site.py を確認。公開workflowはmainをcheckout後、build_cloudflare_site.pyでdistを生成し、そのdistをGitHub Pagesへdeployする。sitemap.xmlはbuild script内でdist/sitemap.xmlとして生成され、リポジトリ直下のsitemap.xmlとしては管理されていない。GSC取得失敗の根本原因は未確定。 2026-10-07、作業PCで /sitemap.xml はHTTP 200 OK、XML本文は正常。一方 /robots.txt はGitHub Pagesの404。robots.txt追加を独立作業として登録し、公開後の再確認を次段階とする。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -547,6 +548,25 @@
       "scope": "experience-log_to_Blogger",
       "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。",
       "evidence": "2026-10-07、Google登録がGitHub Pages/Bloggerでうまくいかない場合の分岐として、WordPress.org＋無料ホスティングを検討する方針をたかと決定。候補調査ではInfinityFree、Byet Host、AwardSpace等が完全無料・WordPress対応を公式に掲示している。まずは1環境を検証し、Google登録を含めて実測する。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-07",
+      "updated_at": "2026-10-07",
+      "prerequisites": []
+    },
+    {
+      "id": "GSC-robots.txt",
+      "title": "GitHub Pagesにrobots.txtを追加してsitemapを明示する",
+      "priority": 22,
+      "status": "queued",
+      "depends_on": [
+        "GSC-サイトマップ確認"
+      ],
+      "not_before": null,
+      "scope": "experience_log_to_Blogger",
+      "target": "GitHub Pagesの公開物にrobots.txtを追加し、全クローラーを許可した上でsitemap.xmlのURLを明示する。公開後に実配信を確認し、GSCサイトマップ取得への影響を検証する。",
+      "evidence": "2026-10-07、作業PCで https://takalenny-blip.github.io/ai-project/robots.txt を確認したところ404。sitemap.xmlは200 OKで標準XMLとして取得できるため、robots.txt不在を独立した対処事項として登録する。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
