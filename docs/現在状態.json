@@ -329,7 +329,7 @@
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
     "target": "GSCの処理結果が出た後、たかがGSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
-    "evidence": "2026-10-07、たかが前日にGSC URL検査を実施。現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況・未登録理由は未確定。登録リクエストは既に実施済みのため同一操作は繰り返さない。処理結果が出た後に確認を継続する。",
+    "evidence": "2026-10-07、たかが前日にGSC URL検査を実施。現在は「データを処理しています。1日後にもう一度ご確認ください」と表示され、インデックス登録状況・未登録理由は未確定。登録リクエストは既に実施済みのため同一操作は繰り返さない。処理結果が出た後に確認を継続する。 別立てのGSC-サイトマップ確認では、送信済み /sitemap.xml が「取得できませんでした」となっており、原因確認を独立作業として管理する。",
     "readiness": "blocked",
     "unblock_action": "GSC確認",
     "prerequisites": [
@@ -460,91 +460,6 @@
   },
   "work_items": [
     {
-      "id": "WORK-0001",
-      "title": "GitHub公開リポジトリのpull_request_target既定ポリシー変更への対応を確定・実装・本番検証する",
-      "priority": 10,
-      "status": "done",
-      "depends_on": [],
-      "not_before": "2026-09-27",
-      "scope": "save_pipeline",
-      "target": "2026-11-02までにsave-request-intake.ymlとauto-approve-save-pr.ymlの継続運用方式を確定・実装・本番検証する",
-      "evidence": "2026-09-27確認。Actions Policy「save-workflows-pull_request_target」がActiveで、対象2 workflowにpull_request_targetを明示許可。save-request-intake実運用Run #635等、auto-approve-save-pr実運用Run #828等が正常終了。Policy変更・workflow変更は不要と判断。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-09-27",
-      "updated_at": "2026-09-27",
-      "prerequisites": []
-    },
-    {
-      "id": "BLOG-0002",
-      "title": "BLOG-0002「VAIO Pをサーバーにしてみたい」を作業稿から完成へ進める",
-      "priority": 10,
-      "status": "done",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "experience_log_to_blogger",
-      "target": "DIGA／DiMORA部分を含む未完部分を肉付けし、本文を完成・確認して公開可能な状態にする",
-      "evidence": "PR #756をマージ済み。BLOG-0002はブロック3までで一区切りとする。merge commit 182677715d398cc763f67f4ea204c39a5a08f8cd。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-09-27",
-      "updated_at": "2026-09-28",
-      "prerequisites": []
-    },
-    {
-      "id": "BLOG-0003",
-      "title": "BLOG-0003「GitHub編」を作成する",
-      "priority": 10,
-      "status": "done",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "experience_log_to_blogger",
-      "target": "BLOG-0002の続きとして、AIとのやりとりをどう残し、GitHubを使ってどう管理するようになったかを、一次記録を中心に記事化する",
-      "evidence": "PR #855・#856をマージ済み。Crow再レビューで現行HTML一致を確認。HTML・レビュー・バックアップまで完了し、Blogger公開工程は別の残工程へ分離。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-09-28",
-      "updated_at": "2026-10-05",
-      "prerequisites": []
-    },
-    {
-      "id": "BLOG-0003残工程",
-      "title": "BLOG-0003のBlogger公開工程を完了する",
-      "priority": 10,
-      "status": "done",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "experience_log_to_blogger",
-      "target": "Bloggerへの画像組み込み、実表示確認、公開まで完了する",
-      "evidence": "PR #868で画像修正をマージ。たかが画像の実表示を確認し、公開済みと報告。公開後の実ページ取得確認は別工程へ分離。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-10-05",
-      "updated_at": "2026-10-05",
-      "prerequisites": []
-    },
-    {
-      "id": "BLOG-0003公開後確認",
-      "title": "GitHub Pages公開後確認を行う",
-      "priority": 10,
-      "status": "done",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "experience_log_to_blogger",
-      "target": "今回のGitHub Pagesデザイン本番反映後の実表示を確認する。確認できない場合は未確認として記録する。完了後にGSC確認へ進む。",
-      "evidence": "2026-10-07、GitHub Pages公開後の実ページ直接取得を試行したが、この環境から公開URLを特定・正常取得できず、実ページ直接取得は未確認として確定。たかのブラウザでの実表示確認済みという既存記録は維持。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-10-05",
-      "updated_at": "2026-10-07",
-      "prerequisites": []
-    },
-    {
       "id": "GSC-確認",
       "title": "GSCのインデックス状況を確認する",
       "priority": 20,
@@ -569,20 +484,39 @@
       "priority": 30,
       "status": "queued",
       "depends_on": [
-        "GSC-確認"
+        "GSC-確認",
+        "GSC-サイトマップ確認"
       ],
       "not_before": null,
       "scope": "experience_log_to_Blogger",
       "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作・公開工程へ進む。",
       "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。",
       "readiness": "blocked",
-      "unblock_action": "GSC確認",
+      "unblock_action": "GSC確認・GSC-サイトマップ確認",
       "environment": "work_pc",
       "created_at": "2026-10-07",
       "updated_at": "2026-10-07",
       "prerequisites": [
-        "GSC-確認"
+        "GSC-確認",
+        "GSC-サイトマップ確認"
       ]
+    },
+    {
+      "id": "GSC-サイトマップ確認",
+      "title": "GSCサイトマップの取得状況と原因を確認する",
+      "priority": 21,
+      "status": "queued",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "experience_log_to_blogger",
+      "target": "GSCで送信した /sitemap.xml の実体・取得状況・取得できない原因を確認し、必要な対処と再送信の要否を判断する。",
+      "evidence": "2026-10-07、たかがGSCの「送信されたサイトマップ」を確認。/sitemap.xml は「型: 不明」「最終読み込み日時: 空欄」「ステータス: 取得できませんでした」「検出されたページ数: 0」「検出された動画数: 0」。取得不能の根本原因は未確定。まず実際の /sitemap.xml の内容・応答を確認する必要がある。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-07",
+      "updated_at": "2026-10-07",
+      "prerequisites": []
     }
   ]
 }
