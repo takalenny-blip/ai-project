@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 RULE = ROOT / "rules" / "構造変更時・独立監査ガード.md"
+READ_MAP = ROOT / "docs" / "AI_READ_MAP.md"
 
 
 def require(text: str, needle: str, label: str) -> None:
@@ -16,6 +17,7 @@ def require(text: str, needle: str, label: str) -> None:
 def main() -> int:
     readme = README.read_text(encoding="utf-8")
     rule = RULE.read_text(encoding="utf-8")
+    read_map = READ_MAP.read_text(encoding="utf-8")
 
     require(readme, "最初に [`docs/現在状態.json`](./docs/現在状態.json) を読んでください。これが現在状態の唯一の正本です。", "README source of truth")
     require(readme, "BUD.md", "README generated view reference")
@@ -35,6 +37,12 @@ def main() -> int:
     require(rule, "GitHub上の `docs/現在状態.json` を最初に直接読み", "rule canonical startup state")
     require(rule, "前回作業以後にPR/merge/commitが存在する場合", "rule post-work freshness check")
     require(rule, "GitHub正本より優先しない", "rule stale-history precedence")
+
+    require(read_map, "`docs/現在状態.json` — 現在状態・現在の作業キュー・現在の次の一手の唯一の正本", "AI read map canonical state")
+    require(read_map, "`BUD.md` / `docs/引き継ぎ/現在の引き継ぎ.md` — 正本から生成された互換ビュー", "AI read map generated views")
+    require(read_map, "正本との不一致時は使用せず、正本を優先する", "AI read map stale-view precedence")
+    if "BUD.md（現在状態） + rules/運用ルール.md（行動規則） > その他の資料" in read_map:
+        raise SystemExit("FAIL: AI_READ_MAP still contains the obsolete BUD-first source-of-truth contract")
 
     print("OK: AI entry documentation contract")
     return 0
