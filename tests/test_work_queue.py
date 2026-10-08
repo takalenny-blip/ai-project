@@ -105,6 +105,7 @@ class WorkQueueTests(unittest.TestCase):
         ]
         items[0]["execution_state"] = "waiting_external"
         items[0]["wait_reason"] = "GSC is processing the URL inspection result"
+        items[0]["progress"]["steps"][0]["status"] = "waiting_external"
         candidates = select_actionable(items, "2026-10-08")
         self.assertEqual([x["id"] for x in candidates], ["SITEMAP", "WP"])
         self.assertNotIn("GSC", [x["id"] for x in candidates])
