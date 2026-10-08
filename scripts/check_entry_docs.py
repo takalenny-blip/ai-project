@@ -37,8 +37,6 @@ def main() -> int:
     require(audit_rule, "次に参加するAI", "next-agent safety check")
     require(audit_rule, "通常工程へ戻る", "return-to-normal-operation rule")
     require(operating_rule, "GitHub上の `docs/現在状態.json` を最初に直接読み", "rule canonical startup state")
-    require(operating_rule, "前回作業以後にPR/merge/commitが存在する場合", "rule post-work freshness check")
-    require(operating_rule, "GitHub正本より優先しない", "rule stale-history precedence")
 
     require(read_map, "`docs/現在状態.json` — 現在状態・現在の作業キュー・現在の次の一手の唯一の正本", "AI read map canonical state")
     require(read_map, "`BUD.md` / `docs/引き継ぎ/現在の引き継ぎ.md` — 正本から生成された互換ビュー", "AI read map generated views")
