@@ -28,9 +28,9 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         wp = next(item for item in self.state["work_items"] if item["id"] == "WP無料ホスティング検証")
         steps = {step["id"]: step for step in wp["progress"]["steps"]}
         for step_id in ("free-account", "subdomain", "admin-login", "wordpress-install",
-                        "script-installer-recheck", "https", "sitemap"):
+                        "script-installer-recheck", "https", "sitemap",
+                        "blog2-publication", "blog3-publication"):
             self.assertEqual(steps[step_id]["status"], "done")
-        self.assertEqual(steps["google-tests"]["status"], "waiting_external")
         current_step = wp["progress"]["current_step"]
         self.assertIn(current_step, steps)
         self.assertNotEqual(steps[current_step]["status"], "done")
@@ -38,6 +38,8 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
             self.assertEqual(steps[current_step]["status"], "waiting_external")
         else:
             self.assertNotEqual(steps[current_step]["status"], "waiting_external")
+        self.assertEqual(current_step, "wp-icon")
+        self.assertEqual(steps["wp-icon"]["status"], "in_progress")
 
     def test_removed_dependencies_are_not_referenced(self):
         ids = {item["id"] for item in self.state["work_items"]}
