@@ -88,6 +88,10 @@ def main():
     actionable = select_actionable(state["work_items"], state.get("updated"))
     if actionable:
         print("actionable_work_items: " + ", ".join(f"{item['id']} (priority={item['priority']})" for item in actionable))
+        for item in actionable:
+            progress = item["progress"]
+            current = next(step for step in progress["steps"] if step["id"] == progress["current_step"])
+            print(f"progress[{item['id']}]: current_step={progress['current_step']} status={current['status']}")
     else:
         print("actionable_work_items: (none)")
     waiting_external = [
@@ -99,6 +103,10 @@ def main():
             f"{item['id']} ({item.get('wait_reason', 'reason unspecified')})"
             for item in waiting_external
         ))
+        for item in waiting_external:
+            progress = item["progress"]
+            current = next(step for step in progress["steps"] if step["id"] == progress["current_step"])
+            print(f"progress[{item['id']}]: current_step={progress['current_step']} status={current['status']}")
     else:
         print("waiting_external_work_items: (none)")
     derived = derived_next_step(state["work_items"], state.get("updated"))
