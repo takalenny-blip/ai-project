@@ -27,8 +27,20 @@ class MainWorkProgressGuardTests(unittest.TestCase):
         ok, _ = validate("work/real-change", ["tests/test_dimora_adapter.py"])
         self.assertTrue(ok)
 
-    def test_fix_branch_is_not_blocked(self):
+    def test_fix_branch_requires_substantive_change(self):
         ok, _ = validate("fix/current-state-guard", ["docs/現在状態.json"])
+        self.assertFalse(ok)
+
+    def test_fix_branch_accepts_substantive_change(self):
+        ok, _ = validate("fix/current-state-guard", ["scripts/main_work_progress_guard.py"])
+        self.assertTrue(ok)
+
+    def test_save_request_branch_is_not_blocked(self):
+        ok, _ = validate("chat-save-request/20261008-1234", [".github/save-queue/request.md"])
+        self.assertTrue(ok)
+
+    def test_save_direct_chat_branch_is_not_blocked(self):
+        ok, _ = validate("save/direct-chat-1234", ["20261008_0834.md"])
         self.assertTrue(ok)
 
 
