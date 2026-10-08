@@ -332,7 +332,7 @@
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
-    "scope": "experience-log_to_Blogger",
+    "scope": "experience_log_to_blogger",
     "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。その後、Blogger・GitHub Pages・WordPressの3サイトのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
     "evidence": "PR #942は未マージのまま残り、robots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。3サイトのGSC登録は実施済みだが、インデックス状況は未確定。",
     "readiness": "ready",
