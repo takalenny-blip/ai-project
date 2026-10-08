@@ -300,7 +300,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003は継続運用中。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCではBlogger・GitHub Pages・WordPressの3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、GSCのsitemap.xmlは「型: 不明」「取得できませんでした」「0件」のままで、原因切り分けが未完了。各サイトのインデックス状況も未確定。",
+    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003は継続運用中。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCではBlogger・GitHub Pages・WordPressの3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、GSCのsitemap.xmlは「型: 不明」「取得できませんでした」「0件」のままで、原因切り分けが未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-09",
@@ -320,10 +320,10 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。"
+      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。"
     },
-    "next_stage_boundary": "まずGitHub PagesのGSCサイトマップ取得失敗の原因切り分けを進める。並行して、WordPressでは保存済みサイトアイコン画像の適用・実表示確認とデザインテンプレート整備を残作業として管理する。GSCの3サイト別インデックス状況はGoogle側の処理結果を待って個別確認する。",
-    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。WordPress側はサイトアイコン画像のGitHub保存まで完了、WordPressへの適用・実表示確認とデザインテンプレート整備が未完了。"
+    "next_stage_boundary": "まずGitHub PagesのGSCサイトマップ取得失敗の原因切り分けを進める。Bloggerは3記事のインデックス登録成功を確認済み。GitHub Pages・WordPressはインデックス状況を個別確認する。並行して、WordPressでは保存済みサイトアイコン画像の適用・実表示確認とデザインテンプレート整備を残作業として管理する。",
+    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況は未確認。WordPress側はサイトアイコン画像のGitHub保存まで完了、WordPressへの適用・実表示確認とデザインテンプレート整備が未完了。"
   },
   "next_step": {
     "id": "GSC-確認",
@@ -333,8 +333,8 @@
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。その後、Blogger・GitHub Pages・WordPressの3サイトのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
-    "evidence": "PR #942は未マージのまま残り、robots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。3サイトのGSC登録は実施済みだが、インデックス状況は未確定。",
+    "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
+    "evidence": "PR #942はrobots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの報告あり。GitHub Pages・WordPressのインデックス状況は未確認。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -446,7 +446,8 @@
         "method": "2026-10-08の直チャット末尾、PR #962/#964の変更内容、PR #942の未完了状態、rules/運用ルール.md §6の終了時チェックリストを照合。",
         "cause": "PR #962のマージ後、回答はGitHubへの画像保存完了のみを報告し、WordPressへの適用・実表示確認の未完了状態をwork_itemsへ分離記録しなかった。後続のPR #964は直チャット保存と既存の現在状態の同期を行ったが、終了時の作業キュー再照合は含まれていなかった。加えて、PR #942のGSC sitemap.xml取得失敗調査がオープンのまま、現在状態のwork_itemsに独立した実行可能な作業として反映されていなかった。",
         "corrective_action": "work_itemsを実際の残作業へ同期し、終了時の照合漏れをverification_recordsへ記録。state-onlyのsave/currentize PRがmain-work progress gateで正しく許可されるようbranch分類の回帰テストを追加する。"
-      }
+      },
+      "note": " 2026-10-09訂正：Bloggerは3記事ともインデックス登録成功を2026-10-08にユーザー確認済み。未確認として残すのはGitHub Pages・WordPressのみ。"
     }
   },
   "interaction_control": {
@@ -481,8 +482,8 @@
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
-      "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。その後、Blogger・GitHub Pages・WordPressの3サイトのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
-      "evidence": "PR #942は未マージのまま残り、robots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。3サイトのGSC登録は実施済みだが、インデックス状況は未確定。",
+      "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
+      "evidence": "PR #942はrobots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの報告あり。GitHub Pages・WordPressのインデックス状況は未確認。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -525,9 +526,9 @@
           },
           {
             "id": "site-index-status-check",
-            "title": "3サイトのインデックス登録状況を個別確認",
+            "title": "GitHub Pages・WordPressのインデックス登録状況を個別確認",
             "status": "waiting_external",
-            "evidence": "GSCの登録操作は3サイトとも実施済み。各サイトのインデックス状況は未確定で、Google側の処理結果も含め個別確認が必要。"
+            "evidence": "Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。残るGitHub Pages・WordPressの状況は未確認で、個別確認が必要。"
           }
         ],
         "updated_at": "2026-10-09"
