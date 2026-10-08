@@ -299,7 +299,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPress環境の公開基盤確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。現在のWP側宿題はアイコン画像とデザインテンプレート。BLOG-0001は画像問題が残っているため先送り。GSCはGoogle側の登録処理待ち。",
+    "summary": "WordPress環境の公開基盤確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。現在のWP側宿題はアイコン画像とデザインテンプレート。BLOG-0001は画像問題が残っているため先送り。GSCはBlogger・GitHub Pages・WordPressの3サイトを別々に登録済みで、現在は各サイトのインデックス状況確認待ち。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-07",
@@ -328,8 +328,8 @@
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
-    "target": "WordPress公開済みのBLOG-0002・BLOG-0003を前提に、サイトのアイコン画像とデザインテンプレートを整える。BLOG-0001の画像問題は別の保留事項として保持し、解消時に対応する。",
-    "evidence": "WordPress導入・HTTPS・サイトマップ確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。現在の残課題として、たかがアイコン画像とデザインテンプレートを指定。BLOG-0001は画像問題のため先送り。",
+    "target": "WordPress公開済みのBLOG-0002・BLOG-0003を前提に、サイトのアイコン画像とデザインテンプレートを整える。BLOG-0001の画像問題は別の保留事項として保持し、解消時に対応する。GSCはBlogger・GitHub Pages・WordPressを別サイトとして管理し、登録済み操作を再実行せず、各サイトのインデックス状況を個別に確認する。",
+    "evidence": "WordPress導入・HTTPS・サイトマップ確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。現在の残課題として、たかがアイコン画像とデザインテンプレートを指定。BLOG-0001は画像問題のため先送り。GSC登録はBlogger・GitHub Pages・WordPressの3サイトで実施済み。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -460,14 +460,14 @@
   "work_items": [
     {
       "id": "GSC-確認",
-      "title": "GSCのインデックス状況を確認する",
+      "title": "GSCの3サイト別インデックス状況を確認する",
       "priority": 20,
       "status": "queued",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
-      "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
-      "evidence": "2026-10-07、たかが前日にGSCのURL検査を実施。現在のGSC表示は「データを処理しています。1日後にもう一度ご確認ください」。インデックス登録済み／未登録、未登録理由はまだ確定していないため、GSC-確認は未完了のまま維持する。登録リクエストは既に実施済みで、同一操作は繰り返さない。",
+      "target": "Blogger・GitHub Pages・WordPressの3サイトについて、GSC登録は各サイト別に完了済みとして扱い、登録済みプロパティを混同せず、各サイトのインデックス登録状況・未確認事項を個別に確認する。既に実施済みの登録操作は理由なく再実行しない。",
+      "evidence": "2026-10-08、たかよりGSC登録はBlogger・GitHub Pages・WordPressの3サイトそれぞれで実施済みとの確認。これは各サイトのGSCプロパティ登録完了を示すもので、ページのインデックス登録状況とは別管理とする。前日のURL検査ではGSCに「データを処理しています。1日後にもう一度ご確認ください」と表示されており、インデックス登録済み／未登録や未登録理由はまだ確定していない。3サイトの登録操作は再実行しない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -475,27 +475,33 @@
       "updated_at": "2026-10-08",
       "prerequisites": [],
       "execution_state": "waiting_external",
-      "wait_reason": "Google側で登録処理中。登録リクエストは実施済みで、所有権確認も完了しているため、同じ操作を繰り返さず結果待ちとする。",
+      "wait_reason": "Blogger・GitHub Pages・WordPressのGSC登録は各サイト別に完了済み。次は各サイトのインデックス状況を個別に確認する段階で、Google側の処理結果待ちを含む。",
       "progress": {
-        "current_step": "google-processing",
+        "current_step": "site-index-status-check",
         "steps": [
           {
-            "id": "gsc-ownership",
-            "title": "GSC所有権確認",
+            "id": "blogger-registration",
+            "title": "BloggerのGSC登録",
             "status": "done",
-            "evidence": "たかがGSCで所有権確認を完了"
+            "evidence": "たかよりGSC登録実施済みとの確認。"
           },
           {
-            "id": "google-registration-request",
-            "title": "Google登録リクエスト",
+            "id": "github-pages-registration",
+            "title": "GitHub PagesのGSC登録",
             "status": "done",
-            "evidence": "たかがGoogle登録リクエストを実施済み。再送信はしない"
+            "evidence": "たかよりGSC登録実施済みとの確認。"
           },
           {
-            "id": "google-processing",
-            "title": "Google側の登録処理待ち",
+            "id": "wordpress-registration",
+            "title": "WordPressのGSC登録",
+            "status": "done",
+            "evidence": "たかよりGSC登録実施済みとの確認。"
+          },
+          {
+            "id": "site-index-status-check",
+            "title": "3サイトのインデックス登録状況を個別確認",
             "status": "waiting_external",
-            "evidence": "GSC表示は「データを処理しています。1日後にもう一度ご確認ください」"
+            "evidence": "前日のURL検査でGSCに「データを処理しています。1日後にもう一度ご確認ください」と表示。各サイトのインデックス状況は未確定。"
           }
         ],
         "updated_at": "2026-10-08"
