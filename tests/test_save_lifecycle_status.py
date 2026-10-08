@@ -37,6 +37,25 @@ class SaveLifecycleStatusTests(unittest.TestCase):
         })
         self.assertEqual(result.status, "final_save_pending")
 
+    def test_open_queue_does_not_hide_existing_final_save_pr(self):
+        result = mod.resolve({
+            "queue_pr":{"number":963,"state":"open","merged":False},
+            "intake":{"status":"success"},
+            "final_save_pr":{"number":964,"state":"open","merged":False},
+            "canonical_readback":{"verified":False},
+        })
+        self.assertEqual(result.status, "final_save_pending")
+        self.assertEqual(result.final_pr, "964")
+
+    def test_open_queue_does_not_hide_verified_merged_final_save(self):
+        result = mod.resolve({
+            "queue_pr":{"number":963,"state":"open","merged":False},
+            "intake":{"status":"success"},
+            "final_save_pr":{"number":964,"state":"closed","merged":True},
+            "canonical_readback":{"verified":True},
+        })
+        self.assertEqual(result.status, "completed")
+
 
 if __name__ == "__main__":
     unittest.main()
