@@ -40,8 +40,8 @@ def changed_paths(base: str, head: str) -> list[str]:
 
 
 def validate(branch: str, paths: list[str]) -> tuple[bool, str]:
-    if not branch.startswith("work/"):
-        return True, "not a work/* branch; progress gate not required"
+    if branch.startswith(("chat-save-request/", "save/direct-chat-")):
+        return True, "save-track branch; progress gate not required"
     substantive = [
         path for path in paths
         if path not in ADMIN_ONLY
