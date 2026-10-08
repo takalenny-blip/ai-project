@@ -39,6 +39,28 @@ def validate_work_items(items: Iterable[dict]) -> None:
             raise ValueError(f"invalid readiness in {item['id']}")
         if item.get("execution_state") not in {"actionable", "waiting_external"}:
             raise ValueError(f"invalid execution_state in {item['id']}")
+        progress = item.get("progress")
+        if not isinstance(progress, dict):
+            raise ValueError(f"{item['id']} requires structured progress")
+        steps = progress.get("steps")
+        if not isinstance(steps, list) or not steps:
+            raise ValueError(f"{item['id']} progress.steps must be a non-empty list")
+        step_ids = [step.get("id") for step in steps]
+        if any(not step_id for step_id in step_ids) or len(step_ids) != len(set(step_ids)):
+            raise ValueError(f"{item['id']} progress step ids must be unique")
+        allowed_step_statuses = {"pending", "in_progress", "waiting_external", "done"}
+        if any(step.get("status") not in allowed_step_statuses for step in steps):
+            raise ValueError(f"{item['id']} has invalid progress step status")
+        current_step = progress.get("current_step")
+        if current_step not in step_ids:
+            raise ValueError(f"{item['id']} progress.current_step must reference a step")
+        current = next(step for step in steps if step["id"] == current_step)
+        if current["status"] == "done":
+            raise ValueError(f"{item['id']} current progress step cannot be done")
+        if item["execution_state"] == "waiting_external" and current["status"] != "waiting_external":
+            raise ValueError(f"{item['id']} waiting_external requires waiting progress step")
+        if item["execution_state"] == "actionable" and current["status"] == "waiting_external":
+            raise ValueError(f"{item['id']} actionable cannot point at waiting progress step")
         if item["execution_state"] == "waiting_external" and not item.get("wait_reason"):
             raise ValueError(f"waiting_external item requires wait_reason: {item['id']}")
         if item["readiness"] == "blocked" and (not item["unblock_action"] or not item.get("blocked_reason")):

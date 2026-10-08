@@ -12,6 +12,11 @@ def item(i, title=None, priority=10, status="queued", deps=None, not_before=None
         "target": i, "evidence": "test evidence", "readiness": "ready",
         "unblock_action": "none", "environment": "work_pc",
         "execution_state": "actionable",
+        "progress": {
+            "current_step": "step-1",
+            "steps": [{"id": "step-1", "title": "step 1", "status": "pending"}],
+            "updated_at": "2026-09-27",
+        },
         "created_at": "2026-09-27", "updated_at": "2026-09-27",
     }
 
@@ -47,6 +52,34 @@ class WorkQueueTests(unittest.TestCase):
         ]
         items[0]["created_at"] = "2026-09-28"
         self.assertEqual([x["id"] for x in select_actionable(items, "2026-09-27")], ["A", "B", "C"])
+
+    def test_missing_progress_is_rejected(self):
+        x = item("A")
+        del x["progress"]
+        with self.assertRaises(ValueError):
+            validate_work_items([x])
+
+    def test_partial_progress_is_valid_and_preserved(self):
+        items = [item("A")]
+        items[0]["status"] = "in_progress"
+        items[0]["progress"] = {
+            "current_step": "step-2",
+            "steps": [
+                {"id": "step-1", "title": "already done", "status": "done", "evidence": "confirmed"},
+                {"id": "step-2", "title": "resume here", "status": "in_progress"},
+            ],
+            "updated_at": "2026-10-08",
+        }
+        validate_work_items(items)
+        self.assertEqual(select_actionable(items, "2026-10-08")[0]["progress"]["current_step"], "step-2")
+
+    def test_waiting_external_requires_waiting_current_step(self):
+        items = [item("A")]
+        items[0]["execution_state"] = "waiting_external"
+        items[0]["wait_reason"] = "external result pending"
+        items[0]["progress"]["current_step"] = "step-1"
+        items[0]["progress"]["steps"][0]["status"] = "waiting_external"
+        validate_work_items(items)
 
     def test_duplicate_id_is_rejected(self):
         with self.assertRaises(ValueError):

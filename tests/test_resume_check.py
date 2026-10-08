@@ -28,6 +28,11 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                 "depends_on": [], "not_before": None, "scope": "test",
                 "target": "target", "evidence": "evidence", "readiness": readiness,
                 "unblock_action": "none", "environment": "work_pc",
+                "progress": {
+                    "current_step": "step-1",
+                    "steps": [{"id": "step-1", "title": "step 1", "status": "pending"}],
+                    "updated_at": "2026-09-27",
+                },
                 "created_at": "2026-09-27", "updated_at": "2026-09-27",
             }],
             "next_step": {
