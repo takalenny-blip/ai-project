@@ -1,6 +1,6 @@
 {
   "schema_version": 5,
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
   "original_lane": "DIGA / DiMORA自動化",
@@ -242,7 +242,8 @@
     "BUD.md二重管理解消の運用マニュアルを追加し、docs/現在状態.jsonを唯一の現在状態正本とする手順を次回も再現可能にした",
     "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した",
     "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_items・next_stepの stale 状態を開始前に検出する。",
-    "work_itemsの途中成果をprogress.stepsへ構造化し、完了済みstep・現在のstep・外部待機stepを正本に保持して、次回起動時の作業巻き戻りを防ぐ"
+    "work_itemsの途中成果をprogress.stepsへ構造化し、完了済みstep・現在のstep・外部待機stepを正本に保持して、次回起動時の作業巻き戻りを防ぐ",
+    "終了時の作業状態同期では、成果物の生成・GitHub保存・実環境への適用・実表示確認を別々のprogress.stepsとして記録し、保存完了を実環境適用完了と混同しない。"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -299,10 +300,10 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPress環境の公開基盤確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。現在のWP側宿題はアイコン画像とデザインテンプレート。BLOG-0001は画像問題が残っているため先送り。GSCはBlogger・GitHub Pages・WordPressの3サイトを別々に登録済みで、現在は各サイトのインデックス状況確認待ち。",
+    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003は継続運用中。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCではBlogger・GitHub Pages・WordPressの3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、GSCのsitemap.xmlは「型: 不明」「取得できませんでした」「0件」のままで、原因切り分けが未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
-      "checked_at": "2026-10-07",
+      "checked_at": "2026-10-09",
       "references": [
         "PR #855",
         "#856",
@@ -312,24 +313,28 @@
         "Blogger公開",
         "たかによる実表示確認",
         "PR #924",
-        "PR #927"
+        "PR #927",
+        "PR #942",
+        "PR #962",
+        "PR #964",
+        "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。このevidenceのchecked_at/ci_head_commitは現在の正本readback基準へ更新。"
+      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。"
     },
-    "next_stage_boundary": "WordPress公開済みのBLOG-0002・0003を前提に、残るWP環境のアイコン画像・デザインテンプレートを整え、BLOG-0001の画像問題は解消時期を見て対応する。",
-    "next_focus": "WordPressのアイコン画像とデザインテンプレートを整える。BLOG-0001は画像問題を先送りとして保持し、解消時に対応する。"
+    "next_stage_boundary": "まずGitHub PagesのGSCサイトマップ取得失敗の原因切り分けを進める。Bloggerは3記事のインデックス登録成功を確認済み。GitHub Pages・WordPressはインデックス状況を個別確認する。並行して、WordPressでは保存済みサイトアイコン画像の適用・実表示確認とデザインテンプレート整備を残作業として管理する。",
+    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況は未確認。WordPress側はサイトアイコン画像のGitHub保存まで完了、WordPressへの適用・実表示確認とデザインテンプレート整備が未完了。"
   },
   "next_step": {
-    "id": "WP無料ホスティング検証",
-    "title": "WordPress公開環境の整備",
-    "priority": 23,
+    "id": "GSC-確認",
+    "title": "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する",
+    "priority": 20,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
-    "scope": "experience-log_to_Blogger",
-    "target": "WordPress公開済みのBLOG-0002・BLOG-0003を前提に、サイトのアイコン画像とデザインテンプレートを整える。BLOG-0001の画像問題は別の保留事項として保持し、解消時に対応する。",
-    "evidence": "WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。たかの現在確認では、WP側の宿題はアイコン画像とデザインテンプレート。BLOG-0001は画像問題のため先送り。",
+    "scope": "experience_log_to_blogger",
+    "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
+    "evidence": "PR #942はrobots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの報告あり。GitHub Pages・WordPressのインデックス状況は未確認。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -432,6 +437,17 @@
         "checked_at": "2026-09-21",
         "reason": "現行のバド単独運用では実機側の取得・操作まで完遂できないため"
       }
+    },
+    "closeout_sync_gap_2026_10_08": {
+      "status": "verified",
+      "label": "2026-10-08終了時の作業キュー同期漏れ原因調査",
+      "evidence": {
+        "checked_at": "2026-10-09",
+        "method": "2026-10-08の直チャット末尾、PR #962/#964の変更内容、PR #942の未完了状態、rules/運用ルール.md §6の終了時チェックリストを照合。",
+        "cause": "PR #962のマージ後、回答はGitHubへの画像保存完了のみを報告し、WordPressへの適用・実表示確認の未完了状態をwork_itemsへ分離記録しなかった。後続のPR #964は直チャット保存と既存の現在状態の同期を行ったが、終了時の作業キュー再照合は含まれていなかった。加えて、PR #942のGSC sitemap.xml取得失敗調査がオープンのまま、現在状態のwork_itemsに独立した実行可能な作業として反映されていなかった。",
+        "corrective_action": "work_itemsを実際の残作業へ同期し、終了時の照合漏れをverification_recordsへ記録。state-onlyのsave/currentize PRがmain-work progress gateで正しく許可されるようbranch分類の回帰テストを追加する。"
+      },
+      "note": " 2026-10-09訂正：Bloggerは3記事ともインデックス登録成功を2026-10-08にユーザー確認済み。未確認として残すのはGitHub Pages・WordPressのみ。"
     }
   },
   "interaction_control": {
@@ -460,24 +476,23 @@
   "work_items": [
     {
       "id": "GSC-確認",
-      "title": "GSCの3サイト別インデックス状況を確認する",
+      "title": "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する",
       "priority": 20,
-      "status": "queued",
+      "status": "in_progress",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
-      "target": "Blogger・GitHub Pages・WordPressの3サイトについて、GSC登録は各サイト別に完了済みとして扱い、登録済みプロパティを混同せず、各サイトのインデックス登録状況・未確認事項を個別に確認する。既に実施済みの登録操作は理由なく再実行しない。",
-      "evidence": "2026-10-08、たかよりGSC登録はBlogger・GitHub Pages・WordPressの3サイトそれぞれで実施済みとの確認。これは各サイトのGSCプロパティ登録完了を示すもので、ページのインデックス登録状況とは別管理とする。前日のURL検査ではGSCに「データを処理しています。1日後にもう一度ご確認ください」と表示されており、インデックス登録済み／未登録や未登録理由はまだ確定していない。3サイトの登録操作は再実行しない。",
+      "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
+      "evidence": "PR #942はrobots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの報告あり。GitHub Pages・WordPressのインデックス状況は未確認。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-06",
-      "updated_at": "2026-10-08",
+      "updated_at": "2026-10-09",
       "prerequisites": [],
-      "execution_state": "waiting_external",
-      "wait_reason": "Blogger・GitHub Pages・WordPressのGSC登録は各サイト別に完了済み。次は各サイトのインデックス状況を個別に確認する段階で、Google側の処理結果待ちを含む。",
+      "execution_state": "actionable",
       "progress": {
-        "current_step": "site-index-status-check",
+        "current_step": "github-pages-sitemap-retrieval",
         "steps": [
           {
             "id": "blogger-registration",
@@ -498,13 +513,25 @@
             "evidence": "たかよりGSC登録実施済みとの確認。"
           },
           {
+            "id": "github-pages-robots-txt",
+            "title": "GitHub Pagesのrobots.txt公開確認",
+            "status": "done",
+            "evidence": "PR #942の記録：Actions run 37604271713のBuild/Upload/Deploy成功。公開内容をたかが確認済み。PR #942自体は古い状態反映PRとして未整理。"
+          },
+          {
+            "id": "github-pages-sitemap-retrieval",
+            "title": "GSC sitemap.xml取得失敗の原因切り分け",
+            "status": "in_progress",
+            "evidence": "PR #942に記録されたGSC表示は「型: 不明」「取得できませんでした」「0件」。原因は未確定。"
+          },
+          {
             "id": "site-index-status-check",
-            "title": "3サイトのインデックス登録状況を個別確認",
+            "title": "GitHub Pages・WordPressのインデックス登録状況を個別確認",
             "status": "waiting_external",
-            "evidence": "前日のURL検査でGSCに「データを処理しています。1日後にもう一度ご確認ください」と表示。各サイトのインデックス状況は未確定。"
+            "evidence": "Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。残るGitHub Pages・WordPressの状況は未確認で、個別確認が必要。"
           }
         ],
-        "updated_at": "2026-10-08"
+        "updated_at": "2026-10-09"
       }
     },
     {
@@ -575,7 +602,7 @@
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-07",
-      "updated_at": "2026-10-08",
+      "updated_at": "2026-10-09",
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
@@ -629,9 +656,16 @@
             "evidence": "たかによる公開確認"
           },
           {
+            "id": "wp-icon-asset",
+            "title": "サイトアイコン画像を作成してGitHubへ保存",
+            "status": "done",
+            "evidence": "PR #962マージ済み。docs/assets/site-icon.pngとして64×64px PNGを保存。"
+          },
+          {
             "id": "wp-icon",
-            "title": "WordPressのアイコン画像を整える",
-            "status": "in_progress"
+            "title": "WordPressへサイトアイコン画像を適用して実表示を確認する",
+            "status": "in_progress",
+            "evidence": "画像ファイル自体はPR #962でdocs/assets/site-icon.pngへ保存・マージ済み。WordPress管理画面への適用と実表示確認は未確認。"
           },
           {
             "id": "wp-design-template",
@@ -655,7 +689,7 @@
             "status": "pending"
           }
         ],
-        "updated_at": "2026-10-08"
+        "updated_at": "2026-10-09"
       }
     }
   ]

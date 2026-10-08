@@ -40,7 +40,7 @@ def changed_paths(base: str, head: str) -> list[str]:
 
 
 def validate(branch: str, paths: list[str]) -> tuple[bool, str]:
-    if branch.startswith(("chat-save-request/", "save/direct-chat-")):
+    if branch.startswith(("chat-save-request/", "save/direct-chat-", "save/currentize-")):
         return True, "save-track branch; progress gate not required"
     substantive = [
         path for path in paths
