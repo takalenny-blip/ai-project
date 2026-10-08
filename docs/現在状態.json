@@ -299,7 +299,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0003は公開確認まで完了。GSCは所有権確認・Google登録リクエスト完了、現在Google側の処理待ち。WP無料ホスティング検証はWordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了し、Google登録は処理中、広告条件確認から再開する。",
+    "summary": "BLOG-0003は公開確認まで完了。GSCは所有権確認・Google登録リクエスト完了、現在Google側の処理待ち。WP無料ホスティング検証はWordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了し、Google登録は処理中。方針として、WordPressでブログ1〜3を公開・実運用確認し、成功した場合はWordPressを本番、BloggerとGitHub Pagesを予備とする。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-07",
@@ -318,7 +318,7 @@
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。このevidenceのchecked_at/ci_head_commitは現在の正本readback基準へ更新。"
     },
     "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
-    "next_focus": "GSC-確認はGoogle側の登録処理待ち。WP無料ホスティング検証は広告条件の確認から再開する。完了済み工程は再実行しない。"
+    "next_focus": "WP無料ホスティング検証の広告条件確認を完了し、その後ブログ1〜3をWordPressで公開・実運用確認する。WordPress本番化は3記事の実運用確認後に判断する。"
   },
   "next_step": {
     "id": "WP無料ホスティング検証",
@@ -328,8 +328,8 @@
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
-    "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。",
-    "evidence": "無料アカウント・無料サブドメイン・管理画面ログイン・WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。Google登録は実施済みで登録処理中。次の実作業は広告条件の確認。",
+    "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を検証したうえで、ブログ1〜3をWordPressへ公開し、表示・更新・運用条件を実測する。本番化条件を満たした場合はWordPressを本番、BloggerとGitHub Pagesを予備とする。",
+    "evidence": "無料アカウント・無料サブドメイン・管理画面ログイン・WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。Google登録は実施済みで登録処理中。広告条件の確認後、ブログ1〜3のWordPress公開・実運用確認へ進む方針を2026-10-08にたかが確定。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -563,8 +563,8 @@
       "depends_on": [],
       "not_before": null,
       "scope": "experience-log_to_Blogger",
-      "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。",
-      "evidence": "無料アカウント・無料サブドメイン・管理画面ログイン・WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。Google登録は実施済みで登録処理中。次の実作業は広告条件の確認。",
+      "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を検証したうえで、ブログ1〜3をWordPressへ公開し、表示・更新・運用条件を実測する。本番化条件を満たした場合はWordPressを本番、BloggerとGitHub Pagesを予備とする。",
+      "evidence": "無料アカウント・無料サブドメイン・管理画面ログイン・WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。Google登録は実施済みで登録処理中。広告条件の確認後、ブログ1〜3のWordPress公開・実運用確認へ進む方針を2026-10-08にたかが確定。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -624,6 +624,21 @@
           {
             "id": "judgment",
             "title": "検証結果をもとに採否判断",
+            "status": "pending"
+          },
+          {
+            "id": "blog1-3-publication",
+            "title": "ブログ1〜3をWordPressで公開",
+            "status": "pending"
+          },
+          {
+            "id": "blog1-3-operation-check",
+            "title": "ブログ1〜3の実運用確認",
+            "status": "pending"
+          },
+          {
+            "id": "wordpress-production-judgment",
+            "title": "WordPress本番化を判断し現在状態へ反映",
             "status": "pending"
           }
         ],
