@@ -524,7 +524,34 @@
         "GSC-確認",
         "GSC-サイトマップ確認"
       ],
-      "execution_state": "actionable"
+      "execution_state": "actionable",
+      "progress": {
+        "current_step": "gsc-confirmation",
+        "steps": [
+          {
+            "id": "gsc-confirmation",
+            "title": "GSC確認完了を待つ",
+            "status": "pending",
+            "evidence": "GSC-確認がGoogle側処理待ち"
+          },
+          {
+            "id": "primary-source-check",
+            "title": "一次資料確認と企画",
+            "status": "pending"
+          },
+          {
+            "id": "production",
+            "title": "BLOG-0004制作",
+            "status": "pending"
+          },
+          {
+            "id": "publication",
+            "title": "公開と実表示確認",
+            "status": "pending"
+          }
+        ],
+        "updated_at": "2026-10-08"
+      }
     },
     {
       "id": "WP無料ホスティング検証",
