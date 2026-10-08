@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reject work/* PRs that only move canonical state/docs without doing main work."""
+"""Reject non-save-track PRs that only move canonical state/docs without doing main work."""
 
 from __future__ import annotations
 
@@ -54,9 +54,9 @@ def validate(branch: str, paths: list[str]) -> tuple[bool, str]:
     if substantive:
         return True, "substantive main-work change detected: " + ", ".join(sorted(substantive))
     return False, (
-        "work/* PR contains no substantive main-work change. "
+        "non-save-track PR contains no substantive main-work change. "
         "State/view-only updates belong to the save track; "
-        "a work/* PR must include implementation, tests, or workflow changes. "
+        "a normal PR must include implementation, tests, or workflow changes. "
         f"changed paths: {', '.join(sorted(paths)) or '(none)'}"
     )
 
