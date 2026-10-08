@@ -5,7 +5,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
-RULE = ROOT / "rules" / "構造変更時・独立監査ガード.md"
+AUDIT_RULE = ROOT / "rules" / "構造変更時・独立監査ガード.md"
+OPERATING_RULE = ROOT / "rules" / "運用ルール.md"
 READ_MAP = ROOT / "docs" / "AI_READ_MAP.md"
 
 
@@ -16,7 +17,8 @@ def require(text: str, needle: str, label: str) -> None:
 
 def main() -> int:
     readme = README.read_text(encoding="utf-8")
-    rule = RULE.read_text(encoding="utf-8")
+    audit_rule = AUDIT_RULE.read_text(encoding="utf-8")
+    operating_rule = OPERATING_RULE.read_text(encoding="utf-8")
     read_map = READ_MAP.read_text(encoding="utf-8")
 
     require(readme, "最初に [`docs/現在状態.json`](./docs/現在状態.json) を読んでください。これが現在状態の唯一の正本です。", "README source of truth")
@@ -29,14 +31,14 @@ def main() -> int:
     require(readme, "BUD.mdや引き継ぎを先に読んで現在状態を決めてはならない", "README no BUD-first startup")
     require(readme, "前回の作業完了後に新しいPR・merge・commitが存在する場合", "README post-work freshness check")
 
-    require(rule, "構造変更時だけ", "audit trigger")
-    require(rule, "scripts/check_repo_integrity.py", "mechanical integrity guard")
-    require(rule, "scripts/save_and_currentize.py", "atomic save guard")
-    require(rule, "次に参加するAI", "next-agent safety check")
-    require(rule, "通常工程へ戻る", "return-to-normal-operation rule")
-    require(rule, "GitHub上の `docs/現在状態.json` を最初に直接読み", "rule canonical startup state")
-    require(rule, "前回作業以後にPR/merge/commitが存在する場合", "rule post-work freshness check")
-    require(rule, "GitHub正本より優先しない", "rule stale-history precedence")
+    require(audit_rule, "構造変更時だけ", "audit trigger")
+    require(audit_rule, "scripts/check_repo_integrity.py", "mechanical integrity guard")
+    require(audit_rule, "scripts/save_and_currentize.py", "atomic save guard")
+    require(audit_rule, "次に参加するAI", "next-agent safety check")
+    require(audit_rule, "通常工程へ戻る", "return-to-normal-operation rule")
+    require(operating_rule, "GitHub上の `docs/現在状態.json` を最初に直接読み", "rule canonical startup state")
+    require(operating_rule, "前回作業以後にPR/merge/commitが存在する場合", "rule post-work freshness check")
+    require(operating_rule, "GitHub正本より優先しない", "rule stale-history precedence")
 
     require(read_map, "`docs/現在状態.json` — 現在状態・現在の作業キュー・現在の次の一手の唯一の正本", "AI read map canonical state")
     require(read_map, "`BUD.md` / `docs/引き継ぎ/現在の引き継ぎ.md` — 正本から生成された互換ビュー", "AI read map generated views")
