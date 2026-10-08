@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   progress-gate:
-    if: startsWith(github.event.pull_request.head.ref, 'work/')
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout merge ref
