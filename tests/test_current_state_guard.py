@@ -46,6 +46,12 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "readiness": "ready",
                 "unblock_action": "none",
                 "environment": "work_pc",
+                "execution_state": "actionable",
+                "progress": {
+                    "current_step": "step-1",
+                    "steps": [{"id": "step-1", "title": "test step", "status": "pending"}],
+                    "updated_at": "2026-09-27",
+                },
                 "created_at": "2026-09-27",
                 "updated_at": "2026-09-27",
             }],
