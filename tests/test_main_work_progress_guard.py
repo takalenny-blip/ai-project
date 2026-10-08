@@ -43,6 +43,10 @@ class MainWorkProgressGuardTests(unittest.TestCase):
         ok, _ = validate("save/direct-chat-1234", ["20261008_0834.md"])
         self.assertTrue(ok)
 
+    def test_save_currentize_branch_is_not_blocked(self):
+        ok, _ = validate("save/currentize-closeout-reconciliation", ["docs/現在状態.json"])
+        self.assertTrue(ok)
+
 
 if __name__ == "__main__":
     unittest.main()
