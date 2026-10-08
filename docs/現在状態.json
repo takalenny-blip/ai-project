@@ -299,7 +299,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。GSCは所有権確認とGoogle登録リクエストまで完了し、現在はGoogle側の処理待ち。GSCサイトマップ実体・生成/公開経路・robots.txt実公開確認も完了済み。WP無料ホスティング検証は無料アカウント・サブドメイン・管理画面ログインまで完了し、WordPress導入前のScript Installer再確認段階。",
+    "summary": "BLOG-0003は公開確認まで完了。GSCは所有権確認・Google登録リクエスト完了、現在Google側の処理待ち。WP無料ホスティング検証はWordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了し、Google登録は処理中、広告条件確認から再開する。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-07",
@@ -318,7 +318,7 @@
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。このevidenceのchecked_at/ci_head_commitは現在の正本readback基準へ更新。"
     },
     "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
-    "next_focus": "GSC-確認はGoogle側の登録処理待ちとして保持する。GSCサイトマップ実体・生成経路・robots.txt確認は完了済みとして再実行候補から除外する。WP無料ホスティング検証は途中成果を保持し、Script Installer再確認から再開する。"
+    "next_focus": "GSC-確認はGoogle側の登録処理待ち。WP無料ホスティング検証は広告条件の確認から再開する。完了済みのWordPress導入・Script Installer・HTTPS・サイトマップ確認は再実行しない。"
   },
   "next_step": {
     "id": "WP無料ホスティング検証",
@@ -329,7 +329,7 @@
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
     "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。",
-    "evidence": "2026-10-07、無料アカウント・無料サブドメイン・管理画面ログインまで完了。WordPressは未導入。Script InstallerはERR_TUNNEL_CONNECTION_FAILEDで停止したため、次回はそこから再開する。",
+    "evidence": "無料アカウント・無料サブドメイン・管理画面ログイン・WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。Google登録は実施済みで登録処理中。次の実作業は広告条件の確認。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -562,7 +562,7 @@
       "not_before": null,
       "scope": "experience-log_to_Blogger",
       "target": "完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。",
-      "evidence": "2026-10-07、無料アカウント・無料サブドメイン・管理画面ログインまで完了。WordPressは未導入。Script InstallerはERR_TUNNEL_CONNECTION_FAILEDで停止したため、次回はそこから再開する。",
+      "evidence": "無料アカウント・無料サブドメイン・管理画面ログイン・WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。Google登録は実施済みで登録処理中。次の実作業は広告条件の確認。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -571,52 +571,53 @@
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "script-installer-recheck",
+        "current_step": "ads-tests",
         "steps": [
           {
             "id": "free-account",
             "title": "無料アカウント作成",
-            "status": "done",
-            "evidence": "2026-10-07確認"
+            "status": "done"
           },
           {
             "id": "subdomain",
             "title": "無料サブドメイン取得",
-            "status": "done",
-            "evidence": "2026-10-07確認"
+            "status": "done"
           },
           {
             "id": "admin-login",
             "title": "管理画面ログイン",
-            "status": "done",
-            "evidence": "2026-10-07確認"
+            "status": "done"
           },
           {
             "id": "wordpress-install",
             "title": "WordPress導入",
-            "status": "pending",
-            "evidence": "未導入。Script Installer経由を再確認する"
+            "status": "done"
           },
           {
             "id": "script-installer-recheck",
-            "title": "Script Installer接続・導入可否を再確認",
-            "status": "in_progress",
-            "evidence": "前回Script InstallerはERR_TUNNEL_CONNECTION_FAILED。ここから再開する"
+            "title": "Script Installer再確認",
+            "status": "done"
           },
           {
-            "id": "basic-tests",
-            "title": "HTTPS・WordPress基本動作・サイトマップ確認",
-            "status": "pending"
+            "id": "https",
+            "title": "HTTPS確認",
+            "status": "done"
+          },
+          {
+            "id": "sitemap",
+            "title": "サイトマップ確認",
+            "status": "done"
           },
           {
             "id": "google-tests",
-            "title": "Google登録可否の実測",
-            "status": "pending"
+            "title": "Google登録",
+            "status": "waiting_external",
+            "evidence": "Google登録は実施済みで現在登録処理中"
           },
           {
             "id": "ads-tests",
-            "title": "広告掲載条件の確認",
-            "status": "pending"
+            "title": "広告条件の確認",
+            "status": "in_progress"
           },
           {
             "id": "judgment",
