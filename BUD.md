@@ -1,6 +1,6 @@
 # BUD — バドのための最上位ダッシュボード
 
-更新日：2026-10-06
+更新日：2026-10-08
 
 ## 正本
 
@@ -16,20 +16,17 @@
 
 ## 現在地点
 
-**BLOG-0003はHTML・Crowレビュー・画像修正・Blogger下書き投入・実表示確認・公開まで完了。公開後の実ページ取得確認は未確認。**
+**BLOG-0003は公開確認まで完了。GSCは所有権確認・Google登録リクエスト完了、現在Google側の処理待ち。WP無料ホスティング検証はWordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了し、Google登録は処理中、広告条件確認から再開する。**
 
 ## 作業キュー
 
-- actionable：4件
+- actionable：1件
 - 一覧：
-- [BLOG-0003公開後確認] priority=10：GitHub Pages公開後確認を行う
-- [WORK-0002] priority=20：save-request-intake.ymlのPR作成失敗を本番経路で確認する
-- [WORK-0003] priority=20：save-request-intake.ymlのpushトリガー非発火問題を本番経路で確認する
-- [WORK-0004] priority=30：BLOG-0001のGSC Redirect errorを経過観察後に再確認する
+- [WP無料ホスティング検証] priority=23：完全無料のWordPress公開環境を検証する
 
 ## 次の一手（互換ビュー）
 
-- [BLOG-0003公開後確認] 今回のGitHub Pagesデザイン本番反映後の実表示を確認する。確認できない場合は未確認として記録する。完了後にGSC確認へ進む。
+- [WP無料ホスティング検証] 完全無料・広告掲載可能・WordPress対応のホスティング環境を1つ選定し、検証用サイトを構築して、HTTPS・WordPress動作・サイトマップ・Google登録可否・広告掲載条件を実測する。本番移行やBLOG-0004の制作先変更は検証結果を確認してから判断する。
 ## 現在の作業レーン
 
 **experience-log → Blogger自動化**
