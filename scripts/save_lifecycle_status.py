@@ -22,15 +22,23 @@ def resolve(data: dict) -> SaveLifecycle:
     intake_status = intake.get("status")
     if intake_status in {"failure", "cancelled", "timed_out", "startup_failure"}:
         return SaveLifecycle("failed_or_incomplete", f"save-request-intake reported terminal failure: {intake_status}", q, f)
+    # Once the canonical save PR exists, its state is authoritative. The queue
+    # PR may remain open when intake's post-processing fails after PR creation.
+    if final.get("state") == "open":
+        return SaveLifecycle("final_save_pending", "canonical save PR is open", q, f)
+    if final.get("state") == "closed" and not final.get("merged"):
+        return SaveLifecycle("failed_or_incomplete", "canonical save PR closed without merge", q, f)
+    if final.get("merged") is True:
+        if readback.get("verified") is not True:
+            return SaveLifecycle("merged_readback_pending", "canonical save PR merged but canonical readback is not verified", q, f)
+        return SaveLifecycle("completed", "canonical save PR merged and canonical readback verified", q, f)
     if queue.get("state") == "closed" and intake_status != "success":
         return SaveLifecycle("submitted_pending", "queue PR is closed but save-request-intake success is not verified", q, f)
-    if queue.get("state") == "open": return SaveLifecycle("submitted_pending", "queue PR is still open", q, f)
-    if queue.get("state") == "closed" and not f: return SaveLifecycle("failed_or_incomplete", "queue PR closed but no canonical save PR is recorded", q, None)
-    if final.get("state") == "open": return SaveLifecycle("final_save_pending", "canonical save PR is open", q, f)
-    if final.get("state") == "closed" and not final.get("merged"): return SaveLifecycle("failed_or_incomplete", "canonical save PR closed without merge", q, f)
-    if final.get("merged") is not True: return SaveLifecycle("final_save_pending", "canonical save PR merge is not yet confirmed", q, f)
-    if readback.get("verified") is not True: return SaveLifecycle("merged_readback_pending", "canonical save PR merged but canonical readback is not verified", q, f)
-    return SaveLifecycle("completed", "canonical save PR merged and canonical readback verified", q, f)
+    if queue.get("state") == "open":
+        return SaveLifecycle("submitted_pending", "queue PR is still open and no canonical save PR is recorded", q, f)
+    if queue.get("state") == "closed" and not f:
+        return SaveLifecycle("failed_or_incomplete", "queue PR closed but no canonical save PR is recorded", q, None)
+    return SaveLifecycle("final_save_pending", "canonical save PR merge is not yet confirmed", q, f)
 
 def main() -> int:
     parser = argparse.ArgumentParser(); parser.add_argument("path", nargs="?"); args = parser.parse_args()
