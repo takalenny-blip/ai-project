@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "updated": "2026-10-08",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger自動化",
@@ -9,7 +9,7 @@
     "status": "structurally_complete",
     "manual_duplicate_management_allowed": false,
     "generation_flow": "第2実装済み。work_itemsを唯一の作業キュー正本とし、next_stepはwork_itemsから導出する互換ビュー。生成ビューでactionable一覧を表示し、依存関係・期限・優先順位を機械検証する。",
-    "work_queue": "work_items: priority/depends_on/not_before/statusを持つ。waitingは保存せず導出する。"
+    "work_queue": "work_items: priority/depends_on/not_before/status/readiness/execution_stateを持つ。readinessは前提・依存の準備状態、execution_stateはactionable/waiting_externalの実行可能状態を表す。next_stepはactionable候補から優先順位で導出する。"
   },
   "direct_chat": {
     "latest_saved": "2026-10-06T21-08-38.893676+0900",
@@ -317,26 +317,25 @@
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。このevidenceのchecked_at/ci_head_commitは現在の正本readback基準へ更新。"
     },
     "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
-    "next_focus": "GSCの処理結果とサイトマップ取得結果をたかが確認し、その後BLOG-0004の制作へ進む。"
+    "next_focus": "GSC-確認はGoogle側の処理待ちとして保持し、独立したGSCサイトマップ確認を優先候補とする。WP無料ホスティング検証も独立したactionable候補として提示し、GSC処理完了待ちだけで停止しない。"
   },
   "next_step": {
-    "id": "GSC-確認",
-    "title": "GSCのインデックス状況を確認する",
-    "priority": 20,
+    "id": "GSC-サイトマップ確認",
+    "title": "GSCサイトマップの取得状況と原因を確認する",
+    "priority": 21,
     "status": "queued",
-    "depends_on": [
-      "BLOG-0003公開後確認"
-    ],
+    "depends_on": [],
     "not_before": null,
     "scope": "experience_log_to_blogger",
-    "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
-    "evidence": "2026-10-07、たかが前日にGSCのURL検査を実施。現在のGSC表示は「データを処理しています。1日後にもう一度ご確認ください」。インデックス登録済み／未登録、未登録理由はまだ確定していないため、GSC-確認は未完了のまま維持する。登録リクエストは既に実施済みで、同一操作は繰り返さない。",
+    "target": "GSCで送信した /sitemap.xml の実体・取得状況・取得できない原因を確認し、GitHub Pagesの生成・公開経路も含めて必要な対処と再送信の要否を判断する。",
+    "evidence": "2026-10-07、たかが実際の https://takalenny-blip.github.io/ai-project/sitemap.xml をブラウザで確認。XMLとして正常に表示され、トップページとBLOG-0001〜0003の4 URLを確認。GSC側の送信済みサイトマップは「型: 不明」「取得できませんでした」「検出されたページ数: 0」のまま。GitHub側ではsitemap.xmlがscripts/build_cloudflare_site.pyによりdist/sitemap.xmlとして生成され、GitHub Pages公開workflowからdeployされる構成を確認。2026-10-07、PR #941（commit bd061a4d668fc3dd0f73cd74eb50605b13332ba6）でrobots.txt生成とSitemap明示を実装・mergeし、/robots.txt の実公開も確認済み。GSC取得失敗の根本原因は未確定。",
     "readiness": "ready",
     "unblock_action": "none",
     "environment": "work_pc",
-    "created_at": "2026-10-06",
-    "updated_at": "2026-10-07",
-    "prerequisites": []
+    "created_at": "2026-10-07",
+    "updated_at": "2026-10-08",
+    "prerequisites": [],
+    "execution_state": "actionable"
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -478,8 +477,10 @@
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-06",
-      "updated_at": "2026-10-07",
-      "prerequisites": []
+      "updated_at": "2026-10-08",
+      "prerequisites": [],
+      "execution_state": "waiting_external",
+      "wait_reason": "GSCのURL検査結果をGoogle側が処理中。たかが確認した表示は「データを処理しています。1日後にもう一度ご確認ください」。"
     },
     {
       "id": "BLOG-0004",
@@ -502,7 +503,8 @@
       "prerequisites": [
         "GSC-確認",
         "GSC-サイトマップ確認"
-      ]
+      ],
+      "execution_state": "actionable"
     },
     {
       "id": "GSC-サイトマップ確認",
@@ -519,7 +521,8 @@
       "environment": "work_pc",
       "created_at": "2026-10-07",
       "updated_at": "2026-10-08",
-      "prerequisites": []
+      "prerequisites": [],
+      "execution_state": "actionable"
     },
     {
       "id": "GSC-サイトマップ配信確認",
@@ -538,7 +541,8 @@
       "environment": "work_pc",
       "created_at": "2026-10-07",
       "updated_at": "2026-10-08",
-      "prerequisites": []
+      "prerequisites": [],
+      "execution_state": "actionable"
     },
     {
       "id": "WP無料ホスティング検証",
@@ -555,7 +559,8 @@
       "environment": "work_pc",
       "created_at": "2026-10-07",
       "updated_at": "2026-10-07",
-      "prerequisites": []
+      "prerequisites": [],
+      "execution_state": "actionable"
     }
   ]
 }
