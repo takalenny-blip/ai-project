@@ -12,9 +12,9 @@
     "work_queue": "work_itemsを唯一の作業キュー正本とし、各work_itemは実作業の途中成果をprogress.stepsへ構造化して保持する。status/readiness/execution_stateは作業全体の状態を表し、next_stepは未完了のactionable候補から導出する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-10-06T21-08-38.893676+0900",
-    "latest_path": "直チャット/2026-10-06_直チャット即時保存_2026-10-06T21-08-38.893676+0900.md",
-    "latest_content_sha": "b296a155bdd3f3249e648200e7e4f0583afd29df",
+    "latest_saved": "2026-10-08T20-44-08.362520+0900",
+    "latest_path": "直チャット/2026-10-08_直チャット即時保存_2026-10-08T20-44-08.362520+0900.md",
+    "latest_content_sha": "66c79b1cb1406acbdf061fca01e38fc1c5058b09",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -321,15 +321,15 @@
     "next_focus": "WordPressのアイコン画像とデザインテンプレートを整える。BLOG-0001は画像問題を先送りとして保持し、解消時に対応する。"
   },
   "next_step": {
-    "id": "WP表示環境整備",
-    "title": "WordPressのアイコン画像とデザインテンプレートを整える",
+    "id": "WP無料ホスティング検証",
+    "title": "WordPress公開環境の整備",
     "priority": 23,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
-    "target": "WordPress公開済みのBLOG-0002・BLOG-0003を前提に、サイトのアイコン画像とデザインテンプレートを整える。BLOG-0001の画像問題は別の保留事項として保持し、解消時に対応する。GSCはBlogger・GitHub Pages・WordPressを別サイトとして管理し、登録済み操作を再実行せず、各サイトのインデックス状況を個別に確認する。",
-    "evidence": "WordPress導入・HTTPS・サイトマップ確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。現在の残課題として、たかがアイコン画像とデザインテンプレートを指定。BLOG-0001は画像問題のため先送り。GSC登録はBlogger・GitHub Pages・WordPressの3サイトで実施済み。",
+    "target": "WordPress公開済みのBLOG-0002・BLOG-0003を前提に、サイトのアイコン画像とデザインテンプレートを整える。BLOG-0001の画像問題は別の保留事項として保持し、解消時に対応する。",
+    "evidence": "WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。たかの現在確認では、WP側の宿題はアイコン画像とデザインテンプレート。BLOG-0001は画像問題のため先送り。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
