@@ -25,7 +25,7 @@ class SaveLifecycleStatusTests(unittest.TestCase):
         result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False}})
         self.assertEqual(result.status, "submitted_pending")
 
-    def test_intake_failure_is_terminal_failure(self):
+    def test_intake_failure_is_terminal_failure_when_no_final_save_exists(self):
         result = mod.resolve({"queue_pr":{"number":553,"state":"closed","merged":False},"intake":{"status":"failure"}})
         self.assertEqual(result.status, "failed_or_incomplete")
 
@@ -51,6 +51,15 @@ class SaveLifecycleStatusTests(unittest.TestCase):
         result = mod.resolve({
             "queue_pr":{"number":963,"state":"open","merged":False},
             "intake":{"status":"success"},
+            "final_save_pr":{"number":964,"state":"closed","merged":True},
+            "canonical_readback":{"verified":True},
+        })
+        self.assertEqual(result.status, "completed")
+
+    def test_intake_failure_does_not_hide_verified_merged_final_save(self):
+        result = mod.resolve({
+            "queue_pr":{"number":963,"state":"open","merged":False},
+            "intake":{"status":"failure"},
             "final_save_pr":{"number":964,"state":"closed","merged":True},
             "canonical_readback":{"verified":True},
         })
