@@ -318,7 +318,7 @@
       "note": "PR #868で3hands/ikerozo画像を修正しマージ済み。たかが画像修正を実表示で確認し、公開済みと報告。公開URLの直接取得はInternal Error/Cache missで未確認。このevidenceのchecked_at/ci_head_commitは現在の正本readback基準へ更新。"
     },
     "next_stage_boundary": "BLOG-0003公開後確認を完了。GitHub Pages公開後の直接取得は未確認として確定。次はGSC確認 → 次のブログ制作。",
-    "next_focus": "GSC-確認はGoogle側の登録処理待ち。WP無料ホスティング検証は広告条件の確認から再開する。完了済みのWordPress導入・Script Installer・HTTPS・サイトマップ確認は再実行しない。"
+    "next_focus": "GSC-確認はGoogle側の登録処理待ち。WP無料ホスティング検証は広告条件の確認から再開する。完了済み工程は再実行しない。"
   },
   "next_step": {
     "id": "WP無料ホスティング検証",
@@ -463,9 +463,7 @@
       "title": "GSCのインデックス状況を確認する",
       "priority": 20,
       "status": "queued",
-      "depends_on": [
-        "BLOG-0003公開後確認"
-      ],
+      "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
       "target": "GitHub Pages公開後確認の完了後、GSCでトップページとBLOG-0001〜0003のインデックス登録状況・未確認事項を確認する。既に実施済みの操作は理由なく再実行しない。",
@@ -516,13 +514,16 @@
       "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作・公開工程へ進む。",
       "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。",
       "readiness": "blocked",
-      "unblock_action": "GSC確認・GSC-サイトマップ確認",
+      "unblock_action": "GSC-確認の外部待機が解消し、GSC確認が完了したらBLOG-0004へ進む。",
       "environment": "work_pc",
       "created_at": "2026-10-07",
-      "updated_at": "2026-10-07",
+      "updated_at": "2026-10-08",
       "prerequisites": [
-        "GSC-確認",
-        "GSC-サイトマップ確認"
+        {
+          "id": "GSC-確認",
+          "status": "pending",
+          "reason": "Google側の登録処理待ち"
+        }
       ],
       "execution_state": "actionable",
       "progress": {
@@ -551,7 +552,8 @@
           }
         ],
         "updated_at": "2026-10-08"
-      }
+      },
+      "blocked_reason": "GSC-確認がGoogle側の登録処理待ちのため、BLOG-0004はまだ開始できない。"
     },
     {
       "id": "WP無料ホスティング検証",
