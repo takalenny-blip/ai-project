@@ -90,6 +90,17 @@ def main():
         print("actionable_work_items: " + ", ".join(f"{item['id']} (priority={item['priority']})" for item in actionable))
     else:
         print("actionable_work_items: (none)")
+    waiting_external = [
+        item for item in state["work_items"]
+        if item["status"] not in {"done", "held"} and item["execution_state"] == "waiting_external"
+    ]
+    if waiting_external:
+        print("waiting_external_work_items: " + ", ".join(
+            f"{item['id']} ({item.get('wait_reason', 'reason unspecified')})"
+            for item in waiting_external
+        ))
+    else:
+        print("waiting_external_work_items: (none)")
     derived = derived_next_step(state["work_items"], state.get("updated"))
     cached = state["next_step"]
     if derived is None:
@@ -104,6 +115,8 @@ def main():
             return 2
     elif cached.get("id") != derived.get("id"):
         return fail("next_step is stale; it does not match the actionable work queue")
+    elif derived.get("execution_state") != "actionable":
+        return fail("derived next_step must be execution_state=actionable")
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
