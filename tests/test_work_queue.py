@@ -11,6 +11,7 @@ def item(i, title=None, priority=10, status="queued", deps=None, not_before=None
         "depends_on": deps or [], "not_before": not_before, "scope": "test",
         "target": i, "evidence": "test evidence", "readiness": "ready",
         "unblock_action": "none", "environment": "work_pc",
+        "execution_state": "actionable",
         "created_at": "2026-09-27", "updated_at": "2026-09-27",
     }
 
@@ -62,6 +63,18 @@ class WorkQueueTests(unittest.TestCase):
     def test_no_actionable_work_is_empty(self):
         items = [item("A", status="done"), item("B", status="held")]
         self.assertEqual(select_actionable(items, "2026-09-27"), [])
+
+    def test_waiting_external_is_excluded_but_independent_candidate_remains(self):
+        items = [
+            item("GSC", priority=20),
+            item("WP", priority=23),
+            item("SITEMAP", priority=21),
+        ]
+        items[0]["execution_state"] = "waiting_external"
+        items[0]["wait_reason"] = "GSC is processing the URL inspection result"
+        candidates = select_actionable(items, "2026-10-08")
+        self.assertEqual([x["id"] for x in candidates], ["SITEMAP", "WP"])
+        self.assertNotIn("GSC", [x["id"] for x in candidates])
 
     def test_independent_ready_candidate_is_not_lost_behind_higher_priority_work(self):
         items = [
