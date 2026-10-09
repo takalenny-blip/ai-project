@@ -34,7 +34,7 @@ class MainWorkProgressGuardTests(unittest.TestCase):
 
     @patch("main_work_progress_guard.subprocess.run")
     def test_changed_paths_preserves_japanese_filenames(self, run):
-        run.return_value = Mock(stdout="rules/運用ルール.md\\0docs/現在状態.json\\0")
+        run.return_value = Mock(stdout="rules/運用ルール.md\0docs/現在状態.json\0")
         paths = changed_paths("origin/main", "HEAD")
         self.assertEqual(paths, ["rules/運用ルール.md", "docs/現在状態.json"])
         self.assertIn("-z", run.call_args.args[0])
