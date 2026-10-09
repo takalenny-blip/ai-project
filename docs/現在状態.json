@@ -8,8 +8,8 @@
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
     "status": "structurally_complete",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "第2実装済み。work_itemsを唯一の作業キュー正本とし、next_stepはwork_itemsから導出する互換ビュー。生成ビューでactionable一覧を表示し、依存関係・期限・優先順位を機械検証する。",
-    "work_queue": "work_itemsを唯一の作業キュー正本とし、各work_itemは実作業の途中成果をprogress.stepsへ構造化して保持する。status/readiness/execution_stateは作業全体の状態を表し、next_stepは未完了のactionable候補から導出する。"
+    "generation_flow": "第2実装済み。work_itemsを唯一の作業キュー正本とし、progress.current_stepを含む未完了工程を確認して次の作業を判断する。生成ビューでactionable候補と各未完了工程を表示し、依存関係・期限・優先順位を機械検証する。",
+    "work_queue": "work_itemsを唯一の作業キュー正本とし、各work_itemは実作業の途中成果をprogress.stepsへ構造化して保持する。status/readiness/execution_stateは作業全体の状態を表す。次の作業はwork_items全体・各progress.current_step・実行環境・外部待機・継続中の宿題を照合して判断し、単独のnext_stepフィールドは持たない。"
   },
   "direct_chat": {
     "latest_saved": "2026-10-08T20-44-08.362520+0900",
@@ -325,20 +325,6 @@
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPressでは保存済みサイトアイコン画像の適用・実表示確認とデザインテンプレート整備が残る。 Bloggerの検索対象外化は設定済みとの報告があるが、保存確認・記事応答・Google再クロール後の除外確認が未完了。",
     "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPress側はサイトアイコン画像の適用・実表示確認とデザインテンプレート整備が未完了。 Bloggerは検索対象外化の設定確認と、公開済み3記事のnoindex応答・Google再クロール後の除外確認が宿題。"
-  },
-  "next_step": {
-    "id": "GSC-確認",
-    "title": "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する",
-    "priority": 20,
-    "depends_on": [],
-    "not_before": null,
-    "environment": "work_pc",
-    "scope": "experience_log_to_blogger",
-    "target": "GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。",
-    "evidence": "PR #942はrobots.txt公開確認と、GSC sitemap.xmlが「型: 不明」「取得できませんでした」「0件」となる問題の継続調査を記録している。たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの報告あり。GitHub Pages・WordPressのインデックス状況は未確認。",
-    "readiness": "ready",
-    "unblock_action": "none",
-    "prerequisites": []
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
