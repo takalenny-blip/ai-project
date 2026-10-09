@@ -16,7 +16,7 @@
 
 ## 現在地点
 
-**WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。 2026-10-09、Bloggerの検索対象外化を方針決定。たかが「検索エンジンに表示」をオフにし、ホームページ・アーカイブ／検索ページ・投稿／ページのカスタムrobotsヘッダータグでnoindexを設定したと報告。保存状態、公開済み3記事の応答、Google検索結果からの除外は未確認。Search Consoleプロパティは維持する。**
+**WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」を採用し、引用記号・吹き出し・コマンド／スクリプト表示の見直しはたかの確認により完了。赤字・赤字＋黄色背景は維持。バドによる独立した実表示確認は未実施。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。 2026-10-09、Bloggerの検索対象外化を方針決定。たかが「検索エンジンに表示」をオフにし、ホームページ・アーカイブ／検索ページ・投稿／ページのカスタムrobotsヘッダータグでnoindexを設定したと報告。保存状態、公開済み3記事の応答、Google検索結果からの除外は未確認。Search Consoleプロパティは維持する。**
 
 ## 作業キュー
 
@@ -32,7 +32,6 @@
   - 未完了工程：verify-google-removal [pending] Google再クロール後、公開済み3記事が検索結果から外れたことを確認
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
   - 未完了工程：wp-icon [in_progress] WordPressへサイトアイコン画像を適用して実表示を確認する
-  - 未完了工程：wp-design-template [pending] WordPressのデザインテンプレートを整える
   - 未完了工程：blog1-image [pending] BLOG-0001の画像問題を解消
   - 未完了工程：operation-check [pending] WordPressの表示・更新・運用確認
   - 未完了工程：wordpress-production-judgment [pending] WordPress本番化を判断し現在状態へ反映
