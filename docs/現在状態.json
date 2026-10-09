@@ -2,7 +2,7 @@
   "schema_version": 5,
   "updated": "2026-10-09",
   "canonical_repository": "takalenny-blip/ai-project",
-  "primary_lane": "experience-log → Blogger自動化",
+  "primary_lane": "experience-log → Blogger下書き確認 → WordPress本番公開",
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
@@ -243,7 +243,8 @@
     "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した",
     "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_items・next_stepの stale 状態を開始前に検出する。",
     "work_itemsの途中成果をprogress.stepsへ構造化し、完了済みstep・現在のstep・外部待機stepを正本に保持して、次回起動時の作業巻き戻りを防ぐ",
-    "終了時の作業状態同期では、成果物の生成・GitHub保存・実環境への適用・実表示確認を別々のprogress.stepsとして記録し、保存完了を実環境適用完了と混同しない。"
+    "終了時の作業状態同期では、成果物の生成・GitHub保存・実環境への適用・実表示確認を別々のprogress.stepsとして記録し、保存完了を実環境適用完了と混同しない。",
+    "公開先・制作作業場所・予備サイトを分離し、WordPressを本番、Bloggerを下書き・表示確認、GitHub Pagesだけを予備公開サイトとする"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -300,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003は継続運用中。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCではBlogger・GitHub Pages・WordPressの3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、GSCのsitemap.xmlは「型: 不明」「取得できませんでした」「0件」のままで、原因切り分けが未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。",
+    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-09",
@@ -320,10 +321,10 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。"
+      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。 2026-10-09、たかの方針変更により、WordPressを本番公開先、Bloggerを下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする役割分離を採用。ブログタイトル検索でGitHub Pagesが上位表示されたことが変更の契機。"
     },
-    "next_stage_boundary": "まずGitHub PagesのGSCサイトマップ取得失敗の原因切り分けを進める。Bloggerは3記事のインデックス登録成功を確認済み。GitHub Pages・WordPressはインデックス状況を個別確認する。並行して、WordPressでは保存済みサイトアイコン画像の適用・実表示確認とデザインテンプレート整備を残作業として管理する。",
-    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況は未確認。WordPress側はサイトアイコン画像のGitHub保存まで完了、WordPressへの適用・実表示確認とデザインテンプレート整備が未完了。"
+    "next_stage_boundary": "GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPressでは保存済みサイトアイコン画像の適用・実表示確認とデザインテンプレート整備が残る。",
+    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPress側はサイトアイコン画像の適用・実表示確認とデザインテンプレート整備が未完了。"
   },
   "next_step": {
     "id": "GSC-確認",
@@ -550,8 +551,8 @@
       ],
       "not_before": null,
       "scope": "experience_log_to_Blogger",
-      "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作・公開工程へ進む。",
-      "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。",
+      "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作を行う。Bloggerは下書き・表示確認の作業場所として使用し、WordPressを本番公開先、GitHub Pagesを唯一の予備公開サイトとする。",
+      "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。 2026-10-09の方針変更により、Bloggerは下書き・表示確認の作業場所であり、公開先・予備公開先ではない。",
       "readiness": "blocked",
       "unblock_action": "GSC-確認の外部待機が解消し、GSC確認が完了したらBLOG-0004へ進む。",
       "environment": "work_pc",
