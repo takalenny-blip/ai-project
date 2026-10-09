@@ -241,7 +241,7 @@
     "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入",
     "BUD.md二重管理解消の運用マニュアルを追加し、docs/現在状態.jsonを唯一の現在状態正本とする手順を次回も再現可能にした",
     "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した",
-    "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_items・next_stepの stale 状態を開始前に検出する。",
+    "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_itemsの stale 状態を開始前に検出する。",
     "work_itemsの途中成果をprogress.stepsへ構造化し、完了済みstep・現在のstep・外部待機stepを正本に保持して、次回起動時の作業巻き戻りを防ぐ",
     "終了時の作業状態同期では、成果物の生成・GitHub保存・実環境への適用・実表示確認を別々のprogress.stepsとして記録し、保存完了を実環境適用完了と混同しない。",
     "公開先・制作作業場所・予備サイトを分離し、WordPressを本番、Bloggerを下書き・表示確認、GitHub Pagesだけを予備公開サイトとする"
@@ -330,7 +330,7 @@
     "script": "scripts/current_state_guard.py",
     "tests": "tests/test_current_state_guard.py",
     "workflow": ".github/workflows/current-state-guard.yml",
-    "purpose": "active/retiredの矛盾、抽象next_step、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入に加え、save-track以外の通常PRが状態・生成ビューだけを更新して本線作業を進めたことにするループをCIで停止する",
+    "purpose": "active/retiredの矛盾、抽象的な作業項目、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入に加え、save-track以外の通常PRが状態・生成ビューだけを更新して本線作業を進めたことにするループをCIで停止する",
     "main_work_progress_guard": "scripts/main_work_progress_guard.py",
     "main_work_progress_workflow": ".github/workflows/main-pr-progress-gate.yml"
   },
@@ -339,7 +339,7 @@
     "source": "docs/現在状態.json",
     "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・next_stepを一括確認するための生成manifest",
     "required_first_check": "scripts/resume_check.py",
-    "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、生成ビューより優先する。前回作業後のPR/merge/commitがwork_itemsとnext_stepへ反映済みか確認してから作業を開始する。"
+    "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、生成ビューより優先する。前回作業後のPR/merge/commitがwork_itemsへ反映済みか確認してから作業を開始する。"
   },
   "verification_contract": {
     "status": "implemented",
@@ -347,7 +347,7 @@
       "recorded_unverified",
       "verified"
     ],
-    "rule": "readiness=ready only when every prerequisite is independently verified; blocked permits only unblock_action/preflight; next_step.status is deprecated and omitted.",
+    "rule": "readiness=ready only when every prerequisite is independently verified; blocked permits only unblock_action/preflight; next_step is removed; work item readiness is canonical.",
     "readiness_states": [
       "ready",
       "blocked"
@@ -439,11 +439,11 @@
   },
   "interaction_control": {
     "status": "implemented_preflight",
-    "scope": "next_step と対話上の進捗・完了主張",
+    "scope": "work_items と対話上の進捗・完了主張",
     "principle": "文書ルールだけでAIの自己抑制を期待せず、進捗主張の受理前に機械的preflightを通す",
     "guard_script": "scripts/interaction_guard.py",
     "blocked_output": {
-      "trigger": "next_step.readiness=blocked",
+      "trigger": "選定したwork itemのreadiness=blocked",
       "action": "進捗・完了・検証済み等の主張を停止し、証拠取得・preflight・unblock_actionに限定",
       "exit_code": 2
     },
