@@ -702,7 +702,7 @@
     {
       "id": "BLOGGER-SEARCH-EXCLUSION",
       "title": "BloggerをGoogle検索対象外にし、公開済み3記事の反映を確認する",
-      "priority": 18,
+      "priority": 22,
       "status": "in_progress",
       "depends_on": [],
       "not_before": null,
