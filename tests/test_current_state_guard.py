@@ -45,6 +45,7 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "evidence": "resume_check.py",
                 "readiness": "ready",
                 "unblock_action": "none",
+                "preflight_prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": git_blob_sha(resume_check)}}],
                 "environment": "work_pc",
                 "execution_state": "actionable",
                 "progress": {
@@ -55,20 +56,6 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "created_at": "2026-09-27",
                 "updated_at": "2026-09-27",
             }],
-            "next_step": {
-                "id": "WORK-TEST",
-                "title": "test work",
-                "priority": 10,
-                "depends_on": [],
-                "not_before": None,
-                "environment": "work_pc",
-                "scope": "new_scope",
-                "target": "work_pcで再開確認を実施する",
-                "evidence": "resume_check.py",
-                "readiness": "ready",
-                "unblock_action": "none",
-                "prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": git_blob_sha(resume_check)}}],
-            },
             "work_pc": {"clone_status": "unverified"},
             "resume_manifest": {
                 "source": "docs/現在状態.json",
@@ -90,7 +77,7 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_legacy_verification_model_is_temporarily_accepted(self):
         state = self.base_state()
         state.pop("verification_records")
-        state["next_step"].pop("scope")
+        state["work_items"][0].pop("scope")
         guard.validate_state(state)
 
     def test_active_work_pc_passes(self):
@@ -100,13 +87,13 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     def test_next_step_repeating_verified_scope_fails(self):
         state = self.base_state()
-        state["next_step"]["scope"] = "resume_check"
+        state["work_items"][0]["scope"] = "resume_check"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
     def test_missing_next_step_scope_fails(self):
         state = self.base_state()
-        state["next_step"].pop("scope")
+        state["work_items"][0].pop("scope")
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
@@ -118,22 +105,22 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     def test_retired_environment_mismatch_fails(self):
         state = self.base_state()
-        state["next_step"]["environment"] = "vaio_p"
+        state["work_items"][0]["environment"] = "vaio_p"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
     def test_retired_name_in_historical_target_is_allowed(self):
         state = self.base_state()
         state["work_items"][0]["target"] = "VAIO Pのサーバー化の経験を記事として整理する"
-        state["next_step"]["target"] = state["work_items"][0]["target"]
+        state["work_items"][0]["target"] = state["work_items"][0]["target"]
         guard.validate_state(state)
 
     def test_retired_name_in_generated_historical_work_item_is_allowed(self):
         state = self.base_state()
         state["work_items"][0]["title"] = "VAIO Pのサーバー化の経験を記事として整理する"
         state["work_items"][0]["target"] = "VAIO Pの経験を記事として整理する"
-        state["next_step"]["title"] = state["work_items"][0]["title"]
-        state["next_step"]["target"] = state["work_items"][0]["target"]
+        state["work_items"][0]["title"] = state["work_items"][0]["title"]
+        state["work_items"][0]["target"] = state["work_items"][0]["target"]
 
         bud_text, handover_text = guard.render(state)
         for text in (bud_text, handover_text):
@@ -142,36 +129,36 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     def test_abstract_next_step_fails(self):
         state = self.base_state()
-        state["next_step"]["target"] = "通常のDiMORA本来工程へ復帰"
+        state["work_items"][0]["target"] = "通常のDiMORA本来工程へ復帰"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
     def test_stale_pr3_next_step_fails(self):
         state = self.base_state()
-        state["next_step"]["target"] = "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める"
+        state["work_items"][0]["target"] = "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
     def test_ready_with_unverified_prerequisite_fails(self):
         state = self.base_state()
-        state["next_step"]["prerequisites"][0]["status"] = "unverified"
+        state["work_items"][0]["preflight_prerequisites"][0]["status"] = "unverified"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
     def test_blocked_with_unverified_prerequisite_passes(self):
         state = self.base_state()
-        state["next_step"]["readiness"] = "blocked"
+        state["work_items"][0]["readiness"] = "blocked"
         state["work_items"][0]["readiness"] = "blocked"
         state["work_items"][0]["blocked_reason"] = "artifact missing"
-        state["next_step"]["blocked_reason"] = "artifact missing"
-        state["next_step"]["unblock_action"] = "run preflight"
+        state["work_items"][0]["blocked_reason"] = "artifact missing"
         state["work_items"][0]["unblock_action"] = "run preflight"
-        state["next_step"]["prerequisites"][0]["status"] = "unverified"
+        state["work_items"][0]["unblock_action"] = "run preflight"
+        state["work_items"][0]["preflight_prerequisites"][0]["status"] = "unverified"
         guard.validate_state(state)
 
     def test_verified_without_evidence_fails(self):
         state = self.base_state()
-        state["next_step"]["prerequisites"][0]["evidence"] = None
+        state["work_items"][0]["preflight_prerequisites"][0]["evidence"] = None
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
@@ -189,13 +176,13 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     def test_verified_repo_file_without_hash_fails(self):
         state = self.base_state()
-        state["next_step"]["prerequisites"][0]["evidence"].pop("method", None)
+        state["work_items"][0]["preflight_prerequisites"][0]["evidence"].pop("method", None)
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
     def test_verified_repo_file_wrong_hash_fails(self):
         state = self.base_state()
-        state["next_step"]["prerequisites"][0]["evidence"]["sha256"] = "0" * 64
+        state["work_items"][0]["preflight_prerequisites"][0]["evidence"]["sha256"] = "0" * 64
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
@@ -238,10 +225,10 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     def test_readiness_status_conflict_fails(self):
         state = self.base_state()
-        state["next_step"]["status"] = "ready"
-        state["next_step"]["readiness"] = "blocked"
-        state["next_step"]["blocked_reason"] = "blocked"
-        state["next_step"]["unblock_action"] = "preflight"
+        state["work_items"][0]["status"] = "ready"
+        state["work_items"][0]["readiness"] = "blocked"
+        state["work_items"][0]["blocked_reason"] = "blocked"
+        state["work_items"][0]["unblock_action"] = "preflight"
         state["work_items"][0]["unblock_action"] = "preflight"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
