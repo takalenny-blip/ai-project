@@ -112,7 +112,7 @@ jobs:
         run: git diff --no-index -- /dev/null generated/current-views/BUD.md || true; git diff --no-index -- /dev/null generated/current-views/現在の引き継ぎ.md || true
 
   sync-generated-views:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
