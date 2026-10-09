@@ -20,5 +20,7 @@ jobs:
 
       - name: Run current-state guards
         run: python3 scripts/current_state_guard.py
+      - name: Verify checked-in generated views match canonical state
+        run: python3 scripts/generate_current_views.py --out-dir generated/current-views --check-deterministic --check-committed
       - name: Run full regression tests
         run: python3 -m unittest discover -s tests
