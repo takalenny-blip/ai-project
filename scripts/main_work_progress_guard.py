@@ -38,7 +38,7 @@ def changed_paths(base: str, head: str) -> list[str]:
         text=True,
         capture_output=True,
     )
-    return [path for path in result.stdout.split("\\0") if path]
+    return [path for path in result.stdout.split("\0") if path]
 
 
 def validate(branch: str, paths: list[str]) -> tuple[bool, str]:
