@@ -137,7 +137,7 @@ def check_committed_views(bud: str, handover: str, root: Path = ROOT) -> tuple[b
     return True, "checked-in views match canonical state"
 
 
-def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None
+def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None:
     out_dir.parent.mkdir(parents=True, exist_ok=True)
     temp_dir = Path(tempfile.mkdtemp(prefix=f".{out_dir.name}.", dir=out_dir.parent))
     try:
