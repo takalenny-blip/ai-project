@@ -9,9 +9,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import validate_work_items, derived_next_step, select_actionable
+from work_queue import validate_work_items, select_actionable
 STATE = ROOT / "docs" / "現在状態.json"
-REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
+REQUIRED = ("execution_environment", "current_position", "work_items")
 
 def repo_blob_sha(path):
     data = path.read_bytes()
@@ -109,27 +109,16 @@ def main():
             print(f"progress[{item['id']}]: current_step={progress['current_step']} status={current['status']}")
     else:
         print("waiting_external_work_items: (none)")
-    derived = derived_next_step(state["work_items"], state.get("updated"))
-    cached = state["next_step"]
-    if derived is None:
-        if cached not in (None, {}):
-            return fail("next_step must be empty when no actionable work exists")
-        blocked_items = [x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"]
-        if blocked_items:
-            blocked_items.sort(key=lambda x: (x["priority"], x["created_at"], x["id"]))
-            blocked = blocked_items[0]
-            print("BLOCKED: work item is blocked: " + blocked["target"])
-            print("UNBLOCK: " + blocked["unblock_action"])
-            return 2
-    elif cached.get("id") != derived.get("id"):
-        return fail("next_step is stale; it does not match the actionable work queue")
-    elif derived.get("execution_state") != "actionable":
-        return fail("derived next_step must be execution_state=actionable")
+    actionable = select_actionable(state["work_items"], state.get("updated"))
+    blocked_items = sorted((x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"), key=lambda x: (x["priority"], x["created_at"], x["id"]))
+    selected = actionable[0] if actionable else (blocked_items[0] if blocked_items else None)
+    if selected is None:
+        return fail("no actionable or explicitly blocked work item is recorded")
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
     current = state["current_position"]
-    nxt = state["next_step"]
+    nxt = selected
 
     if not active:
         return fail("active execution environment is not defined")
@@ -138,13 +127,13 @@ def main():
     if active in retired:
         return fail(f"active environment is also retired: {active}")
     if nxt.get("environment") != active:
-        return fail("next_step.environment does not match active environment")
+        return fail("selected work item environment does not match active environment")
     if not nxt.get("target") or not nxt.get("evidence"):
-        return fail("next_step requires target and evidence")
-    if not isinstance(nxt.get("prerequisites"), list):
-        return fail("next_step.prerequisites must be explicit")
+        return fail("selected work item requires target and evidence")
+    if not isinstance(nxt.get("preflight_prerequisites", []), list):
+        return fail("work item preflight_prerequisites must be a list")
     if nxt.get("readiness") not in {"ready", "blocked"}:
-        return fail("next_step.readiness must be ready or blocked")
+        return fail("selected work item readiness must be ready or blocked")
     interaction = state.get("interaction_control")
     if not isinstance(interaction, dict):
         return fail("interaction_control must be defined")
@@ -159,9 +148,7 @@ def main():
     blocked = interaction.get("blocked_output") or {}
     if blocked.get("exit_code") != 2:
         return fail("interaction_control.blocked_output.exit_code must be 2")
-    if nxt.get("status") not in {None, nxt.get("readiness")}:
-        return fail("next_step.status must be absent or equal to readiness")
-    for p in nxt["prerequisites"]:
+    for p in nxt.get("preflight_prerequisites", []):
         if p.get("status") == "verified" and p.get("kind") == "external_artifact":
             path = external_artifact_path(p)
             ev = p.get("evidence") or {}
@@ -189,13 +176,13 @@ def main():
             actual = hashlib.sha256(path.read_bytes()).hexdigest() if ev.get("sha256") else repo_blob_sha(path)
             if actual != expected:
                 return fail("verified repo_file evidence mismatch: " + p.get("name", "?"))
-    bad = [p.get("name", "?") for p in nxt["prerequisites"] if p.get("status") != "verified"]
+    bad = [p.get("name", "?") for p in nxt.get("preflight_prerequisites", []) if p.get("status") != "verified"]
     if nxt["readiness"] == "ready" and bad:
-        return fail("next_step is ready but prerequisites are not verified: " + ", ".join(bad))
+        return fail("selected work item is ready but preflight prerequisites are not verified: " + ", ".join(bad))
     if nxt["readiness"] == "blocked":
         if not nxt.get("blocked_reason") or not nxt.get("unblock_action"):
-            return fail("blocked next_step requires blocked_reason and unblock_action")
-        print("BLOCKED: next_step is blocked: " + nxt["blocked_reason"])
+            return fail("blocked work item requires blocked_reason and unblock_action")
+        print("BLOCKED: work item is blocked: " + nxt["blocked_reason"])
         print("UNBLOCK: " + nxt["unblock_action"])
         return 2
     if not current.get("summary"):
@@ -214,8 +201,8 @@ def main():
     print(f"active_environment: {active}")
     print(f"retired_environments: {', '.join(retired) if retired else '(none)'}")
     print(f"current_position: {current['summary']}")
-    print(f"next_step: {nxt['target']}")
-    print(f"next_step_environment: {nxt['environment']}")
+    print(f"selected_work_item: {nxt['id']} — {nxt['target']}")
+    print(f"selected_work_environment: {nxt['environment']}")
     print(f"manifest_generator: {manifest['generator']}")
     return 0
 
