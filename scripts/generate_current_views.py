@@ -25,7 +25,6 @@ def render(state: dict) -> tuple[str, str]:
     migration = state["migration"]
     env = state["execution_environment"]
     current = state["current_position"]
-    nxt = state.get("next_step")
     actionable = select_actionable(state["work_items"], state.get("updated"))
     verification_records = state.get("verification_records", {})
 
@@ -53,9 +52,6 @@ def render(state: dict) -> tuple[str, str]:
 - 一覧：
 {chr(10).join("- [" + item["id"] + "] priority=" + str(item["priority"]) + "：" + item["title"] + chr(10) + chr(10).join("  - 未完了工程：" + step["id"] + " [" + step["status"] + "] " + step["title"] for step in item["progress"]["steps"] if step["status"] != "done") for item in actionable) or "- actionableな作業なし"}
 
-## 次の一手（互換ビュー）
-
-{("- [" + nxt["id"] + "] " + nxt["target"]) if nxt else "- actionableな作業なし"}
 """.rstrip("\n")
 
     bud = f"""# BUD — バドのための最上位ダッシュボード
