@@ -16,21 +16,33 @@
 
 ## 現在地点
 
-**WordPress公開済みのBLOG-0002・BLOG-0003は継続運用中。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCではBlogger・GitHub Pages・WordPressの3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、GSCのsitemap.xmlは「型: 不明」「取得できませんでした」「0件」のままで、原因切り分けが未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。**
+**WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。 2026-10-09、Bloggerの検索対象外化を方針決定。たかが「検索エンジンに表示」をオフにし、ホームページ・アーカイブ／検索ページ・投稿／ページのカスタムrobotsヘッダータグでnoindexを設定したと報告。保存状態、公開済み3記事の応答、Google検索結果からの除外は未確認。Search Consoleプロパティは維持する。**
 
 ## 作業キュー
 
-- actionable：2件
+- actionable：3件
 - 一覧：
 - [GSC-確認] priority=20：GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する
+  - 未完了工程：github-pages-sitemap-retrieval [in_progress] GSC sitemap.xml取得失敗の原因切り分け
+  - 未完了工程：site-index-status-check [waiting_external] GitHub Pages・WordPressのインデックス登録状況を個別確認
+  - 未完了工程：work-pc-http-headers [pending] 作業PCでsitemap.xmlのHTTPステータスとContent-Typeを確認
+- [BLOGGER-SEARCH-EXCLUSION] priority=22：BloggerをGoogle検索対象外にし、公開済み3記事の反映を確認する
+  - 未完了工程：recheck-saved-settings [pending] 設定を開き直し、3項目の保存状態を確認
+  - 未完了工程：verify-article-noindex [pending] 公開済み3記事がnoindexを返すことを確認
+  - 未完了工程：verify-google-removal [pending] Google再クロール後、公開済み3記事が検索結果から外れたことを確認
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
+  - 未完了工程：wp-icon [in_progress] WordPressへサイトアイコン画像を適用して実表示を確認する
+  - 未完了工程：wp-design-template [pending] WordPressのデザインテンプレートを整える
+  - 未完了工程：blog1-image [pending] BLOG-0001の画像問題を解消
+  - 未完了工程：operation-check [pending] WordPressの表示・更新・運用確認
+  - 未完了工程：wordpress-production-judgment [pending] WordPress本番化を判断し現在状態へ反映
 
 ## 次の一手（互換ビュー）
 
 - [GSC-確認] GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。
 ## 現在の作業レーン
 
-**experience-log → Blogger自動化**
+**experience-log → Blogger下書き確認 → WordPress本番公開**
 
 「一括改修」は設計を一括で行う意味であり、実装は小さな検証単位で進める。
 
