@@ -62,7 +62,7 @@ def validate_prerequisites(work_item: dict) -> None:
     readiness = work_item.get("readiness")
     if readiness not in {"ready", "blocked"}:
         fail("work item readiness must be ready or blocked")
-    if readiness == "blocked" and (not next_step.get("blocked_reason") or not next_step.get("unblock_action")):
+    if readiness == "blocked" and (not work_item.get("blocked_reason") or not work_item.get("unblock_action")):
         fail("blocked work item requires blocked_reason and unblock_action")
     for index, prerequisite in enumerate(prerequisites):
         if not isinstance(prerequisite, dict):
