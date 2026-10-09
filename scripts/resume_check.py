@@ -113,6 +113,9 @@ def main():
     blocked_items = sorted((x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"), key=lambda x: (x["priority"], x["created_at"], x["id"]))
     selected = actionable[0] if actionable else (blocked_items[0] if blocked_items else None)
     if selected is None:
+        if waiting_external:
+            print("BLOCKED: all remaining work is waiting for external results")
+            return 2
         return fail("no actionable or explicitly blocked work item is recorded")
     env = state["execution_environment"]
     active = env.get("active")
