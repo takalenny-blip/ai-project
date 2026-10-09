@@ -51,7 +51,7 @@ def render(state: dict) -> tuple[str, str]:
 
 - actionable：{len(actionable)}件
 - 一覧：
-{chr(10).join("- [" + item["id"] + "] priority=" + str(item["priority"]) + "：" + item["title"] for item in actionable) or "- actionableな作業なし"}
+{chr(10).join("- [" + item["id"] + "] priority=" + str(item["priority"]) + "：" + item["title"] + chr(10) + chr(10).join("  - 未完了工程：" + step["id"] + " [" + step["status"] + "] " + step["title"] for step in item["progress"]["steps"] if step["status"] != "done") for item in actionable) or "- actionableな作業なし"}
 
 ## 次の一手（互換ビュー）
 
