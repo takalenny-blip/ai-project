@@ -27,7 +27,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                 "id": "WORK-TEST", "title": "test", "priority": 10, "status": "queued",
                 "depends_on": [], "not_before": None, "scope": "test",
                 "target": "target", "evidence": "evidence", "readiness": readiness,
-                "unblock_action": "none", "environment": "work_pc",
+                "unblock_action": "none", "environment": "work_pc", "preflight_prerequisites": [prerequisite],
                 "execution_state": "actionable",
                 "progress": {
                     "current_step": "step-1",
@@ -36,15 +36,6 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                 },
                 "created_at": "2026-09-27", "updated_at": "2026-09-27",
             }],
-            "next_step": {
-                "id": "WORK-TEST",
-                "environment": "work_pc",
-                "scope": "test",
-                "target": "target",
-                "evidence": "evidence",
-                "readiness": readiness,
-                "prerequisites": [prerequisite],
-            },
             "resume_manifest": {"source": "docs/現在状態.json", "generator": "scripts/resume_manifest.py"},
             "external_response_gate": {
                 "status": "clear",
@@ -59,7 +50,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
         }
         if readiness == "blocked":
             state["work_items"][0]["unblock_action"] = "preflight"
-            state["next_step"] = {}
+            state["work_items"][0]["blocked_reason"] = "external artifact is not ready"
         (root / "docs").mkdir()
         (root / "docs" / "現在状態.json").write_text(json.dumps(state), encoding="utf-8")
 
