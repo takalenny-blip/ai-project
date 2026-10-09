@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 
 BLOCKED_PROGRESS_PATTERNS = (
@@ -24,6 +25,9 @@ BLOCKED_PROGRESS_PATTERNS = (
     r"merged",
 )
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from work_queue import select_actionable
+
 CLAIM_PATTERNS = BLOCKED_PROGRESS_PATTERNS + (
     r"問題(?:ありません|なし)",
     r"対応(?:済み|しました|した)",
@@ -34,7 +38,7 @@ def load_json(path: Path) -> dict:
 
 def state_fingerprint(state: dict) -> str:
     payload = {
-        "next_step": state.get("next_step", {}),
+        "work_items": state.get("work_items", []),
         "current_position": state.get("current_position", {}),
     }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
@@ -44,10 +48,14 @@ def has_progress_claim(text: str) -> bool:
     return any(re.search(pattern, text, re.IGNORECASE) for pattern in CLAIM_PATTERNS)
 
 def validate_blocked_output(state: dict, text: str) -> None:
-    readiness = (state.get("next_step") or {}).get("readiness")
+    items = state.get("work_items", [])
+    actionable = select_actionable(items, state.get("updated")) if items else []
+    blocked = sorted((x for x in items if x.get("status") not in {"done", "held"} and x.get("readiness") == "blocked"), key=lambda x: (x.get("priority", 999), x.get("created_at", ""), x.get("id", "")))
+    selected = actionable[0] if actionable else (blocked[0] if blocked else None)
+    readiness = selected.get("readiness") if selected else None
     if readiness == "blocked" and has_progress_claim(text):
         raise ValueError(
-            "blocked next_step rejects progress/completion claims; "
+            "blocked work item rejects progress/completion claims; "
             "only evidence acquisition, preflight, or unblock work may be reported"
         )
 
