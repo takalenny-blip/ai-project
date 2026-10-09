@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import interaction_guard as guard
 
+
 class InteractionGuardTests(unittest.TestCase):
     def state(self, readiness="ready"):
         return {
@@ -64,6 +65,16 @@ class InteractionGuardTests(unittest.TestCase):
             {"state_fingerprint": fp, "progress": False},
             {"state_fingerprint": fp, "progress": False},
         ]
+        with self.assertRaisesRegex(ValueError, "identical structured work state"):
+            guard.validate_loop(history, 2)
+
+    def test_loop_cannot_be_bypassed_by_self_reported_progress(self):
+        state = self.state()
+        fp = guard.state_fingerprint(state)
+        history = [
+            {"state_fingerprint": fp, "progress": False},
+            {"state_fingerprint": fp, "progress": True},
+        ]
         with self.assertRaises(ValueError):
             guard.validate_loop(history, 2)
 
@@ -97,9 +108,10 @@ class InteractionGuardTests(unittest.TestCase):
         fp = guard.state_fingerprint(state)
         history = [
             {"state_fingerprint": fp, "progress": False},
-            {"state_fingerprint": fp, "progress": True},
+            {"state_fingerprint": fp + "-changed", "progress": False},
         ]
         guard.validate_loop(history, 2)
+
 
 if __name__ == "__main__":
     unittest.main()
