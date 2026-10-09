@@ -337,7 +337,7 @@
   "resume_manifest": {
     "generator": "scripts/resume_manifest.py",
     "source": "docs/現在状態.json",
-    "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・next_stepを一括確認するための生成manifest",
+    "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・作業候補を一括確認するための生成manifest",
     "required_first_check": "scripts/resume_check.py",
     "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、生成ビューより優先する。前回作業後のPR/merge/commitがwork_itemsへ反映済みか確認してから作業を開始する。"
   },
@@ -525,7 +525,8 @@
           }
         ],
         "updated_at": "2026-10-09"
-      }
+      },
+      "preflight_prerequisites": []
     },
     {
       "id": "BLOG-0004",
@@ -579,7 +580,8 @@
         ],
         "updated_at": "2026-10-08"
       },
-      "blocked_reason": "GSC-確認がGoogle側の登録処理待ちのため、BLOG-0004はまだ開始できない。"
+      "blocked_reason": "GSC-確認がGoogle側の登録処理待ちのため、BLOG-0004はまだ開始できない。",
+      "preflight_prerequisites": []
     },
     {
       "id": "WP無料ホスティング検証",
@@ -683,7 +685,8 @@
           }
         ],
         "updated_at": "2026-10-09"
-      }
+      },
+      "preflight_prerequisites": []
     },
     {
       "id": "BLOGGER-SEARCH-EXCLUSION",
@@ -737,7 +740,8 @@
           }
         ],
         "updated_at": "2026-10-09"
-      }
+      },
+      "preflight_prerequisites": []
     }
   ]
 }
