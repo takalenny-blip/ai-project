@@ -123,7 +123,21 @@ def render(state: dict) -> tuple[str, str]:
     # use the same byte-level contract and CI compares them with cmp.
     return bud.rstrip("\n"), handover.rstrip("\n")
 
-def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None:
+def check_committed_views(bud: str, handover: str, root: Path = ROOT) -> tuple[bool, str]:
+    """Check that tracked compatibility views exactly match canonical-state rendering."""
+    expected = (
+        (root / "BUD.md", bud),
+        (root / "docs" / "引き継ぎ" / "現在の引き継ぎ.md", handover),
+    )
+    for path, rendered in expected:
+        if not path.is_file():
+            return False, f"committed generated view is missing: {path.relative_to(root)}"
+        if path.read_text(encoding="utf-8") != rendered:
+            return False, f"committed generated view differs: {path.relative_to(root)}"
+    return True, "checked-in views match canonical state"
+
+
+def write_views_atomically(out_dir: Path, bud: str, handover: str) -> None
     out_dir.parent.mkdir(parents=True, exist_ok=True)
     temp_dir = Path(tempfile.mkdtemp(prefix=f".{out_dir.name}.", dir=out_dir.parent))
     try:
@@ -141,6 +155,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--check-deterministic", action="store_true")
+    parser.add_argument("--check-committed", action="store_true")
     args = parser.parse_args()
 
     bud, handover = render(load_state())
@@ -158,6 +173,11 @@ def main() -> int:
     else:
         print(f"OK: rendered {args.out_dir / 'BUD.md'}")
         print(f"OK: rendered {args.out_dir / '現在の引き継ぎ.md'}")
+    if args.check_committed:
+        ok, message = check_committed_views(bud, handover)
+        print(("OK: " if ok else "FAIL: ") + message)
+        if not ok:
+            return 1
     return 0
 
 if __name__ == "__main__":
