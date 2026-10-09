@@ -12,11 +12,11 @@ BUD_PATH = ROOT / "BUD.md"
 HANDOVER_PATH = ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md"
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import validate_work_items, derived_next_step, select_actionable
+from work_queue import validate_work_items, select_actionable
 from generate_current_views import render
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 
-REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
+REQUIRED = ("execution_environment", "current_position", "work_items")
 ABSTRACT_NEXT_STEP = (
     "本来工程へ復帰",
     "通常のDiMORA本来工程へ復帰",
@@ -55,27 +55,27 @@ def _validate_verified_evidence(prerequisite: dict) -> None:
         if actual != expected:
             fail("verified repo_file evidence mismatch: " + prerequisite["name"])
 
-def validate_prerequisites(next_step: dict) -> None:
-    prerequisites = next_step.get("prerequisites")
+def validate_prerequisites(work_item: dict) -> None:
+    prerequisites = work_item.get("preflight_prerequisites", [])
     if not isinstance(prerequisites, list):
-        fail("next_step.prerequisites must be an explicit list")
-    readiness = next_step.get("readiness")
+        fail("work item preflight_prerequisites must be a list")
+    readiness = work_item.get("readiness")
     if readiness not in {"ready", "blocked"}:
-        fail("next_step.readiness must be ready or blocked")
+        fail("work item readiness must be ready or blocked")
     if readiness == "blocked" and (not next_step.get("blocked_reason") or not next_step.get("unblock_action")):
-        fail("blocked next_step requires blocked_reason and unblock_action")
+        fail("blocked work item requires blocked_reason and unblock_action")
     for index, prerequisite in enumerate(prerequisites):
         if not isinstance(prerequisite, dict):
-            fail(f"next_step.prerequisites[{index}] must be an object")
+            fail(f"work item preflight_prerequisites[{index}] must be an object")
         for field in ("name", "kind", "verify_scope", "status"):
             if not prerequisite.get(field):
-                fail(f"next_step.prerequisites[{index}].{field} is missing")
+                fail(f"work item preflight_prerequisites[{index}].{field} is missing")
         if prerequisite["status"] not in {"verified", "unverified", "missing", "invalid"}:
             fail(f"invalid prerequisite status: {prerequisite['status']}")
         if prerequisite["status"] == "verified":
             _validate_verified_evidence(prerequisite)
     if readiness == "ready" and any(p["status"] != "verified" for p in prerequisites):
-        fail("next_step.readiness=ready requires every prerequisite to be verified")
+        fail("work item readiness=ready requires every prerequisite to be verified")
 
 def validate_external_response_gate(state: dict) -> None:
     gate = state.get("external_response_gate", {"status": "clear"})
@@ -138,21 +138,8 @@ def validate_work_queue(state: dict) -> None:
         validate_work_items(items)
     except ValueError as exc:
         fail(str(exc))
-    derived = derived_next_step(items, state.get("updated"))
-    cached = state.get("next_step")
-    if derived is None:
-        if cached not in (None, {}):
-            fail("next_step must be empty when no actionable work exists")
-        return
-    if not isinstance(cached, dict):
-        fail("next_step must be an object derived from work_items")
-    if cached.get("id") != derived.get("id"):
-        fail("next_step does not match the highest-priority actionable work item")
-    for key in ("target", "evidence", "environment", "scope", "readiness", "unblock_action"):
-        if cached.get(key) != derived.get(key):
-            fail("next_step is not an exact derived view of work_items: " + key)
-    if derived.get("readiness") == "blocked" and cached.get("blocked_reason") != derived.get("blocked_reason"):
-        fail("next_step blocked_reason is not derived from work_items")
+    for item in items:
+        validate_prerequisites(item)
 
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
@@ -161,16 +148,18 @@ def validate_state(state: dict) -> None:
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
-    nxt = state["next_step"]
+    actionable = select_actionable(state["work_items"], state.get("updated"))
+    blocked_items = sorted((x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"), key=lambda x: (x["priority"], x["created_at"], x["id"]))
+    nxt = actionable[0] if actionable else (blocked_items[0] if blocked_items else None)
     legacy_verification_model = "verification_records" not in state
     if not legacy_verification_model:
         validate_completed_verifications(state)
         validate_work_queue(state)
-        if not nxt.get("scope"):
-            fail("next_step.scope is missing")
-        completed = state["verification_records"].get(nxt["scope"])
+        if nxt and not nxt.get("scope"):
+            fail("selected work item scope is missing")
+        completed = state["verification_records"].get(nxt["scope"]) if nxt else None
         if isinstance(completed, dict) and completed.get("status") == "verified":
-            fail("next_step repeats an already verified scope: " + nxt["scope"])
+            fail("selected work item repeats an already verified scope: " + nxt["scope"])
     # Staged migration compatibility: the current canonical state predates the
     # verification_records/scope fields. Allow it to pass until the normal save
     # pipeline applies the explicit migration patch; do not silently invent evidence.
@@ -181,18 +170,16 @@ def validate_state(state: dict) -> None:
         fail("retired execution environments must be a list")
     if active in retired:
         fail(f"active environment is also retired: {active}")
-    if nxt.get("environment") != active:
-        fail("next_step.environment does not match active environment")
-    for field in ("target", "evidence"):
-        if not nxt.get(field):
-            fail(f"next_step.{field} is missing")
-    if nxt.get("status") not in {None, nxt.get("readiness")}:
-        fail("next_step.status must be absent or equal to readiness")
+    if nxt:
+        if nxt.get("environment") != active:
+            fail("selected work item environment does not match active environment")
+        for field in ("target", "evidence"):
+            if not nxt.get(field):
+                fail(f"selected work item {field} is missing")
     if not current.get("summary"):
         fail("current_position.summary is missing")
-    if any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
-        fail("next_step.target is too abstract or stale; require current concrete work")
-    validate_prerequisites(nxt)
+    if nxt and any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
+        fail("selected work item target is too abstract or stale; require current concrete work")
     validate_external_response_gate(state)
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
