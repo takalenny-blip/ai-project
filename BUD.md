@@ -36,8 +36,6 @@
   - 未完了工程：blog1-image [pending] BLOG-0001の画像問題を解消
   - 未完了工程：operation-check [pending] WordPressの表示・更新・運用確認
   - 未完了工程：wordpress-production-judgment [pending] WordPress本番化を判断し現在状態へ反映
-
-
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → WordPress本番公開**
