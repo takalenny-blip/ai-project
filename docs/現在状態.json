@@ -324,7 +324,7 @@
       "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。 2026-10-09、たかの方針変更により、WordPressを本番公開先、Bloggerを下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする役割分離を採用。ブログタイトル検索でGitHub Pagesが上位表示されたことが変更の契機。 2026-10-09、たかがBloggerの「検索エンジンに表示」をオフ、カスタムrobotsヘッダータグ3項目へnoindex設定したと報告。設定の再確認・記事応答・Google検索結果からの除外は未確認。 2026-10-09、たかがCocoonスキン「モノクロ」を選択。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出し、コマンド・スクリプトの見た目の検討を完了したと報告。バドによる独立した公開ページの実表示確認は未実施。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPressでは保存済みサイトアイコン画像の適用・実表示確認が残る。 Bloggerの検索対象外化は設定済みとの報告があるが、保存確認・記事応答・Google再クロール後の除外確認が未完了。",
-    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPress側はサイトアイコン画像の適用・実表示確認は対応完了。 Bloggerは検索対象外化の設定確認と、公開済み3記事のnoindex応答・Google再クロール後の除外確認が宿題。"
+    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPress側はサイトアイコン画像の適用・実表示確認が未完了。Cocoonのデザイン見直しは対応完了。 Bloggerは検索対象外化の設定確認と、公開済み3記事のnoindex応答・Google再クロール後の除外確認が宿題。"
   },
   "next_step": {
     "id": "GSC-確認",
