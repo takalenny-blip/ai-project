@@ -38,6 +38,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   render-and-check:
@@ -126,18 +127,29 @@ jobs:
       - name: Regenerate tracked views from canonical state
         run: python scripts/generate_current_views.py --out-dir generated/current-views
 
-      - name: Sync generated views when needed
+      - name: Prepare generated views for pull request
+        id: sync
         run: |
           set -euo pipefail
           if cmp --silent generated/current-views/BUD.md BUD.md &&
              cmp --silent generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md; then
             echo "OK: tracked generated views are already synchronized"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           cp generated/current-views/BUD.md BUD.md
           cp generated/current-views/現在の引き継ぎ.md docs/引き継ぎ/現在の引き継ぎ.md
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add BUD.md docs/引き継ぎ/現在の引き継ぎ.md
-          git commit -m "chore: sync generated current-state views"
-          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Create pull request for generated views
+        if: steps.sync.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/sync-current-state-views
+          delete-branch: true
+          commit-message: "chore: sync generated current-state views"
+          title: "Sync generated current-state views"
+          body: |
+            Automated synchronization of BUD.md and docs/引き継ぎ/現在の引き継ぎ.md from docs/現在状態.json.
+            These are generated views; the canonical source remains docs/現在状態.json.
