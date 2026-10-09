@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。WordPressのデザインテンプレートも未完了。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。 2026-10-09、Bloggerの検索対象外化を方針決定。たかが「検索エンジンに表示」をオフにし、ホームページ・アーカイブ／検索ページ・投稿／ページのカスタムrobotsヘッダータグでnoindexを設定したと報告。保存状態、公開済み3記事の応答、Google検索結果からの除外は未確認。Search Consoleプロパティは維持する。",
+    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」を採用し、引用記号・吹き出し・コマンド／スクリプト表示の見直しはたかの確認により完了。赤字・赤字＋黄色背景は維持。バドによる独立した実表示確認は未実施。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。 2026-10-09、Bloggerの検索対象外化を方針決定。たかが「検索エンジンに表示」をオフにし、ホームページ・アーカイブ／検索ページ・投稿／ページのカスタムrobotsヘッダータグでnoindexを設定したと報告。保存状態、公開済み3記事の応答、Google検索結果からの除外は未確認。Search Consoleプロパティは維持する。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-09",
@@ -321,10 +321,10 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。 2026-10-09、たかの方針変更により、WordPressを本番公開先、Bloggerを下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする役割分離を採用。ブログタイトル検索でGitHub Pagesが上位表示されたことが変更の契機。 2026-10-09、たかがBloggerの「検索エンジンに表示」をオフ、カスタムrobotsヘッダータグ3項目へnoindex設定したと報告。設定の再確認・記事応答・Google検索結果からの除外は未確認。"
+      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。 2026-10-09、たかの方針変更により、WordPressを本番公開先、Bloggerを下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする役割分離を採用。ブログタイトル検索でGitHub Pagesが上位表示されたことが変更の契機。 2026-10-09、たかがBloggerの「検索エンジンに表示」をオフ、カスタムrobotsヘッダータグ3項目へnoindex設定したと報告。設定の再確認・記事応答・Google検索結果からの除外は未確認。 2026-10-09、たかがCocoonスキン「モノクロ」を選択。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出し、コマンド・スクリプトの見た目の検討を完了したと報告。バドによる独立した公開ページの実表示確認は未実施。"
     },
-    "next_stage_boundary": "GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPressでは保存済みサイトアイコン画像の適用・実表示確認とデザインテンプレート整備が残る。 Bloggerの検索対象外化は設定済みとの報告があるが、保存確認・記事応答・Google再クロール後の除外確認が未完了。",
-    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPress側はサイトアイコン画像の適用・実表示確認とデザインテンプレート整備が未完了。 Bloggerは検索対象外化の設定確認と、公開済み3記事のnoindex応答・Google再クロール後の除外確認が宿題。"
+    "next_stage_boundary": "GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPressでは保存済みサイトアイコン画像の適用・実表示確認が残る。 Bloggerの検索対象外化は設定済みとの報告があるが、保存確認・記事応答・Google再クロール後の除外確認が未完了。",
+    "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPress側はサイトアイコン画像の適用・実表示確認は対応完了。 Bloggerは検索対象外化の設定確認と、公開済み3記事のnoindex応答・Google再クロール後の除外確認が宿題。"
   },
   "next_step": {
     "id": "GSC-確認",
@@ -677,7 +677,8 @@
           {
             "id": "wp-design-template",
             "title": "WordPressのデザインテンプレートを整える",
-            "status": "pending"
+            "status": "done",
+            "evidence": "2026-10-09、たかの確認により完了として記録。Cocoonスキン「モノクロ」を採用。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出しの見た目の検討、コマンド・スクリプトの見た目の検討を完了したとのユーザー報告。バドによる公開ページの独立した実表示確認は行っていない。"
           },
           {
             "id": "blog1-image",
