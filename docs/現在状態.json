@@ -529,6 +529,12 @@
             "title": "GitHub Pages・WordPressのインデックス登録状況を個別確認",
             "status": "waiting_external",
             "evidence": "Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。残るGitHub Pages・WordPressの状況は未確認で、個別確認が必要。"
+          },
+          {
+            "id": "work-pc-http-headers",
+            "title": "作業PCでsitemap.xmlのHTTPステータスとContent-Typeを確認",
+            "status": "pending",
+            "evidence": "たかが2026-10-09に作業PCでの確認を宿題として指定。Chromeで https://takalenny-blip.github.io/ai-project/sitemap.xml を開き、F12 → Network → 再読み込み → sitemap.xml → HeadersからStatus CodeとContent-Typeを確認する。確認結果待ち。"
           }
         ],
         "updated_at": "2026-10-09"
