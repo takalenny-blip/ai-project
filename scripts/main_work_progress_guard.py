@@ -30,13 +30,15 @@ SUBSTANTIVE_WORKFLOW_PREFIX = ".github/workflows/"
 
 
 def changed_paths(base: str, head: str) -> list[str]:
+    # -z prevents Git from quoting/escaping non-ASCII paths (for example Japanese
+    # filenames), so validate() receives the real repository paths.
     result = subprocess.run(
-        ["git", "diff", "--name-only", f"{base}...{head}"],
+        ["git", "diff", "--name-only", "-z", f"{base}...{head}"],
         check=True,
         text=True,
         capture_output=True,
     )
-    return [line for line in result.stdout.splitlines() if line]
+    return [path for path in result.stdout.split("\0") if path]
 
 
 def validate(branch: str, paths: list[str]) -> tuple[bool, str]:
