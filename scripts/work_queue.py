@@ -105,11 +105,3 @@ def select_actionable(items: Iterable[dict], today: str | date | None = None) ->
         actionable.append(item)
     return sorted(actionable, key=lambda item: (item["priority"], item["created_at"], item["id"]))
 
-
-def derived_next_step(items: Iterable[dict], today: str | date | None = None) -> dict | None:
-    items = list(items)
-    actionable = select_actionable(items, today)
-    if actionable:
-        return actionable[0]
-    blocked = [item for item in items if item["status"] not in TERMINAL_STATUSES and item["readiness"] == "blocked"]
-    return sorted(blocked, key=lambda item: (item["priority"], item["created_at"], item["id"]))[0] if blocked else None
