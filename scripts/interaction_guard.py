@@ -29,19 +29,38 @@ CLAIM_PATTERNS = BLOCKED_PROGRESS_PATTERNS + (
     r"対応(?:済み|しました|した)",
 )
 
+
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
+
 def state_fingerprint(state: dict) -> str:
-    payload = {
-        "next_step": state.get("next_step", {}),
-        "current_position": state.get("current_position", {}),
-    }
+    """Fingerprint actual work progress, not mutable prose in the handoff."""
+    work_items = []
+    for item in state.get("work_items", []):
+        progress = item.get("progress") or {}
+        work_items.append({
+            "id": item.get("id"),
+            "status": item.get("status"),
+            "readiness": item.get("readiness"),
+            "execution_state": item.get("execution_state"),
+            "current_step": progress.get("current_step"),
+            "steps": sorted(
+                (
+                    {"id": step.get("id"), "status": step.get("status")}
+                    for step in progress.get("steps", [])
+                ),
+                key=lambda step: str(step["id"]),
+            ),
+        })
+    payload = {"work_items": sorted(work_items, key=lambda item: str(item["id"]))}
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
+
 def has_progress_claim(text: str) -> bool:
     return any(re.search(pattern, text, re.IGNORECASE) for pattern in CLAIM_PATTERNS)
+
 
 def validate_blocked_output(state: dict, text: str) -> None:
     readiness = (state.get("next_step") or {}).get("readiness")
@@ -50,6 +69,7 @@ def validate_blocked_output(state: dict, text: str) -> None:
             "blocked next_step rejects progress/completion claims; "
             "only evidence acquisition, preflight, or unblock work may be reported"
         )
+
 
 def validate_evidence_claim(text: str, evidence: list[dict] | None) -> None:
     if not has_progress_claim(text):
@@ -67,6 +87,7 @@ def validate_evidence_claim(text: str, evidence: list[dict] | None) -> None:
         if actual != item["sha256"]:
             raise ValueError("evidence SHA-256 mismatch: " + str(path))
 
+
 def validate_loop(history: list[dict], threshold: int = 2) -> None:
     if threshold < 2:
         raise ValueError("loop threshold must be >= 2")
@@ -74,11 +95,13 @@ def validate_loop(history: list[dict], threshold: int = 2) -> None:
         return
     tail = history[-threshold:]
     fingerprints = [item.get("state_fingerprint") for item in tail]
-    no_progress = all(item.get("progress") is False for item in tail)
-    if fingerprints[0] and len(set(fingerprints)) == 1 and no_progress:
+    # Progress is represented by the structured fingerprint. Do not trust a
+    # caller-supplied progress boolean that can contradict unchanged state.
+    if fingerprints[0] and len(set(fingerprints)) == 1:
         raise ValueError(
-            f"forced stop: identical state repeated {threshold} times without progress"
+            f"forced stop: identical structured work state repeated {threshold} times"
         )
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -105,6 +128,7 @@ def main() -> int:
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
         print(f"STOP: {exc}")
         return 2
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

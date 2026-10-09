@@ -6,16 +6,25 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import interaction_guard as guard
 
+
 class InteractionGuardTests(unittest.TestCase):
     def state(self, readiness="ready"):
         return {
             "current_position": {"summary": "current"},
-            "next_step": {
-                "scope": "experience_log_to_blogger",
-                "target": "経験ログを中心としたAI編集・Blogger自動化へ戻る",
+            "next_step": {"readiness": readiness},
+            "work_items": [{
+                "id": "BLOG-0001",
+                "status": "in_progress",
                 "readiness": readiness,
-                "prerequisites": [],
-            },
+                "execution_state": "actionable",
+                "progress": {
+                    "current_step": "draft",
+                    "steps": [
+                        {"id": "draft", "status": "in_progress", "title": "本文を編集する"},
+                        {"id": "publish", "status": "pending", "title": "公開確認"},
+                    ],
+                },
+            }],
         }
 
     def test_blocked_rejects_completion_claim(self):
@@ -56,13 +65,38 @@ class InteractionGuardTests(unittest.TestCase):
             {"state_fingerprint": fp, "progress": False},
             {"state_fingerprint": fp, "progress": False},
         ]
+        with self.assertRaisesRegex(ValueError, "identical structured work state"):
+            guard.validate_loop(history, 2)
+
+    def test_loop_cannot_be_bypassed_by_self_reported_progress(self):
+        state = self.state()
+        fp = guard.state_fingerprint(state)
+        history = [
+            {"state_fingerprint": fp, "progress": False},
+            {"state_fingerprint": fp, "progress": True},
+        ]
         with self.assertRaises(ValueError):
             guard.validate_loop(history, 2)
+
+    def test_prose_changes_do_not_change_fingerprint(self):
+        state1 = self.state()
+        state2 = self.state()
+        state2["current_position"]["summary"] = "同じ作業について説明を言い換えた"
+        state2["next_step"]["target"] = "同じ作業の説明を言い換えた"
+        self.assertEqual(guard.state_fingerprint(state1), guard.state_fingerprint(state2))
+
+    def test_work_step_transition_changes_fingerprint(self):
+        state1 = self.state()
+        state2 = self.state()
+        state2["work_items"][0]["progress"]["steps"][0]["status"] = "done"
+        state2["work_items"][0]["progress"]["current_step"] = "publish"
+        self.assertNotEqual(guard.state_fingerprint(state1), guard.state_fingerprint(state2))
 
     def test_state_change_resets_loop(self):
         state1 = self.state()
         state2 = self.state()
-        state2["next_step"]["target"] = "別の具体的作業"
+        state2["work_items"][0]["progress"]["steps"][0]["status"] = "done"
+        state2["work_items"][0]["progress"]["current_step"] = "publish"
         history = [
             {"state_fingerprint": guard.state_fingerprint(state1), "progress": False},
             {"state_fingerprint": guard.state_fingerprint(state2), "progress": False},
@@ -74,9 +108,10 @@ class InteractionGuardTests(unittest.TestCase):
         fp = guard.state_fingerprint(state)
         history = [
             {"state_fingerprint": fp, "progress": False},
-            {"state_fingerprint": fp, "progress": True},
+            {"state_fingerprint": fp + "-changed", "progress": False},
         ]
         guard.validate_loop(history, 2)
+
 
 if __name__ == "__main__":
     unittest.main()
