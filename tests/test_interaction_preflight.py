@@ -32,7 +32,7 @@ class InteractionPreflightTests(unittest.TestCase):
             }]), encoding="utf-8")
             state = tmp / "state.json"
             state.write_text(json.dumps({
-                "next_step": {"readiness": "ready"},
+                "work_items": [],
                 "current_position": {},
             }), encoding="utf-8")
             history = tmp / "history.json"
