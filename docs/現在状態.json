@@ -604,7 +604,7 @@
       "not_before": null,
       "scope": "experience-log_to_Blogger",
       "target": "WordPress公開済みのBLOG-0002・BLOG-0003を前提に、サイトのアイコン画像とデザインテンプレートを整える。BLOG-0001の画像問題は別の保留事項として保持し、解消時に対応する。",
-      "evidence": "WordPress導入・Script Installer再確認・HTTPS・サイトマップ確認まで完了。BLOG-0002とBLOG-0003はWordPress公開済み。たかの現在確認では、WP側の宿題はアイコン画像とデザインテンプレート。BLOG-0001は画像問題のため先送り。",
+      "evidence": "WordPress公開環境の整備中。BLOG-0001は画像問題のため先送りしていた。2026-10-09、Dropboxの /BLOG1画像/ に blog001-01.jpg（143,397 bytes）、blog001-02.jpg（184,772 bytes）、blog001-03.jpg（227,962 bytes）があることを確認。画像データを作業環境へ取り込み、寸法確認・GitHub登録・HTML参照更新・PR/merge・公開表示確認を行う必要がある。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -683,7 +683,7 @@
             "id": "blog1-image",
             "title": "BLOG-0001の画像問題を解消",
             "status": "pending",
-            "evidence": "画像問題のため先送り"
+            "evidence": "宿題（2026-10-09）。Dropboxの /BLOG1画像/ に blog001-01.jpg（143,397 bytes）、blog001-02.jpg（184,772 bytes）、blog001-03.jpg（227,962 bytes）が存在し、JPEGファイルとして確認済み。現時点では画像バイナリを作業環境へ取り込めていないため、寸法確認・GitHub画像登録・docs/企画/BLOG-0001_Blogger掲載用.html の画像参照をGitHub画像URLへ変更する作業は未完了。次回、作業PCから3ファイルをこのチャットへ添付して再開し、PR・merge後に公開表示を確認する。"
           },
           {
             "id": "operation-check",
