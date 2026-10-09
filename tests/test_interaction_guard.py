@@ -10,12 +10,16 @@ class InteractionGuardTests(unittest.TestCase):
     def state(self, readiness="ready"):
         return {
             "current_position": {"summary": "current"},
-            "next_step": {
-                "scope": "experience_log_to_blogger",
-                "target": "経験ログを中心としたAI編集・Blogger自動化へ戻る",
-                "readiness": readiness,
-                "prerequisites": [],
-            },
+            "updated": "2026-10-08",
+            "work_items": [{
+                "id": "WORK-TEST", "title": "test", "priority": 10, "status": "queued",
+                "depends_on": [], "not_before": None, "scope": "experience_log_to_blogger",
+                "target": "経験ログを中心としたAI編集・Blogger自動化へ戻る", "evidence": "test",
+                "readiness": readiness, "unblock_action": "preflight", "environment": "work_pc",
+                "execution_state": "actionable", "created_at": "2026-10-08", "updated_at": "2026-10-08",
+                "blocked_reason": "external wait" if readiness == "blocked" else None,
+                "progress": {"current_step": "step-1", "steps": [{"id": "step-1", "title": "test", "status": "pending"}], "updated_at": "2026-10-08"},
+            }],
         }
 
     def test_blocked_rejects_completion_claim(self):
@@ -62,7 +66,7 @@ class InteractionGuardTests(unittest.TestCase):
     def test_state_change_resets_loop(self):
         state1 = self.state()
         state2 = self.state()
-        state2["next_step"]["target"] = "別の具体的作業"
+        state2["work_items"][0]["target"] = "別の具体的作業"
         history = [
             {"state_fingerprint": guard.state_fingerprint(state1), "progress": False},
             {"state_fingerprint": guard.state_fingerprint(state2), "progress": False},
