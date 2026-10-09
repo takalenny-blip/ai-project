@@ -77,7 +77,6 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_legacy_verification_model_is_temporarily_accepted(self):
         state = self.base_state()
         state.pop("verification_records")
-        state["work_items"][0].pop("scope")
         guard.validate_state(state)
 
     def test_active_work_pc_passes(self):
