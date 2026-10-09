@@ -222,13 +222,9 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
-    def test_readiness_status_conflict_fails(self):
+    def test_invalid_work_item_status_fails(self):
         state = self.base_state()
         state["work_items"][0]["status"] = "ready"
-        state["work_items"][0]["readiness"] = "blocked"
-        state["work_items"][0]["blocked_reason"] = "blocked"
-        state["work_items"][0]["unblock_action"] = "preflight"
-        state["work_items"][0]["unblock_action"] = "preflight"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
