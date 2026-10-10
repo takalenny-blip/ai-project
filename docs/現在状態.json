@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」を採用し、引用記号・吹き出し・コマンド／スクリプト表示の見直しはたかの確認により完了。赤字・赤字＋黄色背景は維持。バドによる独立した実表示確認は未実施。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。 2026-10-09、Bloggerの検索対象外化を方針決定。たかが「検索エンジンに表示」をオフにし、ホームページ・アーカイブ／検索ページ・投稿／ページのカスタムrobotsヘッダータグでnoindexを設定したと報告。保存状態、公開済み3記事の応答、Google検索結果からの除外は未確認。Search Consoleプロパティは維持する。",
+    "summary": "WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする方針へ変更。Google検索でGitHub Pagesがブログタイトル検索の上位に表示されたことを受け、公開先・作業場所・予備サイトの役割を分離する。サイトアイコン画像はPR #962でdocs/assets/site-icon.pngへ保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」を採用し、引用記号・吹き出し・コマンド／スクリプト表示の見直しはたかの確認により完了。赤字・赤字＋黄色背景は維持。バドによる独立した実表示確認は未実施。GSCでは3サイトを別々に登録済み。GitHub Pagesのrobots.txt公開は確認済みだが、sitemap.xml取得失敗の原因切り分けは未完了。Bloggerは3記事ともインデックス登録成功を2026-10-08にたかが確認済み。GitHub PagesとWordPressのインデックス状況は未確認。 2026-10-09、Bloggerの検索対象外化を方針決定。たかが「検索エンジンに表示」をオフにし、ホームページ・アーカイブ／検索ページ・投稿／ページのカスタムrobotsヘッダータグでnoindexを設定したと報告。保存状態、公開済み3記事の応答、Google検索結果からの除外は未確認。Search Consoleプロパティは維持する。 2026-10-10、作業PCでGitHub Pages sitemap.xmlのHTTP 200 OKとContent-Type: application/xmlを確認。XML内の4 URLすべて表示可能。GSCの取得失敗は継続し、原因は未確定。次はGSCサイトマップ詳細の最終読み込み日時・エラー詳細を確認する。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-09",
@@ -321,7 +321,7 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。 2026-10-09、たかの方針変更により、WordPressを本番公開先、Bloggerを下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする役割分離を採用。ブログタイトル検索でGitHub Pagesが上位表示されたことが変更の契機。 2026-10-09、たかがBloggerの「検索エンジンに表示」をオフ、カスタムrobotsヘッダータグ3項目へnoindex設定したと報告。設定の再確認・記事応答・Google検索結果からの除外は未確認。 2026-10-09、たかがCocoonスキン「モノクロ」を選択。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出し、コマンド・スクリプトの見た目の検討を完了したと報告。バドによる独立した公開ページの実表示確認は未実施。"
+      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。 2026-10-09、たかの方針変更により、WordPressを本番公開先、Bloggerを下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする役割分離を採用。ブログタイトル検索でGitHub Pagesが上位表示されたことが変更の契機。 2026-10-09、たかがBloggerの「検索エンジンに表示」をオフ、カスタムrobotsヘッダータグ3項目へnoindex設定したと報告。設定の再確認・記事応答・Google検索結果からの除外は未確認。 2026-10-09、たかがCocoonスキン「モノクロ」を選択。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出し、コマンド・スクリプトの見た目の検討を完了したと報告。バドによる独立した公開ページの実表示確認は未実施。 2026-10-10、たかが作業PCでGitHub Pages sitemap.xmlのHTTP 200 OK / application/xml、XML内4 URLすべての表示可能を確認。ブラウザ側の取得・MIME・URL表示は確認済みだが、GSCの取得失敗原因は未確定。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPressでは保存済みサイトアイコン画像の適用・実表示確認が残る。 Bloggerの検索対象外化は設定済みとの報告があるが、保存確認・記事応答・Google再クロール後の除外確認が未完了。",
     "next_focus": "GitHub PagesのGSC sitemap.xml取得失敗の原因を切り分ける。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。WordPress側はサイトアイコン画像の適用・実表示確認が未完了。Cocoonのデザイン見直しは対応完了。 Bloggerは検索対象外化の設定確認と、公開済み3記事のnoindex応答・Google再クロール後の除外確認が宿題。"
@@ -334,8 +334,8 @@
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience_log_to_blogger",
-    "target": "まず作業PCで https://takalenny-blip.github.io/ai-project/sitemap.xml のHTTPステータスとContent-Typeを確認する。その結果を基にGSCの取得失敗原因を切り分ける。インデックス状況は未確認のGitHub Pages・WordPressのみ個別確認し、Bloggerの登録済み3記事を再確認しない。GSC登録は再実行しない。",
-    "evidence": "直近の具体作業は作業PCでのHTTPステータスとContent-Type確認。確認結果を受けてサイトマップ取得失敗の原因を切り分ける。Bloggerの3記事は2026-10-08にインデックス登録成功をユーザー確認済みのため再確認対象から除外し、未確認のGitHub Pages・WordPressのみ個別確認する。",
+    "target": "作業PCでのHTTP確認は完了。GSCのサイトマップ詳細に表示される最終読み込み日時・エラー詳細を確認し、GSCの取得失敗原因を切り分ける。その後、未確認のGitHub Pages・WordPressのインデックス状況を個別確認する。Bloggerの登録済み3記事は再確認しない。GSC登録は再実行しない。",
+    "evidence": "2026-10-10、たかが作業PCで sitemap.xml のHTTP 200 OK / Content-Type: application/xml を確認。XML内の4 URL（ルート、ai-blog-start.html、vaio-p-again-and-beyond.html、github-ai-conversation.html）はすべて表示可能と確認。これによりブラウザからの取得、MIME、掲載URLの表示は確認済み。GSC画面では従来「型: 不明」「取得できませんでした」「0件」と記録されているが、現在の最終読み込み日時・詳細エラーは未確認で、原因は未確定。Bloggerの3記事は2026-10-08にインデックス登録成功をユーザー確認済みのため再確認対象から除外し、未確認のGitHub Pages・WordPressのみ個別確認する。GSC登録は再実行しない。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -483,17 +483,17 @@
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
-      "target": "まず作業PCで https://takalenny-blip.github.io/ai-project/sitemap.xml のHTTPステータスとContent-Typeを確認する。その結果を基にGSCの取得失敗原因を切り分ける。インデックス状況は未確認のGitHub Pages・WordPressのみ個別確認し、Bloggerの登録済み3記事を再確認しない。GSC登録は再実行しない。",
-      "evidence": "直近の具体作業は作業PCでのHTTPステータスとContent-Type確認。確認結果を受けてサイトマップ取得失敗の原因を切り分ける。Bloggerの3記事は2026-10-08にインデックス登録成功をユーザー確認済みのため再確認対象から除外し、未確認のGitHub Pages・WordPressのみ個別確認する。",
+      "target": "作業PCでのHTTP確認は完了。GSCのサイトマップ詳細に表示される最終読み込み日時・エラー詳細を確認し、GSCの取得失敗原因を切り分ける。その後、未確認のGitHub Pages・WordPressのインデックス状況を個別確認する。Bloggerの登録済み3記事は再確認しない。GSC登録は再実行しない。",
+      "evidence": "2026-10-10、たかが作業PCで sitemap.xml のHTTP 200 OK / Content-Type: application/xml を確認。XML内の4 URL（ルート、ai-blog-start.html、vaio-p-again-and-beyond.html、github-ai-conversation.html）はすべて表示可能と確認。これによりブラウザからの取得、MIME、掲載URLの表示は確認済み。GSC画面では従来「型: 不明」「取得できませんでした」「0件」と記録されているが、現在の最終読み込み日時・詳細エラーは未確認で、原因は未確定。Bloggerの3記事は2026-10-08にインデックス登録成功をユーザー確認済みのため再確認対象から除外し、未確認のGitHub Pages・WordPressのみ個別確認する。GSC登録は再実行しない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-06",
-      "updated_at": "2026-10-09",
+      "updated_at": "2026-10-10",
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "work-pc-http-headers",
+        "current_step": "github-pages-sitemap-retrieval",
         "steps": [
           {
             "id": "blogger-registration",
@@ -523,7 +523,7 @@
             "id": "github-pages-sitemap-retrieval",
             "title": "GSC sitemap.xml取得失敗の原因切り分け",
             "status": "in_progress",
-            "evidence": "PR #942に記録されたGSC表示は「型: 不明」「取得できませんでした」「0件」。原因は未確定。"
+            "evidence": "GSCでの表示は「型: 不明」「取得できませんでした」「0件」（既存記録）。2026-10-10、たかの作業PCで sitemap.xml のHTTP 200 OK / Content-Type: application/xml とXML内4 URLを確認し、4 URLすべて表示可能と確認。ブラウザ側の取得・形式・掲載URLの表示は確認できたが、GSC取得失敗の原因は未確定。次はGSCサイトマップ詳細の最終読み込み日時・エラー詳細を確認する。"
           },
           {
             "id": "site-index-status-check",
@@ -534,11 +534,11 @@
           {
             "id": "work-pc-http-headers",
             "title": "作業PCでsitemap.xmlのHTTPステータスとContent-Typeを確認",
-            "status": "pending",
-            "evidence": "たかが2026-10-09に作業PCでの確認を宿題として指定。Chromeで https://takalenny-blip.github.io/ai-project/sitemap.xml を開き、F12 → Network → 再読み込み → sitemap.xml → HeadersからStatus CodeとContent-Typeを確認する。確認結果待ち。"
+            "status": "done",
+            "evidence": "2026-10-10、たかが作業PCで確認。https://takalenny-blip.github.io/ai-project/sitemap.xml はHTTP 200 OK、Content-Type: application/xml。XMLにはルートURLと3つのHTML URLの計4 URLが記載され、たかの確認で4 URLすべて表示可能。ブラウザ側のHTTP応答・MIME・URL表示は確認済み。"
           }
         ],
-        "updated_at": "2026-10-09"
+        "updated_at": "2026-10-10"
       }
     },
     {
@@ -754,5 +754,7 @@
         "updated_at": "2026-10-09"
       }
     }
-  ]
+  ],
+  "next_stage_boundary": "作業PCでのsitemap.xml HTTP確認は完了（200 OK、application/xml、XML内4 URLすべて表示可能）。GitHub PagesのGSCサイトマップ取得失敗の原因切り分けを継続し、次はGSCサイトマップ詳細の最終読み込み日時・エラー詳細を確認する。その後、未確認のGitHub Pages・WordPressのインデックス状況を個別確認する。ブログの役割はWordPress＝本番公開先、Blogger＝下書き・表示確認の作業場所、GitHub Pages＝唯一の予備公開サイト。",
+  "next_focus": "GSCサイトマップ詳細の最終読み込み日時・エラー詳細を確認して、GitHub Pages sitemap.xml取得失敗の原因を切り分ける。作業PCでのHTTP 200 OK / application/xmlと4 URLすべての表示可能は確認済み。次にGitHub Pages・WordPressのインデックス状況を個別確認する。Bloggerは検索対象外化の設定保存・記事noindex応答・Google再クロール後の除外確認が宿題。WordPressは保存済みサイトアイコン画像の適用・実表示確認が未完了。"
 }
