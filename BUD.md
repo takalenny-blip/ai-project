@@ -1,6 +1,6 @@
 # BUD — バドのための最上位ダッシュボード
 
-更新日：2026-10-10
+更新日：2026-10-11
 
 ## 正本
 
@@ -31,7 +31,6 @@
   - 未完了工程：verify-google-removal [pending] Google再クロール後、公開済み3記事が検索結果から外れたことを確認
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
   - 未完了工程：wp-icon [in_progress] WordPressへサイトアイコン画像を適用して実表示を確認する
-  - 未完了工程：blog1-image [pending] BLOG-0001の画像問題を解消
   - 未完了工程：operation-check [pending] WordPressの表示・更新・運用確認
   - 未完了工程：wordpress-production-judgment [pending] WordPress本番化を判断し現在状態へ反映
 
