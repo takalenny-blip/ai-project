@@ -284,6 +284,32 @@ def article_variant(base_page, title, permalink, body_html):
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
         f'<p class="eyebrow">{labels.get(permalink, "ARTICLE / RECORD")}</p>',
     )
+    canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
+    base_page = re.sub(r"<title>.*?</title>", f"<title>{title}</title>", base_page, count=1)
+    base_page = re.sub(
+        r'<meta name="description" content="[^"]*">',
+        f'<meta name="description" content="{title}">',
+        base_page,
+        count=1,
+    )
+    base_page = re.sub(
+        r'<link rel="canonical" href="[^"]*">',
+        f'<link rel="canonical" href="{canonical_url}">',
+        base_page,
+        count=1,
+    )
+    base_page = re.sub(
+        r'<meta property="og:title" content="[^"]*">',
+        f'<meta property="og:title" content="{title}">',
+        base_page,
+        count=1,
+    )
+    base_page = re.sub(
+        r'<meta property="og:url" content="[^"]*">',
+        f'<meta property="og:url" content="{canonical_url}">',
+        base_page,
+        count=1,
+    )
     start = base_page.index("      <h1>")
     end = base_page.index("    </article>", start)
     replacement = f"""      <h1>{title}</h1>
