@@ -16,19 +16,15 @@
 
 ## 現在地点
 
-**WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする。サイトアイコン画像はPR #962で保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」と引用記号・吹き出し・コマンド／スクリプト表示の見直しは、たかの確認により完了。GSCでは3サイトを別々に登録済み。2026-10-10、GitHub Pagesのsitemap.xmlは作業PCのブラウザーでHTTP 200 OK、Content-Type: application/xml、XML内4 URLすべて表示可能と確認。一方、GSCは最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」が継続。sitemap.xml自体のライブテストはクロール許可・取得・インデックス許可がすべて成功だが、GSCのサイトマップ処理正常化は未確認。URL検査ではVAIO P記事は登録済み、GitHub編記事はクロール済み・インデックス未登録、トップページは未認識。トップページのライブテストは2026/10/10 17:53:48に取得成功、クロール・インデックス許可あり、正規URLは自身。インデックス登録リクエストはキュー追加済みだが、登録結果は未確認。GitHub Pagesの残るURLとWordPressのインデックス状況も未確認。Bloggerは3記事の登録成功を2026-10-08に確認済み。2026-10-09にBlogger検索対象外化の設定を行ったとの報告があるが、設定保存・記事応答・Google検索結果からの除外は未確認。**
+**WordPress公開済みのBLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする。サイトアイコン画像はPR #962で保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」と引用記号・吹き出し・コマンド／スクリプト表示の見直しは、たかの確認により完了。GSCでは3サイトを別々に登録済み。2026-10-10、GitHub Pagesのsitemap.xmlは作業PCのブラウザーでHTTP 200 OK、Content-Type: application/xml、XML内4 URLすべて表示可能と確認。一方、GSCは最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」が継続。sitemap.xml自体のライブテストはクロール許可・取得・インデックス許可がすべて成功だが、GSCのサイトマップ処理正常化は未確認。URL検査ではVAIO P記事は登録済み、GitHub編記事はクロール済み・インデックス未登録、トップページは未認識。トップページのライブテストは2026/10/10 17:53:48に取得成功、クロール・インデックス許可あり、正規URLは自身。インデックス登録リクエストはキュー追加済みだが、登録結果は未確認。GitHub Pagesの残るURLとWordPressのインデックス状況も未確認。Bloggerは下書き・表示確認用としてnoindex化して閉じる方針。2026-10-09に設定変更したとのユーザー報告あり。設定保存・記事応答・Google検索結果からの除外は未検証だが、2026-10-11のユーザー判断により追加確認の作業キューから除外。**
 
 ## 作業キュー
 
-- actionable：3件
+- actionable：2件
 - 一覧：
 - [GSC-確認] priority=20：GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する
   - 未完了工程：github-pages-sitemap-retrieval [in_progress] GSC sitemap.xml取得失敗の原因切り分け
   - 未完了工程：site-index-status-check [in_progress] GitHub Pages・WordPressのインデックス登録状況を個別確認
-- [BLOGGER-SEARCH-EXCLUSION] priority=22：BloggerをGoogle検索対象外にし、公開済み3記事の反映を確認する
-  - 未完了工程：recheck-saved-settings [pending] 設定を開き直し、3項目の保存状態を確認
-  - 未完了工程：verify-article-noindex [pending] 公開済み3記事がnoindexを返すことを確認
-  - 未完了工程：verify-google-removal [pending] Google再クロール後、公開済み3記事が検索結果から外れたことを確認
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
   - 未完了工程：wp-icon [in_progress] WordPressへサイトアイコン画像を適用して実表示を確認する
   - 未完了工程：operation-check [pending] WordPressの表示・更新・運用確認
@@ -36,7 +32,7 @@
 
 ## 次の一手（互換ビュー）
 
-- [GSC-確認] GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。確認済みのブラウザーHTTP応答とライブテスト取得成功をGSCサイトマップ処理成功と混同しない。GitHub PagesのURL検査結果を記録し、トップページはインデックス登録リクエスト済みのため結果を待つ。未確認のai-blog-start.htmlとWordPressのインデックス状況を個別確認する。Bloggerの登録済み3記事は再確認しない。GSCプロパティ登録は再実行しない。
+- [GSC-確認] GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。確認済みのブラウザーHTTP応答とライブテスト取得成功をGSCサイトマップ処理成功と混同しない。GSCサイトマップ詳細の最終読み込み日時・エラー詳細を確認する。続いて未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。Bloggerは検索対象外化して閉じる方針のため、検索結果からの除外確認を作業キューに残さない。GSCプロパティ登録は再実行しない。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → WordPress本番公開**
