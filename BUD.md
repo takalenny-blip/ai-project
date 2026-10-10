@@ -38,7 +38,7 @@
 
 ## 次の一手（互換ビュー）
 
-- [GSC-確認] GitHub Pagesのrobots.txt公開確認済み状態を維持しつつ、GSC sitemap.xmlの取得失敗原因を切り分ける。Bloggerは3記事ともインデックス登録成功を確認済み。GitHub Pages・WordPressのインデックス状況を個別確認する。各サイトのGSC登録は完了済みで、登録操作を再実行しない。
+- [GSC-確認] まず作業PCで https://takalenny-blip.github.io/ai-project/sitemap.xml のHTTPステータスとContent-Typeを確認する。その結果を基にGSCの取得失敗原因を切り分ける。インデックス状況は未確認のGitHub Pages・WordPressのみ個別確認し、Bloggerの登録済み3記事を再確認しない。GSC登録は再実行しない。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → WordPress本番公開**
