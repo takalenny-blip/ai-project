@@ -330,61 +330,15 @@
     "id": "GSC-確認",
     "title": "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する",
     "priority": 20,
-    "status": "in_progress",
     "depends_on": [],
     "not_before": null,
+    "environment": "work_pc",
     "scope": "experience_log_to_blogger",
     "target": "GitHub PagesのGSC sitemap.xml取得失敗の原因切り分けを継続する。確認済みのブラウザーHTTP応答とライブテスト取得成功をGSCサイトマップ処理成功と混同しない。GSCサイトマップ詳細の最終読み込み日時・エラー詳細を確認する。続いて未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。Bloggerは検索対象外化して閉じる方針のため、検索結果からの除外確認を作業キューに残さない。GSCプロパティ登録は再実行しない。",
     "evidence": "2026-10-10確認結果：sitemap.xml詳細は最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」。sitemap.xmlはブラウザーでHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能。sitemap.xml自身のURLライブテストはクロール許可=はい、取得=成功、インデックス許可=はいだが、GSCサイトマップ処理の成功を意味しない。URL検査：vaio-p-again-and-beyond.htmlはインデックス登録済み。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLは自身、参照元サイトマップなし。トップページは「URLがGoogleに認識されていません」、参照元サイトマップ・参照元ページなし。トップページのライブテストは2026/10/10 17:53:48、取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは「URLを優先クロールキューに追加しました」と受け付けられた。インデックス登録結果は未確認。未確認のai-blog-start.htmlとWordPressのインデックス状況を次に確認する。Bloggerの3記事は登録成功確認済みのため再確認せず、GSC登録も再実行しない。",
     "readiness": "ready",
     "unblock_action": "none",
-    "environment": "work_pc",
-    "created_at": "2026-10-06",
-    "updated_at": "2026-10-10",
-    "prerequisites": [],
-    "execution_state": "actionable",
-    "progress": {
-      "current_step": "github-pages-sitemap-retrieval",
-      "steps": [
-        {
-          "id": "github-pages-registration",
-          "title": "GitHub PagesのGSC登録",
-          "status": "done",
-          "evidence": "たかよりGSC登録実施済みとの確認。"
-        },
-        {
-          "id": "wordpress-registration",
-          "title": "WordPressのGSC登録",
-          "status": "done",
-          "evidence": "たかよりGSC登録実施済みとの確認。"
-        },
-        {
-          "id": "github-pages-robots-txt",
-          "title": "GitHub Pagesのrobots.txt公開確認",
-          "status": "done",
-          "evidence": "PR #942の記録：Actions run 37604271713のBuild/Upload/Deploy成功。公開内容をたかが確認済み。PR #942自体は古い状態反映PRとして未整理。"
-        },
-        {
-          "id": "github-pages-sitemap-retrieval",
-          "title": "GSC sitemap.xml取得失敗の原因切り分け",
-          "status": "in_progress",
-          "evidence": "GSCサイトマップ詳細：最終読み込み2026/10/09、検出ページ0、検出動画0、追加エラー詳細なし、「サイトマップを読み込めませんでした」。2026-10-10のライブテストではsitemap.xmlのクロール許可=はい、ページ取得=成功、インデックス登録許可=はい。作業PCブラウザーでもHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能を確認済み。ただし、URLライブテストの取得成功はGSCサイトマップ処理の成功を証明しない。原因は未確定。"
-        },
-        {
-          "id": "site-index-status-check",
-          "title": "GitHub Pages・WordPressのインデックス登録状況を個別確認",
-          "status": "in_progress",
-          "evidence": "2026-10-10、GitHub PagesのURL検査結果を個別確認。vaio-p-again-and-beyond.htmlは登録済み。github-ai-conversation.htmlはクロール済み・インデックス未登録（前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、正規URLは自身）。トップページはGoogleに認識されておらず、参照元サイトマップ・参照元ページなし。ただしトップページのライブテストは2026/10/10 17:53:48に取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは優先クロールキューへ追加済み。登録結果は未確認。未確認のai-blog-start.htmlとWordPressのインデックス状況を個別確認する。Bloggerの登録済み3記事は再確認対象外。"
-        },
-        {
-          "id": "work-pc-http-headers",
-          "title": "作業PCでsitemap.xmlのHTTPステータスとContent-Typeを確認",
-          "status": "done",
-          "evidence": "2026-10-10、たかが作業PCで確認。https://takalenny-blip.github.io/ai-project/sitemap.xml はHTTP 200 OK、Content-Type: application/xml。XMLにはルートURLと3つのHTML URLの計4 URLが記載され、たかの確認で4 URLすべて表示可能。ブラウザ側のHTTP応答・MIME・URL表示は確認済み。"
-        }
-      ],
-      "updated_at": "2026-10-11"
-    }
+    "prerequisites": []
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
