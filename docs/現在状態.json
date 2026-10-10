@@ -1,6 +1,6 @@
 {
   "schema_version": 5,
-  "updated": "2026-10-10",
+  "updated": "2026-10-11",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger下書き確認 → WordPress本番公開",
   "original_lane": "DIGA / DiMORA自動化",
@@ -603,13 +603,13 @@
       "depends_on": [],
       "not_before": null,
       "scope": "experience-log_to_Blogger",
-      "target": "WordPress公開済みのBLOG-0002・BLOG-0003を前提に、サイトのアイコン画像とデザインテンプレートを整える。BLOG-0001の画像問題は別の保留事項として保持し、解消時に対応する。",
-      "evidence": "WordPress公開環境の整備中。BLOG-0001は画像問題のため先送りしていた。2026-10-09、Dropboxの /BLOG1画像/ に blog001-01.jpg（143,397 bytes）、blog001-02.jpg（184,772 bytes）、blog001-03.jpg（227,962 bytes）があることを確認。画像データを作業環境へ取り込み、寸法確認・GitHub登録・HTML参照更新・PR/merge・公開表示確認を行う必要がある。",
+      "target": "WordPress公開済みのBLOG-0002・BLOG-0003を継続運用し、サイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断を進める。BLOG-0001の画像登録・HTML参照更新・WordPress下書きでの表示確認は完了。",
+      "evidence": "BLOG-0001の画像問題は解消。PR #1000で3枚の画像をdocs/企画/BLOG-0001/images/へ保存し、PR #1001で掲載用HTMLの画像参照6か所をGitHub raw URLへ変更。両PRはたかがマージ済み。たかがWordPress下書きへHTMLを貼り付け、画像3枚の表示を確認済み（2026-10-11）。残るWordPress作業はサイトアイコン、表示・更新・運用確認、本番化判断。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-07",
-      "updated_at": "2026-10-09",
+      "updated_at": "2026-10-11",
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
@@ -683,8 +683,8 @@
           {
             "id": "blog1-image",
             "title": "BLOG-0001の画像問題を解消",
-            "status": "pending",
-            "evidence": "宿題（2026-10-09）。Dropboxの /BLOG1画像/ に blog001-01.jpg（143,397 bytes）、blog001-02.jpg（184,772 bytes）、blog001-03.jpg（227,962 bytes）が存在し、JPEGファイルとして確認済み。現時点では画像バイナリを作業環境へ取り込めていないため、寸法確認・GitHub画像登録・docs/企画/BLOG-0001_Blogger掲載用.html の画像参照をGitHub画像URLへ変更する作業は未完了。次回、作業PCから3ファイルをこのチャットへ添付して再開し、PR・merge後に公開表示を確認する。"
+            "status": "done",
+            "evidence": "PR #1000で3枚の画像をGitHubへ保存、PR #1001でHTMLの画像参照6か所をGitHub raw URLへ変更。両PRマージ済み。2026-10-11、たかがWordPress下書きへHTMLを貼り付け、画像3枚が表示できることを確認。"
           },
           {
             "id": "operation-check",
@@ -697,7 +697,7 @@
             "status": "pending"
           }
         ],
-        "updated_at": "2026-10-09"
+        "updated_at": "2026-10-11"
       }
     },
     {
