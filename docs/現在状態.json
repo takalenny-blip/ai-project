@@ -12,9 +12,9 @@
     "work_queue": "work_itemsを唯一の作業キュー正本とし、各work_itemは実作業の途中成果をprogress.stepsへ構造化して保持する。status/readiness/execution_stateは作業全体の状態を表し、next_stepは未完了のactionable候補から導出する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-10-10T16-20-54.209214+0900",
-    "latest_path": "直チャット/2026-10-10_直チャット即時保存_2026-10-10T16-20-54.209214+0900.md",
-    "latest_content_sha": "0878b26159727479738da9a0b7a135ac51f7c3cb",
+    "latest_saved": "2026-10-10T16-44-11.494257+0900",
+    "latest_path": "直チャット/2026-10-10_直チャット即時保存_2026-10-10T16-44-11.494257+0900.md",
+    "latest_content_sha": "c5ffe3e305db456edcbc2dd5099387b432bbe5e7",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
