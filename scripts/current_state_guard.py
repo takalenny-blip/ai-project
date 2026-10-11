@@ -173,17 +173,23 @@ def validate_completed_step_prose(state: dict) -> None:
             if isinstance(value, str):
                 prose_fields.append(f"work_items[{item.get('id')}].{key}: {value}")
 
-    # Semantic aliases are explicit because Japanese descriptions do not have
-    # reliable word boundaries. Add a rule when a recurring status phrase needs
-    # a machine-checkable relationship to a canonical progress step.
-    rules = (
-        {
-            "work_item_id": "WP無料ホスティング検証",
-            "step_id": "wp-icon",
-            "keywords": ("サイトアイコン", "実表示確認"),
-            "stale_markers": ("未完了", "未確認", "未実施", "残る作業"),
-        },
-    )
+    # Rules live in the canonical state so new work/status vocabularies can
+    # be covered without editing the guard implementation itself.
+    rules = state.get("prose_status_consistency_rules", [])
+    if not isinstance(rules, list):
+        fail("prose_status_consistency_rules must be a list")
+    for index, rule in enumerate(rules):
+        if not isinstance(rule, dict):
+            fail(f"prose_status_consistency_rules[{index}] must be an object")
+        for field in ("work_item_id", "step_id", "keywords", "stale_markers"):
+            if not rule.get(field):
+                fail(f"prose_status_consistency_rules[{index}].{field} is required")
+        if (not isinstance(rule["keywords"], list)
+                or not all(isinstance(value, str) and value for value in rule["keywords"])):
+            fail(f"prose_status_consistency_rules[{index}].keywords must be non-empty strings")
+        if (not isinstance(rule["stale_markers"], list)
+                or not all(isinstance(value, str) and value for value in rule["stale_markers"])):
+            fail(f"prose_status_consistency_rules[{index}].stale_markers must be non-empty strings")
     items = {item.get("id"): item for item in state.get("work_items", [])}
     for rule in rules:
         item = items.get(rule["work_item_id"])
