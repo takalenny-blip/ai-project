@@ -16,18 +16,22 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.state_path = ROOT / "docs" / "現在状態.json"
         self.state = json.loads(self.state_path.read_text(encoding="utf-8"))
 
-    def test_current_state_work_queue_is_valid_and_selects_gsc_sitemap_troubleshooting(self):
+    def test_current_state_work_queue_marks_url_checks_done_and_waits_for_google(self):
         validate_work_items(self.state["work_items"])
         actionable = select_actionable(self.state["work_items"], self.state["updated"])
         self.assertTrue(actionable)
         self.assertEqual(self.state["next_step"]["id"], actionable[0]["id"])
-        self.assertEqual(actionable[0]["id"], "GSC-確認")
-        self.assertTrue(any(item["id"] == "WP無料ホスティング検証" for item in actionable))
+        self.assertEqual(actionable[0]["id"], "WP無料ホスティング検証")
+        self.assertEqual([item["id"] for item in actionable], ["WP無料ホスティング検証"])
         gsc = next(item for item in self.state["work_items"] if item["id"] == "GSC-確認")
         gsc_steps = {step["id"]: step for step in gsc["progress"]["steps"]}
-        self.assertEqual(gsc["progress"]["current_step"], "site-index-status-check")
+        self.assertEqual(gsc["execution_state"], "waiting_external")
+        self.assertTrue(gsc.get("wait_reason"))
+        self.assertEqual(gsc["progress"]["current_step"], "github-pages-sitemap-retrieval")
         self.assertEqual(gsc_steps["github-pages-robots-txt"]["status"], "done")
+        self.assertEqual(gsc_steps["site-index-status-check"]["status"], "done")
         self.assertEqual(gsc_steps["github-pages-sitemap-retrieval"]["status"], "waiting_external")
+        self.assertIn("再実施しない", gsc_steps["site-index-status-check"]["evidence"])
 
     def test_current_state_preserves_structured_progress(self):
         wp = next(item for item in self.state["work_items"] if item["id"] == "WP無料ホスティング検証")
