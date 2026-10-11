@@ -2,6 +2,7 @@
 """Build the BLOG-0003 production page for GitHub Pages."""
 
 from pathlib import Path
+import html as html_module
 import re
 import shutil
 
@@ -272,44 +273,6 @@ robots_txt = """User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.githu
 (DIST / "robots.txt").write_text(robots_txt, encoding="utf-8")
 
 
-html_sitemap = """<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>サイトマップ｜たか’sブログ</title>
-<meta name="description" content="たか’sブログの記事一覧。">
-<link rel="canonical" href="https://takalenny-blip.github.io/ai-project/sitemap.html">
-<style>
-* { box-sizing: border-box; }
-body { margin: 0; background: #363636; color: #eee7db; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; line-height: 1.9; }
-main { max-width: 850px; margin: 0 auto; padding: 48px 24px 72px; }
-h1 { font-family: Georgia, "Noto Serif JP", serif; font-weight: 500; }
-p { color: #aaa093; }
-ul { list-style: none; padding: 0; }
-li { padding: 18px 0; border-bottom: 1px solid #3d3933; }
-a { color: #c4a46a; text-decoration: none; }
-a:hover { text-decoration: underline; }
-.home { display: inline-block; margin-top: 30px; }
-</style>
-</head>
-<body>
-<main>
-<h1>サイトマップ</h1>
-<p>たか’sブログの記事一覧</p>
-<ul>
-<li><a href="./">トップページ｜たか’sブログ</a></li>
-<li><a href="ai-blog-start.html">第1部｜AIとのやりとりを残してみる――それは「便利そうだな」から始まった</a></li>
-<li><a href="vaio-p-again-and-beyond.html">第2部｜もう一度動かしてみた――その先で考えたこと</a></li>
-<li><a href="github-ai-conversation.html">第3部｜GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか</a></li>
-</ul>
-<a class="home" href="./">← トップページへ戻る</a>
-</main>
-</body>
-</html>
-"""
-(DIST / "sitemap.html").write_text(html_sitemap, encoding="utf-8")
-
 (DIST / "index.html").write_text(home, encoding="utf-8")
 (DIST / PERMALINK).write_text(page, encoding="utf-8")
 
@@ -371,6 +334,76 @@ missing = [
 ]
 if missing:
     raise SystemExit("missing local images: " + ", ".join(sorted(set(missing))))
+
+
+def build_html_sitemap():
+    base_url = "https://takalenny-blip.github.io/ai-project"
+    public_pages = []
+    for page_path in sorted(DIST.glob("*.html")):
+        if page_path.name == "sitemap.html":
+            continue
+        page_html = page_path.read_text(encoding="utf-8")
+        canonical_match = re.search(
+            r'<link rel="canonical" href="([^"]+)"',
+            page_html,
+        )
+        title_match = re.search(r"<title>(.*?)</title>", page_html, re.DOTALL)
+        if not canonical_match or not title_match:
+            continue
+        canonical_url = html_module.unescape(canonical_match.group(1))
+        if canonical_url.rstrip("/") != base_url and not canonical_url.startswith(base_url + "/"):
+            continue
+        href = "./" if page_path.name == "index.html" else page_path.name
+        title = html_module.unescape(title_match.group(1).strip())
+        public_pages.append((href, title))
+
+    if not any(href == "./" for href, _ in public_pages):
+        raise SystemExit("HTML sitemap generation failed: public homepage is missing")
+    if not public_pages:
+        raise SystemExit("HTML sitemap generation failed: no public pages found")
+
+    links = "\n".join(
+        f'<li><a href="{html_module.escape(href, quote=True)}">{html_module.escape(title)}</a></li>'
+        for href, title in public_pages
+    )
+    html_sitemap = f"""<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サイトマップ｜たか’sブログ</title>
+<meta name="description" content="たか’sブログの記事一覧。">
+<link rel="canonical" href="{base_url}/sitemap.html">
+<style>
+* {{ box-sizing: border-box; }}
+body {{ margin: 0; background: #363636; color: #eee7db; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif; line-height: 1.9; }}
+main {{ max-width: 850px; margin: 0 auto; padding: 48px 24px 72px; }}
+h1 {{ font-family: Georgia, "Noto Serif JP", serif; font-weight: 500; }}
+p {{ color: #aaa093; }}
+ul {{ list-style: none; padding: 0; }}
+li {{ padding: 18px 0; border-bottom: 1px solid #3d3933; }}
+a {{ color: #c4a46a; text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}
+.home {{ display: inline-block; margin-top: 30px; }}
+</style>
+</head>
+<body>
+<main>
+<h1>サイトマップ</h1>
+<p>たか’sブログの記事一覧</p>
+<ul>
+{links}
+</ul>
+<a class="home" href="./">← トップページへ戻る</a>
+</main>
+</body>
+</html>
+"""
+    (DIST / "sitemap.html").write_text(html_sitemap, encoding="utf-8")
+    print(f"built {DIST / 'sitemap.html'} with {len(public_pages)} public pages")
+
+
+build_html_sitemap()
 
 print(f"built {DIST / 'index.html'}")
 print(f"built {DIST / PERMALINK}")
