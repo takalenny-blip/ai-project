@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPress公開済みのBLOG-0001・BLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする。サイトアイコン画像はPR #962で保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」と引用記号・吹き出し・コマンド／スクリプト表示の見直しは、たかの確認により完了。GitHub Pagesのトップページは現在404ではない（2026-10-11、たか確認）。sitemap.xmlのブラウザーHTTP 200・application/xml・XML内4 URLの表示とURLライブテスト成功を確認済み。GSCのサイトマップ取得エラーの原因切り分けは実施済みで、現時点はGoogle側の処理待ち。GSCでの正常化は未確認。URL検査ではVAIO P記事は登録済み、GitHub編記事はクロール済み・インデックス未登録、トップページは未認識だが登録リクエストはキュー追加済み。GitHub Pagesの未確認URLとWordPressのインデックス状況は未確認。Bloggerは下書き・表示確認用としてnoindex化して閉じる方針。2026-10-09に設定変更したとのユーザー報告あり。設定保存・記事応答・Google検索結果からの除外は未検証だが、2026-10-11のユーザー判断により追加確認の作業キューから除外。",
+    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。更新・保存確認は既に複数回実施済みのため再確認しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。WordPressのGSCインデックス状況は未確認でGSC-確認に残す。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-11",
@@ -321,7 +321,7 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "PR #962で64pxのサイトアイコン画像をdocs/assets/site-icon.pngへ保存したが、WordPress管理画面への適用・実表示確認の証拠はない。PR #942ではrobots.txt公開確認済み一方、GSC sitemap.xmlの取得失敗（型不明・取得不可・0件）が未解決として残っている。2026-10-09にPR/実作業記録とwork_itemsを再照合。 たかより2026-10-08にBloggerの3記事すべてのインデックス登録成功を確認したとの訂正あり。GitHub Pages・WordPressの状況とは分けて管理する。 2026-10-09、たかの方針変更により、WordPressを本番公開先、Bloggerを下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする役割分離を採用。ブログタイトル検索でGitHub Pagesが上位表示されたことが変更の契機。 2026-10-09、たかがBloggerの「検索エンジンに表示」をオフ、カスタムrobotsヘッダータグ3項目へnoindex設定したと報告。設定の再確認・記事応答・Google検索結果からの除外は未確認。 2026-10-09、たかがCocoonスキン「モノクロ」を選択。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出し、コマンド・スクリプトの見た目の検討を完了したと報告。バドによる独立した公開ページの実表示確認は未実施。 2026-10-10、たかが作業PCでGitHub Pages sitemap.xmlのHTTP 200 OK / application/xml、XML内4 URLすべての表示可能を確認。ブラウザ側の取得・MIME・URL表示は確認済みだが、GSCの取得失敗原因は未確定。 2026-10-10のGSC確認：サイトマップ詳細は最終読み込み2026/10/09、検出ページ0、動画0、追加エラー詳細なし。sitemap.xmlのURLライブテストはクロール許可=はい、ページ取得=成功、インデックス許可=はい。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLはいずれも自身。vaio-p-again-and-beyond.htmlはインデックス登録済み。トップページは「URLがGoogleに認識されていません」、サイトマップ・参照元ページとも検出なし。トップページのライブテストは2026/10/10 17:53:48に取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは優先クロールキューに追加済み。登録完了は未確認。 2026-10-11、たかよりBLOG-0001もWordPressで公開済みとの訂正あり。正本のWordPress作業記録を修正し、BLOG-0001の公開を完了として反映。 2026-10-11、たかよりGitHub Pagesトップページは404になっていないとの訂正あり。GSC sitemap.xml取得失敗の原因切り分けは実施済みで、現在はGoogle側の処理待ちとの判断。"
+      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。更新・保存確認は既に繰り返し実施済みで再確認不要。WordPressのGSCインデックス状況は未確認としてGSC-確認に残す。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。独立して未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認が未完了。",
     "next_focus": "Google側のGSC sitemap.xml処理待ちを維持し、原因切り分けを再実行しない。実行可能な別作業として、未確認のGitHub Pages URLとWordPressのインデックス登録状況を個別確認する。WordPressではサイトアイコン画像の適用・実表示確認、表示・更新・運用確認、本番化判断が未完了。"
@@ -597,8 +597,8 @@
       "depends_on": [],
       "not_before": null,
       "scope": "experience-log_to_Blogger",
-      "target": "WordPress公開済みのBLOG-0001・BLOG-0002・BLOG-0003を継続運用し、サイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断を進める。BLOG-0001の画像登録・HTML参照更新・WordPress下書きでの表示確認は完了。",
-      "evidence": "BLOG-0001はWordPressで公開済み。画像問題は解消。PR #1000で3枚の画像をdocs/企画/BLOG-0001/images/へ保存し、PR #1001で掲載用HTMLの画像参照6か所をGitHub raw URLへ変更。両PRはたかがマージ済み。たかがWordPress下書きへHTMLを貼り付け、画像3枚の表示を確認済み（2026-10-11）。残るWordPress作業はサイトアイコン、表示・更新・運用確認、本番化判断。",
+      "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
+      "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressのGSCインデックス状況は未確認としてGSC-確認に残す。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -607,7 +607,7 @@
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "wp-icon",
+        "current_step": "ongoing-publication",
         "steps": [
           {
             "id": "free-account",
@@ -671,8 +671,8 @@
           {
             "id": "wp-icon",
             "title": "WordPressへサイトアイコン画像を適用して実表示を確認する",
-            "status": "in_progress",
-            "evidence": "画像ファイル自体はPR #962でdocs/assets/site-icon.pngへ保存・マージ済み。WordPress管理画面への適用と実表示確認は未確認。"
+            "status": "done",
+            "evidence": "2026-10-11、たか確認：WordPressの設定画面とブラウザーのタブ／サイト表示でサイトアイコンを確認。"
           },
           {
             "id": "wp-design-template",
@@ -689,18 +689,26 @@
           {
             "id": "operation-check",
             "title": "WordPressの表示・更新・運用確認",
-            "status": "pending"
+            "status": "done",
+            "evidence": "2026-10-11、たか確認：本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は既に複数回実施済みのため重複確認不要。"
           },
           {
             "id": "wordpress-production-judgment",
             "title": "WordPress本番化を判断し現在状態へ反映",
-            "status": "pending"
+            "status": "done",
+            "evidence": "2026-10-11、確認済み実績を根拠にWordPressを本番公開先として継続運用する判断を記録。WordPressのGSCインデックス状況は未確認のまま別作業で追跡。"
+          },
+          {
+            "id": "ongoing-publication",
+            "title": "WordPress本番公開先として継続運用",
+            "status": "in_progress",
+            "evidence": "本番公開先として運用中。新たな不具合・変更要求が発生した場合のみ対応し、完了済み表示確認を繰り返さない。"
           }
         ],
         "updated_at": "2026-10-11"
       }
     }
   ],
-  "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。独立して未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認が未完了。",
-  "next_focus": "Google側のGSC sitemap.xml処理待ちを維持し、原因切り分けを再実行しない。実行可能な別作業として、未確認のGitHub Pages URLとWordPressのインデックス登録状況を個別確認する。WordPressではサイトアイコン画像の適用・実表示確認、表示・更新・運用確認、本番化判断が未完了。"
+  "next_stage_boundary": "WordPress本番運用の判断とサイトアイコン・記事表示・画像・本文表現・モバイル表示の確認を2026-10-11に反映済み。完了済み確認を繰り返さない。残る別作業はGSC-確認。",
+  "next_focus": "優先作業はGSC-確認。Google側のsitemap.xml処理待ちは維持し、原因切り分けを繰り返さない。作業PCで未確認のGitHub Pages URLとWordPressインデックス状況を個別確認する。WordPressの確認済み工程は再実施しない。"
 }
