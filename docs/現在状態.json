@@ -323,8 +323,8 @@
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
       "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。更新・保存確認は既に繰り返し実施済みで再確認不要。WordPressのGSCインデックス状況は未確認としてGSC-確認に残す。"
     },
-    "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。独立して未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認が未完了。",
-    "next_focus": "Google側のGSC sitemap.xml処理待ちを維持し、原因切り分けを再実行しない。実行可能な別作業として、未確認のGitHub Pages URLとWordPressのインデックス登録状況を個別確認する。WordPressではサイトアイコン画像の適用・実表示確認、表示・更新・運用確認、本番化判断が未完了。"
+    "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。独立して未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認は完了済み。",
+    "next_focus": "Google側のGSC sitemap.xml処理待ちを維持し、原因切り分けを再実行しない。実行可能な別作業として、未確認のGitHub Pages URLとWordPressのインデックス登録状況を個別確認する。WordPressではサイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断は完了済み。"
   },
   "next_step": {
     "id": "GSC-確認",
@@ -474,6 +474,14 @@
     },
     "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
   },
+  "prose_status_consistency_rules": [
+    {
+      "work_item_id": "WP無料ホスティング検証",
+      "step_id": "wp-icon",
+      "keywords": ["サイトアイコン", "実表示確認"],
+      "stale_markers": ["未完了", "未確認", "未実施", "残る作業"]
+    }
+  ],
   "work_items": [
     {
       "id": "GSC-確認",
