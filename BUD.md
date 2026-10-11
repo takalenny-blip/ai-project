@@ -16,21 +16,18 @@
 
 ## 現在地点
 
-**WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。更新・保存確認は既に複数回実施済みのため再確認しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。WordPressのGSCインデックス状況は未確認でGSC-確認に残す。**
+**WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。**
 
 ## 作業キュー
 
-- actionable：2件
+- actionable：1件
 - 一覧：
-- [GSC-確認] priority=20：GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する
-  - 未完了工程：github-pages-sitemap-retrieval [waiting_external] Google側のGSC sitemap.xml処理待ち
-  - 未完了工程：site-index-status-check [in_progress] GitHub Pages・WordPressのインデックス登録状況を個別確認
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
   - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
 
-- [GSC-確認] Google側のGSC sitemap.xml処理待ちを維持しつつ、未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。サイトマップの原因切り分けとGSCサイトマップ詳細の再確認は、Google側の処理結果が変化するまで繰り返さない。GSCプロパティ登録は再実行しない。
+- [WP無料ホスティング検証] WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → WordPress本番公開**

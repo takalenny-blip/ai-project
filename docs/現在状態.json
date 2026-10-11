@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。更新・保存確認は既に複数回実施済みのため再確認しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。WordPressのGSCインデックス状況は未確認でGSC-確認に残す。",
+    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-11",
@@ -321,21 +321,21 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。更新・保存確認は既に繰り返し実施済みで再確認不要。WordPressのGSCインデックス状況は未確認としてGSC-確認に残す。"
+      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認も実施済みで再確認不要。WordPress各URLの具体的な登録結果は正本記録に残っていないため、登録済み／未登録を推定しない。GSC sitemap.xmlはGoogle側の処理結果待ち。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。独立して未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認は完了済み。",
     "next_focus": "Google側のGSC sitemap.xml処理待ちを維持し、原因切り分けを再実行しない。実行可能な別作業として、未確認のGitHub Pages URLとWordPressのインデックス登録状況を個別確認する。WordPressではサイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断は完了済み。"
   },
   "next_step": {
-    "id": "GSC-確認",
-    "title": "GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する",
-    "priority": 20,
+    "id": "WP無料ホスティング検証",
+    "title": "WordPress公開環境の整備",
+    "priority": 23,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
-    "scope": "experience_log_to_blogger",
-    "target": "Google側のGSC sitemap.xml処理待ちを維持しつつ、未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。サイトマップの原因切り分けとGSCサイトマップ詳細の再確認は、Google側の処理結果が変化するまで繰り返さない。GSCプロパティ登録は再実行しない。",
-    "evidence": "2026-10-10確認結果：sitemap.xml詳細は最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」。sitemap.xmlはブラウザーでHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能。sitemap.xml自身のURLライブテストはクロール許可=はい、取得=成功、インデックス許可=はいだが、GSCサイトマップ処理の成功を意味しない。URL検査：vaio-p-again-and-beyond.htmlはインデックス登録済み。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLは自身、参照元サイトマップなし。トップページは「URLがGoogleに認識されていません」、参照元サイトマップ・参照元ページなし。トップページのライブテストは2026/10/10 17:53:48、取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは「URLを優先クロールキューに追加しました」と受け付けられた。インデックス登録結果は未確認。未確認のai-blog-start.htmlとWordPressのインデックス状況を次に確認する。Bloggerの3記事は登録成功確認済みのため再確認せず、GSC登録も再実行しない。 2026-10-11、たかより原因切り分けは実施済みでGoogle側の処理待ちとの確認。トップページは404になっていないとの訂正あり。",
+    "scope": "experience-log_to_Blogger",
+    "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
+    "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressのGSCインデックス状況は未確認としてGSC-確認に残す。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -504,23 +504,23 @@
   "work_items": [
     {
       "id": "GSC-確認",
-      "title": "GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する",
+      "title": "GSCサイトマップ処理待ち（URL検査・表示確認は実施済み）",
       "priority": 20,
       "status": "in_progress",
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
-      "target": "Google側のGSC sitemap.xml処理待ちを維持しつつ、未確認のGitHub Pages URLとWordPressのインデックス状況を個別確認する。サイトマップの原因切り分けとGSCサイトマップ詳細の再確認は、Google側の処理結果が変化するまで繰り返さない。GSCプロパティ登録は再実行しない。",
-      "evidence": "2026-10-10確認結果：sitemap.xml詳細は最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」。sitemap.xmlはブラウザーでHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能。sitemap.xml自身のURLライブテストはクロール許可=はい、取得=成功、インデックス許可=はいだが、GSCサイトマップ処理の成功を意味しない。URL検査：vaio-p-again-and-beyond.htmlはインデックス登録済み。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLは自身、参照元サイトマップなし。トップページは「URLがGoogleに認識されていません」、参照元サイトマップ・参照元ページなし。トップページのライブテストは2026/10/10 17:53:48、取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは「URLを優先クロールキューに追加しました」と受け付けられた。インデックス登録結果は未確認。未確認のai-blog-start.htmlとWordPressのインデックス状況を次に確認する。Bloggerの3記事は登録成功確認済みのため再確認せず、GSC登録も再実行しない。 2026-10-11、たかより原因切り分けは実施済みでGoogle側の処理待ちとの確認。トップページは404になっていないとの訂正あり。",
+      "target": "Google側のGSC sitemap.xml処理結果を待つ。GitHub Pagesトップページの404確認、GitHub Pages・WordPress各URLのインデックス状況確認は実施済みのため再実行しない。Google側の処理結果が変化した場合だけ記録を更新する。GSCプロパティ登録・原因切り分け・同じURL検査を繰り返さない。",
+      "evidence": "2026-10-10確認結果：sitemap.xml詳細は最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」。sitemap.xmlはブラウザーでHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能。sitemap.xml自身のURLライブテストはクロール許可=はい、取得=成功、インデックス許可=はいだが、GSCサイトマップ処理の成功を意味しない。URL検査：vaio-p-again-and-beyond.htmlはインデックス登録済み。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLは自身、参照元サイトマップなし。トップページは「URLがGoogleに認識されていません」、参照元サイトマップ・参照元ページなし。トップページのライブテストは2026/10/10 17:53:48、取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは「URLを優先クロールキューに追加しました」と受け付けられた。インデックス登録結果は未確認。未確認のai-blog-start.htmlとWordPressのインデックス状況を次に確認する。Bloggerの3記事は登録成功確認済みのため再確認せず、GSC登録も再実行しない。 2026-10-11、たかより原因切り分けは実施済みでGoogle側の処理待ちとの確認。トップページは404になっていないとの訂正あり。 2026-10-11、たかより追加確認：GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含む対象確認はすべて実施済み。これらの確認作業を再度の未完了タスクとして提示しない。今回の正本にWordPress各URLの具体的な登録結果が残っていないため、登録済み／未登録を推定して記載しない。既知のGitHub Pages URL検査結果は履歴として保持し、同じ検査を再実施しない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-06",
       "updated_at": "2026-10-11",
       "prerequisites": [],
-      "execution_state": "actionable",
+      "execution_state": "waiting_external",
       "progress": {
-        "current_step": "site-index-status-check",
+        "current_step": "github-pages-sitemap-retrieval",
         "steps": [
           {
             "id": "github-pages-registration",
@@ -542,15 +542,15 @@
           },
           {
             "id": "github-pages-sitemap-retrieval",
-            "title": "Google側のGSC sitemap.xml処理待ち",
+            "title": "Google側のGSC sitemap.xml処理結果待ち",
             "status": "waiting_external",
-            "evidence": "GSCサイトマップ詳細：最終読み込み2026/10/09、検出ページ0、検出動画0、追加エラー詳細なし、「サイトマップを読み込めませんでした」。2026-10-10のライブテストではsitemap.xmlのクロール許可=はい、ページ取得=成功、インデックス登録許可=はい。作業PCブラウザーでもHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能を確認済み。ただし、URLライブテストの取得成功はGSCサイトマップ処理の成功を証明しない。原因は未確定。 2026-10-11、たか確認：原因切り分けは実施済み。Google側の処理待ちであり、再調査を繰り返さない。"
+            "evidence": "GSCサイトマップ詳細：最終読み込み2026/10/09、検出ページ0、検出動画0、追加エラー詳細なし、「サイトマップを読み込めませんでした」。2026-10-10のライブテストではsitemap.xmlのクロール許可=はい、ページ取得=成功、インデックス登録許可=はい。作業PCブラウザーでもHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能を確認済み。ただし、URLライブテストの取得成功はGSCサイトマップ処理の成功を証明しない。2026-10-11、たか確認：原因切り分けは実施済み。Google側の処理結果待ちであり、原因調査・サイトマップ詳細の再確認を繰り返さない。"
           },
           {
             "id": "site-index-status-check",
-            "title": "GitHub Pages・WordPressのインデックス登録状況を個別確認",
-            "status": "in_progress",
-            "evidence": "2026-10-10、GitHub PagesのURL検査結果を個別確認。vaio-p-again-and-beyond.htmlは登録済み。github-ai-conversation.htmlはクロール済み・インデックス未登録（前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、正規URLは自身）。トップページはGoogleに認識されておらず、参照元サイトマップ・参照元ページなし。ただしトップページのライブテストは2026/10/10 17:53:48に取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは優先クロールキューへ追加済み。登録結果は未確認。未確認のai-blog-start.htmlとWordPressのインデックス状況を個別確認する。Bloggerの登録済み3記事は再確認対象外。 次工程は未確認URLとWordPressのインデックス状況の個別確認。サイトマップ原因切り分けは再実行しない。"
+            "title": "GitHub Pages・WordPressのインデックス状況確認（確認作業完了）",
+            "status": "done",
+            "evidence": "2026-10-11、たかより確認作業すべて完了との明示。対象にはGitHub Pagesトップページが現在404にならないことの確認、およびWordPressトップページ・BLOG-0001〜0003のインデックス状況確認を含む。確認作業の実施は完了として扱い、再実施しない。正本にWordPress各URLの具体的な登録結果が残っていないため、実際の登録状態は推定せず未記録として区別する。GitHub Pagesの既知の過去結果（vaio-p-again-and-beyond.html登録済み、github-ai-conversation.htmlクロール済み・未登録、トップページは過去に未認識・優先クロール要求済み）は履歴として保持する。"
           },
           {
             "id": "work-pc-http-headers",
@@ -560,7 +560,8 @@
           }
         ],
         "updated_at": "2026-10-11"
-      }
+      },
+      "wait_reason": "Google側のGSC sitemap.xml処理結果待ち。対象URLの確認作業は実施済みで、再確認しない。"
     },
     {
       "id": "BLOG-0004",
@@ -736,6 +737,6 @@
       }
     }
   ],
-  "next_stage_boundary": "WordPress本番運用の判断とサイトアイコン・記事表示・画像・本文表現・モバイル表示の確認を2026-10-11に反映済み。完了済み確認を繰り返さない。残る別作業はGSC-確認。",
-  "next_focus": "優先作業はGSC-確認。Google側のsitemap.xml処理待ちは維持し、原因切り分けを繰り返さない。作業PCで未確認のGitHub Pages URLとWordPressインデックス状況を個別確認する。WordPressの確認済み工程は再実施しない。"
+  "next_stage_boundary": "WordPress本番運用の判断とサイトアイコン・記事表示・画像・本文表現・モバイル表示の確認を2026-10-11に反映済み。GitHub Pagesトップページが404ではないことの確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認も実施済み。確認作業を繰り返さない。WordPress各URLの具体的な登録結果は正本記録に残っていないため推定しない。GSC sitemap.xmlのGoogle側処理結果待ちだけを維持する。",
+  "next_focus": "Google側のGSC sitemap.xml処理結果待ちを維持する。GitHub Pagesトップページの404確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認、その他のURL検査、サイトマップ原因切り分けは再実行しない。Google側の処理結果が変化した場合だけ正本を更新する。"
 }
