@@ -16,7 +16,7 @@
 
 ## 現在地点
 
-**WordPress公開済みのBLOG-0001・BLOG-0002・BLOG-0003を本番公開先として継続運用する。Bloggerは下書き・表示確認の作業場所、GitHub Pagesだけを予備公開サイトとする。サイトアイコン画像はPR #962で保存済みだが、WordPressへの適用・実表示確認は未確認。Cocoonスキン「モノクロ」と引用記号・吹き出し・コマンド／スクリプト表示の見直しは、たかの確認により完了。GitHub Pagesのトップページは現在404ではない（2026-10-11、たか確認）。sitemap.xmlのブラウザーHTTP 200・application/xml・XML内4 URLの表示とURLライブテスト成功を確認済み。GSCのサイトマップ取得エラーの原因切り分けは実施済みで、現時点はGoogle側の処理待ち。GSCでの正常化は未確認。URL検査ではVAIO P記事は登録済み、GitHub編記事はクロール済み・インデックス未登録、トップページは未認識だが登録リクエストはキュー追加済み。GitHub Pagesの未確認URLとWordPressのインデックス状況は未確認。Bloggerは下書き・表示確認用としてnoindex化して閉じる方針。2026-10-09に設定変更したとのユーザー報告あり。設定保存・記事応答・Google検索結果からの除外は未検証だが、2026-10-11のユーザー判断により追加確認の作業キューから除外。**
+**WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。更新・保存確認は既に複数回実施済みのため再確認しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。WordPressのGSCインデックス状況は未確認でGSC-確認に残す。**
 
 ## 作業キュー
 
@@ -26,9 +26,7 @@
   - 未完了工程：github-pages-sitemap-retrieval [waiting_external] GSC sitemap.xml取得失敗の原因切り分け
   - 未完了工程：site-index-status-check [in_progress] GitHub Pages・WordPressのインデックス登録状況を個別確認
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
-  - 未完了工程：wp-icon [in_progress] WordPressへサイトアイコン画像を適用して実表示を確認する
-  - 未完了工程：operation-check [pending] WordPressの表示・更新・運用確認
-  - 未完了工程：wordpress-production-judgment [pending] WordPress本番化を判断し現在状態へ反映
+  - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
 
