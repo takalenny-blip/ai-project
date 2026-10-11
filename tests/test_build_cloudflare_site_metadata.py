@@ -43,6 +43,28 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか",
         )
 
+    def test_html_sitemap_lists_all_public_pages(self):
+        html = (DIST / "sitemap.html").read_text(encoding="utf-8")
+        self.assertIn("<title>サイトマップ｜たか’sブログ</title>", html)
+        self.assertIn('rel="canonical" href="https://takalenny-blip.github.io/ai-project/sitemap.html"', html)
+        for permalink in (
+            "./",
+            "ai-blog-start.html",
+            "vaio-p-again-and-beyond.html",
+            "github-ai-conversation.html",
+        ):
+            self.assertIn(f'href="{permalink}"', html)
+
+    def test_home_and_article_pages_link_to_html_sitemap(self):
+        for permalink in (
+            "index.html",
+            "ai-blog-start.html",
+            "vaio-p-again-and-beyond.html",
+            "github-ai-conversation.html",
+        ):
+            html = (DIST / permalink).read_text(encoding="utf-8")
+            self.assertIn('href="sitemap.html">サイトマップ</a>', html)
+
 
 if __name__ == "__main__":
     unittest.main()
