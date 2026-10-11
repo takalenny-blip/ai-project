@@ -167,11 +167,18 @@ def validate_completed_step_prose(state: dict) -> None:
         value = current.get(key)
         if isinstance(value, str):
             prose_fields.append(f"current_position.{key}: {value}")
+    next_step = state.get("next_step", {})
+    if isinstance(next_step.get("title"), str):
+        prose_fields.append(f"next_step.title: {next_step['title']}")
     for item in state.get("work_items", []):
         for key in ("title", "target", "blocked_reason"):
             value = item.get(key)
             if isinstance(value, str):
                 prose_fields.append(f"work_items[{item.get('id')}].{key}: {value}")
+        for step in item.get("progress", {}).get("steps", []):
+            value = step.get("title")
+            if isinstance(value, str):
+                prose_fields.append(f"work_items[{item.get('id')}].progress.steps[{step.get('id')}].title: {value}")
 
     # Rules live in the canonical state so new work/status vocabularies can
     # be covered without editing the guard implementation itself.
@@ -184,6 +191,9 @@ def validate_completed_step_prose(state: dict) -> None:
         for field in ("work_item_id", "step_id", "keywords", "stale_markers"):
             if not rule.get(field):
                 fail(f"prose_status_consistency_rules[{index}].{field} is required")
+        expected_status = rule.get("expected_step_status", "done")
+        if expected_status not in {"pending", "in_progress", "waiting_external", "done"}:
+            fail(f"prose_status_consistency_rules[{index}].expected_step_status is invalid")
         if (not isinstance(rule["keywords"], list)
                 or not all(isinstance(value, str) and value for value in rule["keywords"])):
             fail(f"prose_status_consistency_rules[{index}].keywords must be non-empty strings")
@@ -197,14 +207,16 @@ def validate_completed_step_prose(state: dict) -> None:
             continue
         steps = item.get("progress", {}).get("steps", [])
         step = next((s for s in steps if s.get("id") == rule["step_id"]), None)
-        if not step or step.get("status") != "done":
+        expected_status = rule.get("expected_step_status", "done")
+        if not step or step.get("status") != expected_status:
             continue
         for entry in prose_fields:
             for sentence in entry.replace("。", "。\n").splitlines():
                 if (all(word in sentence for word in rule["keywords"])
                         and any(marker in sentence for marker in rule["stale_markers"])):
+                    status_label = "completed" if expected_status == "done" else expected_status
                     fail(
-                        "stale prose contradicts completed work step "
+                        f"stale prose contradicts {status_label} work step "
                         f"{rule['work_item_id']}/{rule['step_id']}: {entry}"
                     )
 

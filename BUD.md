@@ -22,8 +22,8 @@
 
 - actionable：2件
 - 一覧：
-- [GSC-確認] priority=20：GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する
-  - 未完了工程：github-pages-sitemap-retrieval [waiting_external] GSC sitemap.xml取得失敗の原因切り分け
+- [GSC-確認] priority=20：GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する
+  - 未完了工程：github-pages-sitemap-retrieval [waiting_external] Google側のGSC sitemap.xml処理待ち
   - 未完了工程：site-index-status-check [in_progress] GitHub Pages・WordPressのインデックス登録状況を個別確認
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
   - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用

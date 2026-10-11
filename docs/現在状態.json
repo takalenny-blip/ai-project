@@ -328,7 +328,7 @@
   },
   "next_step": {
     "id": "GSC-確認",
-    "title": "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する",
+    "title": "GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する",
     "priority": 20,
     "depends_on": [],
     "not_before": null,
@@ -478,14 +478,33 @@
     {
       "work_item_id": "WP無料ホスティング検証",
       "step_id": "wp-icon",
-      "keywords": ["サイトアイコン", "実表示確認"],
-      "stale_markers": ["未完了", "未確認", "未実施", "残る作業"]
+      "keywords": [
+        "サイトアイコン",
+        "実表示確認"
+      ],
+      "stale_markers": [
+        "未完了",
+        "未確認",
+        "未実施",
+        "残る作業"
+      ]
+    },
+    {
+      "work_item_id": "GSC-確認",
+      "step_id": "github-pages-sitemap-retrieval",
+      "expected_step_status": "waiting_external",
+      "keywords": [
+        "サイトマップ取得失敗"
+      ],
+      "stale_markers": [
+        "切り分け"
+      ]
     }
   ],
   "work_items": [
     {
       "id": "GSC-確認",
-      "title": "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する",
+      "title": "GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する",
       "priority": 20,
       "status": "in_progress",
       "depends_on": [],
@@ -523,7 +542,7 @@
           },
           {
             "id": "github-pages-sitemap-retrieval",
-            "title": "GSC sitemap.xml取得失敗の原因切り分け",
+            "title": "Google側のGSC sitemap.xml処理待ち",
             "status": "waiting_external",
             "evidence": "GSCサイトマップ詳細：最終読み込み2026/10/09、検出ページ0、検出動画0、追加エラー詳細なし、「サイトマップを読み込めませんでした」。2026-10-10のライブテストではsitemap.xmlのクロール許可=はい、ページ取得=成功、インデックス登録許可=はい。作業PCブラウザーでもHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能を確認済み。ただし、URLライブテストの取得成功はGSCサイトマップ処理の成功を証明しない。原因は未確定。 2026-10-11、たか確認：原因切り分けは実施済み。Google側の処理待ちであり、再調査を繰り返さない。"
           },
