@@ -253,6 +253,12 @@ class CurrentStateGuardTests(unittest.TestCase):
             "id": "WP無料ホスティング検証",
             "progress": {"steps": [{"id": "wp-icon", "status": "done"}]},
         }]
+        state["prose_status_consistency_rules"] = [{
+            "work_item_id": "WP無料ホスティング検証",
+            "step_id": "wp-icon",
+            "keywords": ["サイトアイコン", "実表示確認"],
+            "stale_markers": ["未完了", "未確認", "未実施", "残る作業"],
+        }]
         state["current_position"]["next_stage_boundary"] = (
             "サイトアイコン画像の適用・実表示確認が未完了。"
         )
@@ -264,6 +270,12 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["work_items"] = [{
             "id": "WP無料ホスティング検証",
             "progress": {"steps": [{"id": "wp-icon", "status": "done"}]},
+        }]
+        state["prose_status_consistency_rules"] = [{
+            "work_item_id": "WP無料ホスティング検証",
+            "step_id": "wp-icon",
+            "keywords": ["サイトアイコン", "実表示確認"],
+            "stale_markers": ["未完了", "未確認", "未実施", "残る作業"],
         }]
         state["current_position"]["next_focus"] = (
             "サイトアイコンの実表示確認は完了済み。WordPressのGSC状況は未確認。"
