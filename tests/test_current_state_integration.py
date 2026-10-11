@@ -44,7 +44,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         else:
             self.assertNotEqual(steps[current_step]["status"], "waiting_external")
         self.assertEqual(steps["wp-icon-asset"]["status"], "done")
-        self.assertEqual(current_step, "wp-icon")
+        self.assertEqual(current_step, "ongoing-publication")
         self.assertEqual(steps["wp-icon"]["status"], "in_progress")
 
     def test_removed_dependencies_are_not_referenced(self):
