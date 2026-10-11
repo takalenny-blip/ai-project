@@ -39,9 +39,14 @@ jobs:
             *.md) ;;
             *) echo "Filename must end in .md" >&2; exit 1 ;;
           esac
-          case "$EXPECTED_SIZE" in
-            ''|*[!0-9]*) echo "expected_size must be numeric" >&2; exit 1 ;;
-          esac
+          if [[ "$EXPECTED_SIZE" =~ ^[0-9]+$ ]]; then
+            :
+          elif [[ "$EXPECTED_SIZE" =~ ^[0-9]{1,3}(,[0-9]{3})+$ ]]; then
+            EXPECTED_SIZE="${EXPECTED_SIZE//,/}"
+          else
+            echo "expected_size must be numeric (digits, optionally with thousands separators)" >&2
+            exit 1
+          fi
 
       - name: Check duplicate large-file queue PR
         env:
@@ -66,6 +71,9 @@ jobs:
           FILENAME: ${{ inputs.filename }}
         run: |
           set -euo pipefail
+          if [[ "$EXPECTED_SIZE" =~ ^[0-9]{1,3}(,[0-9]{3})+$ ]]; then
+            EXPECTED_SIZE="${EXPECTED_SIZE//,/}"
+          fi
           out="${RUNNER_TEMP}/$FILENAME"
           curl --fail --location --silent --show-error --retry 2 --output "$out" "$SOURCE_URL"
           test -s "$out"
