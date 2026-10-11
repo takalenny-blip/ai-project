@@ -221,7 +221,25 @@ def validate_completed_step_prose(state: dict) -> None:
                     )
 
 
+def validate_publishing_lane_consistency(state: dict) -> None:
+    lane = state.get("primary_lane", "")
+    if "WordPress本番公開" not in lane:
+        return
+    migration = state.get("migration")
+    if not isinstance(migration, dict):
+        fail("WordPress production lane requires migration policy")
+    policy = migration.get("normal_work_policy", "")
+    stale = "Blogger自動化へ戻る"
+    if stale in policy or stale in state.get("surgery", {}).get("next_design_item", ""):
+        fail("publishing-lane prose still points back to Blogger automation")
+    required = ("Bloggerは下書き・表示確認", "WordPressは本番公開先", "GitHub Pagesは予備公開サイト")
+    missing_policy = [phrase for phrase in required if phrase not in policy]
+    if missing_policy:
+        fail("migration.normal_work_policy contradicts primary_lane; missing: " + ", ".join(missing_policy))
+
+
 def validate_state(state: dict) -> None:
+    validate_publishing_lane_consistency(state)
     missing = [key for key in REQUIRED if key not in state]
     if missing:
         fail("missing required fields: " + ", ".join(missing))
