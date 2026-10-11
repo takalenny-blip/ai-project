@@ -194,7 +194,7 @@ def validate_completed_step_prose(state: dict) -> None:
         if not step or step.get("status") != "done":
             continue
         for entry in prose_fields:
-            for sentence in entry.replace("。", "。\\n").splitlines():
+            for sentence in entry.replace("。", "。\n").splitlines():
                 if (all(word in sentence for word in rule["keywords"])
                         and any(marker in sentence for marker in rule["stale_markers"])):
                     fail(
