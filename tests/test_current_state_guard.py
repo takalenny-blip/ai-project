@@ -329,5 +329,31 @@ class CurrentStateGuardTests(unittest.TestCase):
         guard.validate_completed_step_prose(state)
 
 
+    def test_wordpress_primary_lane_rejects_stale_blogger_automation_policy(self):
+        state = self.base_state()
+        state["primary_lane"] = "experience-log → Blogger下書き確認 → WordPress本番公開"
+        state["surgery"] = {"next_design_item": "experience-log → Blogger自動化へ戻る"}
+        state["migration"] = {
+            "normal_work_policy": "経験ログを中心としたAI編集・Blogger自動化へ戻る"
+        }
+        with self.assertRaisesRegex(ValueError, "publishing-lane prose still points back to Blogger automation"):
+            guard.validate_publishing_lane_consistency(state)
+
+    def test_wordpress_primary_lane_accepts_current_publishing_policy(self):
+        state = self.base_state()
+        state["primary_lane"] = "experience-log → Blogger下書き確認 → WordPress本番公開"
+        state["surgery"] = {
+            "next_design_item": "GSC-確認完了後にBLOG-0004の企画・一次資料確認・制作へ進む"
+        }
+        state["migration"] = {
+            "normal_work_policy": (
+                "経験ログを中心としたAI編集を継続する。Bloggerは下書き・表示確認、"
+                "WordPressは本番公開先、GitHub Pagesは予備公開サイトとする。"
+            )
+        }
+        guard.validate_publishing_lane_consistency(state)
+
+
+
 if __name__ == "__main__":
     unittest.main()
