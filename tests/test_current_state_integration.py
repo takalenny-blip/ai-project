@@ -25,9 +25,9 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertTrue(any(item["id"] == "WP無料ホスティング検証" for item in actionable))
         gsc = next(item for item in self.state["work_items"] if item["id"] == "GSC-確認")
         gsc_steps = {step["id"]: step for step in gsc["progress"]["steps"]}
-        self.assertEqual(gsc["progress"]["current_step"], "github-pages-sitemap-retrieval")
+        self.assertEqual(gsc["progress"]["current_step"], "site-index-status-check")
         self.assertEqual(gsc_steps["github-pages-robots-txt"]["status"], "done")
-        self.assertEqual(gsc_steps["github-pages-sitemap-retrieval"]["status"], "in_progress")
+        self.assertEqual(gsc_steps["github-pages-sitemap-retrieval"]["status"], "waiting_external")
 
     def test_current_state_preserves_structured_progress(self):
         wp = next(item for item in self.state["work_items"] if item["id"] == "WP無料ホスティング検証")
