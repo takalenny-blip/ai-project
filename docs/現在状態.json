@@ -597,8 +597,8 @@
       "depends_on": [],
       "not_before": null,
       "scope": "experience-log_to_Blogger",
-      "target": "WordPress公開済みのBLOG-0002・BLOG-0003を継続運用し、サイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断を進める。BLOG-0001の画像登録・HTML参照更新・WordPress下書きでの表示確認は完了。",
-      "evidence": "BLOG-0001の画像問題は解消。PR #1000で3枚の画像をdocs/企画/BLOG-0001/images/へ保存し、PR #1001で掲載用HTMLの画像参照6か所をGitHub raw URLへ変更。両PRはたかがマージ済み。たかがWordPress下書きへHTMLを貼り付け、画像3枚の表示を確認済み（2026-10-11）。残るWordPress作業はサイトアイコン、表示・更新・運用確認、本番化判断。",
+      "target": "WordPress公開済みのBLOG-0001・BLOG-0002・BLOG-0003を継続運用し、サイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断を進める。BLOG-0001の画像登録・HTML参照更新・WordPress下書きでの表示確認は完了。",
+      "evidence": "BLOG-0001はWordPressで公開済み。画像問題は解消。PR #1000で3枚の画像をdocs/企画/BLOG-0001/images/へ保存し、PR #1001で掲載用HTMLの画像参照6か所をGitHub raw URLへ変更。両PRはたかがマージ済み。たかがWordPress下書きへHTMLを貼り付け、画像3枚の表示を確認済み（2026-10-11）。残るWordPress作業はサイトアイコン、表示・更新・運用確認、本番化判断。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -655,6 +655,12 @@
             "title": "BLOG-0003をWordPressで公開",
             "status": "done",
             "evidence": "たかによる公開確認"
+          },
+          {
+            "id": "blog1-publication",
+            "title": "BLOG-0001をWordPressで公開",
+            "status": "done",
+            "evidence": "2026-10-11、たかよりWordPressで公開済みとの確認。"
           },
           {
             "id": "wp-icon-asset",
