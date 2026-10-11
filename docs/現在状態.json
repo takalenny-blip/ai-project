@@ -474,6 +474,14 @@
     },
     "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
   },
+  "prose_status_consistency_rules": [
+    {
+      "work_item_id": "WP無料ホスティング検証",
+      "step_id": "wp-icon",
+      "keywords": ["サイトアイコン", "実表示確認"],
+      "stale_markers": ["未完了", "未確認", "未実施", "残る作業"]
+    }
+  ],
   "work_items": [
     {
       "id": "GSC-確認",
