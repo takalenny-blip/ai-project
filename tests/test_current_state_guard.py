@@ -247,5 +247,29 @@ class CurrentStateGuardTests(unittest.TestCase):
             guard.validate_state(state)
 
 
+    def test_stale_unfinished_prose_conflicts_with_done_step(self):
+        state = self.base_state()
+        state["work_items"] = [{
+            "id": "WP無料ホスティング検証",
+            "progress": {"steps": [{"id": "wp-icon", "status": "done"}]},
+        }]
+        state["current_position"]["next_stage_boundary"] = (
+            "サイトアイコン画像の適用・実表示確認が未完了。"
+        )
+        with self.assertRaisesRegex(ValueError, "stale prose contradicts completed work step"):
+            guard.validate_completed_step_prose(state)
+
+    def test_unrelated_unconfirmed_status_does_not_conflict_with_done_step(self):
+        state = self.base_state()
+        state["work_items"] = [{
+            "id": "WP無料ホスティング検証",
+            "progress": {"steps": [{"id": "wp-icon", "status": "done"}]},
+        }]
+        state["current_position"]["next_focus"] = (
+            "サイトアイコンの実表示確認は完了済み。WordPressのGSC状況は未確認。"
+        )
+        guard.validate_completed_step_prose(state)
+
+
 if __name__ == "__main__":
     unittest.main()
