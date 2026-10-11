@@ -1,6 +1,14 @@
 name: Publish GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/build_cloudflare_site.py'
+      - 'docs/企画/**'
+      - 'docs/site/images/**'
+      - '.github/workflows/github-pages-manual-publish.yml'
   workflow_dispatch:
     inputs:
       confirm:
@@ -19,25 +27,26 @@ concurrency:
 
 jobs:
   publish:
-    if: ${{ github.ref == 'refs/heads/main' && inputs.confirm == 'PUBLISH' }}
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.confirm == 'PUBLISH') }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout confirmed main
+      - name: Checkout triggering commit
         uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ github.sha }}
+          fetch-depth: 0
 
-      - name: Verify checkout is main
+      - name: Verify checkout matches trigger
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
 
-      - name: Build site
+      - name: Build site and HTML sitemap
         run: python3 scripts/build_cloudflare_site.py
 
       - name: Setup Pages

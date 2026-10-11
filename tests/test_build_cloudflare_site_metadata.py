@@ -43,6 +43,39 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか",
         )
 
+    def test_html_sitemap_lists_every_canonical_public_html_page(self):
+        sitemap = (DIST / "sitemap.html").read_text(encoding="utf-8")
+        self.assertIn("<title>サイトマップ｜たか’sブログ</title>", sitemap)
+        self.assertIn('rel="canonical" href="https://takalenny-blip.github.io/ai-project/sitemap.html"', sitemap)
+        public_page_count = 0
+        for page_path in sorted(DIST.glob("*.html")):
+            if page_path.name == "sitemap.html":
+                continue
+            page_html = page_path.read_text(encoding="utf-8")
+            canonical = re.search(r'<link rel="canonical" href="([^"]+)"', page_html)
+            title = re.search(r"<title>(.*?)</title>", page_html, re.DOTALL)
+            if not canonical or not title:
+                self.assertNotIn(page_path.name, sitemap)
+                continue
+            if not canonical.group(1).startswith(BASE_URL):
+                self.assertNotIn(page_path.name, sitemap)
+                continue
+            public_page_count += 1
+            expected_href = "./" if page_path.name == "index.html" else page_path.name
+            self.assertIn(f'href="{expected_href}">{title.group(1)}</a>', sitemap)
+        self.assertGreaterEqual(public_page_count, 4)
+        self.assertIn('href="./">たか’sブログ</a>', sitemap)
+
+    def test_home_and_article_pages_link_to_html_sitemap(self):
+        for permalink in (
+            "index.html",
+            "ai-blog-start.html",
+            "vaio-p-again-and-beyond.html",
+            "github-ai-conversation.html",
+        ):
+            html = (DIST / permalink).read_text(encoding="utf-8")
+            self.assertIn('href="sitemap.html">サイトマップ</a>', html)
+
 
 if __name__ == "__main__":
     unittest.main()
