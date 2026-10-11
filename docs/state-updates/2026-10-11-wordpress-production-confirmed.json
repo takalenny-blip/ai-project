@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-11",
+  "kind": "canonical_state_update",
+  "purpose": "Record confirmed WordPress production operation and close already-confirmed verification steps without repeating them.",
+  "source": "User confirmations in the current and immediately preceding conversation.",
+  "confirmed": [
+    "WordPress site icon is visible in settings and in the browser tab/site.",
+    "BLOG-0001, BLOG-0002 and BLOG-0003 are published on WordPress.",
+    "BLOG-0001 body and images display correctly.",
+    "Quote, speech-bubble and command/script formatting are acceptable.",
+    "Mobile layout is acceptable.",
+    "WordPress update/save checks have already been performed repeatedly; do not repeat without a new issue."
+  ],
+  "decision": "Continue WordPress as the production publication site; Blogger remains the draft/display-check workspace and GitHub Pages remains the only fallback site.",
+  "not_verified": [
+    "WordPress Google Search Console indexing status"
+  ],
+  "do_not_repeat": [
+    "WordPress site icon",
+    "BLOG-0001 body/images",
+    "quote/speech-bubble/command formatting",
+    "mobile layout",
+    "WordPress update/save"
+  ],
+  "references": [
+    "PR #962",
+    "PR #1000",
+    "PR #1001",
+    "docs/現在状態.json: WP無料ホスティング検証"
+  ]
+}
