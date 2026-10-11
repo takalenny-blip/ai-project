@@ -154,6 +154,55 @@ def validate_work_queue(state: dict) -> None:
     if derived.get("readiness") == "blocked" and cached.get("blocked_reason") != derived.get("blocked_reason"):
         fail("next_step blocked_reason is not derived from work_items")
 
+def validate_completed_step_prose(state: dict) -> None:
+    """Reject stale unfinished claims that contradict a completed canonical step.
+
+    Check only current-state descriptions, not historical evidence or chat logs.
+    Sentences are checked independently so an unrelated '未確認' elsewhere in
+    the same paragraph does not trigger a false positive.
+    """
+    prose_fields = []
+    current = state.get("current_position", {})
+    for key in ("summary", "next_stage_boundary", "next_focus"):
+        value = current.get(key)
+        if isinstance(value, str):
+            prose_fields.append(f"current_position.{key}: {value}")
+    for item in state.get("work_items", []):
+        for key in ("title", "target", "blocked_reason"):
+            value = item.get(key)
+            if isinstance(value, str):
+                prose_fields.append(f"work_items[{item.get('id')}].{key}: {value}")
+
+    # Semantic aliases are explicit because Japanese descriptions do not have
+    # reliable word boundaries. Add a rule when a recurring status phrase needs
+    # a machine-checkable relationship to a canonical progress step.
+    rules = (
+        {
+            "work_item_id": "WP無料ホスティング検証",
+            "step_id": "wp-icon",
+            "keywords": ("サイトアイコン", "実表示確認"),
+            "stale_markers": ("未完了", "未確認", "未実施", "残る作業"),
+        },
+    )
+    items = {item.get("id"): item for item in state.get("work_items", [])}
+    for rule in rules:
+        item = items.get(rule["work_item_id"])
+        if not item:
+            continue
+        steps = item.get("progress", {}).get("steps", [])
+        step = next((s for s in steps if s.get("id") == rule["step_id"]), None)
+        if not step or step.get("status") != "done":
+            continue
+        for entry in prose_fields:
+            for sentence in entry.replace("。", "。\\n").splitlines():
+                if (all(word in sentence for word in rule["keywords"])
+                        and any(marker in sentence for marker in rule["stale_markers"])):
+                    fail(
+                        "stale prose contradicts completed work step "
+                        f"{rule['work_item_id']}/{rule['step_id']}: {entry}"
+                    )
+
+
 def validate_state(state: dict) -> None:
     missing = [key for key in REQUIRED if key not in state]
     if missing:
@@ -194,6 +243,7 @@ def validate_state(state: dict) -> None:
         fail("next_step.target is too abstract or stale; require current concrete work")
     validate_prerequisites(nxt)
     validate_external_response_gate(state)
+    validate_completed_step_prose(state)
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
         fail("work_pc clone_status=cloned requires clone_evidence")
