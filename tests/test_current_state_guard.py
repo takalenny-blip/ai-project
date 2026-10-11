@@ -283,5 +283,51 @@ class CurrentStateGuardTests(unittest.TestCase):
         guard.validate_completed_step_prose(state)
 
 
+    def test_waiting_external_step_rejects_stale_investigation_title(self):
+        state = self.base_state()
+        stale_title = "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する"
+        state["next_step"]["title"] = stale_title
+        state["work_items"] = [{
+            "id": "GSC-確認",
+            "title": stale_title,
+            "progress": {"steps": [{
+                "id": "github-pages-sitemap-retrieval",
+                "title": "GSC sitemap.xml取得失敗の原因切り分け",
+                "status": "waiting_external",
+            }]},
+        }]
+        state["prose_status_consistency_rules"] = [{
+            "work_item_id": "GSC-確認",
+            "step_id": "github-pages-sitemap-retrieval",
+            "expected_step_status": "waiting_external",
+            "keywords": ["サイトマップ取得失敗"],
+            "stale_markers": ["切り分け"],
+        }]
+        with self.assertRaisesRegex(ValueError, "stale prose contradicts waiting_external work step"):
+            guard.validate_completed_step_prose(state)
+
+    def test_waiting_external_step_accepts_waiting_title(self):
+        state = self.base_state()
+        waiting_title = "GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する"
+        state["next_step"]["title"] = waiting_title
+        state["work_items"] = [{
+            "id": "GSC-確認",
+            "title": waiting_title,
+            "progress": {"steps": [{
+                "id": "github-pages-sitemap-retrieval",
+                "title": "Google側のGSC sitemap.xml処理待ち",
+                "status": "waiting_external",
+            }]},
+        }]
+        state["prose_status_consistency_rules"] = [{
+            "work_item_id": "GSC-確認",
+            "step_id": "github-pages-sitemap-retrieval",
+            "expected_step_status": "waiting_external",
+            "keywords": ["サイトマップ取得失敗"],
+            "stale_markers": ["切り分け"],
+        }]
+        guard.validate_completed_step_prose(state)
+
+
 if __name__ == "__main__":
     unittest.main()
