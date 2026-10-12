@@ -442,8 +442,8 @@ if missing:
 def is_noindex_page(page_html):
     """Return whether a page's robots meta tag explicitly contains noindex."""
     for tag in re.findall(r"<meta\\b[^>]*>", page_html, re.IGNORECASE):
-        name_match = re.search(r'name=["\\']robots["\\']', tag, re.IGNORECASE)
-        content_match = re.search(r'content=["\\']([^"\\']*)["\\']', tag, re.IGNORECASE)
+        name_match = re.search(r"""name=["']robots["']""", tag, re.IGNORECASE)
+        content_match = re.search(r"""content=["']([^"']*)["']""", tag, re.IGNORECASE)
         if (
             name_match
             and content_match
@@ -451,7 +451,6 @@ def is_noindex_page(page_html):
         ):
             return True
     return False
-
 
 def build_xml_sitemap():
     """Build the XML sitemap from generated canonical public pages."""
