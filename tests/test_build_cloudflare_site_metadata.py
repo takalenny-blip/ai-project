@@ -177,7 +177,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             with self.subTest(page=page_path.name):
                 html = page_path.read_text(encoding="utf-8")
                 for tag in re.findall(r"<img\\b[^>]*>", html, re.IGNORECASE):
-                    self.assertRegex(tag, r'\\balt=["\\'][^"\\']*["\\']')
+                    self.assertRegex(tag, r"""\\balt=["'][^"']*["']""")
                 for image_name in re.findall(r'src="images/([^"]+)"', html):
                     self.assertTrue(
                         (DIST / "images" / image_name).is_file(),
