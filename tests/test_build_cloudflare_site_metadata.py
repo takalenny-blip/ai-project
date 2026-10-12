@@ -132,6 +132,23 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         self.assertIn('<meta name="robots" content="noindex,follow">', html)
 
 
+    def test_navigation_links_use_accessible_unified_colors_and_keyboard_focus(self):
+        for permalink in (
+            "index.html",
+            "ai-blog-start.html",
+            "vaio-p-again-and-beyond.html",
+            "github-ai-conversation.html",
+            "about.html",
+            "privacy.html",
+            "sitemap.html",
+        ):
+            html = (DIST / permalink).read_text(encoding="utf-8")
+            self.assertIn('<style id="accessible-link-colors">', html)
+            self.assertIn("color: #9fd7ff;", html)
+            self.assertIn("color: #ffffff;", html)
+            self.assertIn("outline: 3px solid #ffd166;", html)
+            self.assertNotIn('id="accessible-link-colors"\\n</head>', html)
+
     def test_sidebar_and_footer_navigation_are_generated(self):
         for permalink in (
             "index.html",
