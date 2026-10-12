@@ -16,7 +16,7 @@
 
 ## 現在地点
 
-**GitHub Pagesを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。**
+**GitHub Pagesを本番公開先として運用する。BLOG-0001〜0003はGitHub Pages公開レーンの対象。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。**
 
 ## 作業キュー
 
@@ -28,7 +28,7 @@
 
 ## 次の一手（互換ビュー）
 
-- [GITHUB-PAGES-PRODUCTION] GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページは表示確認済み。確認済み工程を繰り返さず、Google側のGSC処理結果の変化または新たな不具合・変更要求があった場合のみ対応する。
+- [GITHUB-PAGES-PRODUCTION] GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。確認済み工程を繰り返さず、新たな不具合・変更要求またはGoogle側のGSC処理結果の変化があった場合のみ対応する。WordPressは本番公開先として扱わない。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
@@ -58,5 +58,5 @@
 ## 移行
 
 - 状態：complete
-- 通常工程：DiMORA本来工程へは復帰せず、経験ログを中心としたAI編集を継続する。Bloggerは下書き・表示確認、GitHub Pagesを本番公開先とする。WordPressは本番公開先として扱わない。
+- 通常工程：DiMORA本来工程へは復帰せず、経験ログを中心としたAI編集を継続する。Bloggerは下書き・表示確認、GitHub Pagesは本番公開先とする。WordPressは本番公開先として扱わない。
 - 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
