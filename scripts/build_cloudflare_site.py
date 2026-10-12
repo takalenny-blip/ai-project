@@ -458,15 +458,15 @@ def build_xml_sitemap():
         raise SystemExit("XML sitemap generation failed: duplicate canonical URLs")
 
     urls.sort(key=lambda url: (url != homepage, url))
-    entries = "\\n".join(
+    entries = "\n".join(
         f"  <url><loc>{html_module.escape(url, quote=False)}</loc></url>"
         for url in urls
     )
     sitemap = (
-        '<?xml version="1.0" encoding="UTF-8"?>\\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n'
-        f"{entries}\\n"
-        "</urlset>\\n"
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{entries}\n"
+        "</urlset>\n"
     )
     (DIST / "sitemap.xml").write_text(sitemap, encoding="utf-8")
     print(f"built {DIST / 'sitemap.xml'} with {len(urls)} canonical pages")
