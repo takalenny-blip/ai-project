@@ -328,7 +328,7 @@
   },
   "next_step": {
     "id": "WP無料ホスティング検証",
-    "title": "WordPress公開環境の整備",
+    "title": "WordPress本番公開先として継続運用",
     "priority": 23,
     "depends_on": [],
     "not_before": null,
