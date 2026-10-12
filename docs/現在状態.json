@@ -301,10 +301,10 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。",
+    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesのrobots.txt・sitemap.xml・トップページの公開表示確認（2026-10-12完了）、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
-      "checked_at": "2026-10-11",
+      "checked_at": "2026-10-12",
       "references": [
         "PR #855",
         "#856",
@@ -318,10 +318,13 @@
         "PR #942",
         "PR #962",
         "PR #964",
-        "PR #966"
+        "PR #966",
+        "2026-10-12 たかによるブラウザー確認: GitHub Pages robots.txt / sitemap.xml / トップページ正常表示",
+        "PR #1034",
+        "main commit 87978b64ed0cb9b18d8d7e5018f4f23658215c30"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認も実施済みで再確認不要。WordPress各URLの具体的な登録結果は正本記録に残っていないため、登録済み／未登録を推定しない。GSC sitemap.xmlはGoogle側の処理結果待ち。"
+      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認も実施済みで再確認不要。WordPress各URLの具体的な登録結果は正本記録に残っていないため、登録済み／未登録を推定しない。GSC sitemap.xmlはGoogle側の処理結果待ち。 2026-10-12、たかがGitHub Pagesのrobots.txt、sitemap.xml、トップページを作業PCブラウザーで確認し、3 URLとも正常表示（AAA）と報告。SEO整備の公開物確認は完了。GSC sitemap.xmlのGoogle側処理結果は別途外部待機中。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。GitHub Pagesトップページの404確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認は実施済みで、再実施しない。WordPress各URLの具体的な登録結果は正本記録にないため推定しない。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認は完了済み。",
     "next_focus": "Google側のGSC sitemap.xml処理結果待ちを維持し、原因切り分け・サイトマップ詳細の再確認・GitHub Pagesトップページの404確認・WordPressトップページとBLOG-0001〜0003のインデックス状況確認を再実行しない。Google側の処理結果が変化した場合だけ正本を更新する。WordPressではサイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断は完了済み。"
@@ -740,12 +743,12 @@
       "id": "GITHUB-PAGES-SEO",
       "title": "GitHub PagesのSEO整備",
       "priority": 18,
-      "status": "in_progress",
+      "status": "done",
       "depends_on": [],
       "not_before": null,
       "scope": "github_pages_backup_site",
       "target": "GitHub Pagesを予備公開サイトとして、検索エンジンが公開ページを正しく発見・解釈できるよう段階的に整備する。XMLサイトマップとrobots.txtの生成を修正した後、ページごとのtitle/description/canonical、OGP、構造化データ、不要ページのindexability、画像・表示品質を監査する。WordPress本番設定は変更せず、既に実施済みのGSC URL検査やサイトマップ原因切り分けを繰り返さない。",
-      "evidence": "2026-10-12、PR #1031（サイトマップ・robots.txt）、#1032（OGP・構造化データ）、#1033（noindex除外・生成HTML全体の画像品質監査）をマージ済み。PR #1032/#1033のMain work progress gateとcurrent-state-guard成功。公開反映・実表示は未確認。",
+      "evidence": "2026-10-12、PR #1031（サイトマップ・robots.txt）、#1032（OGP・構造化データ）、#1033（noindex除外・生成HTML全体の画像品質監査）をマージ済み。PR #1032/#1033のMain work progress gateとcurrent-state-guard成功。2026-10-12、たかが作業PCのブラウザーで https://takalenny-blip.github.io/ai-project/robots.txt（テキスト表示）、https://takalenny-blip.github.io/ai-project/sitemap.xml（XML表示）、https://takalenny-blip.github.io/ai-project/（トップページ正常表示）の3 URLを確認。ユーザー報告は「AAA」。公開URLの応答・表示確認は完了。Google側のGSCサイトマップ処理結果は別work item「GSC-確認」で外部待機中であり、この確認からGSC処理成功を推定しない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -777,13 +780,14 @@
           {
             "id": "publish-verification",
             "title": "マージ後の公開物を確認し、現在状態を更新",
-            "status": "pending"
+            "status": "done",
+            "evidence": "2026-10-12、たかが作業PCのブラウザーで https://takalenny-blip.github.io/ai-project/robots.txt（テキスト表示）、https://takalenny-blip.github.io/ai-project/sitemap.xml（XML表示）、https://takalenny-blip.github.io/ai-project/（トップページ正常表示）の3 URLを確認。ユーザー報告は「AAA」。公開URLの応答・表示確認は完了。Google側のGSCサイトマップ処理結果は別work item「GSC-確認」で外部待機中であり、この確認からGSC処理成功を推定しない。"
           }
         ],
         "updated_at": "2026-10-12"
       }
     }
   ],
-  "next_stage_boundary": "GitHub Pages SEOの生成コード整備はPR #1031〜#1033でマージ済み。残作業は公開反映・実表示確認。Google側のGSC sitemap.xml処理結果待ちは別の外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを再実施しない。WordPress本番設定は変更しない。",
-  "next_focus": "GitHub Pages SEOの生成コード整備（サイトマップ・robots.txt、ページ別メタデータ・構造化データ、noindex除外・画像品質監査）はマージ済み。次は公開反映と公開物の実表示を確認し、その結果をdocs/現在状態.jsonへ記録する。公開サイトの確認ができない場合は未確認として記録し、Google側のGSC sitemap.xml処理結果待ちは外部待機のまま維持する。WordPress本番設定は変更しない。"
+  "next_stage_boundary": "GitHub Pages SEO整備のコード工程（PR #1031〜#1033）と公開物の実表示確認（2026-10-12、たかのブラウザー確認でrobots.txt・sitemap.xml・トップページ正常表示）は完了。Google側のGSC sitemap.xml処理結果はwork item「GSC-確認」で外部待機中。GSC処理の正常化・インデックス結果を公開表示確認から推定しない。既に実施済みのGSC URL検査、サイトマップ原因切り分け、サイトマップ詳細確認を繰り返さない。WordPress本番設定は変更しない。",
+  "next_focus": "GitHub Pages SEO整備は公開物の実表示確認まで完了。次の関連待機事項はGoogle側のGSC sitemap.xml処理結果であり、work item「GSC-確認」の外部待機を維持する。結果に変化があった場合だけ正本を更新し、GSC URL検査・サイトマップ原因切り分け・サイトマップ詳細確認を再実行しない。WordPress本番設定は変更しない。"
 }
