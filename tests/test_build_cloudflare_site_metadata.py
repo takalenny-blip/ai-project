@@ -167,6 +167,22 @@ class ArticleSeoMetadataTests(unittest.TestCase):
     def test_temporary_quote_samples_page_is_noindex(self):
         html = (DIST / "quote-samples.html").read_text(encoding="utf-8")
         self.assertIn('<meta name="robots" content="noindex,follow">', html)
+        xml_sitemap = (DIST / "sitemap.xml").read_text(encoding="utf-8")
+        html_sitemap = (DIST / "sitemap.html").read_text(encoding="utf-8")
+        self.assertNotIn("quote-samples.html", xml_sitemap)
+        self.assertNotIn("quote-samples.html", html_sitemap)
+
+    def test_generated_pages_have_alt_text_for_images_and_valid_local_image_paths(self):
+        for page_path in sorted(DIST.glob("*.html")):
+            with self.subTest(page=page_path.name):
+                html = page_path.read_text(encoding="utf-8")
+                for tag in re.findall(r"<img\\b[^>]*>", html, re.IGNORECASE):
+                    self.assertRegex(tag, r'\\balt=["\\'][^"\\']*["\\']')
+                for image_name in re.findall(r'src="images/([^"]+)"', html):
+                    self.assertTrue(
+                        (DIST / "images" / image_name).is_file(),
+                        f"{page_path.name} references missing image {image_name}",
+                    )
 
 
     def test_navigation_links_use_accessible_unified_colors_and_keyboard_focus(self):
