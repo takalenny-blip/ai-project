@@ -476,7 +476,7 @@
   },
   "prose_status_consistency_rules": [
     {
-      "work_item_id": "WP無料ホスティング検証",
+      "work_item_id": "GITHUB-PAGES-PRODUCTION",
       "step_id": "wp-icon",
       "keywords": [
         "サイトアイコン",
