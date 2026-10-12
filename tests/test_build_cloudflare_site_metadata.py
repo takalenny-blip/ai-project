@@ -87,7 +87,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
                 self.assertIn('<meta property="og:image:alt" content="たか’sブログのサイトバナー">', html)
                 self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
                 matches = re.findall(
-                    r'<script type="application/ld\\+json">(.*?)</script>',
+                    r'<script type="application/ld\+json">(.*?)</script>',
                     html,
                     re.DOTALL,
                 )
@@ -97,7 +97,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
                 self.assertEqual(schema["@type"], schema_type)
                 self.assertEqual(schema["inLanguage"], "ja-JP")
                 self.assertIn("url", schema)
-                self.assertNotIn(r"\\n", matches[0])
+                self.assertNotIn(r"\n", matches[0])
 
     def test_homepage_has_website_social_metadata(self):
         html = (DIST / "index.html").read_text(encoding="utf-8")
