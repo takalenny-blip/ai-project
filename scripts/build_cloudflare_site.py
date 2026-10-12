@@ -65,6 +65,7 @@ page = f"""<!doctype html>
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/{PERMALINK}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="{TITLE}">
+<meta property="og:description" content="{BLOG3_DESCRIPTION}">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/{PERMALINK}">
 <meta property="og:image" content="{SITE_IMAGE_URL}">
 <meta property="og:image:alt" content="たか’sブログのサイトバナー">
@@ -311,6 +312,12 @@ def article_variant(base_page, title, permalink, body_html):
     base_page = re.sub(
         r'<meta name="description" content="[^"]*">',
         f'<meta name="description" content="{description}">',
+        base_page,
+        count=1,
+    )
+    base_page = re.sub(
+        r'<meta property="og:description" content="[^"]*">',
+        f'<meta property="og:description" content="{description}">',
         base_page,
         count=1,
     )
