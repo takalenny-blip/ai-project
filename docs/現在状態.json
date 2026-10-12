@@ -2,7 +2,7 @@
   "schema_version": 5,
   "updated": "2026-10-13",
   "canonical_repository": "takalenny-blip/ai-project",
-  "primary_lane": "experience-log → Blogger下書き確認 → WordPress本番公開",
+  "primary_lane": "experience-log → Blogger下書き確認 → GitHub Pages本番公開",
   "original_lane": "DIGA / DiMORA自動化",
   "current_state_model": {
     "target": "docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする",
@@ -36,7 +36,7 @@
   },
   "migration": {
     "status": "complete",
-    "normal_work_policy": "DiMORA本来工程へは復帰せず、経験ログを中心としたAI編集を継続する。Bloggerは下書き・表示確認、WordPressは本番公開先、GitHub Pagesは予備公開サイトとする。",
+    "normal_work_policy": "DiMORA本来工程へは復帰せず、経験ログを中心としたAI編集を継続する。Bloggerは下書き・表示確認、GitHub Pagesは本番公開先とする。WordPressは本番公開先として扱わない。",
     "temporary_manual_sync": "BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する"
   },
   "verification_required": [
@@ -244,7 +244,7 @@
     "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_items・next_stepの stale 状態を開始前に検出する。",
     "work_itemsの途中成果をprogress.stepsへ構造化し、完了済みstep・現在のstep・外部待機stepを正本に保持して、次回起動時の作業巻き戻りを防ぐ",
     "終了時の作業状態同期では、成果物の生成・GitHub保存・実環境への適用・実表示確認を別々のprogress.stepsとして記録し、保存完了を実環境適用完了と混同しない。",
-    "公開先・制作作業場所・予備サイトを分離し、WordPressを本番、Bloggerを下書き・表示確認、GitHub Pagesだけを予備公開サイトとする"
+    "公開先・制作作業場所を分離し、GitHub Pagesを本番公開先、Bloggerを下書き・表示確認の作業場所とする。WordPressを本番公開先として扱わない。"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済みだが、各URLの具体的な登録結果は正本記録にないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。",
+    "summary": "GitHub Pagesを本番公開先として運用する。BLOG-0001〜0003はGitHub Pages公開レーンの対象。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-12",
@@ -321,21 +321,21 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認も実施済みで再確認不要。WordPress各URLの具体的な登録結果は正本記録に残っていないため、登録済み／未登録を推定しない。GSC sitemap.xmlはGoogle側の処理結果待ち。"
+      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は過去に実施済みだが、これは過去の確認記録であり、WordPressを現在の本番公開先とする根拠ではない。WordPress各URLの具体的な登録結果は正本記録に残っていないため推定しない。GitHub Pagesのrobots.txt・sitemap.xml・トップページは2026-10-12に正常表示を確認済み。GSC sitemap.xmlはGoogle側の処理結果待ち。"
     },
-    "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。GitHub Pagesトップページの404確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認は実施済みで、再実施しない。WordPress各URLの具体的な登録結果は正本記録にないため推定しない。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認は完了済み。 2026-10-12、robots.txt・sitemap.xml・トップページの公開表示をたかがブラウザーで確認済み。Google側のGSC処理結果は未確認。 GitHub Pagesのrobots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。Google Search Console側の処理結果は外部待ち。",
-    "next_focus": "GitHub Pagesのrobots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済み。公開物の再確認・サイトマップ詳細の再確認・原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ正本を更新する。GSC-確認は外部待ち、BLOG-0004はGSC-確認の解消待ち。現時点で実行可能な作業項目はWordPress本番公開先としての継続運用だが、確認済み工程を繰り返さず、新たな不具合・変更要求が発生した場合のみ対応する。"
+    "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。GitHub Pagesトップページの404確認、robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みで、再実施しない。WordPressに関する過去の公開・インデックス確認は履歴として保持し、WordPressを本番公開先として扱わない。",
+    "next_focus": "GitHub Pagesを本番公開先として扱う。robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みのため、公開物の再確認・サイトマップ詳細の再確認・原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ正本を更新する。GSC-確認は外部待ち、BLOG-0004はGSC-確認の解消待ち。WordPressを本番公開先として継続運用する作業は存在しない。"
   },
   "next_step": {
-    "id": "WP無料ホスティング検証",
-    "title": "WordPress本番公開先として継続運用",
+    "id": "GITHUB-PAGES-PRODUCTION",
+    "title": "GitHub Pagesを本番公開先として継続運用",
     "priority": 23,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
     "scope": "experience-log_to_Blogger",
-    "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
-    "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済み。確認作業を再実施せず、各URLの具体的な登録結果は正本記録にないため推定しない。",
+    "target": "GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。確認済み工程を繰り返さず、新たな不具合・変更要求またはGoogle側のGSC処理結果の変化があった場合のみ対応する。WordPressは本番公開先として扱わない。",
+    "evidence": "2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。GSC sitemap.xml処理結果はGoogle側の外部待ち。以前の状態正本がWordPressを本番公開先としていたのは誤りであり、2026-10-13にたかが訂正。今後はGitHub Pagesを本番公開先とし、WordPress本番運用を次の一手として提示しない。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -510,7 +510,7 @@
       "depends_on": [],
       "not_before": null,
       "scope": "experience_log_to_blogger",
-      "target": "Google側のGSC sitemap.xml処理結果を待つ。GitHub Pagesトップページの404確認、GitHub Pages・WordPress各URLのインデックス状況確認は実施済みのため再実行しない。Google側の処理結果が変化した場合だけ記録を更新する。GSCプロパティ登録・原因切り分け・同じURL検査を繰り返さない。",
+      "target": "Google側のGSC sitemap.xml処理結果を待つ。GitHub Pagesの公開表示確認および既知URLの確認作業は実施済みのため再実行しない。Google側の処理結果が変化した場合だけ記録を更新する。GSCプロパティ登録・原因切り分け・同じURL検査を繰り返さない。WordPressの過去の確認記録は履歴であり、現在の本番公開先を意味しない。",
       "evidence": "2026-10-10確認結果：sitemap.xml詳細は最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」。sitemap.xmlはブラウザーでHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能。sitemap.xml自身のURLライブテストはクロール許可=はい、取得=成功、インデックス許可=はいだが、GSCサイトマップ処理の成功を意味しない。URL検査：vaio-p-again-and-beyond.htmlはインデックス登録済み。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLは自身、参照元サイトマップなし。トップページは「URLがGoogleに認識されていません」、参照元サイトマップ・参照元ページなし。トップページのライブテストは2026/10/10 17:53:48、取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは「URLを優先クロールキューに追加しました」と受け付けられた。インデックス登録結果は未確認。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認は2026-10-11に実施済み。これらを再確認しない。WordPress各URLの具体的な登録結果はこの正本に記録されていないため推定しない。Bloggerの3記事は登録成功確認済みのため再確認せず、GSC登録も再実行しない。 2026-10-11、たかより原因切り分けは実施済みでGoogle側の処理待ちとの確認。トップページは404になっていないとの訂正あり。 2026-10-11、たかより追加確認：GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含む対象確認はすべて実施済み。これらの確認作業を再度の未完了タスクとして提示しない。今回の正本にWordPress各URLの具体的な登録結果が残っていないため、登録済み／未登録を推定して記載しない。既知のGitHub Pages URL検査結果は履歴として保持し、同じ検査を再実施しない。",
       "readiness": "ready",
       "unblock_action": "none",
@@ -573,8 +573,8 @@
       ],
       "not_before": null,
       "scope": "experience_log_to_Blogger",
-      "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作を行う。Bloggerは下書き・表示確認の作業場所として使用し、WordPressを本番公開先、GitHub Pagesを唯一の予備公開サイトとする。",
-      "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。 2026-10-09の方針変更により、Bloggerは下書き・表示確認の作業場所であり、公開先・予備公開先ではない。",
+      "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作を行う。Bloggerは下書き・表示確認の作業場所として使用し、GitHub Pagesを本番公開先とする。WordPressを本番公開先として扱わない。",
+      "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。Bloggerは下書き・表示確認の作業場所であり、公開先ではない。GitHub Pagesが本番公開先。",
       "readiness": "blocked",
       "unblock_action": "GSC-確認の外部待機が解消し、GSC確認が完了したらBLOG-0004へ進む。",
       "environment": "work_pc",
@@ -618,15 +618,15 @@
       "blocked_reason": "GSC-確認がGoogle側の登録処理待ちのため、BLOG-0004はまだ開始できない。"
     },
     {
-      "id": "WP無料ホスティング検証",
-      "title": "WordPress本番公開先として継続運用",
+      "id": "GITHUB-PAGES-PRODUCTION",
+      "title": "GitHub Pagesを本番公開先として継続運用",
       "priority": 23,
       "status": "in_progress",
       "depends_on": [],
       "not_before": null,
       "scope": "experience-log_to_Blogger",
-      "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
-      "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済み。確認作業を再実施せず、各URLの具体的な登録結果は正本記録にないため推定しない。",
+      "target": "GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。確認済み工程を繰り返さず、新たな不具合・変更要求またはGoogle側のGSC処理結果の変化があった場合のみ対応する。WordPressは本番公開先として扱わない。",
+      "evidence": "2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。GSC sitemap.xml処理結果はGoogle側の外部待ち。以前の状態正本がWordPressを本番公開先としていたのは誤りであり、2026-10-13にたかが訂正。今後はGitHub Pagesを本番公開先とし、WordPress本番運用を次の一手として提示しない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -722,15 +722,15 @@
           },
           {
             "id": "wordpress-production-judgment",
-            "title": "WordPress本番化を判断し現在状態へ反映",
-            "status": "done",
-            "evidence": "2026-10-11、確認済み実績を根拠にWordPressを本番公開先として継続運用する判断を記録。WordPressトップページとBLOG-0001〜0003のインデックス状況確認作業は2026-10-11に実施済み。具体的な登録結果は正本記録にないため推定せず、同じ確認を再実施しない。"
+            "title": "旧方針：WordPress本番化判断（訂正済み）",
+            "status": "superseded",
+            "evidence": "過去にWordPressを本番公開先と判断した記録。2026-10-13、たかの明示によりこの判断は誤りとして撤回。現在の本番公開先はGitHub Pages。履歴として保持し、現在方針の根拠にしない。"
           },
           {
             "id": "ongoing-publication",
-            "title": "WordPress本番公開先として継続運用",
+            "title": "GitHub Pagesを本番公開先として継続運用",
             "status": "in_progress",
-            "evidence": "本番公開先として運用中。新たな不具合・変更要求が発生した場合のみ対応し、完了済み表示確認を繰り返さない。"
+            "evidence": "本番公開先はGitHub Pages。公開表示確認済みのrobots.txt・sitemap.xml・トップページを繰り返し確認しない。Google側のGSC処理結果が変化した場合または新たな不具合・変更要求が発生した場合のみ対応する。WordPressを本番公開先として扱わない。"
           }
         ],
         "updated_at": "2026-10-13"
@@ -738,5 +738,5 @@
     }
   ],
   "next_stage_boundary": "GitHub Pages SEOの生成コード整備はPR #1031〜#1033でマージ済み。残作業は公開反映・実表示確認。Google側のGSC sitemap.xml処理結果待ちは別の外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを再実施しない。WordPress本番設定は変更しない。",
-  "next_focus": "GitHub Pagesの公開表示確認は2026-10-12に完了済み。robots.txt・sitemap.xml・トップページの再確認やGSC原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ記録を更新する。GSC-確認は外部待ち、BLOG-0004はその解消待ち。現在の実行可能項目はWordPress本番公開先としての継続運用であり、確認済み工程を繰り返さず、新たな不具合・変更要求が発生した場合のみ対応する。"
+  "next_focus": "GitHub Pagesを本番公開先として扱う。公開表示確認は2026-10-12に完了済み。robots.txt・sitemap.xml・トップページの再確認やGSC原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ記録を更新する。GSC-確認は外部待ち、BLOG-0004はその解消待ち。現在の作業方針はGitHub Pages本番公開であり、WordPress本番運用は行わない。"
 }
