@@ -29,6 +29,10 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             f'<meta name="description" content="{expected_descriptions[permalink]}">',
             html,
         )
+        self.assertIn(
+            f'<meta property="og:description" content="{expected_descriptions[permalink]}">',
+            html,
+        )
         self.assertNotEqual(expected_descriptions[permalink], expected_title)
         self.assertIn(f'<link rel="canonical" href="{expected_url}">', html)
         self.assertIn(f'<meta property="og:title" content="{expected_title}">', html)
