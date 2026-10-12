@@ -16,17 +16,17 @@
 
 ## 現在地点
 
-**WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。**
+**WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。 2026-10-12、たかが作業PCのブラウザーで公開物を確認。robots.txt、sitemap.xml、GitHub Pagesトップページの3 URLはいずれも正常表示。Google Search Console側のサイトマップ処理結果は引き続き外部待ち。**
 
 ## 作業キュー
 
 - actionable：2件
 - 一覧：
 - [GITHUB-PAGES-SEO] priority=18：GitHub PagesのSEO整備
-  - 未完了工程：metadata-structured-data [pending] ページ別SEOメタデータと構造化データを監査・整備
-  - 未完了工程：indexability-quality [pending] 不要ページのindexabilityと画像・表示品質を監査
-  - 未完了工程：publish-verification [pending] マージ後の公開物を確認し、現在状態を更新
+
+  - 未完了工程：canonical-state-update-route [pending] 公開確認結果の記録経路を整備し、SEO作業を閉じる
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
+
   - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
