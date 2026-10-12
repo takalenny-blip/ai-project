@@ -20,10 +20,28 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         html = (DIST / permalink).read_text(encoding="utf-8")
         expected_url = f"{BASE_URL}/{permalink}"
         self.assertIn(f"<title>{expected_title}</title>", html)
-        self.assertIn(f'<meta name="description" content="{expected_title}">', html)
+        expected_descriptions = {
+            "ai-blog-start.html": "AIとのやりとりからブログ制作の仕組みを考え始めた記録。Claudeのブラウザ操作をきっかけに、GeminiやPythonでの自動化、経験を記事として残す発想につながっていく。",
+            "vaio-p-again-and-beyond.html": "VAIO Pをもう一度動かすためにDebianを導入し、環境を整えた記録。DIGA／DiMORAの番組予約情報を扱う自動化テストを通して、試行錯誤と次の発想を振り返る。",
+            "github-ai-conversation.html": "AIとのやりとりをGitHubに残し、現在状態や作業の進み具合を管理する仕組みを作った経験。会話を保存するだけでなく、あとから再開できる形に整えていく過程を紹介する。",
+        }
+        self.assertIn(
+            f'<meta name="description" content="{expected_descriptions[permalink]}">',
+            html,
+        )
+        self.assertIn(
+            f'<meta property="og:description" content="{expected_descriptions[permalink]}">',
+            html,
+        )
+        self.assertNotEqual(expected_descriptions[permalink], expected_title)
         self.assertIn(f'<link rel="canonical" href="{expected_url}">', html)
         self.assertIn(f'<meta property="og:title" content="{expected_title}">', html)
         self.assertIn(f'<meta property="og:url" content="{expected_url}">', html)
+        self.assertIn(
+            '<meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">',
+            html,
+        )
+        self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
 
     def test_blog_0001_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
@@ -42,6 +60,20 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "github-ai-conversation.html",
             "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか",
         )
+
+    def test_homepage_has_website_social_metadata(self):
+        html = (DIST / "index.html").read_text(encoding="utf-8")
+        self.assertIn('<meta property="og:type" content="website">', html)
+        self.assertIn('<meta property="og:title" content="たか’sブログ">', html)
+        self.assertIn(
+            '<meta property="og:url" content="https://takalenny-blip.github.io/ai-project/">',
+            html,
+        )
+        self.assertIn(
+            '<meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">',
+            html,
+        )
+        self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
 
     def test_html_sitemap_lists_every_canonical_public_html_page(self):
         sitemap = (DIST / "sitemap.html").read_text(encoding="utf-8")

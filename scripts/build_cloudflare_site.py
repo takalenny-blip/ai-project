@@ -20,6 +20,10 @@ BLOG1_TITLE = "AIとのやりとりを残してみる――それは「便利そ
 BLOG2_TITLE = "もう一度動かしてみた――その先で考えたこと"
 BLOG1_PERMALINK = "ai-blog-start.html"
 BLOG2_PERMALINK = "vaio-p-again-and-beyond.html"
+BLOG1_DESCRIPTION = "AIとのやりとりからブログ制作の仕組みを考え始めた記録。Claudeのブラウザ操作をきっかけに、GeminiやPythonでの自動化、経験を記事として残す発想につながっていく。"
+BLOG2_DESCRIPTION = "VAIO Pをもう一度動かすためにDebianを導入し、環境を整えた記録。DIGA／DiMORAの番組予約情報を扱う自動化テストを通して、試行錯誤と次の発想を振り返る。"
+BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作業の進み具合を管理する仕組みを作った経験。会話を保存するだけでなく、あとから再開できる形に整えていく過程を紹介する。"
+SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 
 for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE):
     if not required_source.is_file():
@@ -56,12 +60,16 @@ page = f"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{TITLE}</title>
-<meta name="description" content="{TITLE}">
+<meta name="description" content="{BLOG3_DESCRIPTION}">
 <meta name="google-site-verification" content="Iaufdzv8o8vilCmpJ1WqXyjSyYZtNh13gEXbhYTgV0Y">
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/{PERMALINK}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="{TITLE}">
+<meta property="og:description" content="{BLOG3_DESCRIPTION}">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/{PERMALINK}">
+<meta property="og:image" content="{SITE_IMAGE_URL}">
+<meta property="og:image:alt" content="たか’sブログのサイトバナー">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 * {{ box-sizing: border-box; }}
 html {{ scroll-behavior: smooth; }}
@@ -164,6 +172,13 @@ home = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>たか’sブログ</title>
 <meta name="description" content="AIとのやりとりと、そこから生まれた経験を残していくブログです。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="たか’sブログ">
+<meta property="og:description" content="AIとのやりとりと、そこから生まれた経験を残していくブログです。">
+<meta property="og:url" content="https://takalenny-blip.github.io/ai-project/">
+<meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">
+<meta property="og:image:alt" content="たか’sブログのサイトバナー">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="google-site-verification" content="Iaufdzv8o8vilCmpJ1WqXyjSyYZtNh13gEXbhYTgV0Y">
 <link rel="canonical" href="https://takalenny-blip.github.io/ai-project/">
 <style>
@@ -288,9 +303,21 @@ def article_variant(base_page, title, permalink, body_html):
     )
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
     base_page = re.sub(r"<title>.*?</title>", f"<title>{title}</title>", base_page, count=1)
+    descriptions = {
+        BLOG1_PERMALINK: BLOG1_DESCRIPTION,
+        BLOG2_PERMALINK: BLOG2_DESCRIPTION,
+        PERMALINK: BLOG3_DESCRIPTION,
+    }
+    description = descriptions.get(permalink, title)
     base_page = re.sub(
         r'<meta name="description" content="[^"]*">',
-        f'<meta name="description" content="{title}">',
+        f'<meta name="description" content="{description}">',
+        base_page,
+        count=1,
+    )
+    base_page = re.sub(
+        r'<meta property="og:description" content="[^"]*">',
+        f'<meta property="og:description" content="{description}">',
         base_page,
         count=1,
     )
