@@ -32,7 +32,7 @@ ARTICLES = [
 
 
 def render_sidebar():
-    recent_links = "\\n".join(
+    recent_links = "\n".join(
         f'<li><a href="{item["permalink"]}">{html_module.escape(item["title"])}</a></li>'
         for item in reversed(ARTICLES)
     )
@@ -74,7 +74,7 @@ def render_article_navigation(permalink):
         f'<a rel="next" href="{next_item["permalink"]}">次の記事：{html_module.escape(next_item["title"])} →</a>'
         if next_item else '<span class="nav-unavailable">次の記事はありません</span>'
     )
-    related_links = "\\n".join(
+    related_links = "\n".join(
         f'<li><a href="{item["permalink"]}">{html_module.escape(item["title"])}</a></li>'
         for item in ARTICLES if item["permalink"] != permalink
     )
@@ -319,6 +319,8 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </body>
 </html>
 """
+home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer())
+
 quote_samples = """<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>引用表示サンプル</title>
