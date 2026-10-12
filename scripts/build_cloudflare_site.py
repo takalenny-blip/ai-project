@@ -424,13 +424,33 @@ page3 = article_variant(page, TITLE, PERMALINK, html)
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
 
-missing = [
-    name for name in re.findall(r'src="images/([^"]+)"', html)
-    if not (DIST / "images" / name).is_file()
-]
+# Audit local image references across every generated page, not only the source
+# HTML for the third article. Earlier article variants and static pages must also
+# be checked because they can contain independent image references.
+missing = set()
+for generated_page in DIST.glob("*.html"):
+    generated_html = generated_page.read_text(encoding="utf-8")
+    missing.update(
+        name
+        for name in re.findall(r'src="images/([^"]+)"', generated_html)
+        if not (DIST / "images" / name).is_file()
+    )
 if missing:
-    raise SystemExit("missing local images: " + ", ".join(sorted(set(missing))))
+    raise SystemExit("missing local images: " + ", ".join(sorted(missing)))
 
+
+def is_noindex_page(page_html):
+    """Return whether a page's robots meta tag explicitly contains noindex."""
+    for tag in re.findall(r"<meta\b[^>]*>", page_html, re.IGNORECASE):
+        name_match = re.search(r"""name=["']robots["']""", tag, re.IGNORECASE)
+        content_match = re.search(r"""content=["']([^"']*)["']""", tag, re.IGNORECASE)
+        if (
+            name_match
+            and content_match
+            and re.search(r"\bnoindex\b", content_match.group(1), re.IGNORECASE)
+        ):
+            return True
+    return False
 
 def build_xml_sitemap():
     """Build the XML sitemap from generated canonical public pages."""
@@ -441,6 +461,8 @@ def build_xml_sitemap():
         if page_path.name == "sitemap.html":
             continue
         page_html = page_path.read_text(encoding="utf-8")
+        if is_noindex_page(page_html):
+            continue
         canonical_match = re.search(
             r'<link rel="canonical" href="([^"]+)"',
             page_html,
@@ -480,6 +502,8 @@ def build_html_sitemap():
         if page_path.name == "sitemap.html":
             continue
         page_html = page_path.read_text(encoding="utf-8")
+        if is_noindex_page(page_html):
+            continue
         canonical_match = re.search(
             r'<link rel="canonical" href="([^"]+)"',
             page_html,
