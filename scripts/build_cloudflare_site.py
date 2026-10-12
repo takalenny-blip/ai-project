@@ -349,7 +349,7 @@ a{color:#c4a46a}
 """
 (DIST / "quote-samples.html").write_text(quote_samples, encoding="utf-8")
 
-robots_txt = """User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.io/ai-project/sitemap.xml\n"""
+robots_txt = "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.io/ai-project/sitemap.xml\n"
 (DIST / "robots.txt").write_text(robots_txt, encoding="utf-8")
 
 

@@ -100,6 +100,14 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         self.assertIn('href="./">たか’sブログ</a>', sitemap)
 
 
+    def test_robots_txt_has_real_line_breaks_and_xml_sitemap_reference(self):
+        robots = (DIST / "robots.txt").read_text(encoding="utf-8")
+        self.assertEqual(
+            robots,
+            "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.io/ai-project/sitemap.xml\n",
+        )
+
+
     def test_xml_sitemap_contains_all_canonical_content_pages_and_excludes_temporary_pages(self):
         sitemap = ET.fromstring((DIST / "sitemap.xml").read_text(encoding="utf-8"))
         namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
