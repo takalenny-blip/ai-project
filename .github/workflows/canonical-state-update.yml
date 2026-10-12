@@ -1,0 +1,57 @@
+name: Canonical state update
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_json:
+        description: "JSON request: update_id, purpose, source, patch, confirmed, not_verified, references"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: canonical-state-update
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Prepare atomic state bundle
+        env:
+          REQUEST_JSON: ${{ inputs.request_json }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s' "$REQUEST_JSON" > "$RUNNER_TEMP/state-update-request.json"
+          branch="save/currentize-${GITHUB_RUN_ID}"
+          git switch -c "$branch" origin/main
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python scripts/apply_canonical_state_update.py --request-file "$RUNNER_TEMP/state-update-request.json"
+          git commit -m "chore: apply reviewed canonical state update"
+          git push --set-upstream origin "$branch"
+          echo "branch=$branch" >> "$GITHUB_ENV"
+      - name: Open pull request
+        env:
+          GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "SAVE_PR_TOKEN repository secret is required." >&2; exit 1; }
+          gh api "repos/${GITHUB_REPOSITORY}/pulls" \
+            -f base=main \
+            -f head="$branch" \
+            -f title="Canonical state update" \
+            -f body="Audited canonical-state patch. State, audit record, and generated views are one atomic commit; repository guards remain required."
