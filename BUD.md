@@ -23,7 +23,6 @@
 - actionable：1件
 - 一覧：
 - [WP無料ホスティング検証] priority=23：WordPress本番公開先として継続運用
-
   - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
