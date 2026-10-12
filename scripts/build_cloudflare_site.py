@@ -601,6 +601,7 @@ def apply_accessible_link_colors():
     """Use one high-contrast link palette across generated public pages."""
     css = """<style id="accessible-link-colors">
 nav a:link, nav a:visited,
+article a:link, article a:visited,
 .site-footer a:link, .site-footer a:visited,
 .sidebar-section a:link, .sidebar-section a:visited,
 .article-navigation a:link, .article-navigation a:visited,
@@ -610,7 +611,7 @@ main > a:link, main > a:visited {
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
 }
-nav a:hover, .site-footer a:hover, .sidebar-section a:hover,
+nav a:hover, article a:hover, .site-footer a:hover, .sidebar-section a:hover,
 .article-navigation a:hover, .content a:hover, main > a:hover {
   color: #ffffff;
   text-decoration: underline;
