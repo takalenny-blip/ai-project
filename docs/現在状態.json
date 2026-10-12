@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。",
+    "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。 2026-10-12、たかが作業PCのブラウザーで公開物を確認。robots.txt、sitemap.xml、GitHub Pagesトップページの3 URLはいずれも正常表示。Google Search Console側のサイトマップ処理結果は引き続き外部待ち。 GitHub Pagesのrobots.txt・sitemap.xml・トップページは2026-10-12にたかが正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-11",
@@ -323,19 +323,19 @@
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
       "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認も実施済みで再確認不要。WordPress各URLの具体的な登録結果は正本記録に残っていないため、登録済み／未登録を推定しない。GSC sitemap.xmlはGoogle側の処理結果待ち。"
     },
-    "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。GitHub Pagesトップページの404確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認は実施済みで、再実施しない。WordPress各URLの具体的な登録結果は正本記録にないため推定しない。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認は完了済み。",
-    "next_focus": "Google側のGSC sitemap.xml処理結果待ちを維持し、原因切り分け・サイトマップ詳細の再確認・GitHub Pagesトップページの404確認・WordPressトップページとBLOG-0001〜0003のインデックス状況確認を再実行しない。Google側の処理結果が変化した場合だけ正本を更新する。WordPressではサイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断は完了済み。"
+    "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。GitHub Pagesトップページの404確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認は実施済みで、再実施しない。WordPress各URLの具体的な登録結果は正本記録にないため推定しない。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認は完了済み。 2026-10-12、robots.txt・sitemap.xml・トップページの公開表示をたかがブラウザーで確認済み。Google側のGSC処理結果は未確認。 GitHub Pagesのrobots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。Google Search Console側の処理結果は外部待ち。",
+    "next_focus": "Google側のGSC sitemap.xml処理結果待ちを維持し、原因切り分け・サイトマップ詳細の再確認・GitHub Pagesトップページの404確認・WordPressトップページとBLOG-0001〜0003のインデックス状況確認を再実行しない。Google側の処理結果が変化した場合だけ正本を更新する。WordPressではサイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断は完了済み。 公開表示確認済みの3 URL（robots.txt、sitemap.xml、トップページ）は再確認しない。Google側のGSC処理結果が変化した場合だけ記録を更新する。 GitHub Pagesの公開表示確認は完了し再実施しない。Google側のGSCサイトマップ処理結果が変化した場合だけ記録を更新する。"
   },
   "next_step": {
-    "id": "GITHUB-PAGES-SEO",
-    "title": "GitHub PagesのSEO整備",
-    "priority": 18,
+    "id": "WP無料ホスティング検証",
+    "title": "WordPress公開環境の整備",
+    "priority": 23,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
-    "scope": "github_pages_backup_site",
-    "target": "GitHub Pagesを予備公開サイトとして、検索エンジンが公開ページを正しく発見・解釈できるよう段階的に整備する。XMLサイトマップとrobots.txtの生成を修正した後、ページごとのtitle/description/canonical、OGP、構造化データ、不要ページのindexability、画像・表示品質を監査する。WordPress本番設定は変更せず、既に実施済みのGSC URL検査やサイトマップ原因切り分けを繰り返さない。",
-    "evidence": "2026-10-12、GitHub Pages生成コードの監査で、XMLサイトマップが4 URL固定でabout/privacyが漏れていること、robots.txtの改行生成に不整合があることを確認。PR #1031でcanonical URLからのXMLサイトマップ自動生成、robots.txtの正規改行、一時引用比較ページのnoindex、回帰テストを追加。公開反映確認は別工程として保持する。",
+    "scope": "experience-log_to_Blogger",
+    "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
+    "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済み。確認作業を再実施せず、各URLの具体的な登録結果は正本記録にないため推定しない。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -734,53 +734,6 @@
           }
         ],
         "updated_at": "2026-10-11"
-      }
-    },
-    {
-      "id": "GITHUB-PAGES-SEO",
-      "title": "GitHub PagesのSEO整備",
-      "priority": 18,
-      "status": "in_progress",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "github_pages_backup_site",
-      "target": "GitHub Pagesを予備公開サイトとして、検索エンジンが公開ページを正しく発見・解釈できるよう段階的に整備する。XMLサイトマップとrobots.txtの生成を修正した後、ページごとのtitle/description/canonical、OGP、構造化データ、不要ページのindexability、画像・表示品質を監査する。WordPress本番設定は変更せず、既に実施済みのGSC URL検査やサイトマップ原因切り分けを繰り返さない。",
-      "evidence": "2026-10-12、PR #1031（サイトマップ・robots.txt）、#1032（OGP・構造化データ）、#1033（noindex除外・生成HTML全体の画像品質監査）をマージ済み。PR #1032/#1033のMain work progress gateとcurrent-state-guard成功。公開反映・実表示は未確認。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-10-12",
-      "updated_at": "2026-10-12",
-      "prerequisites": [],
-      "execution_state": "actionable",
-      "progress": {
-        "current_step": "publish-verification",
-        "steps": [
-          {
-            "id": "sitemap-robots",
-            "title": "XMLサイトマップとrobots.txtの生成を修正",
-            "status": "done",
-            "evidence": "PR #1031でcanonical URLからのXMLサイトマップ生成、robots.txtの改行修正、一時引用比較ページのnoindexを実装し、current-state-guardの回帰テスト成功を確認。マージ後の公開適用確認は別工程。"
-          },
-          {
-            "id": "metadata-structured-data",
-            "title": "ページ別SEOメタデータと構造化データを監査・整備",
-            "status": "done",
-            "evidence": "PR #1032を2026-10-12にマージ。Open Graph/Twitter・ページ種別に応じたJSON-LD（WebSite、BlogPosting、AboutPage、PrivacyPolicy、WebPage）を生成し、メタデータ回帰テストを追加。Main work progress gateとcurrent-state-guard成功。公開サイトの実表示は未確認。"
-          },
-          {
-            "id": "indexability-quality",
-            "title": "不要ページのindexabilityと画像・表示品質を監査",
-            "status": "done",
-            "evidence": "PR #1033を2026-10-12にマージ（merge commit a406f1b0c34be8c8dd8a38e5bf638d06b611be02）。noindexページをXML/HTMLサイトマップから除外し、生成HTML全体のローカル画像参照とalt属性を検査する回帰テストを追加。PRのMain work progress gateとcurrent-state-guardは成功。公開サイトの実表示は未確認。"
-          },
-          {
-            "id": "publish-verification",
-            "title": "マージ後の公開物を確認し、現在状態を更新",
-            "status": "pending"
-          }
-        ],
-        "updated_at": "2026-10-12"
       }
     }
   ],

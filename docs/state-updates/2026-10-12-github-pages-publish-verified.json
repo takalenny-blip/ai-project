@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "kind": "canonical_state_update",
+  "purpose": "Record the user's browser confirmation of the three published GitHub Pages resources, close the completed GitHub Pages SEO work item, and keep Google Search Console processing as a separate external wait.",
+  "source": "User confirmation in the current conversation; the user reported AAA for all three URLs.",
+  "confirmed": [
+    "https://takalenny-blip.github.io/ai-project/robots.txt displays normally",
+    "https://takalenny-blip.github.io/ai-project/sitemap.xml displays normally",
+    "https://takalenny-blip.github.io/ai-project/ displays normally",
+    "GITHUB-PAGES-SEO implementation PRs #1031, #1032, #1033 are merged; publication display verification is now complete"
+  ],
+  "not_verified": [
+    "Google Search Console sitemap processing result"
+  ],
+  "references": [
+    "PR #1031",
+    "#1032",
+    "#1033",
+    "#1034"
+  ],
+  "patch": {
+    "current_position": {
+      "summary": "WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。GitHub Pagesトップページが現在404ではないことの確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含むGSC確認作業は実施済み。確認作業を繰り返さない。WordPressの各URLの具体的な登録結果は正本記録に残っていないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。 2026-10-12、たかが作業PCのブラウザーで公開物を確認。robots.txt、sitemap.xml、GitHub Pagesトップページの3 URLはいずれも正常表示。Google Search Console側のサイトマップ処理結果は引き続き外部待ち。 GitHub Pagesのrobots.txt・sitemap.xml・トップページは2026-10-12にたかが正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。",
+      "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。トップページは404ではないとの2026-10-11のたか確認あり。GitHub Pagesトップページの404確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認は実施済みで、再実施しない。WordPress各URLの具体的な登録結果は正本記録にないため推定しない。WordPressではBLOG-0001〜0003公開済み。サイトアイコン画像の適用・実表示確認は完了済み。 2026-10-12、robots.txt・sitemap.xml・トップページの公開表示をたかがブラウザーで確認済み。Google側のGSC処理結果は未確認。 GitHub Pagesのrobots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。Google Search Console側の処理結果は外部待ち。",
+      "next_focus": "Google側のGSC sitemap.xml処理結果待ちを維持し、原因切り分け・サイトマップ詳細の再確認・GitHub Pagesトップページの404確認・WordPressトップページとBLOG-0001〜0003のインデックス状況確認を再実行しない。Google側の処理結果が変化した場合だけ正本を更新する。WordPressではサイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断は完了済み。 公開表示確認済みの3 URL（robots.txt、sitemap.xml、トップページ）は再確認しない。Google側のGSC処理結果が変化した場合だけ記録を更新する。 GitHub Pagesの公開表示確認は完了し再実施しない。Google側のGSCサイトマップ処理結果が変化した場合だけ記録を更新する。"
+    },
+    "work_items": [
+      {
+        "id": "GSC-確認",
+        "title": "GSCサイトマップ処理待ち（URL検査・表示確認は実施済み）",
+        "priority": 20,
+        "status": "in_progress",
+        "depends_on": [],
+        "not_before": null,
+        "scope": "experience_log_to_blogger",
+        "target": "Google側のGSC sitemap.xml処理結果を待つ。GitHub Pagesトップページの404確認、GitHub Pages・WordPress各URLのインデックス状況確認は実施済みのため再実行しない。Google側の処理結果が変化した場合だけ記録を更新する。GSCプロパティ登録・原因切り分け・同じURL検査を繰り返さない。",
+        "evidence": "2026-10-10確認結果：sitemap.xml詳細は最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」。sitemap.xmlはブラウザーでHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能。sitemap.xml自身のURLライブテストはクロール許可=はい、取得=成功、インデックス許可=はいだが、GSCサイトマップ処理の成功を意味しない。URL検査：vaio-p-again-and-beyond.htmlはインデックス登録済み。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLは自身、参照元サイトマップなし。トップページは「URLがGoogleに認識されていません」、参照元サイトマップ・参照元ページなし。トップページのライブテストは2026/10/10 17:53:48、取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは「URLを優先クロールキューに追加しました」と受け付けられた。インデックス登録結果は未確認。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認は2026-10-11に実施済み。これらを再確認しない。WordPress各URLの具体的な登録結果はこの正本に記録されていないため推定しない。Bloggerの3記事は登録成功確認済みのため再確認せず、GSC登録も再実行しない。 2026-10-11、たかより原因切り分けは実施済みでGoogle側の処理待ちとの確認。トップページは404になっていないとの訂正あり。 2026-10-11、たかより追加確認：GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含む対象確認はすべて実施済み。これらの確認作業を再度の未完了タスクとして提示しない。今回の正本にWordPress各URLの具体的な登録結果が残っていないため、登録済み／未登録を推定して記載しない。既知のGitHub Pages URL検査結果は履歴として保持し、同じ検査を再実施しない。",
+        "readiness": "ready",
+        "unblock_action": "none",
+        "environment": "work_pc",
+        "created_at": "2026-10-06",
+        "updated_at": "2026-10-11",
+        "prerequisites": [],
+        "execution_state": "waiting_external",
+        "progress": {
+          "current_step": "github-pages-sitemap-retrieval",
+          "steps": [
+            {
+              "id": "github-pages-registration",
+              "title": "GitHub PagesのGSC登録",
+              "status": "done",
+              "evidence": "たかよりGSC登録実施済みとの確認。"
+            },
+            {
+              "id": "wordpress-registration",
+              "title": "WordPressのGSC登録",
+              "status": "done",
+              "evidence": "たかよりGSC登録実施済みとの確認。"
+            },
+            {
+              "id": "github-pages-robots-txt",
+              "title": "GitHub Pagesのrobots.txt公開確認",
+              "status": "done",
+              "evidence": "PR #942の記録：Actions run 37604271713のBuild/Upload/Deploy成功。公開内容をたかが確認済み。PR #942自体は古い状態反映PRとして未整理。"
+            },
+            {
+              "id": "github-pages-sitemap-retrieval",
+              "title": "Google側のGSC sitemap.xml処理結果待ち",
+              "status": "waiting_external",
+              "evidence": "GSCサイトマップ詳細：最終読み込み2026/10/09、検出ページ0、検出動画0、追加エラー詳細なし、「サイトマップを読み込めませんでした」。2026-10-10のライブテストではsitemap.xmlのクロール許可=はい、ページ取得=成功、インデックス登録許可=はい。作業PCブラウザーでもHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能を確認済み。ただし、URLライブテストの取得成功はGSCサイトマップ処理の成功を証明しない。2026-10-11、たか確認：原因切り分けは実施済み。Google側の処理結果待ちであり、原因調査・サイトマップ詳細の再確認を繰り返さない。"
+            },
+            {
+              "id": "site-index-status-check",
+              "title": "GitHub Pages・WordPressのインデックス状況確認（確認作業完了）",
+              "status": "done",
+              "evidence": "2026-10-11、たかより確認作業すべて完了との明示。対象にはGitHub Pagesトップページが現在404にならないことの確認、およびWordPressトップページ・BLOG-0001〜0003のインデックス状況確認を含む。確認作業の実施は完了として扱い、再実施しない。正本にWordPress各URLの具体的な登録結果が残っていないため、実際の登録状態は推定せず未記録として区別する。GitHub Pagesの既知の過去結果（vaio-p-again-and-beyond.html登録済み、github-ai-conversation.htmlクロール済み・未登録、トップページは過去に未認識・優先クロール要求済み）は履歴として保持する。"
+            },
+            {
+              "id": "work-pc-http-headers",
+              "title": "作業PCでsitemap.xmlのHTTPステータスとContent-Typeを確認",
+              "status": "done",
+              "evidence": "2026-10-10、たかが作業PCで確認。https://takalenny-blip.github.io/ai-project/sitemap.xml はHTTP 200 OK、Content-Type: application/xml。XMLにはルートURLと3つのHTML URLの計4 URLが記載され、たかの確認で4 URLすべて表示可能。ブラウザ側のHTTP応答・MIME・URL表示は確認済み。"
+            }
+          ],
+          "updated_at": "2026-10-11"
+        },
+        "wait_reason": "Google側のGSC sitemap.xml処理結果待ち。対象URLの確認作業は実施済みで、再確認しない。"
+      },
+      {
+        "id": "BLOG-0004",
+        "title": "BLOG-0004を作成する",
+        "priority": 30,
+        "status": "queued",
+        "depends_on": [
+          "GSC-確認"
+        ],
+        "not_before": null,
+        "scope": "experience_log_to_Blogger",
+        "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作を行う。Bloggerは下書き・表示確認の作業場所として使用し、WordPressを本番公開先、GitHub Pagesを唯一の予備公開サイトとする。",
+        "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。 2026-10-09の方針変更により、Bloggerは下書き・表示確認の作業場所であり、公開先・予備公開先ではない。",
+        "readiness": "blocked",
+        "unblock_action": "GSC-確認の外部待機が解消し、GSC確認が完了したらBLOG-0004へ進む。",
+        "environment": "work_pc",
+        "created_at": "2026-10-07",
+        "updated_at": "2026-10-08",
+        "prerequisites": [
+          {
+            "id": "GSC-確認",
+            "status": "pending",
+            "reason": "Google側の登録処理待ち"
+          }
+        ],
+        "execution_state": "actionable",
+        "progress": {
+          "current_step": "gsc-confirmation",
+          "steps": [
+            {
+              "id": "gsc-confirmation",
+              "title": "GSC確認完了を待つ",
+              "status": "pending",
+              "evidence": "GSC-確認がGoogle側処理待ち"
+            },
+            {
+              "id": "primary-source-check",
+              "title": "一次資料確認と企画",
+              "status": "pending"
+            },
+            {
+              "id": "production",
+              "title": "BLOG-0004制作",
+              "status": "pending"
+            },
+            {
+              "id": "publication",
+              "title": "公開と実表示確認",
+              "status": "pending"
+            }
+          ],
+          "updated_at": "2026-10-08"
+        },
+        "blocked_reason": "GSC-確認がGoogle側の登録処理待ちのため、BLOG-0004はまだ開始できない。"
+      },
+      {
+        "id": "WP無料ホスティング検証",
+        "title": "WordPress公開環境の整備",
+        "priority": 23,
+        "status": "in_progress",
+        "depends_on": [],
+        "not_before": null,
+        "scope": "experience-log_to_Blogger",
+        "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
+        "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済み。確認作業を再実施せず、各URLの具体的な登録結果は正本記録にないため推定しない。",
+        "readiness": "ready",
+        "unblock_action": "none",
+        "environment": "work_pc",
+        "created_at": "2026-10-07",
+        "updated_at": "2026-10-11",
+        "prerequisites": [],
+        "execution_state": "actionable",
+        "progress": {
+          "current_step": "ongoing-publication",
+          "steps": [
+            {
+              "id": "free-account",
+              "title": "無料アカウント作成",
+              "status": "done"
+            },
+            {
+              "id": "subdomain",
+              "title": "無料サブドメイン取得",
+              "status": "done"
+            },
+            {
+              "id": "admin-login",
+              "title": "管理画面ログイン",
+              "status": "done"
+            },
+            {
+              "id": "wordpress-install",
+              "title": "WordPress導入",
+              "status": "done"
+            },
+            {
+              "id": "script-installer-recheck",
+              "title": "Script Installer再確認",
+              "status": "done"
+            },
+            {
+              "id": "https",
+              "title": "HTTPS確認",
+              "status": "done"
+            },
+            {
+              "id": "sitemap",
+              "title": "サイトマップ確認",
+              "status": "done"
+            },
+            {
+              "id": "blog2-publication",
+              "title": "BLOG-0002をWordPressで公開",
+              "status": "done",
+              "evidence": "たかによる公開確認"
+            },
+            {
+              "id": "blog3-publication",
+              "title": "BLOG-0003をWordPressで公開",
+              "status": "done",
+              "evidence": "たかによる公開確認"
+            },
+            {
+              "id": "blog1-publication",
+              "title": "BLOG-0001をWordPressで公開",
+              "status": "done",
+              "evidence": "2026-10-11、たかよりWordPressで公開済みとの確認。"
+            },
+            {
+              "id": "wp-icon-asset",
+              "title": "サイトアイコン画像を作成してGitHubへ保存",
+              "status": "done",
+              "evidence": "PR #962マージ済み。docs/assets/site-icon.pngとして64×64px PNGを保存。"
+            },
+            {
+              "id": "wp-icon",
+              "title": "WordPressへサイトアイコン画像を適用して実表示を確認する",
+              "status": "done",
+              "evidence": "2026-10-11、たか確認：WordPressの設定画面とブラウザーのタブ／サイト表示でサイトアイコンを確認。"
+            },
+            {
+              "id": "wp-design-template",
+              "title": "WordPressのデザインテンプレートを整える",
+              "status": "done",
+              "evidence": "2026-10-09、たかの確認により完了として記録。Cocoonスキン「モノクロ」を採用。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出しの見た目の検討、コマンド・スクリプトの見た目の検討を完了したとのユーザー報告。バドによる公開ページの独立した実表示確認は行っていない。"
+            },
+            {
+              "id": "blog1-image",
+              "title": "BLOG-0001の画像問題を解消",
+              "status": "done",
+              "evidence": "PR #1000で3枚の画像をGitHubへ保存、PR #1001でHTMLの画像参照6か所をGitHub raw URLへ変更。両PRマージ済み。2026-10-11、たかがWordPress下書きへHTMLを貼り付け、画像3枚が表示できることを確認。"
+            },
+            {
+              "id": "operation-check",
+              "title": "WordPressの表示・更新・運用確認",
+              "status": "done",
+              "evidence": "2026-10-11、たか確認：本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は既に複数回実施済みのため重複確認不要。"
+            },
+            {
+              "id": "wordpress-production-judgment",
+              "title": "WordPress本番化を判断し現在状態へ反映",
+              "status": "done",
+              "evidence": "2026-10-11、確認済み実績を根拠にWordPressを本番公開先として継続運用する判断を記録。WordPressトップページとBLOG-0001〜0003のインデックス状況確認作業は2026-10-11に実施済み。具体的な登録結果は正本記録にないため推定せず、同じ確認を再実施しない。"
+            },
+            {
+              "id": "ongoing-publication",
+              "title": "WordPress本番公開先として継続運用",
+              "status": "in_progress",
+              "evidence": "本番公開先として運用中。新たな不具合・変更要求が発生した場合のみ対応し、完了済み表示確認を繰り返さない。"
+            }
+          ],
+          "updated_at": "2026-10-11"
+        }
+      }
+    ],
+    "next_step": {
+      "id": "WP無料ホスティング検証",
+      "title": "WordPress公開環境の整備",
+      "priority": 23,
+      "depends_on": [],
+      "not_before": null,
+      "environment": "work_pc",
+      "scope": "experience-log_to_Blogger",
+      "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
+      "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済み。確認作業を再実施せず、各URLの具体的な登録結果は正本記録にないため推定しない。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "prerequisites": []
+    }
+  }
+}

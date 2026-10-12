@@ -21,8 +21,10 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         actionable = select_actionable(self.state["work_items"], self.state["updated"])
         self.assertTrue(actionable)
         self.assertEqual(self.state["next_step"]["id"], actionable[0]["id"])
-        self.assertEqual(actionable[0]["id"], "GITHUB-PAGES-SEO")
-        self.assertEqual([item["id"] for item in actionable], ["GITHUB-PAGES-SEO", "WP無料ホスティング検証"])
+        self.assertEqual(actionable[0]["id"], "WP無料ホスティング検証")
+        self.assertEqual([item["id"] for item in actionable], ["WP無料ホスティング検証"])
+        self.assertNotIn("GITHUB-PAGES-SEO", [item["id"] for item in self.state["work_items"]])
+        self.assertIn("robots.txt・sitemap.xml・トップページ", self.state["current_position"]["summary"])
         gsc = next(item for item in self.state["work_items"] if item["id"] == "GSC-確認")
         gsc_steps = {step["id"]: step for step in gsc["progress"]["steps"]}
         self.assertEqual(gsc["execution_state"], "waiting_external")
