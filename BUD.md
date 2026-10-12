@@ -23,10 +23,8 @@
 - actionable：2件
 - 一覧：
 - [GITHUB-PAGES-SEO] priority=18：GitHub PagesのSEO整備
-
   - 未完了工程：canonical-state-update-route [pending] 公開確認結果の記録経路を整備し、SEO作業を閉じる
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
-
   - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
