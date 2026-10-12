@@ -22,7 +22,7 @@
 
 - actionable：1件
 - 一覧：
-- [WP無料ホスティング検証] priority=23：GitHub Pagesを本番公開先として継続運用
+- [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
 
   - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 
