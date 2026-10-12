@@ -745,16 +745,16 @@ def apply_social_metadata_and_structured_data():
             if re.search(pattern, page_html):
                 page_html = re.sub(pattern, lambda _match, tag=tag: tag, page_html, count=1)
             else:
-                page_html = page_html.replace("</head>", tag + "\\n</head>", 1)
+                page_html = page_html.replace("</head>", tag + "\n</head>", 1)
 
         twitter_tag = '<meta name="twitter:card" content="summary_large_image">'
         if 'name="twitter:card"' not in page_html:
-            page_html = page_html.replace("</head>", twitter_tag + "\\n</head>", 1)
+            page_html = page_html.replace("</head>", twitter_tag + "\n</head>", 1)
 
         json_ld = (
-            '<script type="application/ld+json">\\n'
+            '<script type="application/ld+json">\n'
             + json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
-            + "\\n</script>"
+            + "\n</script>"
         )
         if 'type="application/ld+json"' in page_html:
             page_html = re.sub(
@@ -765,7 +765,7 @@ def apply_social_metadata_and_structured_data():
                 flags=re.DOTALL,
             )
         else:
-            page_html = page_html.replace("</head>", json_ld + "\\n</head>", 1)
+            page_html = page_html.replace("</head>", json_ld + "\n</head>", 1)
         page_path.write_text(page_html, encoding="utf-8")
 
 
