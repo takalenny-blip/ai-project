@@ -627,7 +627,7 @@ a:focus-visible {
         if "</head>" not in page_html:
             raise SystemExit(f"cannot add accessible link colors: missing </head> in {page_path.name}")
         if 'id="accessible-link-colors"' not in page_html:
-            page_html = page_html.replace("</head>", css + "\\n</head>", 1)
+            page_html = page_html.replace("</head>", css + "\n</head>", 1)
             page_path.write_text(page_html, encoding="utf-8")
 
 
