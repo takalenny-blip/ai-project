@@ -441,13 +441,13 @@ if missing:
 
 def is_noindex_page(page_html):
     """Return whether a page's robots meta tag explicitly contains noindex."""
-    for tag in re.findall(r"<meta\\b[^>]*>", page_html, re.IGNORECASE):
+    for tag in re.findall(r"<meta\b[^>]*>", page_html, re.IGNORECASE):
         name_match = re.search(r"""name=["']robots["']""", tag, re.IGNORECASE)
         content_match = re.search(r"""content=["']([^"']*)["']""", tag, re.IGNORECASE)
         if (
             name_match
             and content_match
-            and re.search(r"\\bnoindex\\b", content_match.group(1), re.IGNORECASE)
+            and re.search(r"\bnoindex\b", content_match.group(1), re.IGNORECASE)
         ):
             return True
     return False
