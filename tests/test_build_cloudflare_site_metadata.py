@@ -2,6 +2,7 @@ import re
 import subprocess
 import sys
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -98,6 +99,55 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         self.assertGreaterEqual(public_page_count, 4)
         self.assertIn('href="./">たか’sブログ</a>', sitemap)
 
+
+    def test_robots_txt_has_real_line_breaks_and_xml_sitemap_reference(self):
+        robots = (DIST / "robots.txt").read_text(encoding="utf-8")
+        self.assertEqual(
+            robots,
+            "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.io/ai-project/sitemap.xml\n",
+        )
+
+
+    def test_xml_sitemap_contains_all_canonical_content_pages_and_excludes_temporary_pages(self):
+        sitemap = ET.fromstring((DIST / "sitemap.xml").read_text(encoding="utf-8"))
+        namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        urls = {
+            node.text
+            for node in sitemap.findall("sm:url/sm:loc", namespace)
+        }
+        expected = {
+            f"{BASE_URL}/",
+            f"{BASE_URL}/ai-blog-start.html",
+            f"{BASE_URL}/vaio-p-again-and-beyond.html",
+            f"{BASE_URL}/github-ai-conversation.html",
+            f"{BASE_URL}/about.html",
+            f"{BASE_URL}/privacy.html",
+        }
+        self.assertEqual(urls, expected)
+        self.assertNotIn(f"{BASE_URL}/sitemap.html", urls)
+        self.assertNotIn(f"{BASE_URL}/quote-samples.html", urls)
+
+    def test_temporary_quote_samples_page_is_noindex(self):
+        html = (DIST / "quote-samples.html").read_text(encoding="utf-8")
+        self.assertIn('<meta name="robots" content="noindex,follow">', html)
+
+
+    def test_navigation_links_use_accessible_unified_colors_and_keyboard_focus(self):
+        for permalink in (
+            "index.html",
+            "ai-blog-start.html",
+            "vaio-p-again-and-beyond.html",
+            "github-ai-conversation.html",
+            "about.html",
+            "privacy.html",
+            "sitemap.html",
+        ):
+            html = (DIST / permalink).read_text(encoding="utf-8")
+            self.assertIn('<style id="accessible-link-colors">', html)
+            self.assertIn("color: #9fd7ff;", html)
+            self.assertIn("color: #ffffff;", html)
+            self.assertIn("outline: 3px solid #ffd166;", html)
+            self.assertNotIn('id="accessible-link-colors"\\n</head>', html)
 
     def test_sidebar_and_footer_navigation_are_generated(self):
         for permalink in (

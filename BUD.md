@@ -1,6 +1,6 @@
 # BUD — バドのための最上位ダッシュボード
 
-更新日：2026-10-11
+更新日：2026-10-12
 
 ## 正本
 
@@ -20,14 +20,18 @@
 
 ## 作業キュー
 
-- actionable：1件
+- actionable：2件
 - 一覧：
+- [GITHUB-PAGES-SEO] priority=18：GitHub PagesのSEO整備
+  - 未完了工程：metadata-structured-data [pending] ページ別SEOメタデータと構造化データを監査・整備
+  - 未完了工程：indexability-quality [pending] 不要ページのindexabilityと画像・表示品質を監査
+  - 未完了工程：publish-verification [pending] マージ後の公開物を確認し、現在状態を更新
 - [WP無料ホスティング検証] priority=23：WordPress公開環境の整備
   - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
 
-- [WP無料ホスティング検証] WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。
+- [GITHUB-PAGES-SEO] GitHub Pagesを予備公開サイトとして、検索エンジンが公開ページを正しく発見・解釈できるよう段階的に整備する。XMLサイトマップとrobots.txtの生成を修正した後、ページごとのtitle/description/canonical、OGP、構造化データ、不要ページのindexability、画像・表示品質を監査する。WordPress本番設定は変更せず、既に実施済みのGSC URL検査やサイトマップ原因切り分けを繰り返さない。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → WordPress本番公開**

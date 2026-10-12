@@ -323,7 +323,7 @@ home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_foo
 
 quote_samples = """<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>引用表示サンプル</title>
+<title>引用表示サンプル</title><meta name="robots" content="noindex,follow">
 <style>
 *{box-sizing:border-box} body{margin:0;background:#363636;color:#eee7db;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;line-height:1.9}
 main{max-width:900px;margin:auto;padding:50px 28px 80px} h1{font-family:Georgia,"Noto Serif JP",serif;font-weight:500} h2{font-size:1rem;color:#b3945a;margin-top:42px}
@@ -349,17 +349,7 @@ a{color:#c4a46a}
 """
 (DIST / "quote-samples.html").write_text(quote_samples, encoding="utf-8")
 
-sitemap = """<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://takalenny-blip.github.io/ai-project/</loc></url>
-  <url><loc>https://takalenny-blip.github.io/ai-project/ai-blog-start.html</loc></url>
-  <url><loc>https://takalenny-blip.github.io/ai-project/vaio-p-again-and-beyond.html</loc></url>
-  <url><loc>https://takalenny-blip.github.io/ai-project/github-ai-conversation.html</loc></url>
-</urlset>
-"""
-(DIST / "sitemap.xml").write_text(sitemap, encoding="utf-8")
-
-robots_txt = """User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.io/ai-project/sitemap.xml\n"""
+robots_txt = "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.io/ai-project/sitemap.xml\n"
 (DIST / "robots.txt").write_text(robots_txt, encoding="utf-8")
 
 
@@ -439,6 +429,47 @@ missing = [
 ]
 if missing:
     raise SystemExit("missing local images: " + ", ".join(sorted(set(missing))))
+
+
+def build_xml_sitemap():
+    """Build the XML sitemap from generated canonical public pages."""
+    base_url = "https://takalenny-blip.github.io/ai-project"
+    urls = []
+    for page_path in sorted(DIST.glob("*.html")):
+        # The HTML sitemap is navigation, not a content URL to submit in the XML sitemap.
+        if page_path.name == "sitemap.html":
+            continue
+        page_html = page_path.read_text(encoding="utf-8")
+        canonical_match = re.search(
+            r'<link rel="canonical" href="([^"]+)"',
+            page_html,
+        )
+        if not canonical_match:
+            continue
+        canonical_url = html_module.unescape(canonical_match.group(1)).strip()
+        if canonical_url.rstrip("/") != base_url and not canonical_url.startswith(base_url + "/"):
+            continue
+        urls.append(canonical_url)
+
+    homepage = base_url + "/"
+    if homepage not in urls:
+        raise SystemExit("XML sitemap generation failed: canonical homepage is missing")
+    if len(urls) != len(set(urls)):
+        raise SystemExit("XML sitemap generation failed: duplicate canonical URLs")
+
+    urls.sort(key=lambda url: (url != homepage, url))
+    entries = "\n".join(
+        f"  <url><loc>{html_module.escape(url, quote=False)}</loc></url>"
+        for url in urls
+    )
+    sitemap = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{entries}\n"
+        "</urlset>\n"
+    )
+    (DIST / "sitemap.xml").write_text(sitemap, encoding="utf-8")
+    print(f"built {DIST / 'sitemap.xml'} with {len(urls)} canonical pages")
 
 
 def build_html_sitemap():
@@ -563,6 +594,45 @@ build_static_page(
     "<p>このサイトには、現時点で問い合わせフォームやコメント投稿機能を設けていません。</p><p>サイトの閲覧に伴い、ホスティングサービスなどの提供元が技術的なアクセス情報を処理する場合があります。サービス側での情報の取扱いについては、それぞれの提供元が公開する方針をご確認ください。</p><p>記事から外部サイトへ移動した場合、そのサイトでの情報の取扱いは移動先の方針に従います。</p><p>個人情報を収集する機能や外部サービスを追加した場合は、このページの記載を見直します。</p>",
 )
 build_html_sitemap()
+build_xml_sitemap()
+
+
+def apply_accessible_link_colors():
+    """Use one high-contrast link palette across generated public pages."""
+    css = """<style id="accessible-link-colors">
+nav a:link, nav a:visited,
+article a:link, article a:visited,
+.site-footer a:link, .site-footer a:visited,
+.sidebar-section a:link, .sidebar-section a:visited,
+.article-navigation a:link, .article-navigation a:visited,
+.content a:link, .content a:visited,
+main > a:link, main > a:visited {
+  color: #9fd7ff;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+nav a:hover, article a:hover, .site-footer a:hover, .sidebar-section a:hover,
+.article-navigation a:hover, .content a:hover, main > a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+  text-decoration-thickness: 0.12em;
+}
+a:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+</style>"""
+    for page_path in DIST.glob("*.html"):
+        page_html = page_path.read_text(encoding="utf-8")
+        if "</head>" not in page_html:
+            raise SystemExit(f"cannot add accessible link colors: missing </head> in {page_path.name}")
+        if 'id="accessible-link-colors"' not in page_html:
+            page_html = page_html.replace("</head>", css + "\n</head>", 1)
+            page_path.write_text(page_html, encoding="utf-8")
+
+
+apply_accessible_link_colors()
 
 print(f"built {DIST / 'index.html'}")
 print(f"built {DIST / PERMALINK}")

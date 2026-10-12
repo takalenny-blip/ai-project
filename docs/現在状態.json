@@ -1,6 +1,6 @@
 {
   "schema_version": 5,
-  "updated": "2026-10-11",
+  "updated": "2026-10-12",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger下書き確認 → WordPress本番公開",
   "original_lane": "DIGA / DiMORA自動化",
@@ -327,15 +327,15 @@
     "next_focus": "Google側のGSC sitemap.xml処理結果待ちを維持し、原因切り分け・サイトマップ詳細の再確認・GitHub Pagesトップページの404確認・WordPressトップページとBLOG-0001〜0003のインデックス状況確認を再実行しない。Google側の処理結果が変化した場合だけ正本を更新する。WordPressではサイトアイコン適用・実表示確認、表示・更新・運用確認、本番化判断は完了済み。"
   },
   "next_step": {
-    "id": "WP無料ホスティング検証",
-    "title": "WordPress公開環境の整備",
-    "priority": 23,
+    "id": "GITHUB-PAGES-SEO",
+    "title": "GitHub PagesのSEO整備",
+    "priority": 18,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
-    "scope": "experience-log_to_Blogger",
-    "target": "WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。",
-    "evidence": "2026-10-11、たか確認：WordPressサイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は過去に複数回実施済みのため再確認しない。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済み。確認作業を再実施せず、各URLの具体的な登録結果は正本記録にないため推定しない。",
+    "scope": "github_pages_backup_site",
+    "target": "GitHub Pagesを予備公開サイトとして、検索エンジンが公開ページを正しく発見・解釈できるよう段階的に整備する。XMLサイトマップとrobots.txtの生成を修正した後、ページごとのtitle/description/canonical、OGP、構造化データ、不要ページのindexability、画像・表示品質を監査する。WordPress本番設定は変更せず、既に実施済みのGSC URL検査やサイトマップ原因切り分けを繰り返さない。",
+    "evidence": "2026-10-12、GitHub Pages生成コードの監査で、XMLサイトマップが4 URL固定でabout/privacyが漏れていること、robots.txtの改行生成に不整合があることを確認。PR #1031でcanonical URLからのXMLサイトマップ自動生成、robots.txtの正規改行、一時引用比較ページのnoindex、回帰テストを追加。公開反映確認は別工程として保持する。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -735,8 +735,53 @@
         ],
         "updated_at": "2026-10-11"
       }
+    },
+    {
+      "id": "GITHUB-PAGES-SEO",
+      "title": "GitHub PagesのSEO整備",
+      "priority": 18,
+      "status": "in_progress",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "github_pages_backup_site",
+      "target": "GitHub Pagesを予備公開サイトとして、検索エンジンが公開ページを正しく発見・解釈できるよう段階的に整備する。XMLサイトマップとrobots.txtの生成を修正した後、ページごとのtitle/description/canonical、OGP、構造化データ、不要ページのindexability、画像・表示品質を監査する。WordPress本番設定は変更せず、既に実施済みのGSC URL検査やサイトマップ原因切り分けを繰り返さない。",
+      "evidence": "2026-10-12、GitHub Pages生成コードの監査で、XMLサイトマップが4 URL固定でabout/privacyが漏れていること、robots.txtの改行生成に不整合があることを確認。PR #1031でcanonical URLからのXMLサイトマップ自動生成、robots.txtの正規改行、一時引用比較ページのnoindex、回帰テストを追加。公開反映確認は別工程として保持する。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-12",
+      "updated_at": "2026-10-12",
+      "prerequisites": [],
+      "execution_state": "actionable",
+      "progress": {
+        "current_step": "metadata-structured-data",
+        "steps": [
+          {
+            "id": "sitemap-robots",
+            "title": "XMLサイトマップとrobots.txtの生成を修正",
+            "status": "done",
+            "evidence": "PR #1031でcanonical URLからのXMLサイトマップ生成、robots.txtの改行修正、一時引用比較ページのnoindexを実装し、current-state-guardの回帰テスト成功を確認。マージ後の公開適用確認は別工程。"
+          },
+          {
+            "id": "metadata-structured-data",
+            "title": "ページ別SEOメタデータと構造化データを監査・整備",
+            "status": "pending"
+          },
+          {
+            "id": "indexability-quality",
+            "title": "不要ページのindexabilityと画像・表示品質を監査",
+            "status": "pending"
+          },
+          {
+            "id": "publish-verification",
+            "title": "マージ後の公開物を確認し、現在状態を更新",
+            "status": "pending"
+          }
+        ],
+        "updated_at": "2026-10-12"
+      }
     }
   ],
-  "next_stage_boundary": "WordPress本番運用の判断とサイトアイコン・記事表示・画像・本文表現・モバイル表示の確認を2026-10-11に反映済み。GitHub Pagesトップページが404ではないことの確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認も実施済み。確認作業を繰り返さない。WordPress各URLの具体的な登録結果は正本記録に残っていないため推定しない。GSC sitemap.xmlのGoogle側処理結果待ちだけを維持する。",
-  "next_focus": "Google側のGSC sitemap.xml処理結果待ちを維持する。GitHub Pagesトップページの404確認、WordPressトップページ・BLOG-0001〜0003のインデックス状況確認、その他のURL検査、サイトマップ原因切り分けは再実行しない。Google側の処理結果が変化した場合だけ正本を更新する。"
+  "next_stage_boundary": "WordPress本番運用を維持し、GitHub Pagesは予備公開サイトとしてSEO整備を進める。2026-10-12のPR #1031でXMLサイトマップとrobots.txtの生成を修正し、一時引用比較ページをnoindexにする変更と回帰テストを追加。マージ後の公開適用確認、ページ別SEOメタデータ・構造化データ・indexability・画像／表示品質の整備は未完了。GSC sitemap.xmlのGoogle側処理結果待ちは別項目として維持し、原因切り分けや完了済みURL検査を再実施しない。",
+  "next_focus": "GitHub PagesのSEO整備を優先し、XMLサイトマップ・robots.txtの生成修正に続いて、ページ別SEOメタデータ・構造化データ・indexability・画像と表示品質を段階的に整備する。マージ後の公開適用確認を別工程として行う。Google側のGSC sitemap.xml処理結果は外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを繰り返さない。WordPress本番設定は変更しない。"
 }
