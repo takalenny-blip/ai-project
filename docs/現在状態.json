@@ -723,8 +723,8 @@
           {
             "id": "wordpress-production-judgment",
             "title": "旧方針：WordPress本番化判断（訂正済み）",
-            "status": "superseded",
-            "evidence": "過去にWordPressを本番公開先と判断した記録。2026-10-13、たかの明示によりこの判断は誤りとして撤回。現在の本番公開先はGitHub Pages。履歴として保持し、現在方針の根拠にしない。"
+            "status": "done",
+            "evidence": "過去にWordPressを本番公開先と判断した記録。2026-10-13、たかの明示によりこの判断は誤りとして撤回済み。履歴として完了扱いで保持し、現在方針の根拠にしない。現在の本番公開先はGitHub Pages。"
           },
           {
             "id": "ongoing-publication",
