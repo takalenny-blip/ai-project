@@ -2,6 +2,7 @@ import re
 import subprocess
 import sys
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -97,6 +98,30 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             self.assertIn(f'href="{expected_href}">{title.group(1)}</a>', sitemap)
         self.assertGreaterEqual(public_page_count, 4)
         self.assertIn('href="./">たか’sブログ</a>', sitemap)
+
+
+    def test_xml_sitemap_contains_all_canonical_content_pages_and_excludes_temporary_pages(self):
+        sitemap = ET.fromstring((DIST / "sitemap.xml").read_text(encoding="utf-8"))
+        namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        urls = {
+            node.text
+            for node in sitemap.findall("sm:url/sm:loc", namespace)
+        }
+        expected = {
+            f"{BASE_URL}/",
+            f"{BASE_URL}/ai-blog-start.html",
+            f"{BASE_URL}/vaio-p-again-and-beyond.html",
+            f"{BASE_URL}/github-ai-conversation.html",
+            f"{BASE_URL}/about.html",
+            f"{BASE_URL}/privacy.html",
+        }
+        self.assertEqual(urls, expected)
+        self.assertNotIn(f"{BASE_URL}/sitemap.html", urls)
+        self.assertNotIn(f"{BASE_URL}/quote-samples.html", urls)
+
+    def test_temporary_quote_samples_page_is_noindex(self):
+        html = (DIST / "quote-samples.html").read_text(encoding="utf-8")
+        self.assertIn('<meta name="robots" content="noindex,follow">', html)
 
 
     def test_sidebar_and_footer_navigation_are_generated(self):
