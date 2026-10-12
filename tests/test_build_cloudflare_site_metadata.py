@@ -98,6 +98,53 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         self.assertGreaterEqual(public_page_count, 4)
         self.assertIn('href="./">たか’sブログ</a>', sitemap)
 
+
+    def test_sidebar_and_footer_navigation_are_generated(self):
+        for permalink in (
+            "index.html",
+            "ai-blog-start.html",
+            "vaio-p-again-and-beyond.html",
+            "github-ai-conversation.html",
+        ):
+            html = (DIST / permalink).read_text(encoding="utf-8")
+            self.assertIn('<nav class="sidebar-section" aria-label="記事を探す">', html)
+            self.assertIn("最近の記事", html)
+            self.assertIn('href="about.html">ブログについて</a>', html)
+            self.assertIn('href="privacy.html">プライバシーポリシー</a>', html)
+            self.assertIn('aria-label="フッターナビゲーション"', html)
+
+    def test_article_navigation_has_story_neighbors_and_related_links(self):
+        expected = {
+            "ai-blog-start.html": (None, "vaio-p-again-and-beyond.html"),
+            "vaio-p-again-and-beyond.html": ("ai-blog-start.html", "github-ai-conversation.html"),
+            "github-ai-conversation.html": ("vaio-p-again-and-beyond.html", None),
+        }
+        for permalink, (previous, following) in expected.items():
+            html = (DIST / permalink).read_text(encoding="utf-8")
+            self.assertIn('aria-label="記事ナビゲーション"', html)
+            self.assertIn("あわせて読みたい", html)
+            if previous:
+                self.assertIn(f'<a rel="prev" href="{previous}">', html)
+            else:
+                self.assertIn("前の記事はありません", html)
+            if following:
+                self.assertIn(f'<a rel="next" href="{following}">', html)
+            else:
+                self.assertIn("次の記事はありません", html)
+
+    def test_about_and_privacy_pages_are_generated_and_listed(self):
+        about = (DIST / "about.html").read_text(encoding="utf-8")
+        privacy = (DIST / "privacy.html").read_text(encoding="utf-8")
+        sitemap = (DIST / "sitemap.html").read_text(encoding="utf-8")
+        self.assertIn('<link rel="canonical" href="https://takalenny-blip.github.io/ai-project/about.html">', about)
+        self.assertIn('<link rel="canonical" href="https://takalenny-blip.github.io/ai-project/privacy.html">', privacy)
+        self.assertIn("AIとのやりとりをきっかけに生まれた試行錯誤", about)
+        self.assertIn("ホスティングサービス", privacy)
+        self.assertIn('href="about.html">ブログについて｜たか’sブログ</a>', sitemap)
+        self.assertIn('href="privacy.html">プライバシーポリシー｜たか’sブログ</a>', sitemap)
+        self.assertIn('href="privacy.html">プライバシーポリシー</a>', about)
+        self.assertIn('href="about.html">ブログについて</a>', privacy)
+
     def test_home_and_article_pages_link_to_html_sitemap(self):
         for permalink in (
             "index.html",
@@ -106,7 +153,8 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "github-ai-conversation.html",
         ):
             html = (DIST / permalink).read_text(encoding="utf-8")
-            self.assertIn('href="sitemap.html">サイトマップ</a>', html)
+            self.assertIn('href="sitemap.html">記事一覧</a>', html)
+            self.assertIn('href="sitemap.html">すべての記事</a>', html)
 
 
 if __name__ == "__main__":
