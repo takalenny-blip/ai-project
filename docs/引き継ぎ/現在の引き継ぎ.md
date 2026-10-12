@@ -24,11 +24,11 @@
 - 一覧：
 - [WP無料ホスティング検証] priority=23：GitHub Pagesを本番公開先として継続運用
 
-  - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
+  - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
 
-- [WP無料ホスティング検証] WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。
+- [GITHUB-PAGES-PRODUCTION] GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページは表示確認済み。確認済み工程を繰り返さず、Google側のGSC処理結果の変化または新たな不具合・変更要求があった場合のみ対応する。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
