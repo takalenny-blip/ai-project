@@ -3,6 +3,7 @@
 
 from pathlib import Path
 import html as html_module
+import json
 import re
 import shutil
 
@@ -633,6 +634,142 @@ a:focus-visible {
 
 
 apply_accessible_link_colors()
+
+
+def apply_social_metadata_and_structured_data():
+    """Keep social previews and JSON-LD consistent with each canonical page."""
+    home_url = "https://takalenny-blip.github.io/ai-project/"
+    publisher = {
+        "@type": "Organization",
+        "name": "たか’sブログ",
+        "url": home_url,
+        "logo": {"@type": "ImageObject", "url": SITE_IMAGE_URL},
+    }
+    article_by_path = {f"/{item['permalink']}": item for item in ARTICLES}
+
+    for page_path in sorted(DIST.glob("*.html")):
+        page_html = page_path.read_text(encoding="utf-8")
+        if page_path.name == "quote-samples.html":
+            continue
+        canonical_match = re.search(
+            r'<link rel="canonical" href="([^"]+)"', page_html
+        )
+        title_match = re.search(r"<title>(.*?)</title>", page_html, re.DOTALL)
+        description_match = re.search(
+            r'<meta name="description" content="([^"]*)"', page_html
+        )
+        if not canonical_match or not title_match or not description_match:
+            continue
+
+        canonical = html_module.unescape(canonical_match.group(1)).strip()
+        title = html_module.unescape(title_match.group(1).strip())
+        description = html_module.unescape(description_match.group(1).strip())
+        page_path_part = "/" if page_path.name == "index.html" else f"/{page_path.name}"
+        article = article_by_path.get(page_path_part)
+
+        if page_path.name == "index.html":
+            schema_type = "WebSite"
+            og_type = "website"
+            schema = {
+                "@context": "https://schema.org",
+                "@type": schema_type,
+                "name": title,
+                "url": canonical,
+                "description": description,
+                "inLanguage": "ja-JP",
+                "publisher": publisher,
+            }
+        elif article:
+            schema_type = "BlogPosting"
+            og_type = "article"
+            schema = {
+                "@context": "https://schema.org",
+                "@type": schema_type,
+                "headline": title,
+                "description": description,
+                "url": canonical,
+                "mainEntityOfPage": {"@type": "WebPage", "@id": canonical},
+                "image": SITE_IMAGE_URL,
+                "author": {"@type": "Person", "name": "たか"},
+                "publisher": publisher,
+                "inLanguage": "ja-JP",
+            }
+        elif page_path.name == "about.html":
+            schema_type = "AboutPage"
+            og_type = "website"
+            schema = {
+                "@context": "https://schema.org",
+                "@type": schema_type,
+                "name": title,
+                "description": description,
+                "url": canonical,
+                "inLanguage": "ja-JP",
+                "isPartOf": {"@type": "WebSite", "url": home_url, "name": "たか’sブログ"},
+            }
+        elif page_path.name == "privacy.html":
+            schema_type = "PrivacyPolicy"
+            og_type = "website"
+            schema = {
+                "@context": "https://schema.org",
+                "@type": schema_type,
+                "name": title,
+                "description": description,
+                "url": canonical,
+                "inLanguage": "ja-JP",
+                "isPartOf": {"@type": "WebSite", "url": home_url, "name": "たか’sブログ"},
+            }
+        else:
+            schema_type = "WebPage"
+            og_type = "website"
+            schema = {
+                "@context": "https://schema.org",
+                "@type": schema_type,
+                "name": title,
+                "description": description,
+                "url": canonical,
+                "inLanguage": "ja-JP",
+                "isPartOf": {"@type": "WebSite", "url": home_url, "name": "たか’sブログ"},
+            }
+
+        metadata = {
+            "og:type": og_type,
+            "og:title": title,
+            "og:description": description,
+            "og:url": canonical,
+            "og:image": SITE_IMAGE_URL,
+            "og:image:alt": "たか’sブログのサイトバナー",
+        }
+        for prop, value in metadata.items():
+            pattern = rf'<meta property="{re.escape(prop)}" content="[^"]*">'
+            tag = f'<meta property="{prop}" content="{html_module.escape(value, quote=True)}">'
+            if re.search(pattern, page_html):
+                page_html = re.sub(pattern, lambda _match, tag=tag: tag, page_html, count=1)
+            else:
+                page_html = page_html.replace("</head>", tag + "\n</head>", 1)
+
+        twitter_tag = '<meta name="twitter:card" content="summary_large_image">'
+        if 'name="twitter:card"' not in page_html:
+            page_html = page_html.replace("</head>", twitter_tag + "\n</head>", 1)
+
+        json_ld = (
+            '<script type="application/ld+json">\n'
+            + json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
+            + "\n</script>"
+        )
+        if 'type="application/ld+json"' in page_html:
+            page_html = re.sub(
+                r'<script type="application/ld\+json">.*?</script>',
+                lambda _match: json_ld,
+                page_html,
+                count=1,
+                flags=re.DOTALL,
+            )
+        else:
+            page_html = page_html.replace("</head>", json_ld + "\n</head>", 1)
+        page_path.write_text(page_html, encoding="utf-8")
+
+
+apply_social_metadata_and_structured_data()
 
 print(f"built {DIST / 'index.html'}")
 print(f"built {DIST / PERMALINK}")

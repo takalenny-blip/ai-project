@@ -1,3 +1,4 @@
+import json
 import re
 import subprocess
 import sys
@@ -61,6 +62,42 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "github-ai-conversation.html",
             "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか",
         )
+
+    def test_canonical_pages_have_consistent_social_metadata_and_valid_json_ld(self):
+        expected_types = {
+            "index.html": ("website", "WebSite"),
+            "ai-blog-start.html": ("article", "BlogPosting"),
+            "vaio-p-again-and-beyond.html": ("article", "BlogPosting"),
+            "github-ai-conversation.html": ("article", "BlogPosting"),
+            "about.html": ("website", "AboutPage"),
+            "privacy.html": ("website", "PrivacyPolicy"),
+            "sitemap.html": ("website", "WebPage"),
+        }
+        for permalink, (og_type, schema_type) in expected_types.items():
+            with self.subTest(permalink=permalink):
+                html = (DIST / permalink).read_text(encoding="utf-8")
+                self.assertIn(f'<meta property="og:type" content="{og_type}">', html)
+                self.assertIn('<meta property="og:title" content="', html)
+                self.assertIn('<meta property="og:description" content="', html)
+                self.assertIn('<meta property="og:url" content="', html)
+                self.assertIn(
+                    '<meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">',
+                    html,
+                )
+                self.assertIn('<meta property="og:image:alt" content="たか’sブログのサイトバナー">', html)
+                self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
+                matches = re.findall(
+                    r'<script type="application/ld\+json">(.*?)</script>',
+                    html,
+                    re.DOTALL,
+                )
+                self.assertEqual(len(matches), 1)
+                schema = json.loads(matches[0])
+                self.assertEqual(schema["@context"], "https://schema.org")
+                self.assertEqual(schema["@type"], schema_type)
+                self.assertEqual(schema["inLanguage"], "ja-JP")
+                self.assertIn("url", schema)
+                self.assertNotIn(r"\n", matches[0])
 
     def test_homepage_has_website_social_metadata(self):
         html = (DIST / "index.html").read_text(encoding="utf-8")
