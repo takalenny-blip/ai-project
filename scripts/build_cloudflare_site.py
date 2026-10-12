@@ -24,6 +24,69 @@ BLOG1_DESCRIPTION = "AIとのやりとりからブログ制作の仕組みを考
 BLOG2_DESCRIPTION = "VAIO Pをもう一度動かすためにDebianを導入し、環境を整えた記録。DIGA／DiMORAの番組予約情報を扱う自動化テストを通して、試行錯誤と次の発想を振り返る。"
 BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作業の進み具合を管理する仕組みを作った経験。会話を保存するだけでなく、あとから再開できる形に整えていく過程を紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
+ARTICLES = [
+    {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
+    {"title": BLOG2_TITLE, "permalink": BLOG2_PERMALINK, "part": "第2部｜VAIO P", "description": BLOG2_DESCRIPTION},
+    {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
+]
+
+
+def render_sidebar():
+    recent_links = "\\n".join(
+        f'<li><a href="{item["permalink"]}">{html_module.escape(item["title"])}</a></li>'
+        for item in reversed(ARTICLES)
+    )
+    return f"""<aside class="profile" aria-label="ブログ案内">
+  <p class="profile-label">PROFILE</p>
+  <div class="profile-icon" aria-hidden="true">た</div>
+  <p><strong>たか</strong></p>
+  <p>AIとのやりとりと、その過程を記録しています。</p>
+  <nav class="sidebar-section" aria-label="記事を探す">
+    <h2>記事を探す</h2>
+    <ul><li><a href="sitemap.html">すべての記事</a></li></ul>
+    <h2>最近の記事</h2>
+    <ul>{recent_links}</ul>
+  </nav>
+</aside>"""
+
+
+def render_footer():
+    return """<footer class="site-footer">
+  <nav aria-label="フッターナビゲーション">
+    <a href="./">トップページ</a> ·
+    <a href="sitemap.html">記事一覧</a> ·
+    <a href="about.html">ブログについて</a> ·
+    <a href="privacy.html">プライバシーポリシー</a>
+  </nav>
+  <p>たか’sブログ</p>
+</footer>"""
+
+
+def render_article_navigation(permalink):
+    index = next(i for i, item in enumerate(ARTICLES) if item["permalink"] == permalink)
+    previous_item = ARTICLES[index - 1] if index > 0 else None
+    next_item = ARTICLES[index + 1] if index + 1 < len(ARTICLES) else None
+    previous_link = (
+        f'<a rel="prev" href="{previous_item["permalink"]}">← 前の記事：{html_module.escape(previous_item["title"])}</a>'
+        if previous_item else '<span class="nav-unavailable">前の記事はありません</span>'
+    )
+    next_link = (
+        f'<a rel="next" href="{next_item["permalink"]}">次の記事：{html_module.escape(next_item["title"])} →</a>'
+        if next_item else '<span class="nav-unavailable">次の記事はありません</span>'
+    )
+    related_links = "\\n".join(
+        f'<li><a href="{item["permalink"]}">{html_module.escape(item["title"])}</a></li>'
+        for item in ARTICLES if item["permalink"] != permalink
+    )
+    return f"""<nav class="article-navigation" aria-label="記事ナビゲーション">
+  <p class="nav-label">記事ナビゲーション</p>
+  <div class="article-neighbors">{previous_link}{next_link}</div>
+  <h2>あわせて読みたい</h2>
+  <ul>{related_links}</ul>
+</nav>"""
+
+
+
 
 for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE):
     if not required_source.is_file():
@@ -118,6 +181,17 @@ figcaption {{ margin-top:.65em; color:var(--muted); font-size:.82em; }}
 .flow-box {{ background:#2b2926; }}
 code {{ background:#35322e; padding:.1em .3em; border-radius:2px; }}
 .profile {{ position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }}
+.sidebar-section {{ margin-top:30px; padding-top:22px; border-top:1px solid var(--line); }}
+.sidebar-section h2 {{ margin:0 0 10px; color:var(--accent); font-size:.76rem; font-family:inherit; font-weight:600; letter-spacing:.08em; }}
+.sidebar-section ul {{ margin:0 0 22px; padding-left:1.1em; }}
+.sidebar-section li {{ margin:.55em 0; font-size:.84rem; }}
+.article-navigation {{ margin:3em 0 0; padding:1.3em; border:1px solid var(--line); background:#2b2926; }}
+.article-navigation .nav-label {{ margin:0 0 1em; color:var(--accent); font-size:.72rem; letter-spacing:.12em; font-weight:600; }}
+.article-navigation .article-neighbors {{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:1em; }}
+.article-navigation .nav-unavailable {{ color:var(--muted); font-size:.86em; }}
+.article-navigation h2 {{ margin:1.7em 0 .6em; padding:0; border:0; font-family:inherit; font-size:.9rem; font-weight:600; }}
+.article-navigation ul {{ margin:0; padding-left:1.2em; }}
+.article-navigation li {{ margin:.4em 0; }}
 .profile-label {{ margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }}
 .profile-icon {{ width:58px; height:58px; margin-bottom:14px; border:1px solid #806b4a; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }}
 .profile-name {{ color:var(--ink); font-family:Georgia,"Noto Serif JP",serif; font-size:1.05rem; }}
@@ -152,15 +226,10 @@ code {{ background:#35322e; padding:.1em .3em; border-radius:2px; }}
       </div>
       {html}
     </article>
-    <aside class="profile" aria-label="プロフィール">
-      <p class="profile-label">PROFILE</p>
-      <div class="profile-icon" aria-hidden="true">た</div>
-      <p>たか</p>
-      <p>AIとのやりとりと、その過程を記録しています。</p>
-    </aside>
+    {render_sidebar()}
   </div>
 </main>
-<footer class="site-footer">たか’sブログ · <a href="sitemap.html">サイトマップ</a></footer>
+{render_footer()}
 </body>
 </html>
 """
@@ -209,6 +278,10 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .profile-label { margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }
 .profile-icon { width:58px; height:58px; margin-bottom:14px; border:1px solid #c9bda9; border-radius:50%; display:grid; place-items:center; background:transparent; color:var(--ink); font-family:Georgia,serif; font-size:1.25rem; }
 .profile p { margin:0 0 .35em; }
+.sidebar-section { margin-top:30px; padding-top:22px; border-top:1px solid var(--line); }
+.sidebar-section h2 { margin:0 0 10px; color:var(--accent); font-size:.76rem; font-family:inherit; font-weight:600; letter-spacing:.08em; }
+.sidebar-section ul { margin:0 0 22px; padding-left:1.1em; }
+.sidebar-section li { margin:.55em 0; font-size:.84rem; }
 .site-footer { border-top:1px solid var(--line); background:var(--paper); color:var(--muted); text-align:center; padding:34px 18px; font-size:.76rem; letter-spacing:.1em; }
 @media (max-width:760px) {
   .header-inner { padding:22px 18px 18px; }
@@ -240,9 +313,9 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   <a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった――GitHubで作った仕組み</h2><p>保存し、現在を間違えない仕組みにしていった経験。</p></a>
 </div>
 </section>
-<aside class="profile" aria-label="プロフィール"><p class="profile-label">PROFILE</p><div class="profile-icon" aria-hidden="true">た</div><p><strong>たか</strong></p><p>AIとのやりとりと、その過程を記録しています。</p></aside>
+{render_sidebar()}
 </div>
-<footer class="site-footer">たか’sブログ · <a href="sitemap.html">サイトマップ</a></footer>
+{render_footer()}
 </body>
 </html>
 """
@@ -344,6 +417,7 @@ def article_variant(base_page, title, permalink, body_html):
     replacement = f"""      <h1>{title}</h1>
       <p class="post-meta">固定ページ：{permalink}</p>
       {body_html}
+      {render_article_navigation(permalink)}
 """
     return base_page[:start] + replacement + base_page[end:]
 
@@ -412,6 +486,8 @@ li {{ padding: 18px 0; border-bottom: 1px solid #3d3933; }}
 a {{ color: #c4a46a; text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}
 .home {{ display: inline-block; margin-top: 30px; }}
+.site-footer {{ border-top:1px solid #3d3933; color:#aaa093; text-align:center; padding:30px 18px; font-size:.76rem; letter-spacing:.04em; }}
+.site-footer p {{ margin:.8em 0 0; }}
 </style>
 </head>
 <body>
@@ -423,6 +499,7 @@ a:hover {{ text-decoration: underline; }}
 </ul>
 <a class="home" href="./">← トップページへ戻る</a>
 </main>
+{render_footer()}
 </body>
 </html>
 """
@@ -430,6 +507,57 @@ a:hover {{ text-decoration: underline; }}
     print(f"built {DIST / 'sitemap.html'} with {len(public_pages)} public pages")
 
 
+def build_static_page(title, permalink, description, body):
+    canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
+    page_html = f"""<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}｜たか’sブログ</title>
+<meta name="description" content="{description}">
+<link rel="canonical" href="{canonical_url}">
+<style>
+* {{ box-sizing:border-box; }}
+:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#363636; --cream:#2d2b28; --line:#3d3933; --accent:#b3945a; }}
+body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.9; }}
+.site-header {{ max-width:1120px; margin:0 auto; padding:30px 28px 26px; }}
+.site-header img {{ display:block; width:100%; max-height:240px; object-fit:cover; height:auto; border:1px solid var(--line); }}
+.banner {{ border-block:1px solid var(--line); background:var(--cream); color:var(--muted); padding:13px max(18px, calc((100% - 1064px)/2)); font-size:.78rem; letter-spacing:.08em; }}
+main {{ max-width:850px; margin:0 auto; padding:48px 24px 72px; }}
+h1 {{ font-family:Georgia,"Noto Serif JP",serif; font-weight:500; line-height:1.45; }}
+a {{ color:#c4a46a; }}
+.site-footer {{ border-top:1px solid var(--line); color:var(--muted); text-align:center; padding:30px 18px; font-size:.76rem; letter-spacing:.04em; }}
+.site-footer p {{ margin:.8em 0 0; }}
+@media(max-width:700px) {{ .site-header {{ padding:22px 18px 18px; }} .site-header img {{ max-height:180px; }} main {{ padding:36px 18px 54px; }} }}
+</style>
+</head>
+<body>
+<header class="site-header"><a href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></header>
+<div class="banner">AIとのやりとりと、そこから生まれた経験を残していく</div>
+<main>
+<h1>{title}</h1>
+{body}
+</main>
+{render_footer()}
+</body>
+</html>
+"""
+    (DIST / permalink).write_text(page_html, encoding="utf-8")
+
+
+build_static_page(
+    "ブログについて",
+    "about.html",
+    "たか’sブログの目的と、記事に残していることを紹介します。",
+    "<p>このブログでは、AIとのやりとりをきっかけに生まれた試行錯誤や、そこから得た経験を記録しています。</p><p>完成した結果だけでなく、うまくいかなかったことや、考えが変わっていく過程も残していきます。</p>",
+)
+build_static_page(
+    "プライバシーポリシー",
+    "privacy.html",
+    "たか’sブログにおける個人情報と外部サービスの取扱いについて。",
+    "<p>このサイトには、現時点で問い合わせフォームやコメント投稿機能を設けていません。</p><p>サイトの閲覧に伴い、ホスティングサービスなどの提供元が技術的なアクセス情報を処理する場合があります。サービス側での情報の取扱いについては、それぞれの提供元が公開する方針をご確認ください。</p><p>記事から外部サイトへ移動した場合、そのサイトでの情報の取扱いは移動先の方針に従います。</p><p>個人情報を収集する機能や外部サービスを追加した場合は、このページの記載を見直します。</p>",
+)
 build_html_sitemap()
 
 print(f"built {DIST / 'index.html'}")
