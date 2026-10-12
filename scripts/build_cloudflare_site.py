@@ -364,7 +364,7 @@ robots_txt = """User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.githu
 
 
 (DIST / "index.html").write_text(home, encoding="utf-8")
-(DIST / PERMALINK).write_text(page, encoding="utf-8")
+# The canonical article is written after article_variant adds the shared article navigation.
 
 def article_variant(base_page, title, permalink, body_html):
     labels = {
@@ -425,8 +425,10 @@ def article_variant(base_page, title, permalink, body_html):
 
 page1 = article_variant(page, BLOG1_TITLE, BLOG1_PERMALINK, blog1_html)
 page2 = article_variant(page, BLOG2_TITLE, BLOG2_PERMALINK, blog2_html)
+page3 = article_variant(page, TITLE, PERMALINK, html)
 (DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
 (DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
+(DIST / PERMALINK).write_text(page3, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
