@@ -23,8 +23,9 @@ SUBSTANTIVE_PREFIXES = (
     "docs/設計/",
     "schemas/",
     "rules/",
+    "経験ログ/",
 )
-SUBSTANTIVE_FILES = {"README.md"}
+SUBSTANTIVE_FILES = {"README.md", "指針等/ID管理台帳.md"}
 
 SUBSTANTIVE_WORKFLOW_PREFIX = ".github/workflows/"
 

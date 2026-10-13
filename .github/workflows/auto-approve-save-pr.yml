@@ -68,23 +68,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
           guard_ready="missing"
-          progress_ready="pass"
+          progress_ready="missing"
           for attempt in $(seq 1 120); do
             checks="$(gh pr checks "$PR_URL" --json name,bucket,state)"
             failed="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select((.bucket | ascii_upcase) == "FAIL" or (.bucket | ascii_upcase) == "CANCEL")] | length')"
             [ "$failed" -eq 0 ] || { echo "A PR check failed or was cancelled."; printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'; exit 1; }
 
             guard_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "guard")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
-            progress_ready="pass"
-            case "$HEAD_REF" in
-              work/*)
-                progress_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "progress-gate")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
-                ;;
-            esac
+            progress_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "progress-gate")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
 
             if [ "$guard_ready" = "pass" ] && [ "$progress_ready" = "pass" ]; then
               echo "Required PR checks passed."
