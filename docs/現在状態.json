@@ -804,6 +804,56 @@
         ],
         "updated_at": "2026-10-13"
       }
+    },
+    {
+      "id": "PAT-EXPIRY",
+      "title": "保存・承認フローのPAT期限切れ対策",
+      "priority": 16,
+      "status": "in_progress",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "github_auth_reliability",
+      "target": "保存・承認フローで固定PATの期限切れにより停止する再発を防ぐ。認証依存箇所と権限を棚卸しし、GitHub Appの短命インストールトークンへの移行可能性、秘密鍵管理、ロールバックを設計する。移行完了まではPAT期限前通知も検討する。",
+      "evidence": "GitHub Issue #1059 (https://github.com/takalenny-blip/ai-project/issues/1059)。2026-10-13、SAVE_APPROVE_TAKA2_TOKENの期限切れ（2026-09-25）による保存PR承認停止を受けて残作業として登録。現時点ではIssue登録のみ完了し、依存箇所の棚卸し・移行実装・検証は未完了。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-13",
+      "updated_at": "2026-10-13",
+      "prerequisites": [],
+      "execution_state": "actionable",
+      "progress": {
+        "current_step": "inventory",
+        "steps": [
+          {
+            "id": "inventory",
+            "title": "PAT依存箇所・必要権限・API操作を棚卸しする",
+            "status": "in_progress",
+            "evidence": "Issue #1059を作成。ワークフロー内の認証依存箇所はこれから調査する。"
+          },
+          {
+            "id": "github-app-design",
+            "title": "GitHub App移行方式と秘密鍵管理を設計する",
+            "status": "pending"
+          },
+          {
+            "id": "migration-pr",
+            "title": "移行PRを作成する",
+            "status": "pending"
+          },
+          {
+            "id": "end-to-end-verification",
+            "title": "保存PRからマージ後CI・正本読み戻しまで検証する",
+            "status": "pending"
+          },
+          {
+            "id": "temporary-expiry-notice",
+            "title": "移行完了までのPAT期限前通知を検討する",
+            "status": "pending"
+          }
+        ],
+        "updated_at": "2026-10-13"
+      }
     }
   ],
   "next_stage_boundary": "GitHub Pages SEOの生成コード整備はPR #1031〜#1033でマージ済み。残作業は公開反映・実表示確認。Google側のGSC sitemap.xml処理結果待ちは別の外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを再実施しない。WordPress本番設定は変更しない。",
