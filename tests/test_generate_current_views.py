@@ -36,6 +36,15 @@ class CheckCommittedViewsTests(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn("missing", message)
 
+    def test_byte_mismatch_reports_offset_and_context(self):
+        (self.root / "BUD.md").write_bytes(b"BUD rendered\\r\\n")
+        ok, message = check_committed_views("BUD rendered", "handover rendered", self.root)
+        self.assertFalse(ok)
+        self.assertIn("first byte mismatch at offset 11", message)
+        self.assertIn("expected_bytes=12, actual_bytes=13", message)
+        self.assertIn("expected_excerpt", message)
+        self.assertIn("actual_excerpt", message)
+
 
 if __name__ == "__main__":
     unittest.main()
