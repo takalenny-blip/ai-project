@@ -32,6 +32,14 @@ class MainWorkProgressGuardTests(unittest.TestCase):
         ok, _ = validate("work/blog-publication-roles-20261009", ["rules/運用ルール.md"])
         self.assertTrue(ok)
 
+    def test_work_branch_accepts_experience_record(self):
+        ok, _ = validate("exp-rec/new-record", ["経験ログ/REC_EXP-0000000030_REC-0000000380.md"])
+        self.assertTrue(ok)
+
+    def test_work_branch_accepts_experience_id_ledger(self):
+        ok, _ = validate("exp-rec/new-record", ["指針等/ID管理台帳.md"])
+        self.assertTrue(ok)
+
     @patch("main_work_progress_guard.subprocess.run")
     def test_changed_paths_preserves_japanese_filenames(self, run):
         run.return_value = Mock(stdout="rules/運用ルール.md\0docs/現在状態.json\0")
