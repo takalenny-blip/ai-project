@@ -40,8 +40,8 @@ class CheckCommittedViewsTests(unittest.TestCase):
         (self.root / "BUD.md").write_bytes(b"BUD rendered\\r\\n")
         ok, message = check_committed_views("BUD rendered", "handover rendered", self.root)
         self.assertFalse(ok)
-        self.assertIn("first byte mismatch at offset 11", message)
-        self.assertIn("expected_bytes=12, actual_bytes=13", message)
+        self.assertIn("first byte mismatch at offset 12", message)
+        self.assertIn("expected_bytes=12, actual_bytes=14", message)
         self.assertIn("expected_excerpt", message)
         self.assertIn("actual_excerpt", message)
 
