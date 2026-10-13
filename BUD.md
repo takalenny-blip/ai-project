@@ -23,8 +23,7 @@
 - actionable：2件
 - 一覧：
 - [AI-MANUAL-STRUCTURE] priority=22：3冊のマニュアル構成を企画メモへ反映する
-  - 未完了工程：toc-detail [in_progress] 各冊の目次・完了条件を具体化
-  - 未完了工程：review [pending] 企画メモと現在状態・生成ビューの整合を確認
+  - 未完了工程：review [in_progress] 企画メモと現在状態・生成ビューの整合を確認
 - [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
   - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 

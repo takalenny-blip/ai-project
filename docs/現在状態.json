@@ -745,7 +745,7 @@
       "not_before": null,
       "scope": "AI活用ツール商品化企画",
       "target": "先行するセッティングマニュアル、運用マニュアル、公開マニュアルの役割と目次範囲を企画メモへ反映する。セッティングではGitHubの基本操作・ChatGPTチャットMarkdown保存拡張機能・Dropboxを扱い、GitHub Pagesのサイト構築・公開設定は公開マニュアルに分離する。需要・販売・正式仕様は未確定のまま扱う。",
-      "evidence": "2026-10-13、たかと合意した構成：①セッティング＝作業環境の準備、②運用＝AIで試行錯誤し経験を記録、③公開＝成果をGitHub Pagesで公開。ChatGPTチャットをMarkdown形式でダウンロードするブラウザ拡張機能をセッティングに含め、Dropboxより前に配置する。WordPressは本番公開先とせず、GitHub Pagesを公開先とする。",
+      "evidence": "2026-10-13、3冊の役割分担・基本目次を反映済み。セッティングマニュアルの章別手順・成果物・完了テストを具体化。GitHub Pagesを本番公開先とし、WordPressは本番公開先に戻さない。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -754,7 +754,7 @@
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "toc-detail",
+        "current_step": "review",
         "steps": [
           {
             "id": "scope-confirmed",
@@ -771,13 +771,14 @@
           {
             "id": "toc-detail",
             "title": "各冊の目次・完了条件を具体化",
-            "status": "in_progress",
-            "evidence": "今回の構成は基本案。章ごとの詳細・手順・完了条件は次工程で具体化する。"
+            "status": "done",
+            "evidence": "2026-10-13、先行するセッティングマニュアルについて章別の実施手順・成果物・確認テストを企画メモ§10.5に具体化。"
           },
           {
             "id": "review",
             "title": "企画メモと現在状態・生成ビューの整合を確認",
-            "status": "pending"
+            "status": "in_progress",
+            "evidence": "本変更で企画メモと正本・生成ビューを同一PRで更新し、CIで生成一致と回帰テストを確認する。"
           }
         ],
         "updated_at": "2026-10-13"
