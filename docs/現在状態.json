@@ -814,7 +814,7 @@
       "not_before": null,
       "scope": "github_auth_reliability",
       "target": "保存・承認フローで固定PATの期限切れにより停止する再発を防ぐ。認証依存箇所と権限を棚卸しし、GitHub Appの短命インストールトークンへの移行可能性、秘密鍵管理、ロールバックを設計する。移行完了まではPAT期限前通知も検討する。",
-      "evidence": "GitHub Issue #1059 (https://github.com/takalenny-blip/ai-project/issues/1059)。2026-10-13、SAVE_APPROVE_TAKA2_TOKENの期限切れ（2026-09-25）による保存PR承認停止を受けて残作業として登録。現時点ではIssue登録のみ完了し、依存箇所の棚卸し・移行実装・検証は未完了。",
+      "evidence": "GitHub Issue #1059 (https://github.com/takalenny-blip/ai-project/issues/1059)。2026-10-13、SAVE_APPROVE_TAKA2_TOKENの期限切れ（2026-09-25）による保存PR承認停止を受けて残作業として登録。workflow棚卸し完了：SAVE_APPROVE_TAKA2_TOKENはtaka2-devとして承認とマージに、SAVE_PR_TOKENはsave-request-intake.ymlとcanonical-state-update.ymlでPR作成に使用。GitHub App移行設計とレビュー要件確認、移行実装・検証は未完了。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -823,18 +823,19 @@
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "inventory",
+        "current_step": "github-app-design",
         "steps": [
           {
             "id": "inventory",
             "title": "PAT依存箇所・必要権限・API操作を棚卸しする",
-            "status": "in_progress",
-            "evidence": "Issue #1059を作成。ワークフロー内の認証依存箇所はこれから調査する。"
+            "status": "done",
+            "evidence": "2026-10-13にmainの16 workflowファイルを棚卸し。auto-approve-save-pr.ymlではSAVE_APPROVE_TAKA2_TOKENをgh pr review --approve（taka2-devとして）とgh pr mergeに使用。save-request-intake.ymlとcanonical-state-update.ymlではSAVE_PR_TOKENをPR作成に使用。PR情報・チェック取得はgithub.token、current-state-views等はGITHUB_TOKENを使用。固定PATの用途は承認・マージとPR作成に分かれる。承認用トークンはユーザー taka2-dev のレビュー身份を担うため、GitHub Appへ単純置換できるかはレビュー要件の確認が必要。秘密の値や有効期限の実値は取得していない。"
           },
           {
             "id": "github-app-design",
             "title": "GitHub App移行方式と秘密鍵管理を設計する",
-            "status": "pending"
+            "status": "in_progress",
+            "evidence": "棚卸しの結果、SAVE_PR_TOKENはGitHub Appへ移行できる可能性がある一方、SAVE_APPROVE_TAKA2_TOKENはtaka2-devとして承認する要件があるため、App identityがレビュー要件を満たすか確認が必要。"
           },
           {
             "id": "migration-pr",
