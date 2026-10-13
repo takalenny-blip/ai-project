@@ -28,8 +28,7 @@
   - 未完了工程：publication-preparation [pending] GitHub Pages向け無料記事・サンプルと公開準備を整える
   - 未完了工程：note-demand-validation [pending] noteを候補に需要・購入意向を検証する
 - [PAT-EXPIRY] priority=16：保存・承認フローのPAT期限切れ対策
-  - 未完了工程：inventory [in_progress] PAT依存箇所・必要権限・API操作を棚卸しする
-  - 未完了工程：github-app-design [pending] GitHub App移行方式と秘密鍵管理を設計する
+  - 未完了工程：github-app-design [in_progress] GitHub App移行方式と秘密鍵管理を設計する
   - 未完了工程：migration-pr [pending] 移行PRを作成する
   - 未完了工程：end-to-end-verification [pending] 保存PRからマージ後CI・正本読み戻しまで検証する
   - 未完了工程：temporary-expiry-notice [pending] 移行完了までのPAT期限前通知を検討する
