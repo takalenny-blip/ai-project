@@ -141,7 +141,6 @@ def check_committed_views(bud: str, handover: str, root: Path = ROOT) -> tuple[b
                 min(len(actual_bytes), len(expected_bytes)),
             )
             actual_text = actual_bytes.decode("utf-8", errors="replace")
-            expected_text = expected_bytes.decode("utf-8", errors="replace")
             expected_excerpt = expected_bytes[max(0, mismatch - 24):mismatch + 48].decode("utf-8", errors="replace")
             actual_excerpt = actual_bytes[max(0, mismatch - 24):mismatch + 48].decode("utf-8", errors="replace")
             return False, (
