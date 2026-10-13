@@ -20,14 +20,18 @@
 
 ## 作業キュー
 
-- actionable：1件
+- actionable：2件
 - 一覧：
+- [AI-MANUAL-STRUCTURE] priority=22：3冊のマニュアル構成を企画メモへ反映する
+  - 未完了工程：toc-detail [in_progress] 各冊の目次・完了条件を具体化
+
+  - 未完了工程：review [pending] 企画メモと現在状態・生成ビューの整合を確認
 - [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
   - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
 
-- [GITHUB-PAGES-PRODUCTION] GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。確認済み工程を繰り返さず、新たな不具合・変更要求またはGoogle側のGSC処理結果の変化があった場合のみ対応する。WordPressは本番公開先として扱わない。
+- [AI-MANUAL-STRUCTURE] 先行するセッティングマニュアル、運用マニュアル、公開マニュアルの役割と目次範囲を企画メモへ反映する。セッティングではGitHubの基本操作・ChatGPTチャットMarkdown保存拡張機能・Dropboxを扱い、GitHub Pagesのサイト構築・公開設定は公開マニュアルに分離する。需要・販売・正式仕様は未確定のまま扱う。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
