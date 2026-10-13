@@ -814,14 +814,14 @@
       "not_before": null,
       "scope": "github_auth_reliability",
       "target": "保存・承認フローで固定PATの期限切れにより停止する再発を防ぐ。認証依存箇所と権限を棚卸しし、GitHub Appの短命インストールトークンへの移行可能性、秘密鍵管理、ロールバックを設計する。移行完了まではPAT期限前通知も検討する。",
-      "evidence": "GitHub Issue #1059 (https://github.com/takalenny-blip/ai-project/issues/1059)。2026-10-13、SAVE_APPROVE_TAKA2_TOKENの期限切れ（2026-09-25）による保存PR承認停止を受けて残作業として登録。workflow棚卸し完了：SAVE_APPROVE_TAKA2_TOKENはtaka2-devとして承認とマージに、SAVE_PR_TOKENはsave-request-intake.ymlとcanonical-state-update.ymlでPR作成に使用。GitHub App移行設計とレビュー要件確認、移行実装・検証は未完了。",
+      "evidence": "GitHub Issue #1059。PAT依存箇所の棚卸し完了（PR #1061 merged、merge commit 2b6cc7a31dadf9c57448adf5c702e8e86d5b3d26、マージ後CI成功）。SAVE_PR_TOKENはsave-request-intake.ymlとcanonical-state-update.ymlのPR作成に、SAVE_APPROVE_TAKA2_TOKENはauto-approve-save-pr.ymlのtaka2-devとしての承認とマージに使用。方式選択とGitHub App登録／シークレット設定は未完了。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-13",
       "updated_at": "2026-10-13",
       "prerequisites": [],
-      "execution_state": "actionable",
+      "execution_state": "waiting_external",
       "progress": {
         "current_step": "github-app-design",
         "steps": [
@@ -834,8 +834,8 @@
           {
             "id": "github-app-design",
             "title": "GitHub App移行方式と秘密鍵管理を設計する",
-            "status": "in_progress",
-            "evidence": "棚卸しの結果、SAVE_PR_TOKENはGitHub Appへ移行できる可能性がある一方、SAVE_APPROVE_TAKA2_TOKENはtaka2-devとして承認する要件があるため、App identityがレビュー要件を満たすか確認が必要。"
+            "status": "waiting_external",
+            "evidence": "workflow棚卸しと方式比較を実施。SAVE_PR_TOKENはPR作成用途なのでGitHub Appの短命インストールトークンへ移行する候補。SAVE_APPROVE_TAKA2_TOKENはtaka2-dev本人として承認する用途で、App botへの変更はレビュー身份を変える。安全な次の工程を決めるため、承認身份を維持するか変更するかのユーザー判断が必要。GitHub App登録・インストールとActions変数／シークレット設定もユーザー操作が必要。GitHub公式Docs: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app"
           },
           {
             "id": "migration-pr",
@@ -854,7 +854,8 @@
           }
         ],
         "updated_at": "2026-10-13"
-      }
+      },
+      "wait_reason": "承認identityをtaka2-devのまま維持するか、GitHub App botへ変更するかのユーザー判断待ち。GitHub Appの登録・インストールとActions変数／シークレット設定もユーザー操作が必要。"
     }
   ],
   "next_stage_boundary": "GitHub Pages SEOの生成コード整備はPR #1031〜#1033でマージ済み。残作業は公開反映・実表示確認。Google側のGSC sitemap.xml処理結果待ちは別の外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを再実施しない。WordPress本番設定は変更しない。",
