@@ -16,22 +16,21 @@
 
 ## 現在地点
 
-**WordPressを本番公開先として継続運用する。BLOG-0001〜0003は公開済み。2026-10-11、サイトアイコン、BLOG-0001本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なしとたかが確認。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は実施済みだが、各URLの具体的な登録結果は正本記録にないため推定しない。Bloggerは下書き・表示確認、GitHub Pagesだけを予備公開サイトとする。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。**
+**GitHub Pagesを本番公開先として運用する。BLOG-0001〜0003はGitHub Pages公開レーンの対象。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。**
 
 ## 作業キュー
 
 - actionable：1件
 - 一覧：
-- [WP無料ホスティング検証] priority=23：WordPress本番公開先として継続運用
-
-  - 未完了工程：ongoing-publication [in_progress] WordPress本番公開先として継続運用
+- [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
+  - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
 
-- [WP無料ホスティング検証] WordPressを本番公開先として継続運用する。サイトアイコン、記事画像・本文表現・モバイル表示はユーザー確認済み。確認済み工程を繰り返さない。
+- [GITHUB-PAGES-PRODUCTION] GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。確認済み工程を繰り返さず、新たな不具合・変更要求またはGoogle側のGSC処理結果の変化があった場合のみ対応する。WordPressは本番公開先として扱わない。
 ## 現在の作業レーン
 
-**experience-log → Blogger下書き確認 → WordPress本番公開**
+**experience-log → Blogger下書き確認 → GitHub Pages本番公開**
 
 「一括改修」は設計を一括で行う意味であり、実装は小さな検証単位で進める。
 
@@ -58,5 +57,5 @@
 ## 移行
 
 - 状態：complete
-- 通常工程：DiMORA本来工程へは復帰せず、経験ログを中心としたAI編集を継続する。Bloggerは下書き・表示確認、WordPressは本番公開先、GitHub Pagesは予備公開サイトとする。
+- 通常工程：DiMORA本来工程へは復帰せず、経験ログを中心としたAI編集を継続する。Bloggerは下書き・表示確認、GitHub Pagesは本番公開先とする。WordPressは本番公開先として扱わない。
 - 暫定同期：BUD/引き継ぎの手動同期は終了し、現在状態JSONを正本として生成結果を一致検証する
