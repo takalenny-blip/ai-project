@@ -334,8 +334,8 @@
     "not_before": null,
     "environment": "work_pc",
     "scope": "AI_manual_creation_with_note_demand_validation",
-    "target": "章別設計済みのAI作業のセッティングマニュアルについて、対象読者と最初に解決する困りごとを絞り、本文を作成し、実際の手順を検証する。実証できた内容と限界を明記し、GitHub Pagesでの無料記事・サンプルとnoteでの需要検証を準備する。noteでの販売、価格、正式な商品仕様、開始時期は未決定であり、確定事項として扱わない。",
-    "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1049では設計工程を完了としてwork_itemsから除去したが、本文執筆・実地テスト・公開は未完了とstate update記録にも明記されている。設計工程の完了とマニュアル制作プロジェクト全体の完了を取り違えたため、継続するプロジェクト項目を復元する。",
+    "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
+    "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1051で決定済み対象読者・無料前提の正本と巻き戻し防止ルール、マニュアル群の企画・制作・公開・需要検証の統合管理設計を追加。本文執筆・実地テスト・公開・需要検証は未完了。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -744,8 +744,8 @@
       "depends_on": [],
       "not_before": null,
       "scope": "AI_manual_creation_with_note_demand_validation",
-      "target": "章別設計済みのAI作業のセッティングマニュアルについて、対象読者と最初に解決する困りごとを絞り、本文を作成し、実際の手順を検証する。実証できた内容と限界を明記し、GitHub Pagesでの無料記事・サンプルとnoteでの需要検証を準備する。noteでの販売、価格、正式な商品仕様、開始時期は未決定であり、確定事項として扱わない。",
-      "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1049では設計工程を完了としてwork_itemsから除去したが、本文執筆・実地テスト・公開は未完了とstate update記録にも明記されている。設計工程の完了とマニュアル制作プロジェクト全体の完了を取り違えたため、継続するプロジェクト項目を復元する。",
+      "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
+      "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1051で決定済み対象読者・無料前提の正本と巻き戻し防止ルール、マニュアル群の企画・制作・公開・需要検証の統合管理設計を追加。本文執筆・実地テスト・公開・需要検証は未完了。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -754,7 +754,7 @@
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "reader-and-scope",
+        "current_step": "minimum-scope-and-problem",
         "steps": [
           {
             "id": "chapter-design",
@@ -764,8 +764,15 @@
           },
           {
             "id": "reader-and-scope",
-            "title": "対象読者と最初に解決する困りごとを絞る",
-            "status": "in_progress"
+            "title": "決定済み対象読者・無料前提を確認する",
+            "status": "done",
+            "evidence": "ユーザーが対象読者と無料前提を明示。docs/企画/AI作業セッティングマニュアル_決定済み対象読者.md を正本としてPR #1051で固定し、rules/運用ルール.md に巻き戻し防止を規定。対象読者を再度絞る工程は終了。"
+          },
+          {
+            "id": "minimum-scope-and-problem",
+            "title": "既決方針を前提に先行マニュアルの最小提供範囲を定める",
+            "status": "in_progress",
+            "evidence": "Noteマニュアル群_企画制作公開運用設計.md の共通ライフサイクルと工程ゲートに従う。対象読者の再決定ではなく、先行マニュアルで扱う具体的な課題・最小範囲・完了条件を決める工程。"
           },
           {
             "id": "body-drafting",
