@@ -23,17 +23,19 @@
 - actionable：2件
 - 一覧：
 - [AI-MANUAL-PRODUCTION] priority=15：AI作業のセッティングマニュアル本文作成・実地検証
-  - 未完了工程：reader-and-scope [in_progress] 対象読者と最初に解決する困りごとを絞る
+
+  - 未完了工程：minimum-scope-and-problem [in_progress] 既決方針を前提に先行マニュアルの最小提供範囲を定める
   - 未完了工程：body-drafting [pending] セッティングマニュアル本文を作成する
   - 未完了工程：practical-validation [pending] 手順を実環境で通して効果・限界を検証する
   - 未完了工程：publication-preparation [pending] GitHub Pages向け無料記事・サンプルと公開準備を整える
   - 未完了工程：note-demand-validation [pending] noteを候補に需要・購入意向を検証する
 - [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
+
   - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
 
-- [AI-MANUAL-PRODUCTION] 章別設計済みのAI作業のセッティングマニュアルについて、対象読者と最初に解決する困りごとを絞り、本文を作成し、実際の手順を検証する。実証できた内容と限界を明記し、GitHub Pagesでの無料記事・サンプルとnoteでの需要検証を準備する。noteでの販売、価格、正式な商品仕様、開始時期は未決定であり、確定事項として扱わない。
+- [AI-MANUAL-PRODUCTION] 決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
