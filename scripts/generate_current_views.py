@@ -124,7 +124,7 @@ def render(state: dict) -> tuple[str, str]:
     return bud.rstrip("\n"), handover.rstrip("\n")
 
 def check_committed_views(bud: str, handover: str, root: Path = ROOT) -> tuple[bool, str]:
-    """Check that tracked compatibility views exactly match canonical-state rendering."""
+    """Check exact UTF-8 bytes and report the first mismatch for actionable CI failures."""
     expected = (
         (root / "BUD.md", bud),
         (root / "docs" / "引き継ぎ" / "現在の引き継ぎ.md", handover),
@@ -132,8 +132,22 @@ def check_committed_views(bud: str, handover: str, root: Path = ROOT) -> tuple[b
     for path, rendered in expected:
         if not path.is_file():
             return False, f"committed generated view is missing: {path.relative_to(root)}"
-        if path.read_text(encoding="utf-8") != rendered:
-            return False, f"committed generated view differs: {path.relative_to(root)}"
+        actual_bytes = path.read_bytes()
+        expected_bytes = rendered.encode("utf-8")
+        if actual_bytes != expected_bytes:
+            mismatch = next(
+                (i for i, (actual, expected_byte) in enumerate(zip(actual_bytes, expected_bytes))
+                 if actual != expected_byte),
+                min(len(actual_bytes), len(expected_bytes)),
+            )
+            expected_excerpt = expected_bytes[max(0, mismatch - 24):mismatch + 48].decode("utf-8", errors="replace")
+            actual_excerpt = actual_bytes[max(0, mismatch - 24):mismatch + 48].decode("utf-8", errors="replace")
+            return False, (
+                f"committed generated view differs: {path.relative_to(root)}; "
+                f"first byte mismatch at offset {mismatch}; "
+                f"expected_bytes={len(expected_bytes)}, actual_bytes={len(actual_bytes)}; "
+                f"expected_excerpt={expected_excerpt!r}; actual_excerpt={actual_excerpt!r}"
+            )
     return True, "checked-in views match canonical state"
 
 
