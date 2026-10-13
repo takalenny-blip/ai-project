@@ -21,8 +21,8 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         actionable = select_actionable(self.state["work_items"], self.state["updated"])
         self.assertTrue(actionable)
         self.assertEqual(self.state["next_step"]["id"], actionable[0]["id"])
-        self.assertEqual(actionable[0]["id"], "WP無料ホスティング検証")
-        self.assertEqual([item["id"] for item in actionable], ["WP無料ホスティング検証"])
+        self.assertEqual(actionable[0]["id"], "GITHUB-PAGES-PRODUCTION")
+        self.assertEqual([item["id"] for item in actionable], ["GITHUB-PAGES-PRODUCTION"])
         self.assertNotIn("GITHUB-PAGES-SEO", [item["id"] for item in self.state["work_items"]])
         self.assertIn("robots.txt・sitemap.xml・トップページ", self.state["current_position"]["summary"])
         gsc = next(item for item in self.state["work_items"] if item["id"] == "GSC-確認")
@@ -36,16 +36,16 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertIn("再実施しない", gsc_steps["site-index-status-check"]["evidence"])
 
     def test_current_state_preserves_structured_progress(self):
-        wp = next(item for item in self.state["work_items"] if item["id"] == "WP無料ホスティング検証")
-        steps = {step["id"]: step for step in wp["progress"]["steps"]}
+        work_item = next(item for item in self.state["work_items"] if item["id"] == "GITHUB-PAGES-PRODUCTION")
+        steps = {step["id"]: step for step in work_item["progress"]["steps"]}
         for step_id in ("free-account", "subdomain", "admin-login", "wordpress-install",
                         "script-installer-recheck", "https", "sitemap",
                         "blog2-publication", "blog3-publication"):
             self.assertEqual(steps[step_id]["status"], "done")
-        current_step = wp["progress"]["current_step"]
+        current_step = work_item["progress"]["current_step"]
         self.assertIn(current_step, steps)
         self.assertNotEqual(steps[current_step]["status"], "done")
-        if wp["execution_state"] == "waiting_external":
+        if work_item["execution_state"] == "waiting_external":
             self.assertEqual(steps[current_step]["status"], "waiting_external")
         else:
             self.assertNotEqual(steps[current_step]["status"], "waiting_external")
