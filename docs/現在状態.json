@@ -12,9 +12,9 @@
     "work_queue": "work_itemsを唯一の作業キュー正本とし、各work_itemは実作業の途中成果をprogress.stepsへ構造化して保持する。status/readiness/execution_stateは作業全体の状態を表し、next_stepは未完了のactionable候補から導出する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-10-12T12-42-14.628707+0900",
-    "latest_path": "直チャット/2026-10-12_直チャット即時保存_2026-10-12T12-42-14.628707+0900.md",
-    "latest_content_sha": "887061d220cfdf46a081955bba036fa4a98edf8c",
+    "latest_saved": "2026-10-13T16-17-35.747476+0900",
+    "latest_path": "直チャット/2026-10-13_直チャット即時保存_2026-10-13T16-17-35.747476+0900.md",
+    "latest_content_sha": "b4ce9fd6b3fe6f5fb873a5912fe600f6c798f786",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
@@ -335,7 +335,7 @@
     "environment": "work_pc",
     "scope": "AI_manual_creation_with_note_demand_validation",
     "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-    "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1051で決定済み対象読者・無料前提の正本と巻き戻し防止ルール、マニュアル群の企画・制作・公開・需要検証の統合管理設計を追加。本文執筆・実地テスト・公開・需要検証は未完了。 2026-10-13に制作形式・文体仕様をたかが承認し、正本 docs/企画/AI作業セッティングマニュアル_制作形式・文体仕様.md を追加。本文執筆・実地検証・公開・需要検証は未完了。",
+    "evidence": "PR #1048で章別設計、PR #1051で対象読者・無料前提、PR #1052で制作形式・文体仕様、PR #1053で初版の目的・提供範囲・完成条件が承認・mainへマージ済み。2026-10-13、最小提供範囲の工程を完了として反映し、本文作成へ移行。本文執筆・実地検証・公開・需要検証は未完了。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -745,7 +745,7 @@
       "not_before": null,
       "scope": "AI_manual_creation_with_note_demand_validation",
       "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-      "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1051で決定済み対象読者・無料前提の正本と巻き戻し防止ルール、マニュアル群の企画・制作・公開・需要検証の統合管理設計を追加。本文執筆・実地テスト・公開・需要検証は未完了。 2026-10-13に制作形式・文体仕様をたかが承認し、正本 docs/企画/AI作業セッティングマニュアル_制作形式・文体仕様.md を追加。本文執筆・実地検証・公開・需要検証は未完了。",
+      "evidence": "PR #1048で章別設計、PR #1051で対象読者・無料前提、PR #1052で制作形式・文体仕様、PR #1053で初版の目的・提供範囲・完成条件が承認・mainへマージ済み。2026-10-13、最小提供範囲の工程を完了として反映し、本文作成へ移行。本文執筆・実地検証・公開・需要検証は未完了。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -754,7 +754,7 @@
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "minimum-scope-and-problem",
+        "current_step": "body-drafting",
         "steps": [
           {
             "id": "chapter-design",
@@ -777,13 +777,14 @@
           {
             "id": "minimum-scope-and-problem",
             "title": "既決方針を前提に先行マニュアルの最小提供範囲を定める",
-            "status": "in_progress",
-            "evidence": "Noteマニュアル群_企画制作公開運用設計.md の共通ライフサイクルと工程ゲートに従う。対象読者の再決定ではなく、先行マニュアルで扱う具体的な課題・最小範囲・完了条件を決める工程。 制作形式・文体の決定は別工程 production-format-and-style として完了し、docs/企画/AI作業セッティングマニュアル_制作形式・文体仕様.md を参照する。"
+            "status": "done",
+            "evidence": "PR #1053（merge commit 03d25713332aa87127c1985538c7cd33ce2710c3）で初版の目的・最小提供範囲・完成条件を承認・確定。本文完成、実地検証、公開、需要検証は別工程として未完了。"
           },
           {
             "id": "body-drafting",
             "title": "セッティングマニュアル本文を作成する",
-            "status": "pending"
+            "status": "in_progress",
+            "evidence": "最小提供範囲の策定完了後の次工程。既決の対象読者・無料前提・Markdown原稿・GitHub Pages本番公開を維持し、初版本文を作成する。"
           },
           {
             "id": "practical-validation",
