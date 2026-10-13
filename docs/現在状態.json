@@ -754,7 +754,7 @@
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "toc-detail",
+        "current_step": "review",
         "steps": [
           {
             "id": "scope-confirmed",
@@ -771,13 +771,14 @@
           {
             "id": "toc-detail",
             "title": "各冊の目次・完了条件を具体化",
-            "status": "in_progress",
-            "evidence": "今回の構成は基本案。章ごとの詳細・手順・完了条件は次工程で具体化する。"
+            "status": "done",
+            "evidence": "2026-10-13、先行するセッティングマニュアルについて章別の実施手順・成果物・確認テストを企画メモ§10.5に具体化。"
           },
           {
             "id": "review",
             "title": "企画メモと現在状態・生成ビューの整合を確認",
-            "status": "pending"
+            "status": "in_progress",
+            "evidence": "本変更で企画メモと正本・生成ビューを同一PRで更新し、CIで生成一致と回帰テストを確認する。"
           }
         ],
         "updated_at": "2026-10-13"
