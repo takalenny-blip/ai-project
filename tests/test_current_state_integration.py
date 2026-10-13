@@ -24,7 +24,9 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertEqual(actionable[0]["id"], "GITHUB-PAGES-PRODUCTION")
         self.assertEqual([item["id"] for item in actionable], ["GITHUB-PAGES-PRODUCTION"])
         self.assertNotIn("GITHUB-PAGES-SEO", [item["id"] for item in self.state["work_items"]])
-        self.assertIn("robots.txt・sitemap.xml・トップページ", self.state["current_position"]["summary"])
+        self.assertIn("robots.txt", self.state["current_position"]["summary"])
+        self.assertIn("sitemap.xml", self.state["current_position"]["summary"])
+        self.assertIn("トップページ", self.state["current_position"]["summary"])
         gsc = next(item for item in self.state["work_items"] if item["id"] == "GSC-確認")
         gsc_steps = {step["id"]: step for step in gsc["progress"]["steps"]}
         self.assertEqual(gsc["execution_state"], "waiting_external")
