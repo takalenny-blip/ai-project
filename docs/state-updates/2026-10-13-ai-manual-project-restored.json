@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-13",
+  "kind": "canonical_state_update",
+  "purpose": "マニュアル章別設計の完了をプロジェクト全体の完了と取り違えて継続作業がwork_itemsから消えた不整合を修正する。",
+  "source": "mainのdocs/現在状態.json、PR #1048、PR #1049、docs/state-updates/2026-10-13-ai-manual-structure-complete.json、docs/企画/AI活用ツール商品化_構想メモ.md",
+  "confirmed": [
+    "PR #1048でセッティングマニュアルの章別設計がマージ済み。",
+    "本文執筆・実地テスト・公開は未完了と記録されている。",
+    "noteは販売経路の候補であり、販売仕様・価格・開始時期は未決定。"
+  ],
+  "correction": [
+    "AI-MANUAL-PRODUCTIONをwork_itemsへ復元し、完了済みの章別設計と未完了の制作工程をprogress.stepsで分離。",
+    "対象読者・困りごとの絞り込みを現在の工程に設定し、本文作成・実地検証・GitHub Pages向け公開準備・noteでの需要検証を継続工程として保持。",
+    "rules/運用ルール.md 0-2へ、段階作業の完了とプロジェクト全体の完了を混同しない規則を追加。",
+    "next_stepをwork_itemsの実行可能候補から導出し、BUD.mdと現在の引き継ぎを同じPRで再生成。"
+  ],
+  "not_verified": [
+    "マニュアル本文の執筆、実地検証、GitHub Pages公開、noteでの需要検証は未完了。"
+  ],
+  "references": [
+    "https://github.com/takalenny-blip/ai-project/pull/1048",
+    "https://github.com/takalenny-blip/ai-project/pull/1049",
+    "https://github.com/takalenny-blip/ai-project/blob/main/docs/企画/AI活用ツール商品化_構想メモ.md"
+  ]
+}
