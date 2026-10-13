@@ -327,15 +327,15 @@
     "next_focus": "GitHub Pagesを本番公開先として扱う。robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みのため、公開物の再確認・サイトマップ詳細の再確認・原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ正本を更新する。GSC-確認は外部待ち、BLOG-0004はGSC-確認の解消待ち。WordPressを本番公開先として継続運用する作業は存在しない。"
   },
   "next_step": {
-    "id": "GITHUB-PAGES-PRODUCTION",
-    "title": "GitHub Pagesを本番公開先として継続運用",
-    "priority": 23,
+    "id": "AI-MANUAL-PRODUCTION",
+    "title": "AI作業のセッティングマニュアル本文作成・実地検証",
+    "priority": 15,
     "depends_on": [],
     "not_before": null,
     "environment": "work_pc",
-    "scope": "experience-log_to_GitHub_Pages",
-    "target": "GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。確認済み工程を繰り返さず、新たな不具合・変更要求またはGoogle側のGSC処理結果の変化があった場合のみ対応する。WordPressは本番公開先として扱わない。",
-    "evidence": "2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。GSC sitemap.xml処理結果はGoogle側の外部待ち。以前の状態正本がWordPressを本番公開先としていたのは誤りであり、2026-10-13にたかが訂正。今後はGitHub Pagesを本番公開先とし、WordPress本番運用を次の一手として提示しない。",
+    "scope": "AI_manual_creation_with_note_demand_validation",
+    "target": "章別設計済みのAI作業のセッティングマニュアルについて、対象読者と最初に解決する困りごとを絞り、本文を作成し、実際の手順を検証する。実証できた内容と限界を明記し、GitHub Pagesでの無料記事・サンプルとnoteでの需要検証を準備する。noteでの販売、価格、正式な商品仕様、開始時期は未決定であり、確定事項として扱わない。",
+    "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1049では設計工程を完了としてwork_itemsから除去したが、本文執筆・実地テスト・公開は未完了とstate update記録にも明記されている。設計工程の完了とマニュアル制作プロジェクト全体の完了を取り違えたため、継続するプロジェクト項目を復元する。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -731,6 +731,61 @@
             "title": "GitHub Pagesを本番公開先として継続運用",
             "status": "in_progress",
             "evidence": "本番公開先はGitHub Pages。公開表示確認済みのrobots.txt・sitemap.xml・トップページを繰り返し確認しない。Google側のGSC処理結果が変化した場合または新たな不具合・変更要求が発生した場合のみ対応する。WordPressを本番公開先として扱わない。"
+          }
+        ],
+        "updated_at": "2026-10-13"
+      }
+    },
+    {
+      "id": "AI-MANUAL-PRODUCTION",
+      "title": "AI作業のセッティングマニュアル本文作成・実地検証",
+      "priority": 15,
+      "status": "in_progress",
+      "depends_on": [],
+      "not_before": null,
+      "scope": "AI_manual_creation_with_note_demand_validation",
+      "target": "章別設計済みのAI作業のセッティングマニュアルについて、対象読者と最初に解決する困りごとを絞り、本文を作成し、実際の手順を検証する。実証できた内容と限界を明記し、GitHub Pagesでの無料記事・サンプルとnoteでの需要検証を準備する。noteでの販売、価格、正式な商品仕様、開始時期は未決定であり、確定事項として扱わない。",
+      "evidence": "PR #1048で章別設計がmainへマージ済み。PR #1049では設計工程を完了としてwork_itemsから除去したが、本文執筆・実地テスト・公開は未完了とstate update記録にも明記されている。設計工程の完了とマニュアル制作プロジェクト全体の完了を取り違えたため、継続するプロジェクト項目を復元する。",
+      "readiness": "ready",
+      "unblock_action": "none",
+      "environment": "work_pc",
+      "created_at": "2026-10-13",
+      "updated_at": "2026-10-13",
+      "prerequisites": [],
+      "execution_state": "actionable",
+      "progress": {
+        "current_step": "reader-and-scope",
+        "steps": [
+          {
+            "id": "chapter-design",
+            "title": "セッティングマニュアルの章別設計",
+            "status": "done",
+            "evidence": "PR #1048 merged at 5edc8e3dae96537f7d9eddf01fb7cfeb242bac4b。章ごとの手順・成果物・確認テストを具体化済み。本文・実地検証・公開は未完了。"
+          },
+          {
+            "id": "reader-and-scope",
+            "title": "対象読者と最初に解決する困りごとを絞る",
+            "status": "in_progress"
+          },
+          {
+            "id": "body-drafting",
+            "title": "セッティングマニュアル本文を作成する",
+            "status": "pending"
+          },
+          {
+            "id": "practical-validation",
+            "title": "手順を実環境で通して効果・限界を検証する",
+            "status": "pending"
+          },
+          {
+            "id": "publication-preparation",
+            "title": "GitHub Pages向け無料記事・サンプルと公開準備を整える",
+            "status": "pending"
+          },
+          {
+            "id": "note-demand-validation",
+            "title": "noteを候補に需要・購入意向を検証する",
+            "status": "pending"
           }
         ],
         "updated_at": "2026-10-13"
