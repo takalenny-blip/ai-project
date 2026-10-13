@@ -23,7 +23,6 @@
 - actionable：1件
 - 一覧：
 - [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
-
   - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 
 ## 次の一手（互換ビュー）
