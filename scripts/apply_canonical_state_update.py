@@ -8,6 +8,36 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from save_and_currentize import merge_patch, sync_next_step, render_views, STATE_PATH, BUD_PATH, HANDOVER_PATH
 
+def apply_work_item_updates(state: dict, updates: object) -> None:
+    """Apply ID-keyed patches to existing work items without replacing the queue."""
+    if updates is None:
+        return
+    if not isinstance(updates, list) or not updates:
+        raise SystemExit("work_item_updates must be a non-empty array when provided")
+    work_items = state.get("work_items")
+    if not isinstance(work_items, list):
+        raise SystemExit("state work_items must be an array")
+    seen_update_ids = set()
+    for update in updates:
+        if not isinstance(update, dict) or set(update) != {"id", "patch"}:
+            raise SystemExit("each work_item_update must contain exactly id and patch")
+        item_id = update["id"]
+        item_patch = update["patch"]
+        if not isinstance(item_id, str) or not item_id.strip():
+            raise SystemExit("work_item_update id must be a non-empty string")
+        if item_id in seen_update_ids:
+            raise SystemExit(f"duplicate work_item_update id: {item_id}")
+        seen_update_ids.add(item_id)
+        if not isinstance(item_patch, dict) or not item_patch:
+            raise SystemExit(f"work_item_update patch for {item_id} must be a non-empty object")
+        if "id" in item_patch:
+            raise SystemExit(f"work_item_update may not change id: {item_id}")
+        matches = [item for item in work_items if isinstance(item, dict) and item.get("id") == item_id]
+        if len(matches) != 1:
+            reason = "not found" if not matches else "is not unique"
+            raise SystemExit(f"work_item id {item_id!r} {reason}")
+        merge_patch(matches[0], item_patch)
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--request-file", type=Path, required=True)
@@ -19,6 +49,9 @@ def main():
     patch = req.get("patch")
     if not isinstance(patch, dict) or not patch:
         raise SystemExit("patch must be a non-empty object")
+    work_item_updates = req.get("work_item_updates")
+    if "work_items" in patch and work_item_updates is not None:
+        raise SystemExit("use either patch.work_items or work_item_updates, not both")
     for key in ("purpose", "source"):
         if not isinstance(req.get(key), str) or not req[key].strip():
             raise SystemExit(f"{key} must be a non-empty string")
@@ -27,13 +60,15 @@ def main():
         raise SystemExit(f"refusing to overwrite {audit_path.relative_to(ROOT)}")
     state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
     merge_patch(state, patch)
+    apply_work_item_updates(state, work_item_updates)
     state["updated"] = date.today().isoformat()
     sync_next_step(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     audit = {"schema_version": 1, "date": uid[:10], "kind": "canonical_state_update",
              "purpose": req["purpose"], "source": req["source"],
              "confirmed": req.get("confirmed", []), "not_verified": req.get("not_verified", []),
-             "references": req.get("references", []), "patch": patch}
+             "references": req.get("references", []), "patch": patch,
+             "work_item_updates": work_item_updates or []}
     for key in ("confirmed", "not_verified", "references"):
         if not isinstance(audit[key], list):
             raise SystemExit(f"{key} must be an array")
