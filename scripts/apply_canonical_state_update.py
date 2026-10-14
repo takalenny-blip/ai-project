@@ -83,7 +83,7 @@ def main():
     subprocess.run(["git", "add", str(STATE_PATH), str(BUD_PATH), str(HANDOVER_PATH), str(audit_path)], cwd=ROOT, check=True)
     expected = {str(STATE_PATH.relative_to(ROOT)), str(BUD_PATH.relative_to(ROOT)),
                 str(HANDOVER_PATH.relative_to(ROOT)), str(audit_path.relative_to(ROOT))}
-    changed = set(subprocess.check_output(["git", "diff", "--cached", "--name-only"], cwd=ROOT, text=True).splitlines())
+    changed = set(subprocess.check_output(["git", "-c", "core.quotePath=false", "diff", "--cached", "--name-only"], cwd=ROOT, text=True).splitlines())
     if changed != expected:
         raise SystemExit(f"unexpected staged paths: {sorted(changed)}")
     print("OK: canonical state, audit record, and generated views staged atomically")
