@@ -1,6 +1,6 @@
 {
   "schema_version": 5,
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger下書き確認 → GitHub Pages本番公開",
   "original_lane": "DIGA / DiMORA自動化",
@@ -335,7 +335,7 @@
     "environment": "work_pc",
     "scope": "AI_manual_creation_with_note_demand_validation",
     "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-    "evidence": "PR #1048で章別設計、PR #1051で対象読者・無料前提、PR #1052で制作形式・文体仕様、PR #1053で初版の目的・提供範囲・完成条件が承認・mainへマージ済み。2026-10-13、最小提供範囲の工程を完了として反映し、本文作成へ移行。本文執筆・実地検証・公開・需要検証は未完了。",
+    "evidence": "本文作成中。章別設計 PR #1048、対象読者・無料前提 PR #1051、制作形式・文体仕様 PR #1052、目的・提供範囲 PR #1053、実地検証計画 PR #1076、執筆・編集ルールと第1・第2章改訂 PR #1077 はmainへマージ済み。本文の実地検証・公開・需要検証は未完了。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -745,16 +745,16 @@
       "not_before": null,
       "scope": "AI_manual_creation_with_note_demand_validation",
       "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-      "evidence": "PR #1048で章別設計、PR #1051で対象読者・無料前提、PR #1052で制作形式・文体仕様、PR #1053で初版の目的・提供範囲・完成条件が承認・mainへマージ済み。2026-10-13、最小提供範囲の工程を完了として反映し、本文作成へ移行。本文執筆・実地検証・公開・需要検証は未完了。",
+      "evidence": "本文作成中。章別設計 PR #1048、対象読者・無料前提 PR #1051、制作形式・文体仕様 PR #1052、目的・提供範囲 PR #1053、実地検証計画 PR #1076、執筆・編集ルールと第1・第2章改訂 PR #1077 はmainへマージ済み。本文の実地検証・公開・需要検証は未完了。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
       "created_at": "2026-10-13",
-      "updated_at": "2026-10-13",
+      "updated_at": "2026-10-14",
       "prerequisites": [],
       "execution_state": "actionable",
       "progress": {
-        "current_step": "body-drafting",
+        "current_step": "tool-selection-and-official-verification",
         "steps": [
           {
             "id": "chapter-design",
@@ -800,9 +800,27 @@
             "id": "note-demand-validation",
             "title": "noteを候補に需要・購入意向を検証する",
             "status": "pending"
+          },
+          {
+            "id": "writing-rules-and-ch1-ch2",
+            "title": "執筆・編集ルールを固定し、第1・第2章の重複を整理する",
+            "status": "done",
+            "evidence": "PR #1077 merged (merge commit b3adadbb2d4bfebfe87dcf2bfe738bcb8d8aa6db)。執筆・編集ルールを追加し、第1・第2章を再構成。merge commit head SHA 6f4ed6626aad653319de7e9b41b3cbc7442880e5に対する Main work progress gate run #212 と current-state-guard run #1777 は成功。"
+          },
+          {
+            "id": "validation-plan",
+            "title": "本文を一巡する実地検証計画を用意する",
+            "status": "done",
+            "evidence": "PR #1076 merged (merge commit dac0858d3d3c30e86cc6469897e2c0a8a3ee7b7a)。計画書は作成済みだが、実地検証の実施・合格は未完了。"
+          },
+          {
+            "id": "tool-selection-and-official-verification",
+            "title": "具体的なツール候補・公式情報・無料条件・権限を確認し本文へ反映する",
+            "status": "in_progress",
+            "evidence": "2026-10-14に公開情報を調査。Chrome Web StoreのChatGPT Exporter（otaliptus）とGitHub上のソース・権限説明を候補として比較し、候補比較とテスト手順を本文第4章へ追記。インストール・実際の保存テスト・プライバシー動作の実地検証は未完了。"
           }
         ],
-        "updated_at": "2026-10-13"
+        "updated_at": "2026-10-14"
       }
     },
     {
