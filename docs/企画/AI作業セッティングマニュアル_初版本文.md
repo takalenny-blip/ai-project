@@ -365,14 +365,16 @@ Chromeでは[Chrome ウェブストア](https://chromewebstore.google.com/)、�
 | 候補 | 向いている場面 | 確認できた点 | 注意点 |
 |---|---|---|---|
 | 手動コピー | 短い会話、拡張機能を増やしたくない場合 | 追加インストール不要。コピーした内容をテキストエディターへ保存できる | 見出し・コードなどの書式は手作業で整えることがある |
-| [ChatGPT Exporter（Chrome ウェブストア）](https://chromewebstore.google.com/detail/chatgpt-exporter/abkeekobciebpedokcanajekcnhkbhmk?hl=en) | 会話をMarkdownファイルとして直接保存したい場合 | ストア掲載情報ではMarkdown／LaTeX出力、端末内での処理、データを収集・使用しない旨の開発者申告を確認。更新日表示は2026年5月9日 | ストア上の評価は確認時点でなし。利用者数も少ないため、評価だけで安全性や安定性を判断しない。ChatGPTの画面変更で動作しなくなる可能性がある |
+| [ChatGPT Exporter（開発者：otaliptus）](https://chromewebstore.google.com/detail/chatgpt-exporter/abkeekobciebpedokcanajekcnhkbhmk?hl=en) | 権限や機能を絞った小規模な候補を試したい場合 | ストア掲載情報ではMarkdown／LaTeX出力、端末内処理、データを収集・使用しない旨の開発者申告を確認。更新日表示は2026年5月9日。ソースコードと権限説明を公開 | 調査時点で評価なし・利用者数約42。小規模なため、安定性や継続保守は実地確認が必要 |
+| [ChatGPT Exporter（開発者サイト：chatgptexporter.com）](https://chromewebstore.google.com/detail/chatgpt-exporter-chatgpt/ilmdofdhpnhffldihboadndccenlnfll) | 利用者数やレビューも選定材料にしたい場合 | 調査時点のストア表示は約20万人、評価4.9／約2,600件。Markdown出力は無料、開発者説明ではMarkdown等はブラウザー内処理 | ストアのプライバシー開示では個人を特定できる情報を扱うと申告。PDF出力はサーバー処理と説明され、任意のプレミアム機能もある。Markdownを含め、開示内容と権限を自分で読み、許容できるか判断する |
 
-選定理由は、目的に必要なMarkdown保存機能があり、ストア掲載情報で開発者・更新日・プライバシー申告を確認でき、説明されている権限がChatGPTのタブやダウンロードなどの用途に結び付いていることです。ただし、これは公開情報に基づく候補選定であり、拡張機能のコード監査や実地検証を完了したという意味ではありません。
+この初版での第一試験候補は otaliptus 版です。利用者数やレビュー数ではなく、公開ソース・比較的狭い権限説明・端末内処理の申告を選定材料にしています。ただし、利用者数が少なく、公開情報だけで安全性を保証できるわけではありません。利用者数やレビュー数が多い候補も、個人情報の取扱い申告や権限を確認せずに選ぶべきではありません。どちらも実地検証前の候補であり、実際に導入するかどうかは、権限とデータの扱いを読んで判断してください。
 
 確認先：
 - [Chrome ウェブストアの候補ページ](https://chromewebstore.google.com/detail/chatgpt-exporter/abkeekobciebpedokcanajekcnhkbhmk?hl=en)
 - [開発者のソースコード・説明](https://github.com/otaliptus/chatgpt-markdown-exporter)
 - [開発者のプライバシー説明](https://github.com/otaliptus/chatgpt-markdown-exporter/blob/main/PRIVACY.md)
+- [別候補のChrome ウェブストア掲載情報](https://chromewebstore.google.com/detail/chatgpt-exporter-chatgpt/ilmdofdhpnhffldihboadndccenlnfll)
 
 ### 4.4　アクセス範囲を必要最小限にする
 
@@ -400,7 +402,7 @@ Chromeでは、拡張機能のメニューからサイトへのアクセス範�
 
 この拡張機能の説明では、エクスポート操作を利用者が開始したときに開いているChatGPTタブを読み取り、ブラウザー内でMarkdownへ変換して端末へ保存するとされています。実際の動作やデータの扱いを自分で確認できない場合は、重要な会話には使わず、手動コピーを選んでください。
 
-保存したファイルを開いて内容が確認できても、それだけで外部送信がないことまで証明されたわけではありません。データの扱いはストアの開示情報とプライバシーポリシーでも確認します。実際の動作やデータの扱いを確認できない場合は、重要な会話には使わず、手動コピーを選んでください。
+保存したファイルを開いて内容が確認できても、それだけで外部送信がないことまで証明されたわけではありません。データの扱いはストアの開示情報とプライバシーポリシーでも確認します。
 
 ### 4.6　拡張機能を使わない方法も残す
 
