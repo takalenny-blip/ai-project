@@ -49,6 +49,8 @@ jobs:
           git show "refs/remotes/origin/${REQUEST_BRANCH}:canonical-state-requests/request.json" > "$RUNNER_TEMP/state-update-request.json"
           branch="save/currentize-${GITHUB_RUN_ID}"
           git switch -c "$branch" origin/main
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python scripts/apply_canonical_state_update.py --request-file "$RUNNER_TEMP/state-update-request.json"
           git commit -m "chore: apply reviewed canonical state update"
           git push --set-upstream origin "$branch"
