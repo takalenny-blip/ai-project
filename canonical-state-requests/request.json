@@ -1,17 +1,17 @@
 {
   "update_id": "2026-10-14-ai-manual-pr1088-merged",
-  "purpose": "PR #1088のマージ済み事実をAI作業セッティングマニュアルの正本へ反映し、完了済み本文作成工程の古いレビュー待ち記録を除去してループを防ぐ。",
-  "source": "GitHub PR #1088のmerge記録およびmerge commit e8403498d1161c5af9fe13959a343a3da13ebc67のActions結果。現在のdocs/現在状態.jsonを読み、既存work itemの構造を保持して更新。",
+  "purpose": "PR #1088のマージ済み事実を正本へ反映し、本文作成工程の古いレビュー待ち記録と、本文作成を次工程に含める古いnext_step表示を除去する。実地検証だけを現在工程として維持し、同じ完了作業が再提示されるループを防ぐ。",
+  "source": "PR #1088 merge commit e8403498d1161c5af9fe13959a343a3da13ebc67、成功したActions run 38519296625と38519296622、mainの現在状態JSON。",
   "confirmed": [
-    "PR #1088は2026-10-14にmerge commit e8403498d1161c5af9fe13959a343a3da13ebc67でmainへマージ済み。",
-    "current-state-guard run 38519296625はsuccess。",
-    "Publish GitHub Pages run 38519296622はsuccess。",
-    "本文作成は完了済み。現在工程practical-validationは未完了のため維持する。"
+    "PR #1088は2026-10-14にマージ済み。",
+    "current-state-guard run 38519296625とPublish GitHub Pages run 38519296622は成功。",
+    "本文作成工程は完了済みで、実地検証工程は未完了。",
+    "current_stepはpractical-validationのまま維持する。"
   ],
   "not_verified": [
     "作業PCでのブラウザー拡張機能によるMarkdown保存テストは未実施。",
     "拡張機能による外部送信の有無は未確認。",
-    "作業PC上での検証結果は未取得。"
+    "GitHub Pagesでの公開表示・デプロイ反映は未確認。"
   ],
   "references": [
     "https://github.com/takalenny-blip/ai-project/pull/1088",
@@ -24,6 +24,8 @@
     {
       "id": "AI-MANUAL-PRODUCTION",
       "patch": {
+        "target": "初版本文の作成・最終修正は完了済み。次は作業PCで実地検証を行い、結果を記録する。合格後にGitHub Pages向け公開準備へ進み、公開後にnote等で需要を検証する。決定済みの対象読者・無料前提は再検討しない。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
+        "evidence": "初版本文はPR #1086、最終修正はPR #1088（merge commit e8403498d1161c5af9fe13959a343a3da13ebc67）でmainへ反映済み。current-state-guard run 38519296625とPublish GitHub Pages run 38519296622は成功。本文作成は完了。作業PCでの実地検証、公開準備、公開、note需要検証は未完了。拡張機能はユーザー申告で既にインストール済みのため再インストールさせず、機密情報を含まないテスト会話で検証する。外部送信の有無は未確認。",
         "progress": {
           "current_step": "practical-validation",
           "steps": [
@@ -55,7 +57,7 @@
               "id": "body-drafting",
               "title": "セッティングマニュアル本文を作成する",
               "status": "done",
-              "evidence": "本文作成工程はPR #1086でmainへ反映済み。最終修正PR #1088は2026-10-14にmerge commit e8403498d1161c5af9fe13959a343a3da13ebc67でmainへ反映済み。merge commitのcurrent-state-guard run 38519296625とPublish GitHub Pages run 38519296622はいずれも成功。本文作成工程は完了。作業PCでの実地検証・公開後の実表示確認は別工程であり、未完了のままpractical-validationを現在工程として維持する。"
+              "evidence": "初版本文はPR #1086でmainへ反映済み。最終修正PR #1088は2026-10-14にmerge commit e8403498d1161c5af9fe13959a343a3da13ebc67でmainへ反映済み。merge commitのcurrent-state-guard run 38519296625とPublish GitHub Pages run 38519296622はいずれも成功。本文作成工程は完了。作業PCでの実地検証・公開後の実表示確認は別工程であり未完了。"
             },
             {
               "id": "practical-validation",
