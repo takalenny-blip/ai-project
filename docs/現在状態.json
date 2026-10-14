@@ -338,8 +338,7 @@
     "evidence": "本文の候補比較と検証手順はPR #1078・#1079でmainへ反映済み。次は実地検証。拡張機能のMarkdown保存テスト、マニュアル全体の一巡、公開準備、note需要検証は未完了。 2026-10-14、PR #1082（merge commit 0f53d6afd8374addc87bcfa01e7e14105121bb06）で、基本の実践は完全無料という価値提案をマニュアル本文・統合設計・GitHub Pagesトップページ生成処理へ反映。main読み戻し済み。実際の公開ページ表示・デプロイ反映は未確認。 2026-10-14：ユーザー申告では対象拡張機能は既にインストール済み。移行・実地テストは作業PCで後日実施するため、再インストールを作業として指示しない。インストール済みという申告は、Markdown出力や内容保持、外部送信の有無を検証した証拠とは扱わない。",
     "readiness": "ready",
     "unblock_action": "none",
-    "prerequisites": [],
-    "updated_at": "2026-10-14"
+    "prerequisites": []
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
@@ -784,8 +783,8 @@
           {
             "id": "body-drafting",
             "title": "セッティングマニュアル本文を作成する",
-            "status": "in_progress",
-            "evidence": "最小提供範囲の策定完了後の次工程。既決の対象読者・無料前提・Markdown原稿・GitHub Pages本番公開を維持し、初版本文を作成する。"
+            "status": "done",
+            "evidence": "初版本文の作成・章構成整理をPR #1086でmainへ反映済み。本文作成工程は完了。表記・無料前提・拡張機能手順の最終修正PR #1088は別途レビュー待ちであり、本文の実地検証・公開は未完了。"
           },
           {
             "id": "practical-validation",
