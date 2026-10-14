@@ -330,95 +330,15 @@
     "id": "AI-MANUAL-PRODUCTION",
     "title": "AI作業のセッティングマニュアル本文作成・実地検証",
     "priority": 15,
-    "status": "in_progress",
     "depends_on": [],
     "not_before": null,
+    "environment": "work_pc",
     "scope": "AI_manual_creation_with_note_demand_validation",
     "target": "初版本文の作成・最終修正は完了済み。第2章のAIセットアップ手順不足に対し、2026-10-15に第2章の全体構成案をたかが暫定承認。承認済み構成に沿って本文を更新し、ChatGPTとClaudeは登録・ログインから最初の会話まで具体的に案内し、Geminiは補助候補として簡潔に紹介する。AIの使い分けと、普段のAIに別AIへの依頼文を作らせコピーして渡す例を2.2.1.6に配置する。本文更新と手順の確認後、作業PCで実地検証し、合格後にGitHub Pages向け公開準備、公開、note等での需要検証へ進む。決定済みの対象読者・無料前提は再検討しない。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
     "evidence": "初版本文はPR #1086・#1088でmain反映済み。2026-10-14に第2章のAIセットアップ不足が判明し、PR #1102で更新案を作成。2026-10-15、たかが第2章全体構成案を暫定承認。2.1.1〜2.1.3、2.2のサービス別手順と第4階層、別AI相談用依頼文を2.2.1.6へ配置、2.3.1〜2.3.5を確定。本文と正本・生成ビューをPR #1102内で更新し、レビュー・CI・マージは未完了。本文更新後に個別手順を確認し、その後に実地検証へ進む。",
     "readiness": "ready",
     "unblock_action": "none",
-    "environment": "work_pc",
-    "created_at": "2026-10-13",
-    "updated_at": "2026-10-15",
-    "prerequisites": [],
-    "execution_state": "actionable",
-    "progress": {
-      "current_step": "chapter-2-structure-and-shared-rule",
-      "steps": [
-        {
-          "id": "chapter-design",
-          "title": "セッティングマニュアルの章別設計",
-          "status": "done",
-          "evidence": "PR #1048 merged at 5edc8e3dae96537f7d9eddf01fb7cfeb242bac4b。章ごとの手順・成果物・確認テストを具体化済み。本文・実地検証・公開は未完了。"
-        },
-        {
-          "id": "reader-and-scope",
-          "title": "決定済み対象読者・無料前提を確認する",
-          "status": "done",
-          "evidence": "ユーザーが対象読者と無料前提を明示。docs/企画/AI作業セッティングマニュアル_決定済み対象読者.md を正本としてPR #1051で固定し、rules/運用ルール.md に巻き戻し防止を規定。対象読者を再度絞る工程は終了。"
-        },
-        {
-          "id": "production-format-and-style",
-          "title": "制作形式・文体の決定",
-          "status": "done",
-          "evidence": "たかが2026-10-13に制作形式・文体仕様を承認。正本 docs/企画/AI作業セッティングマニュアル_制作形式・文体仕様.md にMarkdown原稿、GitHub Pages無料公開、文章・手順・コマンド中心、初版のWord・図・イラスト原則なしを記録。"
-        },
-        {
-          "id": "minimum-scope-and-problem",
-          "title": "既決方針を前提に先行マニュアルの最小提供範囲を定める",
-          "status": "done",
-          "evidence": "PR #1053（merge commit 03d25713332aa87127c1985538c7cd33ce2710c3）で初版の目的・最小提供範囲・完成条件を承認・確定。本文完成、実地検証、公開、需要検証は別工程として未完了。"
-        },
-        {
-          "id": "body-drafting",
-          "title": "セッティングマニュアル本文を作成する",
-          "status": "done",
-          "evidence": "初版本文はPR #1086でmainへ反映済み。最終修正PR #1088は2026-10-14にmerge commit e8403498d1161c5af9fe13959a343a3da13ebc67でmainへ反映済み。merge commitのcurrent-state-guard run 38519296625とPublish GitHub Pages run 38519296622はいずれも成功。本文作成工程は完了。作業PCでの実地検証・公開後の実表示確認は別工程であり未完了。"
-        },
-        {
-          "id": "chapter-2-structure-and-shared-rule",
-          "title": "承認済み構成に沿って第2章本文と共通ルールを更新する",
-          "status": "in_progress",
-          "evidence": "2026-10-15、たかが第2章全体構成案を暫定承認。2.1.1〜2.1.3、2.2.1〜2.2.3の各下位手順、2.2.1.6の別AI相談用依頼文、2.3.1〜2.3.5を確定。PR #1102で本文・正本・生成ビューを更新する。レビュー・CI・マージは未完了。本文更新後に個別手順を確認し、実地検証はその後に進める。"
-        },
-        {
-          "id": "practical-validation",
-          "title": "手順を実環境で通して効果・限界を検証する",
-          "status": "pending",
-          "evidence": "次の実施作業：作業PCのブラウザーで、既にインストール済みとユーザー申告のある第一試験候補を再インストールせず、機密情報を含まないテスト会話を使って保存テストを行う。日本語・見出し・箇条書き・コードブロック・リンク・欠落や余分な情報を確認する。外部送信の有無はファイルが作成されたことだけでは証明できないため、確認できなければ「未確認」と記録し、機密会話には使用しない。2026-10-14時点では作業PCでの検証は後日実施。 第2章の構成不足が新たに判明したため、本文構成の見直し・更新が先行する。手順が安定するまで実地検証は再開しない。"
-        },
-        {
-          "id": "publication-preparation",
-          "title": "GitHub Pages向け無料記事・サンプルと公開準備を整える",
-          "status": "pending"
-        },
-        {
-          "id": "note-demand-validation",
-          "title": "noteを候補に需要・購入意向を検証する",
-          "status": "pending"
-        },
-        {
-          "id": "writing-rules-and-ch1-ch2",
-          "title": "執筆・編集ルールを固定し、第1・第2章の重複を整理する",
-          "status": "done",
-          "evidence": "PR #1077 merged (merge commit b3adadbb2d4bfebfe87dcf2bfe738bcb8d8aa6db)。執筆・編集ルールを追加し、第1・第2章を再構成。merge commit head SHA 6f4ed6626aad653319de7e9b41b3cbc7442880e5に対する Main work progress gate run #212 と current-state-guard run #1777 は成功。"
-        },
-        {
-          "id": "validation-plan",
-          "title": "本文を一巡する実地検証計画を用意する",
-          "status": "done",
-          "evidence": "PR #1076 merged (merge commit dac0858d3d3c30e86cc6469897e2c0a8a3ee7b7a)。計画書は作成済みだが、実地検証の実施・合格は未完了。"
-        },
-        {
-          "id": "tool-selection-and-official-verification",
-          "title": "具体的なツール候補・公式情報・無料条件・権限を確認し本文へ反映する",
-          "status": "done",
-          "evidence": "PR #1078（merge commit dffa49b2d5290e240be535624988a7651380ca3e）とPR #1079（merge commit 011a9a38e7e433f65120220cef992bbf0c448252）で候補比較・選定理由・公式ストアの無料範囲・権限・プライバシー開示を本文へ反映。mainのguard、interaction-guard、render-and-check、sync-generated-views、publishは成功。候補の公開情報調査は完了。実地インストールと保存テストは次工程であり未実施。"
-        }
-      ],
-      "updated_at": "2026-10-15"
-    }
+    "prerequisites": []
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
