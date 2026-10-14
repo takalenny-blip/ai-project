@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       request_json:
-        description: "JSON request: update_id, purpose, source, patch, confirmed, not_verified, references"
+        description: "JSON request: update_id, purpose, source, patch and/or work_item_updates, confirmed, not_verified, references"
         required: true
         type: string
 

@@ -46,10 +46,12 @@ def main():
     uid = req.get("update_id", "")
     if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9][a-z0-9-]{2,70}", uid):
         raise SystemExit("invalid update_id")
-    patch = req.get("patch")
-    if not isinstance(patch, dict) or not patch:
-        raise SystemExit("patch must be a non-empty object")
+    patch = req.get("patch", {})
     work_item_updates = req.get("work_item_updates")
+    if not isinstance(patch, dict):
+        raise SystemExit("patch must be an object")
+    if not patch and (not isinstance(work_item_updates, list) or not work_item_updates):
+        raise SystemExit("provide a non-empty patch or work_item_updates array")
     if "work_items" in patch and work_item_updates is not None:
         raise SystemExit("use either patch.work_items or work_item_updates, not both")
     for key in ("purpose", "source"):
