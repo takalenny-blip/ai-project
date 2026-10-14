@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "GitHub Pagesを本番公開先として運用する。BLOG-0001〜0003はGitHub Pages公開レーンの対象。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。",
+    "summary": "GitHub Pagesを本番公開先として運用する。PR #1082で「基本の実践は完全無料」という訴求をトップページ生成処理に追加済み。公開ページへの実反映は未確認。BLOG-0001〜0003はGitHub Pages公開レーンの対象。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-12",
@@ -321,7 +321,7 @@
         "PR #966"
       ],
       "ci_head_commit": "27740906649a91f697b4bff7cb2f5f34538bd256",
-      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は過去に実施済みだが、これは過去の確認記録であり、WordPressを現在の本番公開先とする根拠ではない。WordPress各URLの具体的な登録結果は正本記録に残っていないため推定しない。GitHub Pagesのrobots.txt・sitemap.xml・トップページは2026-10-12に正常表示を確認済み。GSC sitemap.xmlはGoogle側の処理結果待ち。"
+      "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は過去に実施済みだが、これは過去の確認記録であり、WordPressを現在の本番公開先とする根拠ではない。WordPress各URLの具体的な登録結果は正本記録に残っていないため推定しない。GitHub Pagesのrobots.txt・sitemap.xml・トップページは2026-10-12に正常表示を確認済み。GSC sitemap.xmlはGoogle側の処理結果待ち。 2026-10-14、PR #1082をマージし、scripts/build_cloudflare_site.pyへ「基本の実践は完全無料」のトップページ訴求を追加。mainの読み戻しで生成処理への反映を確認。公開ページの実表示・デプロイ反映は未確認のため、公開完了とは扱わない。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。GitHub Pagesトップページの404確認、robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みで、再実施しない。WordPressに関する過去の公開・インデックス確認は履歴として保持し、WordPressを本番公開先として扱わない。",
     "next_focus": "GitHub Pagesを本番公開先として扱う。robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みのため、公開物の再確認・サイトマップ詳細の再確認・原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ正本を更新する。GSC-確認は外部待ち、BLOG-0004はGSC-確認の解消待ち。WordPressを本番公開先として継続運用する作業は存在しない。"
@@ -335,7 +335,7 @@
     "environment": "work_pc",
     "scope": "AI_manual_creation_with_note_demand_validation",
     "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-    "evidence": "本文の候補比較と検証手順はPR #1078・#1079でmainへ反映済み。次は実地検証。拡張機能の実地インストール・保存テスト、マニュアル全体の一巡、公開準備、note需要検証は未完了。",
+    "evidence": "本文の候補比較と検証手順はPR #1078・#1079でmainへ反映済み。次は実地検証。拡張機能の実地インストール・保存テスト、マニュアル全体の一巡、公開準備、note需要検証は未完了。 2026-10-14、PR #1082（merge commit 0f53d6afd8374addc87bcfa01e7e14105121bb06）で、基本の実践は完全無料という価値提案をマニュアル本文・統合設計・GitHub Pagesトップページ生成処理へ反映。main読み戻し済み。実際の公開ページ表示・デプロイ反映は未確認。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -745,7 +745,7 @@
       "not_before": null,
       "scope": "AI_manual_creation_with_note_demand_validation",
       "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-      "evidence": "本文の候補比較と検証手順はPR #1078・#1079でmainへ反映済み。次は実地検証。拡張機能の実地インストール・保存テスト、マニュアル全体の一巡、公開準備、note需要検証は未完了。",
+      "evidence": "本文の候補比較と検証手順はPR #1078・#1079でmainへ反映済み。次は実地検証。拡張機能の実地インストール・保存テスト、マニュアル全体の一巡、公開準備、note需要検証は未完了。 2026-10-14、PR #1082（merge commit 0f53d6afd8374addc87bcfa01e7e14105121bb06）で、基本の実践は完全無料という価値提案をマニュアル本文・統合設計・GitHub Pagesトップページ生成処理へ反映。main読み戻し済み。実際の公開ページ表示・デプロイ反映は未確認。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
