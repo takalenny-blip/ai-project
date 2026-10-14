@@ -57,15 +57,38 @@ jobs:
       - name: Resolve manual queue input
         id: manual
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUEUE_FILENAME: ${{ inputs.queue_filename }}
         shell: bash
         run: |
           set -euo pipefail
-          queue_file=".github/save-queue/${{ inputs.queue_filename }}"
+          queue_file=".github/save-queue/$QUEUE_FILENAME"
           case "$queue_file" in
             .github/save-queue/*.md) ;;
             *) echo "Invalid queue filename: $queue_file" >&2; exit 1 ;;
           esac
+
+          # Queue files from automated intake live on the queue PR branch, not main.
+          # Resolve the unique open save-request PR containing the requested file.
+          mapfile -t prs < <(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("chat-save-request/")) | [.number,.headRefName] | @tsv')
+          matches=()
+          for item in "${prs[@]}"; do
+            read -r number head_ref <<< "$item"
+            if gh api "repos/${GITHUB_REPOSITORY}/pulls/$number/files?per_page=100" --paginate --jq '.[].filename' | grep -Fxq "$queue_file"; then
+              head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/$number" --jq '.head.sha')"
+              matches+=("$number"$'\t'"$head_ref"$'\t'"$head_sha")
+            fi
+          done
+          if [ "${#matches[@]}" -ne 1 ]; then
+            printf 'Expected exactly one open save-request PR for %s; found %s\n' "$queue_file" "${#matches[@]}" >&2
+            printf '%s\n' "${matches[@]}" >&2
+            exit 1
+          fi
+          IFS=$'\t' read -r pr_number head_ref head_sha <<< "${matches[0]}"
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+          echo "source_pr=$pr_number" >> "$GITHUB_OUTPUT"
 
       - name: Checkout trusted base branch
         uses: actions/checkout@v4
@@ -101,7 +124,7 @@ jobs:
           set -euo pipefail
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             queue_file="${{ steps.manual.outputs.queue_file }}"
-            head_sha="$(git rev-parse HEAD)"
+            head_sha="${{ steps.manual.outputs.head_sha }}"
           else
           mapfile -t changed < <(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" --paginate --jq '.[].filename' | sort)
           test "${#changed[@]}" = "1"
