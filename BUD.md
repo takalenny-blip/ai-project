@@ -16,7 +16,7 @@
 
 ## 現在地点
 
-**GitHub Pagesを本番公開先として運用する。BLOG-0001〜0003はGitHub Pages公開レーンの対象。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。**
+**GitHub Pagesを本番公開先として運用する。PR #1082で「基本の実践は完全無料」という訴求をトップページ生成処理に追加済み。公開ページへの実反映は未確認。BLOG-0001〜0003はGitHub Pages公開レーンの対象。2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。Google Search Console側のサイトマップ処理結果は未確認・外部待ち。公開物の表示確認は完了しており、再確認しない。Bloggerは下書き・表示確認の作業場所。WordPressは本番公開先として扱わない。**
 
 ## 作業キュー
 
