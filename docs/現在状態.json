@@ -335,7 +335,7 @@
     "environment": "work_pc",
     "scope": "AI_manual_creation_with_note_demand_validation",
     "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-    "evidence": "本文作成中。章別設計 PR #1048、対象読者・無料前提 PR #1051、制作形式・文体仕様 PR #1052、目的・提供範囲 PR #1053、実地検証計画 PR #1076、執筆・編集ルールと第1・第2章改訂 PR #1077 はmainへマージ済み。本文の実地検証・公開・需要検証は未完了。",
+    "evidence": "本文作成中。章別設計 PR #1048、対象読者・無料前提 PR #1051、制作形式・文体仕様 PR #1052、目的・提供範囲 PR #1053、実地検証計画 PR #1076、執筆・編集ルールと第1・第2章改訂 PR #1077、Markdown保存ツール候補の比較と検証手順 PR #1078 はmainへマージ済み。本文の実地検証・公開・需要検証は未完了。",
     "readiness": "ready",
     "unblock_action": "none",
     "prerequisites": []
@@ -745,7 +745,7 @@
       "not_before": null,
       "scope": "AI_manual_creation_with_note_demand_validation",
       "target": "決定済みの対象読者・無料前提を再検討せず、Noteマニュアル群の統合管理設計に従って、先行するAI作業のセッティングマニュアルの最小提供範囲を定め、本文作成・実地検証を進める。GitHub Pagesで無料公開し、公開後にNote等で需要を検証する。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-      "evidence": "本文作成中。章別設計 PR #1048、対象読者・無料前提 PR #1051、制作形式・文体仕様 PR #1052、目的・提供範囲 PR #1053、実地検証計画 PR #1076、執筆・編集ルールと第1・第2章改訂 PR #1077 はmainへマージ済み。本文の実地検証・公開・需要検証は未完了。",
+      "evidence": "本文作成中。章別設計 PR #1048、対象読者・無料前提 PR #1051、制作形式・文体仕様 PR #1052、目的・提供範囲 PR #1053、実地検証計画 PR #1076、執筆・編集ルールと第1・第2章改訂 PR #1077、Markdown保存ツール候補の比較と検証手順 PR #1078 はmainへマージ済み。本文の実地検証・公開・需要検証は未完了。",
       "readiness": "ready",
       "unblock_action": "none",
       "environment": "work_pc",
@@ -817,7 +817,7 @@
             "id": "tool-selection-and-official-verification",
             "title": "具体的なツール候補・公式情報・無料条件・権限を確認し本文へ反映する",
             "status": "in_progress",
-            "evidence": "2026-10-14に公開情報を調査。Chrome Web StoreのChatGPT Exporter（otaliptus）とGitHub上のソース・権限説明を候補として比較し、候補比較とテスト手順を本文第4章へ追記。インストール・実際の保存テスト・プライバシー動作の実地検証は未完了。"
+            "evidence": "PR #1078 merged (merge commit dffa49b2d5290e240be535624988a7651380ca3e)。第4章へChatGPT Exporter（otaliptus）の候補比較と導入手順を反映。2026-10-14にChrome Web Storeと公開GitHub情報を再確認し、別候補（chatgptexporter.com）も比較。実地インストール・保存テスト・外部送信の検証は未実施。"
           }
         ],
         "updated_at": "2026-10-14"
