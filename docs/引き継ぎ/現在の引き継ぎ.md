@@ -24,10 +24,9 @@
 - 一覧：
 - [AI-MANUAL-PRODUCTION] priority=15：AI作業のセッティングマニュアル本文作成・実地検証
   - 未完了工程：body-drafting [in_progress] セッティングマニュアル本文を作成する
-  - 未完了工程：practical-validation [pending] 手順を実環境で通して効果・限界を検証する
+  - 未完了工程：practical-validation [in_progress] 手順を実環境で通して効果・限界を検証する
   - 未完了工程：publication-preparation [pending] GitHub Pages向け無料記事・サンプルと公開準備を整える
   - 未完了工程：note-demand-validation [pending] noteを候補に需要・購入意向を検証する
-  - 未完了工程：tool-selection-and-official-verification [in_progress] 具体的なツール候補・公式情報・無料条件・権限を確認し本文へ反映する
 - [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
   - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
 
