@@ -1,0 +1,71 @@
+name: Canonical state request intake
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+    paths:
+      - "canonical-state-requests/request.json"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: canonical-state-request-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  create-audited-state-update:
+    if: >-
+      github.actor == github.repository_owner &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'canonical-state-request/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate request branch and prepare atomic update
+        env:
+          REQUEST_BRANCH: ${{ github.event.pull_request.head.ref }}
+          REQUEST_PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "SAVE_PR_TOKEN repository secret is required." >&2; exit 1; }
+          git fetch origin "refs/heads/${REQUEST_BRANCH}:refs/remotes/origin/${REQUEST_BRANCH}"
+          changed_files="$(git diff --name-only origin/main...refs/remotes/origin/${REQUEST_BRANCH})"
+          test "$changed_files" = "canonical-state-requests/request.json" || {
+            echo "Request PR must change only canonical-state-requests/request.json." >&2
+            exit 1
+          }
+          git show "refs/remotes/origin/${REQUEST_BRANCH}:canonical-state-requests/request.json" > "$RUNNER_TEMP/state-update-request.json"
+          branch="save/currentize-${GITHUB_RUN_ID}"
+          git switch -c "$branch" origin/main
+          python scripts/apply_canonical_state_update.py --request-file "$RUNNER_TEMP/state-update-request.json"
+          git commit -m "chore: apply reviewed canonical state update"
+          git push --set-upstream origin "$branch"
+          echo "generated_branch=$branch" >> "$GITHUB_ENV"
+      - name: Open audited state update PR and close intake request
+        env:
+          GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
+          REQUEST_PR_NUMBER: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          pr_url="$(gh api "repos/${GITHUB_REPOSITORY}/pulls" \
+            -f base=main \
+            -f head="$generated_branch" \
+            -f title="Canonical state update" \
+            -f body="Audited canonical-state patch submitted through the owner-only request intake. State, audit record, and generated views are one atomic commit; repository guards and normal review/merge requirements remain required." \
+            --jq .html_url)"
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/issues/${REQUEST_PR_NUMBER}/comments" \
+            -f body="Canonical update request processed. Review and merge the generated state-update PR: $pr_url"
+          gh api -X PATCH "repos/${GITHUB_REPOSITORY}/pulls/${REQUEST_PR_NUMBER}" -f state=closed
