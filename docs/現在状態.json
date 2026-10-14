@@ -816,7 +816,8 @@
           {
             "id": "tool-selection-and-official-verification",
             "title": "具体的なツール候補・公式情報・無料条件・権限を確認し本文へ反映する",
-            "status": "pending"
+            "status": "in_progress",
+            "evidence": "2026-10-14に公開情報を調査。Chrome Web StoreのChatGPT Exporter（otaliptus）とGitHub上のソース・権限説明を候補として比較し、候補比較とテスト手順を本文第4章へ追記。インストール・実際の保存テスト・プライバシー動作の実地検証は未完了。"
           }
         ],
         "updated_at": "2026-10-14"
