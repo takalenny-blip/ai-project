@@ -23,7 +23,8 @@
 - actionable：2件
 - 一覧：
 - [AI-MANUAL-PRODUCTION] priority=15：AI作業のセッティングマニュアル本文作成・実地検証
-  - 未完了工程：practical-validation [in_progress] 手順を実環境で通して効果・限界を検証する
+  - 未完了工程：chapter-2-structure-and-shared-rule [in_progress] 第2章のAIセットアップ構成と全章共通の見出し・執筆原則を整理する
+  - 未完了工程：practical-validation [pending] 手順を実環境で通して効果・限界を検証する
   - 未完了工程：publication-preparation [pending] GitHub Pages向け無料記事・サンプルと公開準備を整える
   - 未完了工程：note-demand-validation [pending] noteを候補に需要・購入意向を検証する
 - [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
@@ -31,7 +32,7 @@
 
 ## 次の一手（互換ビュー）
 
-- [AI-MANUAL-PRODUCTION] 初版本文の作成・最終修正は完了済み。次は作業PCで実地検証を行い、結果を記録する。合格後にGitHub Pages向け公開準備へ進み、公開後にnote等で需要を検証する。決定済みの対象読者・無料前提は再検討しない。販売、価格、正式仕様、開始時期は未決定のまま管理する。
+- [AI-MANUAL-PRODUCTION] 初版本文の作成・最終修正は完了済み。ただし第2章のAIセットアップ手順不足が見つかったため、全章共通の構成原則を反映し、第2章の構成を見直して本文を更新する。ChatGPTとClaudeは登録・ログインから最初の会話まで具体的に案内し、Geminiは簡潔に紹介する。AIの使い分けと、普段のAIに別AIへの依頼文を作ってもらいコピーして渡す例を掲載する。細かな節構成は未確定。本文構成を確定・更新した後、作業PCで実地検証し、合格後にGitHub Pages向け公開準備、公開、note等での需要検証へ進む。決定済みの対象読者・無料前提は再検討しない。販売、価格、正式仕様、開始時期は未決定のまま管理する。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
