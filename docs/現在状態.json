@@ -301,7 +301,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "AI作業セッティングマニュアル第2章の構成をたかが暫定承認。PR #1102で承認済み構成に沿った本文更新と現在状態・生成ビューの同期を進めている。レビュー・CI・マージ、本文の手順確認、作業PCでの実地検証は未完了。GitHub Pagesのsitemap.xmlとrobots.txtのURL確認は実施済みで、Google側の処理結果待ちのため同じURL確認を繰り返さない。",
+    "summary": "AI作業セッティングマニュアル第2章の構成をたかが暫定承認。PR #1102で承認済み構成に沿った本文更新と現在状態・生成ビューの同期を進めている。レビュー・CI・マージ、本文の手順確認、作業PCでの実地検証は未完了。GitHub Pagesのトップページ、sitemap.xml、robots.txtのURL確認は実施済みで、Google側の処理結果待ちのため同じURL確認を再実施しない。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-12",
