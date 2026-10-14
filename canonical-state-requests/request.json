@@ -1,0 +1,39 @@
+{
+  "update_id": "2026-10-14-ai-manual-body-drafting-done",
+  "purpose": "AI作業セッティングマニュアル本文の作成工程を完了として正本へ反映し、次工程を作業PCでの実地検証に保つ。",
+  "source": "main上のAI作業セッティングマニュアル初版本文とPR #1086のマージ記録。PR #1090で追加した所有者限定・監査付き正本更新受付を使用。",
+  "patch": {},
+  "work_item_updates": [
+    {
+      "id": "AI-MANUAL-PRODUCTION",
+      "patch": {
+        "progress": {
+          "current_step": "practical-validation",
+          "steps": [
+            {
+              "id": "body-drafting",
+              "title": "セッティングマニュアル本文を作成する",
+              "status": "done",
+              "evidence": "初版本文の作成・章構成整理をPR #1086でmainへ反映済み。本文作成工程は完了。表記・無料前提・拡張機能手順の最終修正PR #1088は別途レビュー待ちであり、本文の実地検証・公開は未完了。"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "confirmed": [
+    "PR #1086で初版本文がmainへマージ済み。",
+    "本文作成工程と実地検証工程は別工程として管理する。",
+    "作業PCでの実地検証は未実施のため、current_stepはpractical-validationを維持する。"
+  ],
+  "not_verified": [
+    "作業PCでの拡張機能Markdown保存テストは未実施。",
+    "GitHub Pages上の公開表示・デプロイ反映は未確認。",
+    "PR #1088の最終修正は未承認・未マージ。"
+  ],
+  "references": [
+    "https://github.com/takalenny-blip/ai-project/pull/1086",
+    "https://github.com/takalenny-blip/ai-project/pull/1088",
+    "https://github.com/takalenny-blip/ai-project/pull/1090"
+  ]
+}
