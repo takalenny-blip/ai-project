@@ -241,7 +241,7 @@ home = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>たか’sブログ</title>
-<meta name="description" content="AIとのやりとりと、そこから生まれた経験を残していくブログです。">
+<meta name="description" content="AIを使って何かできないかな？基本の実践は完全無料で。AIを試す、経験を記録する、成果を公開するための方法と実体験を紹介します。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="たか’sブログ">
 <meta property="og:description" content="AIとのやりとりと、そこから生まれた経験を残していくブログです。">
@@ -263,6 +263,12 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .header-kicker { margin:.7rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.2em; }
 .banner { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
 .banner-inner { max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }
+.free-entry { max-width:1064px; margin:34px auto 0; padding:32px 34px; border:1px solid var(--accent); background:var(--cream); }
+.free-entry .eyebrow { margin:0 0 10px; color:var(--accent); font-size:.72rem; font-weight:600; letter-spacing:.15em; }
+.free-entry h1 { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.7rem,3.4vw,2.5rem); font-weight:500; line-height:1.45; }
+.free-entry p { max-width:820px; margin:14px 0 0; color:var(--muted); }
+.free-entry .free-note { font-size:.82rem; }
+.free-entry a { display:inline-block; margin-top:18px; color:#c4a46a; font-weight:600; }
 .layout { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; max-width:1120px; margin:0 auto; padding:62px 28px 90px; }
 .content h1 { margin:0 0 36px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1rem; font-weight:500; letter-spacing:.18em; color:var(--accent); }
 .feature { position:relative; display:block; padding:42px 0 40px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); color:inherit; text-decoration:none; }
@@ -288,6 +294,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   .header-inner { padding:22px 18px 18px; }
   .site-signboard img { max-height:180px; }
   .banner-inner { padding:11px 18px; }
+  .free-entry { margin:22px 18px 0; padding:24px 20px; }
   .layout { grid-template-columns:1fr; gap:42px; padding:42px 18px 60px; }
   .feature { padding:30px 0 34px; }
   .feature h2 { font-size:1.8rem; }
@@ -300,6 +307,13 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 <body>
 <header class="site-header"><div class="header-inner"><a class="site-signboard" href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></div></header>
 <div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
+<section class="free-entry" aria-labelledby="free-entry-title">
+  <p class="eyebrow">AIを始めたい人へ</p>
+  <h1 id="free-entry-title">AIで何か始めたい人へ。基本の実践は完全無料で。</h1>
+  <p>AIを使う、作業環境を整える、試行錯誤を記録する、経験や成果を公開する。そんな一連の実践を、有料プランや有料ツールを前提にせず始められる方法を紹介していきます。</p>
+  <p class="free-note">無料プランの制限や、無料ではできないことも隠さず説明します。noteの有料記事は別枠です。セッティングマニュアルは準備中です。</p>
+  <a href="ai-blog-start.html">まずは、AIを使ってみた経験の記事を読む →</a>
+</section>
 <div class="layout">
 <section class="content">
 <h1>THREE PARTS / ONE STORY</h1>
