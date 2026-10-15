@@ -71,6 +71,19 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         finally:
             resume_check.STATE = old_state
 
+    def test_ai_manual_validation_record_cannot_regress_to_unperformed(self):
+        work_item = next(item for item in self.state["work_items"] if item["id"] == "AI-MANUAL-PRODUCTION")
+        steps = {step["id"]: step for step in work_item["progress"]["steps"]}
+        validation = steps["practical-validation"]
+        follow_up = steps["validation-findings-follow-up"]
+        self.assertEqual(validation["status"], "done")
+        self.assertIn("部分合格", validation["evidence"])
+        self.assertIn("チェックボックス", validation["evidence"])
+        self.assertIn("WritingBlock", validation["evidence"])
+        self.assertIn("外部送信", validation["evidence"])
+        self.assertEqual(follow_up["status"], "in_progress")
+        self.assertEqual(work_item["progress"]["current_step"], "validation-findings-follow-up")
+        self.assertIn("未実施として再提示しない", work_item["target"])
 
 if __name__ == "__main__":
     unittest.main()
