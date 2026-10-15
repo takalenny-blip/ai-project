@@ -23,7 +23,6 @@
 - actionable：2件
 - 一覧：
 - [AI-MANUAL-PRODUCTION] priority=15：AI作業のセッティングマニュアル本文作成・実地検証
-  - 完了工程：practical-validation [done] 実地検証は実施済み・部分合格。チェックボックス変換とWritingBlockタグ混入あり、原因未特定。外部送信は未確認。
   - 未完了工程：validation-findings-follow-up [in_progress] 実地検証で見つかった保存不具合と外部送信の未確認を切り分ける
   - 未完了工程：publication-preparation [pending] GitHub Pages向け無料記事・サンプルと公開準備を整える
   - 未完了工程：note-demand-validation [pending] noteを候補に需要・購入意向を検証する
