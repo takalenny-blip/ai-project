@@ -85,5 +85,15 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertEqual(work_item["progress"]["current_step"], "validation-findings-follow-up")
         self.assertIn("未実施として再提示しない", work_item["target"])
 
+    def test_ai_manual_state_has_no_stale_validation_or_ci_status(self):
+        state_text = self.state_path.read_text(encoding="utf-8")
+        self.assertNotIn("正本・生成ビュー同期後の最新headのCIは再実行中。", state_text)
+        self.assertNotIn("実地インストールと保存テストは次工程であり未実施。", state_text)
+        work_item = next(item for item in self.state["work_items"] if item["id"] == "AI-MANUAL-PRODUCTION")
+        steps = {step["id"]: step for step in work_item["progress"]["steps"]}
+        self.assertEqual(steps["practical-validation"]["status"], "done")
+        self.assertIn("部分合格", steps["practical-validation"]["evidence"])
+        self.assertEqual(steps["validation-findings-follow-up"]["status"], "in_progress")
+
 if __name__ == "__main__":
     unittest.main()
