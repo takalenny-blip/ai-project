@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the Dropbox migration dependency map's safety-critical coverage."""
+"""Validate the Dropbox migration dependency map and safety-critical guards."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,6 +7,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 MAP_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理依存関係対応表_20261016.md"
+NO_REWORK_GUARD_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理002再作業禁止ガード.md"
 
 REQUIRED_PATHS = (
     "README.md",
@@ -39,6 +40,13 @@ REQUIRED_SAFETY_STATEMENTS = (
     "コールドスタート",
 )
 
+REQUIRED_NO_REWORK_STATEMENTS = (
+    "項目002",
+    "再開・再検証・再実行しない",
+    "002は完了・再作業禁止",
+    "項目003以降",
+)
+
 
 def validate_map(text: str) -> list[str]:
     errors: list[str] = []
@@ -53,6 +61,14 @@ def validate_map(text: str) -> list[str]:
     return errors
 
 
+def validate_no_002_rework(text: str) -> list[str]:
+    errors: list[str] = []
+    for statement in REQUIRED_NO_REWORK_STATEMENTS:
+        if statement not in text:
+            errors.append(f"002 no-rework guard missing required rule: {statement}")
+    return errors
+
+
 def main() -> int:
     try:
         text = MAP_PATH.read_text(encoding="utf-8")
@@ -60,11 +76,17 @@ def main() -> int:
         print(f"FAIL: cannot read dependency map: {exc}", file=sys.stderr)
         return 1
     errors = validate_map(text)
+    try:
+        guard_text = NO_REWORK_GUARD_PATH.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"cannot read 002 no-rework guard: {exc}")
+    else:
+        errors.extend(validate_no_002_rework(guard_text))
     if errors:
         for error in errors:
             print(f"FAIL: {error}", file=sys.stderr)
         return 1
-    print("OK: Dropbox migration dependency map covers required dependencies and safety boundaries")
+    print("OK: dependency map and 002 no-rework guard cover required safety boundaries")
     return 0
 
 
