@@ -8,7 +8,7 @@ class DropboxMigrationMapTests(unittest.TestCase):
         content = "\n".join(
             [f"`{path}`" for path in REQUIRED_PATHS]
             + list(REQUIRED_SAFETY_STATEMENTS)
-            + ["優先度は1〜5の数値で管理し、既定値は3"]
+            + ["優先度1〜5、既定値3"]
         )
         self.assertEqual(validate_map(content), [])
 
