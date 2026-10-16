@@ -20,18 +20,13 @@
 
 ## 作業キュー
 
-- actionable：2件
-- 一覧：
-- [AI-MANUAL-PRODUCTION] priority=15：AI作業のセッティングマニュアル本文作成・実地検証
-  - 未完了工程：validation-findings-follow-up [in_progress] 実地検証で見つかった保存不具合と外部送信の未確認を切り分ける
-  - 未完了工程：publication-preparation [pending] GitHub Pages向け無料記事・サンプルと公開準備を整える
-  - 未完了工程：note-demand-validation [pending] noteを候補に需要・購入意向を検証する
-- [GITHUB-PAGES-PRODUCTION] priority=23：GitHub Pagesを本番公開先として継続運用
-  - 未完了工程：ongoing-publication [in_progress] GitHub Pagesを本番公開先として継続運用
+- 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx
+- GitHubの work_items / next_step は日常作業キューとして使用しない。
+- ボードを読み取れない場合は停止し、古いGitHub項目へフォールバックしない。
 
-## 次の一手（互換ビュー）
+## 次の一手（作業キューではない技術状態）
 
-- [AI-MANUAL-PRODUCTION] 初版本文・最終修正はmain反映済み。第2章の承認済み構成に沿った本文更新と公式案内の確認は2026-10-15に完了。PR #1102は未マージ。Markdown保存の実地検証は2026-10-14に実施済みで部分合格。公開ソースの予備調査ではチェックボックス欠落の有力仮説（独自DOMのボタン要素が出力時に除外される）を得たが、実機の拡張機能名・版と当日のDOMは未確認。WritingBlockタグ混入はソース上の直接生成箇所を確認できず、表示本文に含まれた文字列を保持した可能性。公開ソースに外部通信処理は見当たらないが、実機インストール版の外部送信有無は未確認。既実施の検証を未実施として再提示しない。次は実機拡張の識別と該当版のソース確認。原因調査・修正後に限り必要な回帰確認を別工程とする。公開準備と需要検証は未完了。決定済みの対象読者・無料前提は再検討しない。販売、価格、正式仕様、開始時期は未決定のまま管理する。
+- 日常作業の次の一手はDropboxボードから取得する。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
@@ -48,8 +43,8 @@
 
 ## 現在状態モデル
 
-- docs/現在状態.jsonを唯一の現在状態正本とし、BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdを生成ビューにする
-- 自動生成：第2実装済み。work_itemsを唯一の作業キュー正本とし、next_stepはwork_itemsから導出する互換ビュー。生成ビューでactionable一覧を表示し、依存関係・期限・優先順位を機械検証する。
+- docs/現在状態.jsonを技術状態・履歴・証拠の正本とし、日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx とする。BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdは生成ビュー。
+- 自動生成：GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubのwork_items/next_stepを日常作業キューとして使用しない。
 
 ## 直チャット
 
