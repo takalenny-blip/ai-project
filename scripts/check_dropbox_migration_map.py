@@ -30,7 +30,7 @@ REQUIRED_PATHS = (
 
 REQUIRED_SAFETY_STATEMENTS = (
     "既存の直チャット原本は変更・削除・改名・上書き・置換しない",
-    "既存Dropboxボード",
+    "既存ボード",
     "上書き",
     "切替完了とは宣言しない",
     "PR #1102",
