@@ -4,6 +4,7 @@ import json
 import os
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 import sys
@@ -67,9 +68,11 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
         old_state = resume_check.STATE
         old_root = resume_check.ROOT
         old_path = os.environ.get("DIMORA_ARTIFACT_PATH")
+        old_board = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
         resume_check.STATE = root / "docs" / "現在状態.json"
         resume_check.ROOT = root
         os.environ["DIMORA_ARTIFACT_PATH"] = str(artifact)
+        os.environ["DROPBOX_WORK_QUEUE_PATH"] = str(root / "Dropbox作業管理統合ボード.xlsx")
         try:
             return resume_check.main()
         finally:
@@ -79,6 +82,15 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                 os.environ.pop("DIMORA_ARTIFACT_PATH", None)
             else:
                 os.environ["DIMORA_ARTIFACT_PATH"] = old_path
+            if old_board is None:
+                os.environ.pop("DROPBOX_WORK_QUEUE_PATH", None)
+            else:
+                os.environ["DROPBOX_WORK_QUEUE_PATH"] = old_board
+
+    def write_minimal_xlsx(self, path):
+        with zipfile.ZipFile(path, "w") as workbook:
+            workbook.writestr("[Content_Types].xml", "<Types></Types>")
+            workbook.writestr("xl/workbook.xml", "<workbook></workbook>")
 
     def test_ready_valid_json_and_count(self):
         with tempfile.TemporaryDirectory() as td:
@@ -208,7 +220,48 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state["work_queue_source"] = "dropbox_board"
             state.pop("work_items")
             state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.write_minimal_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
             self.assertEqual(self.run_check(root, artifact), 0)
+
+    def test_dropbox_mode_stops_when_board_is_missing_and_never_falls_back(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            prerequisite = {
+                "name": "dimora-favorite-programs.json", "kind": "external_artifact",
+                "verify_scope": "runtime", "status": "verified",
+                "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
+                             "sha256": digest, "record_count": 1},
+            }
+            self.write_state(root, prerequisite)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["work_queue_source"] = "dropbox_board"
+            state["work_items"] = [{"id": "LEGACY-STALE-ITEM"}]
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 1)
+
+    def test_dropbox_mode_stops_when_board_file_is_not_a_readable_xlsx(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            prerequisite = {
+                "name": "dimora-favorite-programs.json", "kind": "external_artifact",
+                "verify_scope": "runtime", "status": "verified",
+                "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
+                             "sha256": digest, "record_count": 1},
+            }
+            self.write_state(root, prerequisite)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["work_queue_source"] = "dropbox_board"
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            (root / "Dropbox作業管理統合ボード.xlsx").write_text("not an xlsx", encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 1)
 
 
 if __name__ == "__main__":
