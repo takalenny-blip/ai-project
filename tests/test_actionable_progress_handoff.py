@@ -12,6 +12,7 @@ from work_queue import select_actionable
 class ActionableProgressHandoffTests(unittest.TestCase):
     def test_actionable_work_view_exposes_only_unfinished_substeps(self):
         state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
+        state["work_queue_source"] = "github_json"
         bud, handover = render(state)
         actionable = select_actionable(state["work_items"], state.get("updated"))
 
@@ -33,6 +34,16 @@ class ActionableProgressHandoffTests(unittest.TestCase):
                             f"unfinished actionable step must remain visible: {rendered_step}",
                         )
 
+
+    def test_dropbox_queue_view_never_renders_legacy_items(self):
+        state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
+        state["work_queue_source"] = "dropbox_board"
+        bud, handover = render(state)
+        for view in (bud, handover):
+            self.assertIn("Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx", view)
+            self.assertIn("古いGitHub項目へフォールバックしない", view)
+            self.assertNotIn("actionable：", view)
+            self.assertNotIn("validation-findings-follow-up [in_progress]", view)
 
 if __name__ == "__main__":
     unittest.main()
