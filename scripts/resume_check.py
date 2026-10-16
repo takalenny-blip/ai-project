@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import hashlib
 import os
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,6 +22,26 @@ def repo_blob_sha(path):
 def external_artifact_path(prerequisite):
     configured = os.environ.get("DIMORA_ARTIFACT_PATH")
     return Path(configured) if configured else ROOT / prerequisite["name"]
+
+def dropbox_board_path():
+    configured = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
+    return Path(configured) if configured else ROOT / "Dropbox作業管理統合ボード.xlsx"
+
+def validate_dropbox_board(path):
+    """Fail closed unless the configured local Dropbox-sync file is a readable XLSX."""
+    if not path.is_file():
+        raise ValueError(f"Dropbox work board is missing or unavailable: {path}")
+    try:
+        with zipfile.ZipFile(path) as workbook:
+            bad_member = workbook.testzip()
+            if bad_member is not None:
+                raise ValueError(f"corrupt XLSX member: {bad_member}")
+            required_members = {"[Content_Types].xml", "xl/workbook.xml"}
+            missing = required_members.difference(workbook.namelist())
+            if missing:
+                raise ValueError("not a valid XLSX workbook; missing: " + ", ".join(sorted(missing)))
+    except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
+        raise ValueError(f"Dropbox work board is unreadable: {exc}") from exc
 
 def external_record_count(data):
     if isinstance(data, list):
@@ -84,6 +105,12 @@ def main():
             return fail("pending external_response_gate missing: " + ", ".join(missing_gate_fields))
         print("STOP: external proposal response is pending; react before any other work")
         return 3
+
+    if queue_source == "dropbox_board":
+        try:
+            validate_dropbox_board(dropbox_board_path())
+        except ValueError as exc:
+            return fail(str(exc))
 
     if queue_source == "github_json":
         try:
