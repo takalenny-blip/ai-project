@@ -250,12 +250,15 @@ def validate_state(state: dict) -> None:
     legacy_verification_model = "verification_records" not in state
     if not legacy_verification_model:
         validate_completed_verifications(state)
-        validate_work_queue(state)
-        if not nxt.get("scope"):
-            fail("next_step.scope is missing")
-        completed = state["verification_records"].get(nxt["scope"])
-        if isinstance(completed, dict) and completed.get("status") == "verified":
-            fail("next_step repeats an already verified scope: " + nxt["scope"])
+        if state.get("work_queue_source", "github_json") == "github_json":
+            validate_work_queue(state)
+            if not nxt.get("scope"):
+                fail("next_step.scope is missing")
+            completed = state["verification_records"].get(nxt["scope"])
+            if isinstance(completed, dict) and completed.get("status") == "verified":
+                fail("next_step repeats an already verified scope: " + nxt["scope"])
+        elif state.get("work_queue_source") != "dropbox_board":
+            fail("work_queue_source must be github_json or dropbox_board")
     # Staged migration compatibility: the current canonical state predates the
     # verification_records/scope fields. Allow it to pass until the normal save
     # pipeline applies the explicit migration patch; do not silently invent evidence.
@@ -279,7 +282,8 @@ def validate_state(state: dict) -> None:
         fail("next_step.target is too abstract or stale; require current concrete work")
     validate_prerequisites(nxt)
     validate_external_response_gate(state)
-    validate_completed_step_prose(state)
+    if state.get("work_queue_source", "github_json") == "github_json":
+        validate_completed_step_prose(state)
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
         fail("work_pc clone_status=cloned requires clone_evidence")
@@ -301,7 +305,8 @@ def validate_generated_views(state: dict) -> None:
     """
     env = state["execution_environment"]
     current = state["current_position"]
-    actionable_items = select_actionable(state["work_items"], state.get("updated"))
+    queue_source = state.get("work_queue_source", "github_json")
+    actionable_items = select_actionable(state["work_items"], state.get("updated")) if queue_source == "github_json" else []
     actionable = actionable_items[0] if actionable_items else None
     bud_text, handover_text = render(state)
     for name, text in (("BUD.md", bud_text), ("docs/引き継ぎ/現在の引き継ぎ.md", handover_text)):
@@ -309,8 +314,14 @@ def validate_generated_views(state: dict) -> None:
             f"現在：**{env['active']}**",
             f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
             f"**{current['summary']}**",
-            f"actionable：{len(actionable_items)}件",
         ]
+        if queue_source == "github_json":
+            required.append(f"actionable：{len(actionable_items)}件")
+        elif queue_source == "dropbox_board":
+            required.append("Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx")
+            required.append("古いGitHub項目へフォールバックしない")
+        else:
+            fail("work_queue_source must be github_json or dropbox_board")
         for fragment in required:
             if fragment not in text:
                 fail(f"generated view is stale or incomplete: {name} missing {fragment}")

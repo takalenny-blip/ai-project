@@ -11,7 +11,7 @@ import sys
 sys.path.insert(0, str(ROOT / "scripts"))
 from work_queue import validate_work_items, derived_next_step, select_actionable
 STATE = ROOT / "docs" / "現在状態.json"
-REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
+REQUIRED_BASE = ("execution_environment", "current_position", "next_step")
 
 def repo_blob_sha(path):
     data = path.read_bytes()
@@ -44,7 +44,11 @@ def main():
     except Exception as exc:
         return fail(f"canonical state unreadable: {exc}")
 
-    missing = [k for k in REQUIRED if k not in state]
+    queue_source = state.get("work_queue_source", "github_json")
+    if queue_source not in {"github_json", "dropbox_board"}:
+        return fail("work_queue_source must be github_json or dropbox_board")
+    required = REQUIRED_BASE + (("work_items",) if queue_source == "github_json" else ())
+    missing = [k for k in required if k not in state]
     if missing:
         return fail("missing required fields: " + ", ".join(missing))
 
@@ -81,50 +85,54 @@ def main():
         print("STOP: external proposal response is pending; react before any other work")
         return 3
 
-    try:
-        validate_work_items(state["work_items"])
-    except ValueError as exc:
-        return fail("work queue invalid: " + str(exc))
-    actionable = select_actionable(state["work_items"], state.get("updated"))
-    if actionable:
-        print("actionable_work_items: " + ", ".join(f"{item['id']} (priority={item['priority']})" for item in actionable))
-        for item in actionable:
-            progress = item["progress"]
-            current = next(step for step in progress["steps"] if step["id"] == progress["current_step"])
-            print(f"progress[{item['id']}]: current_step={progress['current_step']} status={current['status']}")
+    if queue_source == "github_json":
+        try:
+            validate_work_items(state["work_items"])
+        except ValueError as exc:
+            return fail("work queue invalid: " + str(exc))
+        actionable = select_actionable(state["work_items"], state.get("updated"))
+        if actionable:
+            print("actionable_work_items: " + ", ".join(f"{item['id']} (priority={item['priority']})" for item in actionable))
+            for item in actionable:
+                progress = item["progress"]
+                current = next(step for step in progress["steps"] if step["id"] == progress["current_step"])
+                print(f"progress[{item['id']}]: current_step={progress['current_step']} status={current['status']}")
+        else:
+            print("actionable_work_items: (none)")
+        waiting_external = [
+            item for item in state["work_items"]
+            if item["status"] not in {"done", "held"} and item["execution_state"] == "waiting_external"
+        ]
+        if waiting_external:
+            print("waiting_external_work_items: " + ", ".join(
+                f"{item['id']} ({item.get('wait_reason', 'reason unspecified')})"
+                for item in waiting_external
+            ))
+            for item in waiting_external:
+                progress = item["progress"]
+                current = next(step for step in progress["steps"] if step["id"] == progress["current_step"])
+                print(f"progress[{item['id']}]: current_step={progress['current_step']} status={current['status']}")
+        else:
+            print("waiting_external_work_items: (none)")
+        derived = derived_next_step(state["work_items"], state.get("updated"))
+        cached = state["next_step"]
+        if derived is None:
+            if cached not in (None, {}):
+                return fail("next_step must be empty when no actionable work exists")
+            blocked_items = [x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"]
+            if blocked_items:
+                blocked_items.sort(key=lambda x: (x["priority"], x["created_at"], x["id"]))
+                blocked = blocked_items[0]
+                print("BLOCKED: work item is blocked: " + blocked["target"])
+                print("UNBLOCK: " + blocked["unblock_action"])
+                return 2
+        elif cached.get("id") != derived.get("id"):
+            return fail("next_step is stale; it does not match the actionable work queue")
+        elif derived.get("execution_state") != "actionable":
+            return fail("derived next_step must be execution_state=actionable")
     else:
-        print("actionable_work_items: (none)")
-    waiting_external = [
-        item for item in state["work_items"]
-        if item["status"] not in {"done", "held"} and item["execution_state"] == "waiting_external"
-    ]
-    if waiting_external:
-        print("waiting_external_work_items: " + ", ".join(
-            f"{item['id']} ({item.get('wait_reason', 'reason unspecified')})"
-            for item in waiting_external
-        ))
-        for item in waiting_external:
-            progress = item["progress"]
-            current = next(step for step in progress["steps"] if step["id"] == progress["current_step"])
-            print(f"progress[{item['id']}]: current_step={progress['current_step']} status={current['status']}")
-    else:
-        print("waiting_external_work_items: (none)")
-    derived = derived_next_step(state["work_items"], state.get("updated"))
-    cached = state["next_step"]
-    if derived is None:
-        if cached not in (None, {}):
-            return fail("next_step must be empty when no actionable work exists")
-        blocked_items = [x for x in state["work_items"] if x["status"] not in {"done", "held"} and x["readiness"] == "blocked"]
-        if blocked_items:
-            blocked_items.sort(key=lambda x: (x["priority"], x["created_at"], x["id"]))
-            blocked = blocked_items[0]
-            print("BLOCKED: work item is blocked: " + blocked["target"])
-            print("UNBLOCK: " + blocked["unblock_action"])
-            return 2
-    elif cached.get("id") != derived.get("id"):
-        return fail("next_step is stale; it does not match the actionable work queue")
-    elif derived.get("execution_state") != "actionable":
-        return fail("derived next_step must be execution_state=actionable")
+        print("daily_work_queue_source: Dropbox /ChatGPT/Dropbox作業管理統合ボード.xlsx")
+        print("No fallback to legacy GitHub work_items or next_step is permitted.")
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
@@ -214,7 +222,10 @@ def main():
     print(f"active_environment: {active}")
     print(f"retired_environments: {', '.join(retired) if retired else '(none)'}")
     print(f"current_position: {current['summary']}")
-    print(f"next_step: {nxt['target']}")
+    if queue_source == "github_json":
+        print(f"next_step: {nxt['target']}")
+    else:
+        print("daily_next_action: read from Dropbox board; not derived from GitHub JSON")
     print(f"next_step_environment: {nxt['environment']}")
     print(f"manifest_generator: {manifest['generator']}")
     return 0

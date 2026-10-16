@@ -190,5 +190,26 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             self.assertEqual(self.run_check(root, artifact), 0)
 
 
+    def test_dropbox_mode_ignores_legacy_work_items_and_reports_board_as_queue(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            prerequisite = {
+                "name": "dimora-favorite-programs.json", "kind": "external_artifact",
+                "verify_scope": "runtime", "status": "verified",
+                "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
+                             "sha256": digest, "record_count": 1},
+            }
+            self.write_state(root, prerequisite)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["work_queue_source"] = "dropbox_board"
+            state.pop("work_items")
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.assertEqual(self.run_check(root, artifact), 0)
+
+
 if __name__ == "__main__":
     unittest.main()
