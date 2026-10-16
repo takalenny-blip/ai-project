@@ -355,5 +355,22 @@ class CurrentStateGuardTests(unittest.TestCase):
 
 
 
+    def test_dropbox_board_mode_does_not_treat_legacy_work_items_as_queue(self):
+        state = self.base_state()
+        state["work_queue_source"] = "dropbox_board"
+        state["work_items"] = []
+        guard.validate_state(state)
+        bud_text, handover_text = guard.render(state)
+        for rendered in (bud_text, handover_text):
+            self.assertIn("Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx", rendered)
+            self.assertIn("古いGitHub項目へフォールバックしない", rendered)
+            self.assertNotIn("actionable：", rendered)
+
+    def test_dropbox_board_mode_generated_views_guard_accepts_queue_contract(self):
+        state = self.base_state()
+        state["work_queue_source"] = "dropbox_board"
+        guard.validate_generated_views(state)
+
+
 if __name__ == "__main__":
     unittest.main()
