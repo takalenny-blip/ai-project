@@ -30,25 +30,25 @@ def render(state: dict) -> tuple[str, str]:
     if queue_source == "dropbox_board":
         actionable = []
         queue_section = (
-            "## 作業キュー\\n\\n"
-            "- 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx\\n"
-            "- GitHubの work_items / next_step は日常作業キューとして使用しない。\\n"
+            "## 作業キュー\n\n"
+            "- 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx\n"
+            "- GitHubの work_items / next_step は日常作業キューとして使用しない。\n"
             "- ボードを読み取れない場合は停止し、古いGitHub項目へフォールバックしない。"
         )
         next_step_section = (
-            "## 次の一手（作業キューではない技術状態）\\n\\n"
+            "## 次の一手（作業キューではない技術状態）\n\n"
             "- 日常作業の次の一手はDropboxボードから取得する。"
         )
     elif queue_source == "github_json":
         actionable = select_actionable(state["work_items"], state.get("updated"))
         queue_section = (
-            "## 作業キュー\\n\\n"
-            f"- actionable：{len(actionable)}件\\n"
-            "- 一覧：\\n"
+            "## 作業キュー\n\n"
+            f"- actionable：{len(actionable)}件\n"
+            "- 一覧：\n"
             + (chr(10).join("- [" + item["id"] + "] priority=" + str(item["priority"]) + "：" + item["title"] + chr(10) + chr(10).join("  - 未完了工程：" + step["id"] + " [" + step["status"] + "] " + step["title"] for step in item["progress"]["steps"] if step["status"] != "done") for item in actionable) or "- actionableな作業なし")
         )
         next_step_section = (
-            "## 次の一手（互換ビュー）\\n\\n"
+            "## 次の一手（互換ビュー）\n\n"
             + (("- [" + nxt["id"] + "] " + nxt["target"]) if nxt else "- actionableな作業なし")
         )
     else:
