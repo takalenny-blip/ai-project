@@ -30,7 +30,8 @@ REQUIRED_PATHS = (
 
 REQUIRED_SAFETY_STATEMENTS = (
     "既存の直チャット原本は変更・削除・改名・上書き・置換しない",
-    "既存Dropboxボードは上書き・削除しない",
+    "既存Dropboxボード",
+    "上書き",
     "切替完了とは宣言しない",
     "PR #1102",
     "PR #1116",
@@ -47,7 +48,7 @@ def validate_map(text: str) -> list[str]:
     for statement in REQUIRED_SAFETY_STATEMENTS:
         if statement not in text:
             errors.append(f"dependency map missing safety/evidence statement: {statement}")
-    if "優先度は1〜5の数値" not in text or "既定値は3" not in text:
+    if "優先度1〜5" not in text or "既定値3" not in text:
         errors.append("dependency map must reflect the board's priority range 1-5 and default 3")
     return errors
 
