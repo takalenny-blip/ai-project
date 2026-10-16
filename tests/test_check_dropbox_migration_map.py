@@ -1,6 +1,12 @@
 import unittest
 
-from check_dropbox_migration_map import REQUIRED_PATHS, REQUIRED_SAFETY_STATEMENTS, validate_map
+from check_dropbox_migration_map import (
+    REQUIRED_NO_REWORK_STATEMENTS,
+    REQUIRED_PATHS,
+    REQUIRED_SAFETY_STATEMENTS,
+    validate_map,
+    validate_no_002_rework,
+)
 
 
 class DropboxMigrationMapTests(unittest.TestCase):
@@ -38,6 +44,18 @@ class DropboxMigrationMapTests(unittest.TestCase):
         )
         errors = validate_map(content)
         self.assertTrue(any("priority range 1-5" in error for error in errors))
+
+    def test_002_no_rework_guard_passes(self):
+        content = "\n".join(REQUIRED_NO_REWORK_STATEMENTS)
+        self.assertEqual(validate_no_002_rework(content), [])
+
+    def test_missing_002_no_rework_rule_is_reported(self):
+        content = "\n".join(
+            statement for statement in REQUIRED_NO_REWORK_STATEMENTS
+            if statement != "再開・再検証・再実行しない"
+        )
+        errors = validate_no_002_rework(content)
+        self.assertTrue(any("再開・再検証・再実行しない" in error for error in errors))
 
 
 if __name__ == "__main__":
