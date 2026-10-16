@@ -12,9 +12,9 @@
     "work_queue": "日常作業キューの正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。GitHubのwork_items/next_stepは旧形式の技術履歴として保持し、キュー候補・次の作業選定・フォールバックに使用しない。Dropboxを読めない場合は停止して利用不可を明示する。"
   },
   "direct_chat": {
-    "latest_saved": "2026-10-16T20-01-56.234866+0900",
-    "latest_path": "直チャット/2026-10-16_直チャット即時保存_2026-10-16T20-01-56.234866+0900.md",
-    "latest_content_sha": "cbeaa5877d3abb66d7c04cb957033626d323ad01",
+    "latest_saved": "2026-10-16T20-47-09.456948+0900",
+    "latest_path": "直チャット/2026-10-16_直チャット即時保存_2026-10-16T20-47-09.456948+0900.md",
+    "latest_content_sha": "762db6cba5c1b9d84b3f4a65f21020e7c97ac6ac",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
