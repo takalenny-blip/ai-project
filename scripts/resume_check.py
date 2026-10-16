@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
 from work_queue import validate_work_items, derived_next_step, select_actionable
+from dropbox_board import validate_remote_board_from_env
 STATE = ROOT / "docs" / "現在状態.json"
 REQUIRED_BASE = ("execution_environment", "current_position", "next_step")
 
@@ -108,7 +109,14 @@ def main():
 
     if queue_source == "dropbox_board":
         try:
-            validate_dropbox_board(dropbox_board_path())
+            if os.environ.get("DROPBOX_ACCESS_TOKEN"):
+                remote_path = validate_remote_board_from_env()
+                print(f"dropbox_remote_board: read and validated {remote_path}")
+            elif os.environ.get("DROPBOX_REQUIRE_REMOTE") == "1":
+                raise ValueError("DROPBOX_ACCESS_TOKEN is required for remote Dropbox board validation")
+            else:
+                validate_dropbox_board(dropbox_board_path())
+                print("dropbox_local_board: validated local sync copy only; cloud freshness not verified")
         except ValueError as exc:
             return fail(str(exc))
 
