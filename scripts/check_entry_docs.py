@@ -21,15 +21,15 @@ def main() -> int:
     operating_rule = OPERATING_RULE.read_text(encoding="utf-8")
     read_map = READ_MAP.read_text(encoding="utf-8")
 
-    require(readme, "最初に [`docs/現在状態.json`](./docs/現在状態.json) を読んでください。これが現在状態の唯一の正本です。", "README source of truth")
+    require(readme, "日常作業キューの唯一の正本はDropboxの固定ファイル", "README Dropbox queue source")
     require(readme, "BUD.md", "README generated view reference")
     require(readme, "機械生成されるビュー", "README generated-view contract")
     require(readme, "これらを現在状態の正本として直接編集してはいけません", "README no-direct-edit contract")
     require(readme, "構造変更時だけ深い独立監査を起動し", "README conditional audit trigger")
     require(readme, "起動時・再開時の現在化ゲート", "README startup currentization gate")
     require(readme, "docs/現在状態.json", "README canonical startup state")
-    require(readme, "BUD.mdや引き継ぎを先に読んで現在状態を決めてはならない", "README no BUD-first startup")
-    require(readme, "前回の作業完了後に新しいPR・merge・commitが存在する場合", "README post-work freshness check")
+    require(readme, "日常作業キューと優先度・状態・次のアクションはDropboxの固定ファイル", "README Dropbox startup queue")
+    require(readme, "Dropboxボードを読み取れない場合は作業キュー利用不可として停止", "README no stale queue fallback")
 
     require(audit_rule, "構造変更時だけ", "audit trigger")
     require(audit_rule, "scripts/check_repo_integrity.py", "mechanical integrity guard")
@@ -38,9 +38,9 @@ def main() -> int:
     require(audit_rule, "通常工程へ戻る", "return-to-normal-operation rule")
     require(operating_rule, "GitHub上の `docs/現在状態.json` を最初に直接読み", "rule canonical startup state")
 
-    require(read_map, "`docs/現在状態.json` — 現在状態・現在の作業キュー・現在の次の一手の唯一の正本", "AI read map canonical state")
+    require(read_map, "Dropbox `/ChatGPT/Dropbox作業管理統合ボード.xlsx` — 日常作業キュー・優先度・状態・次のアクションの唯一の正本", "AI read map Dropbox queue source")
     require(read_map, "`BUD.md` / `docs/引き継ぎ/現在の引き継ぎ.md` — 正本から生成された互換ビュー", "AI read map generated views")
-    require(read_map, "正本との不一致時は使用せず、正本を優先する", "AI read map stale-view precedence")
+    require(read_map, "Dropboxボードを読み取れない場合は停止し、旧GitHubキューや古い生成ビューへフォールバックしない", "AI read map no stale fallback")
     if "BUD.md（現在状態） + rules/運用ルール.md（行動規則） > その他の資料" in read_map:
         raise SystemExit("FAIL: AI_READ_MAP still contains the obsolete BUD-first source-of-truth contract")
 
