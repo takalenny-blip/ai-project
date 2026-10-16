@@ -312,7 +312,7 @@ def validate_generated_views(state: dict) -> None:
     for name, text in (("BUD.md", bud_text), ("docs/引き継ぎ/現在の引き継ぎ.md", handover_text)):
         required = [
             f"現在：**{env['active']}**",
-            f"退役：{', '.join(env.get('retired', [])) or '(なし)'",
+            f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
             f"**{current['summary']}**",
         ]
         if queue_source == "github_json":
