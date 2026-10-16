@@ -36,12 +36,14 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_interaction_guard.py' -v
       - name: Run explicit interaction session tests
         run: python -m unittest discover -s tests -p 'test_interaction_session.py' -v
-      - name: Run resume preflight with an explicit CI fixture
+      - name: Run resume preflight against Dropbox when credentials are configured
+        env:
+          DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
         run: |
-          python - <<'PY'
-          import zipfile
-          with zipfile.ZipFile('/tmp/ci-dropbox-board.xlsx', 'w') as workbook:
-              workbook.writestr('[Content_Types].xml', '<Types></Types>')
-              workbook.writestr('xl/workbook.xml', '<workbook></workbook>')
-          PY
-          DROPBOX_WORK_QUEUE_PATH=/tmp/ci-dropbox-board.xlsx python scripts/resume_check.py
+          if [ -n "${DROPBOX_ACCESS_TOKEN:-}" ]; then
+            DROPBOX_REQUIRE_REMOTE=1 python scripts/resume_check.py
+          else
+            echo "NOTICE: DROPBOX_ACCESS_TOKEN is not configured; running local-fixture preflight only."
+            python -c "import zipfile; z=zipfile.ZipFile('/tmp/ci-dropbox-board.xlsx','w'); z.writestr('[Content_Types].xml','<Types></Types>'); z.writestr('xl/workbook.xml','<workbook></workbook>'); z.close()"
+            DROPBOX_WORK_QUEUE_PATH=/tmp/ci-dropbox-board.xlsx python scripts/resume_check.py
+          fi
