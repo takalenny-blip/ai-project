@@ -7,6 +7,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 MAP_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理依存関係対応表_20261016.md"
+DESIGN_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理移行設計.md"
 NO_REWORK_GUARD_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理002再作業禁止ガード.md"
 
 REQUIRED_PATHS = (
@@ -69,6 +70,21 @@ def validate_no_002_rework(text: str) -> list[str]:
     return errors
 
 
+def validate_design_status(text: str) -> list[str]:
+    """Keep the design aligned with the completed board check and merged dependency-map PR."""
+    errors: list[str] = []
+    required = (
+        "PR #1119は2026-10-16にマージ済み",
+        "項目002は完了扱い",
+        "再実施しない",
+        "`/ChatGPT/Dropbox作業管理統合ボード.xlsx`",
+    )
+    for statement in required:
+        if statement not in text:
+            errors.append(f"migration design missing current-state/no-rework statement: {statement}")
+    return errors
+
+
 def main() -> int:
     try:
         text = MAP_PATH.read_text(encoding="utf-8")
@@ -76,6 +92,12 @@ def main() -> int:
         print(f"FAIL: cannot read dependency map: {exc}", file=sys.stderr)
         return 1
     errors = validate_map(text)
+    try:
+        design_text = DESIGN_PATH.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"cannot read Dropbox migration design: {exc}")
+    else:
+        errors.extend(validate_design_status(design_text))
     try:
         guard_text = NO_REWORK_GUARD_PATH.read_text(encoding="utf-8")
     except OSError as exc:

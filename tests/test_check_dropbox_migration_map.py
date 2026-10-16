@@ -6,6 +6,7 @@ from check_dropbox_migration_map import (
     REQUIRED_SAFETY_STATEMENTS,
     validate_map,
     validate_no_002_rework,
+    validate_design_status,
 )
 
 
@@ -56,6 +57,23 @@ class DropboxMigrationMapTests(unittest.TestCase):
         )
         errors = validate_no_002_rework(content)
         self.assertTrue(any("再開・再検証・再実行しない" in error for error in errors))
+
+
+
+class MigrationDesignStatusTests(unittest.TestCase):
+    def test_current_design_and_completed_board_check_are_required(self):
+        content = "PR #1119は2026-10-16にマージ済み\\n項目002は完了扱い。再実施しない。\\n`/ChatGPT/Dropbox作業管理統合ボード.xlsx`"
+        self.assertEqual(validate_design_status(content), [])
+
+    def test_stale_design_that_reopens_item_002_fails(self):
+        content = "PR #1119は2026-10-16にマージ済み\\n項目002は完了扱い。\\n`/ChatGPT/Dropbox作業管理統合ボード.xlsx`"
+        errors = validate_design_status(content)
+        self.assertTrue(any("再実施しない" in error for error in errors))
+
+    def test_missing_merged_pr_evidence_fails(self):
+        content = "項目002は完了扱い。再実施しない。\\n`/ChatGPT/Dropbox作業管理統合ボード.xlsx`"
+        errors = validate_design_status(content)
+        self.assertTrue(any("PR #1119" in error for error in errors))
 
 
 if __name__ == "__main__":
