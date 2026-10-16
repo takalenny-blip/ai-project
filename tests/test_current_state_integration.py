@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import json
+import os
+import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 import sys
 
@@ -65,11 +68,22 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
 
     def test_resume_check_accepts_canonical_state(self):
         old_state = resume_check.STATE
+        old_board = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
         resume_check.STATE = self.state_path
         try:
-            self.assertEqual(resume_check.main(), 0)
+            with tempfile.TemporaryDirectory() as td:
+                board = Path(td) / "Dropbox作業管理統合ボード.xlsx"
+                with zipfile.ZipFile(board, "w") as workbook:
+                    workbook.writestr("[Content_Types].xml", "<Types></Types>")
+                    workbook.writestr("xl/workbook.xml", "<workbook></workbook>")
+                os.environ["DROPBOX_WORK_QUEUE_PATH"] = str(board)
+                self.assertEqual(resume_check.main(), 0)
         finally:
             resume_check.STATE = old_state
+            if old_board is None:
+                os.environ.pop("DROPBOX_WORK_QUEUE_PATH", None)
+            else:
+                os.environ["DROPBOX_WORK_QUEUE_PATH"] = old_board
 
     def test_ai_manual_validation_record_cannot_regress_to_unperformed(self):
         work_item = next(item for item in self.state["work_items"] if item["id"] == "AI-MANUAL-PRODUCTION")

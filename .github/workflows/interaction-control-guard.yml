@@ -36,5 +36,12 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_interaction_guard.py' -v
       - name: Run explicit interaction session tests
         run: python -m unittest discover -s tests -p 'test_interaction_session.py' -v
-      - name: Run resume preflight
-        run: python scripts/resume_check.py
+      - name: Run resume preflight with an explicit CI fixture
+        run: |
+          python - <<'PY'
+          import zipfile
+          with zipfile.ZipFile('/tmp/ci-dropbox-board.xlsx', 'w') as workbook:
+              workbook.writestr('[Content_Types].xml', '<Types></Types>')
+              workbook.writestr('xl/workbook.xml', '<workbook></workbook>')
+          PY
+          DROPBOX_WORK_QUEUE_PATH=/tmp/ci-dropbox-board.xlsx python scripts/resume_check.py
