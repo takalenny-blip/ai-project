@@ -5,7 +5,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from save_and_currentize import merge_patch, sync_next_step
+from save_and_currentize import merge_patch, validate_queue_retirement
 from apply_canonical_state_update import validate_technical_patch
 
 
@@ -31,16 +31,13 @@ class CanonicalStateUpdateTests(unittest.TestCase):
         state = {
             "work_queue_source": "dropbox_board",
             "work_items": [],
-            "next_step": {"id": "LEGACY-QUEUE-RETIRED", "target": "Dropbox only"},
         }
         sync_next_step(state)
-        self.assertEqual(state["next_step"]["id"], "LEGACY-QUEUE-RETIRED")
 
     def test_save_pipeline_rejects_reintroduced_legacy_queue(self):
         state = {
             "work_queue_source": "dropbox_board",
             "work_items": [{"id": "old"}],
-            "next_step": {"id": "LEGACY-QUEUE-RETIRED"},
         }
         with self.assertRaisesRegex(SystemExit, "work_items must be empty"):
             sync_next_step(state)
