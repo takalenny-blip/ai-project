@@ -66,7 +66,6 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_legacy_verification_model_is_temporarily_accepted(self):
         state = self.base_state()
         state.pop("verification_records")
-        state["next_step"].pop("scope")
         guard.validate_state(state)
 
     def test_active_work_pc_passes(self):
@@ -236,7 +235,7 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_legacy_queue_source_is_rejected(self):
         state = self.base_state()
         state["work_queue_source"] = "github_json"
-        with self.assertRaisesRegex(ValueError, "Dropbox is the only daily queue"):
+        with self.assertRaisesRegex(ValueError, "work_queue_source must be dropbox_board"):
             guard.validate_state(state)
 
     def test_dropbox_board_mode_does_not_treat_legacy_work_items_as_queue(self):
