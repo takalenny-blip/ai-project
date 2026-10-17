@@ -15,7 +15,7 @@ REQUIRED_PATHS = (
     "docs/AI_READ_MAP.md",
     "rules/README.md",
     "rules/運用ルール.md",
-    "scripts/work_queue.py",
+    "scripts/check_dropbox_migration_map.py",
     "scripts/generate_current_views.py",
     "scripts/current_state_guard.py",
     "scripts/resume_check.py",
@@ -47,6 +47,14 @@ REQUIRED_NO_REWORK_STATEMENTS = (
     "002は完了・再作業禁止",
     "項目003以降",
 )
+
+
+def validate_retired_queue_files(root: Path = ROOT) -> list[str]:
+    errors: list[str] = []
+    for relative in ("scripts/work_queue.py", "tests/test_work_queue.py"):
+        if (root / relative).exists():
+            errors.append(f"retired GitHub queue file still exists: {relative}")
+    return errors
 
 
 def validate_map(text: str) -> list[str]:
@@ -92,6 +100,7 @@ def main() -> int:
         print(f"FAIL: cannot read dependency map: {exc}", file=sys.stderr)
         return 1
     errors = validate_map(text)
+    errors.extend(validate_retired_queue_files())
     try:
         design_text = DESIGN_PATH.read_text(encoding="utf-8")
     except OSError as exc:
