@@ -145,6 +145,28 @@ def validate_startup_reference_docs(master_plan: str, canonical_repo: str) -> li
             errors.append(f"obsolete BUD-first startup instruction remains: {statement}")
     return errors
 
+def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, resume_guard: str) -> list[str]:
+    """Ensure supporting rule indexes and guards do not restore BUD as the task queue."""
+    errors: list[str] = []
+    requirements = (
+        ("rules README", rules_readme, "日常作業キュー・優先度・状態・次のアクションの唯一の正本はDropbox固定ボード"),
+        ("currentization guard", currentization_guard, "技術状態・履歴・証拠の正本は `docs/現在状態.json`"),
+        ("currentization guard", currentization_guard, "日常作業キューの変更はDropbox固定ボードへ反映"),
+        ("resume/search guard", resume_guard, "BUD・引き継ぎ・過去ログから作業候補を補完しない"),
+        ("resume/search guard", resume_guard, "Dropbox固定ボードで確認する"),
+    )
+    for name, text, statement in requirements:
+        if statement not in text:
+            errors.append(f"{name} missing retired-queue boundary: {statement}")
+    obsolete = (
+        ("rules README", rules_readme, "- `BUD.md`：現在の目的・現在状態・現在の次の一手"),
+        ("resume/search guard", resume_guard, "`BUD.md`、最新の引き継ぎ、実際の直近ユーザー発言で確認済みとされている事実"),
+    )
+    for name, text, statement in obsolete:
+        if statement in text:
+            errors.append(f"{name} retains obsolete queue instruction: {statement}")
+    return errors
+
 def validate_map(text: str) -> list[str]:
     errors: list[str] = []
     for path in REQUIRED_PATHS:
@@ -189,6 +211,14 @@ def main() -> int:
         return 1
     errors = validate_map(text)
     errors.extend(validate_retired_queue_files())
+    try:
+        rules_readme_text = (ROOT / "rules" / "README.md").read_text(encoding="utf-8")
+        currentization_guard_text = (ROOT / "rules" / "現在化・旧情報ガード.md").read_text(encoding="utf-8")
+        resume_guard_text = (ROOT / "rules" / "再開・検索ガード.md").read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"cannot read supporting rule docs: {exc}")
+    else:
+        errors.extend(validate_supporting_rule_docs(rules_readme_text, currentization_guard_text, resume_guard_text))
     try:
         master_plan_text = (ROOT / "docs" / "マスタープラン.md").read_text(encoding="utf-8")
         canonical_repo_text = (ROOT / "docs" / "正本リポジトリ.md").read_text(encoding="utf-8")
