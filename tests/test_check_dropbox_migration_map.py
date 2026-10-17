@@ -7,6 +7,7 @@ from check_dropbox_migration_map import (
     validate_map,
     validate_no_002_rework,
     validate_design_status,
+    validate_retired_queue_files,
 )
 
 
@@ -18,6 +19,17 @@ class DropboxMigrationMapTests(unittest.TestCase):
             + ["優先度1〜5、既定値3"]
         )
         self.assertEqual(validate_map(content), [])
+
+    def test_retired_github_queue_files_must_be_absent(self):
+        from pathlib import Path
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            self.assertEqual(validate_retired_queue_files(root), [])
+            (root / "scripts").mkdir()
+            (root / "scripts" / "work_queue.py").write_text("# obsolete", encoding="utf-8")
+            errors = validate_retired_queue_files(root)
+            self.assertTrue(any("scripts/work_queue.py" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
         content = "\n".join(
