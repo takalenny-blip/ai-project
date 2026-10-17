@@ -23,6 +23,21 @@ class CanonicalStateUpdateTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "work_items/next_step updates are retired"):
             validate_technical_patch({"current_position": {"summary": "x"}}, {"work_item_updates": [{"id": "old"}]})
 
+    def test_technical_patch_rejects_nested_retired_queue_data(self):
+        payloads = (
+            {"current_position": {"work_items": []}},
+            {"current_position": {"next_step": "old queue"}},
+            {"current_position": {"metadata": {"work_item_updates": []}}},
+        )
+        for patch in payloads:
+            with self.subTest(patch=patch):
+                with self.assertRaisesRegex(SystemExit, "work_items/next_step updates are retired"):
+                    validate_technical_patch(patch, {})
+
+        with self.assertRaisesRegex(SystemExit, "work_items/next_step updates are retired"):
+            validate_technical_patch({"current_position": {"summary": "x"}},
+                                     {"metadata": {"work_item_updates": []}})
+
     def test_technical_patch_requires_nonempty_object(self):
         with self.assertRaisesRegex(SystemExit, "non-empty technical-state patch"):
             validate_technical_patch({}, {})
