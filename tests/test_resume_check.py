@@ -227,12 +227,12 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state_path = root / "docs" / "現在状態.json"
             state = json.loads(state_path.read_text(encoding="utf-8"))
             state["work_queue_source"] = "dropbox_board"
-            state.pop("work_items", None)
+            state["work_items"] = []
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.write_minimal_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
             self.assertEqual(self.run_check(root, artifact), 0)
 
-    def test_dropbox_mode_stops_when_board_is_missing_and_never_falls_back(self):
+    def test_dropbox_mode_rejects_nonempty_legacy_queue(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             artifact = root / "dimora.json"
@@ -249,6 +249,12 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state = json.loads(state_path.read_text(encoding="utf-8"))
             state["work_queue_source"] = "dropbox_board"
             state["work_items"] = [{"id": "LEGACY-STALE-ITEM"}]
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.write_minimal_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, artifact), 1)
+
+    def test_dropbox_mode_stops_when_board_is_missing_and_never_falls_back(self):
+            state["work_items"] = []
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 1)
 
