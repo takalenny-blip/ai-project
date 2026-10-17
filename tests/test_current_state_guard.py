@@ -355,6 +355,12 @@ class CurrentStateGuardTests(unittest.TestCase):
 
 
 
+    def test_dropbox_mode_does_not_require_work_items(self):
+        state = self.base_state()
+        state["work_queue_source"] = "dropbox_board"
+        state.pop("work_items", None)
+        guard.validate_state(state)
+
     def test_dropbox_board_mode_does_not_treat_legacy_work_items_as_queue(self):
         state = self.base_state()
         state["work_queue_source"] = "dropbox_board"
