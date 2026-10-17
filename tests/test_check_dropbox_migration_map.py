@@ -8,6 +8,7 @@ from check_dropbox_migration_map import (
     validate_no_002_rework,
     validate_design_status,
     validate_retired_queue_files,
+    validate_retired_queue_manual,
 )
 
 
@@ -30,6 +31,25 @@ class DropboxMigrationMapTests(unittest.TestCase):
             (root / "scripts" / "work_queue.py").write_text("# obsolete", encoding="utf-8")
             errors = validate_retired_queue_files(root)
             self.assertTrue(any("scripts/work_queue.py" in error for error in errors))
+
+    def test_retired_queue_manual_passes_with_explicit_retirement_notice(self):
+        content = """# 廃止済み：旧GitHub作業キュー管理マニュアル
+状態：廃止。
+現行手順として実行してはならない。
+Dropbox固定ファイル `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
+作業候補の抽出・登録・状態更新には使用しない
+"""
+        self.assertEqual(validate_retired_queue_manual(content), [])
+
+    def test_active_legacy_queue_instruction_is_rejected(self):
+        content = """# 廃止済み：旧GitHub作業キュー管理マニュアル
+現行手順として実行してはならない。
+Dropbox固定ファイル `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
+作業候補の抽出・登録・状態更新には使用しない
+現在の作業キューの正本は `docs/現在状態.json` の `work_items`
+"""
+        errors = validate_retired_queue_manual(content)
+        self.assertTrue(any("obsolete active GitHub queue instruction remains" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
         content = "\n".join(
