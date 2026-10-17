@@ -8,8 +8,8 @@
     "target": "docs/現在状態.jsonを技術状態・履歴・証拠の正本とし、日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx とする。BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdは生成ビュー。",
     "status": "structurally_complete",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubのwork_items/next_stepを日常作業キューとして使用しない。",
-    "work_queue": "日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。旧GitHub work_itemsデータは空にリセット済み。next_stepは廃止状態を示す技術メタデータのみで、キュー候補・次の作業選定・フォールバックには使用しない。Dropboxを読めない場合は停止して利用不可を明示する。"
+    "generation_flow": "GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubに作業候補や次の行動を複製しない。",
+    "work_queue": "日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。旧GitHub work_itemsとnext_stepのキューデータは削除済み。Dropboxを読めない場合は停止し、会話履歴や生成ビューから補完しない。"
   },
   "direct_chat": {
     "latest_saved": "2026-10-17T09-07-03.144000+0900",
@@ -241,8 +241,7 @@
     "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入",
     "BUD.md二重管理解消の運用マニュアルを追加し、docs/現在状態.jsonを唯一の現在状態正本とする手順を次回も再現可能にした",
     "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した",
-    "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_items・next_stepの stale 状態を開始前に検出する。",
-    "work_itemsの途中成果をprogress.stepsへ構造化し、完了済みstep・現在のstep・外部待機stepを正本に保持して、次回起動時の作業巻き戻りを防ぐ",
+    "チャット開始・再開時はGitHubのdocs/現在状態.jsonで技術状態・証拠を確認し、日常作業の状態・優先順位・次の行動はDropbox固定ボードから取得する。",
     "終了時の作業状態同期では、成果物の生成・GitHub保存・実環境への適用・実表示確認を別々のprogress.stepsとして記録し、保存完了を実環境適用完了と混同しない。",
     "公開先・制作作業場所を分離し、GitHub Pagesを本番公開先、Bloggerを下書き・表示確認の作業場所とする。WordPressを本番公開先として扱わない。"
   ],
@@ -325,34 +324,22 @@
       "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は過去に実施済みだが、これは過去の確認記録であり、WordPressを現在の本番公開先とする根拠ではない。WordPress各URLの具体的な登録結果は正本記録に残っていないため推定しない。GitHub Pagesのrobots.txt・sitemap.xml・トップページは2026-10-12に正常表示を確認済み。GSC sitemap.xmlはGoogle側の処理結果待ち。 2026-10-14、PR #1082をマージし、scripts/build_cloudflare_site.pyへ「基本の実践は完全無料」のトップページ訴求を追加。mainの読み戻しで生成処理への反映を確認。公開ページの実表示・デプロイ反映は未確認のため、公開完了とは扱わない。 第2章PR #1102では2026-10-15に公式情報確認・本文更新を完了。本文コミット74b995ef6c9720caf901cfc51027e553f69c7493の4 CIチェック成功を確認。正本・生成ビュー同期後の最新head 9c62aa307fd293a270d1ada15166eb7a97afe888の4 CIチェックはすべて成功。実サービス画面での登録／ログイン／初回会話の操作確認は未完了。Markdown保存の実地検証は2026-10-14に実施済み・部分合格。 2026-10-14のMarkdown保存実地検証は実施済みで部分合格。実ファイル `markdown保存_20261014_1817.md` の確認記録では日本語・見出し・箇条書き・Pythonコード・GitHubリンク・会話と時刻は保持。チェックボックスが通常箇条書きに変換され、WritingBlockタグが混入。原因と外部送信有無は未確認。 公開ソース候補の予備調査では、ボタン要素を出力から除外し、ネイティブcheckbox入力だけをMarkdown記号化する実装を確認。これがチェックボックス欠落の有力仮説だが、実機の拡張機能名・版と当日のDOMが未確認のため断定しない。公開ソースの変換処理にWritingBlockタグを直接出力する箇所は見当たらず、本文中の文字列を保持した可能性。公開ソースの通信処理・権限・プライバシー説明を確認したが、実機インストール版の外部送信有無は未確認。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。GitHub Pagesトップページの404確認、robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みで、再実施しない。WordPressに関する過去の公開・インデックス確認は履歴として保持し、WordPressを本番公開先として扱わない。",
-    "next_focus": "日常作業の優先順位・次の作業はDropbox固定ボードで管理する。GitHub側では技術状態・検証証拠のみを保持し、旧work_items/next_stepから作業候補を定義しない。"
+    "next_focus": "日常作業の優先順位・状態・次の行動はDropbox固定ボードだけで管理する。GitHub側は技術状態・検証証拠・履歴を保持し、日常作業キューを複製しない。"
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
     "tests": "tests/test_current_state_guard.py",
     "workflow": ".github/workflows/current-state-guard.yml",
-    "purpose": "active/retiredの矛盾、抽象next_step、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入に加え、save-track以外の通常PRが状態・生成ビューだけを更新して本線作業を進めたことにするループをCIで停止する",
+    "purpose": "実行環境の矛盾、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入、Dropbox以外のキュー参照をCIで検出する。",
     "main_work_progress_guard": "scripts/main_work_progress_guard.py",
     "main_work_progress_workflow": ".github/workflows/main-pr-progress-gate.yml"
   },
   "resume_manifest": {
     "generator": "scripts/resume_manifest.py",
     "source": "docs/現在状態.json",
-    "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・next_stepを一括確認するための生成manifest",
+    "purpose": "再開時にcanonical stateの鮮度、実行環境、現在地点、生成ビュー契約を確認するためのmanifest",
     "required_first_check": "scripts/resume_check.py",
-    "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、生成ビューより優先する。日常作業の候補・状態・優先順位・再開判断はDropbox固定ボードから取得し、GitHubの旧work_items/next_stepへフォールバックしない。"
-  },
-  "verification_contract": {
-    "status": "implemented",
-    "verification_required_statuses": [
-      "recorded_unverified",
-      "verified"
-    ],
-    "rule": "readiness=ready only when every prerequisite is independently verified; blocked permits only unblock_action/preflight; next_step.status is deprecated and omitted.",
-    "readiness_states": [
-      "ready",
-      "blocked"
-    ]
+    "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、技術状態・証拠を確認する。日常作業の候補・状態・優先順位・次の行動はDropbox固定ボードから取得し、GitHubの旧キューデータや生成ビューへフォールバックしない。"
   },
   "external_response_gate": {
     "status": "clear",
@@ -441,11 +428,11 @@
   },
   "interaction_control": {
     "status": "implemented_preflight",
-    "scope": "next_step と対話上の進捗・完了主張",
+    "scope": "進捗・完了主張の証拠検査と同一状態ループのpreflight",
     "principle": "文書ルールだけでAIの自己抑制を期待せず、進捗主張の受理前に機械的preflightを通す",
     "guard_script": "scripts/interaction_guard.py",
     "blocked_output": {
-      "trigger": "next_step.readiness=blocked",
+      "trigger": "preflightが証拠不足・検証失敗・ループを検出",
       "action": "進捗・完了・検証済み等の主張を停止し、証拠取得・preflight・unblock_actionに限定",
       "exit_code": 2
     },
