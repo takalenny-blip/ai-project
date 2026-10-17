@@ -23,7 +23,6 @@
 - 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx
 - GitHubは技術状態・履歴・検証証拠を保持し、日常作業の状態を複製しない。
 - ボードを読み取れない場合は停止し、古いGitHub項目へフォールバックしない。
-
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
