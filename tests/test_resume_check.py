@@ -94,6 +94,16 @@ class ResumeCheckDropboxOnlyTests(unittest.TestCase):
             self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
             self.assertEqual(self.run_check(root, state_path), 1)
 
+    def test_retired_next_step_field_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            state_path = self.write_state(root)
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["next_step"] = {"target": "old queue"}
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state_path), 1)
+
     def test_nonempty_legacy_queue_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
