@@ -54,7 +54,7 @@ class CanonicalStateUpdateTests(unittest.TestCase):
                 "work_queue_source": "dropbox_board",
                 "work_items": legacy_items,
             }
-            with self.assertRaisesRegex(SystemExit, "legacy GitHub work_items field is retired"):
+            with self.assertRaisesRegex(SystemExit, "legacy GitHub queue fields .* are retired"):
                 validate_queue_retirement(state)
 
 
