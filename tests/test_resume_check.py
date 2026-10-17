@@ -18,7 +18,6 @@ class ResumeCheckDropboxOnlyTests(unittest.TestCase):
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "technical state preserved"},
             "work_queue_source": "dropbox_board",
-            "work_items": [],
             "interaction_control": {
                 "status": "implemented_preflight",
                 "guard_script": "scripts/interaction_guard.py",
