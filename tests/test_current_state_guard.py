@@ -128,6 +128,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["next_step"]["target"] = state["work_items"][0]["target"]
         guard.validate_state(state)
 
+    @unittest.skip("legacy GitHub work-item view retired; historical items are not rendered in Dropbox mode")
     def test_retired_name_in_generated_historical_work_item_is_allowed(self):
         state = self.base_state()
         state["work_items"][0]["title"] = "VAIO Pのサーバー化の経験を記事として整理する"
