@@ -25,6 +25,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             "current_position": {"summary": "current"},
             "updated": "2026-09-27",
             "work_queue_source": "dropbox_board",
+            "work_items": [],
             "next_step": {
                 "id": "WORK-TEST",
                 "environment": "work_pc",
