@@ -43,7 +43,7 @@ class CurrentStateGuardTests(unittest.TestCase):
                 "evidence": "Dropbox is the sole daily queue.",
                 "readiness": "ready",
                 "unblock_action": "none",
-                "prerequisites": [],
+                "prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": git_blob_sha(resume_check)}}],
             },
             "work_pc": {"clone_status": "unverified"},
             "resume_manifest": {
@@ -102,8 +102,7 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     def test_retired_name_in_historical_target_is_allowed(self):
         state = self.base_state()
-        state["work_items"][0]["target"] = "VAIO Pのサーバー化の経験を記事として整理する"
-        state["next_step"]["target"] = state["work_items"][0]["target"]
+        state["next_step"]["target"] = "VAIO Pのサーバー化の経験を記事として整理する"
         guard.validate_state(state)
 
     @unittest.skip("legacy GitHub work-item view retired; historical items are not rendered in Dropbox mode")
@@ -141,11 +140,8 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_blocked_with_unverified_prerequisite_passes(self):
         state = self.base_state()
         state["next_step"]["readiness"] = "blocked"
-        state["work_items"][0]["readiness"] = "blocked"
-        state["work_items"][0]["blocked_reason"] = "artifact missing"
         state["next_step"]["blocked_reason"] = "artifact missing"
         state["next_step"]["unblock_action"] = "run preflight"
-        state["work_items"][0]["unblock_action"] = "run preflight"
         state["next_step"]["prerequisites"][0]["status"] = "unverified"
         guard.validate_state(state)
 
@@ -222,7 +218,6 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["next_step"]["readiness"] = "blocked"
         state["next_step"]["blocked_reason"] = "blocked"
         state["next_step"]["unblock_action"] = "preflight"
-        state["work_items"][0]["unblock_action"] = "preflight"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
