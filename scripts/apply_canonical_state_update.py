@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from save_and_currentize import merge_patch, sync_next_step, render_views, STATE_PATH, BUD_PATH, HANDOVER_PATH
+from save_and_currentize import merge_patch, validate_queue_retirement, render_views, STATE_PATH, BUD_PATH, HANDOVER_PATH
 
 
 def validate_technical_patch(patch: object, request: dict) -> dict:
