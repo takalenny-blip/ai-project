@@ -33,41 +33,17 @@ class CurrentStateGuardTests(unittest.TestCase):
             "current_state_model": {"target": "test", "generation_flow": "test", "status": "test"},
             "migration": {"status": "test", "normal_work_policy": "test", "temporary_manual_sync": "test"},
             "verification_records": {"resume_check": {"status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20"}}},
-            "work_items": [{
-                "id": "WORK-TEST",
-                "title": "test work",
-                "priority": 10,
-                "status": "queued",
-                "depends_on": [],
-                "not_before": None,
-                "scope": "new_scope",
-                "target": "work_pcで再開確認を実施する",
-                "evidence": "resume_check.py",
-                "readiness": "ready",
-                "unblock_action": "none",
-                "environment": "work_pc",
-                "execution_state": "actionable",
-                "progress": {
-                    "current_step": "step-1",
-                    "steps": [{"id": "step-1", "title": "test step", "status": "pending"}],
-                    "updated_at": "2026-09-27",
-                },
-                "created_at": "2026-09-27",
-                "updated_at": "2026-09-27",
-            }],
+            "work_queue_source": "dropbox_board",
+            "work_items": [],
             "next_step": {
-                "id": "WORK-TEST",
-                "title": "test work",
-                "priority": 10,
-                "depends_on": [],
-                "not_before": None,
+                "id": "LEGACY-QUEUE-RETIRED",
+                "title": "legacy queue retired",
                 "environment": "work_pc",
-                "scope": "new_scope",
-                "target": "work_pcで再開確認を実施する",
-                "evidence": "resume_check.py",
+                "target": "日常作業の選定・優先順位・再開判断はDropbox固定ボードのみから行う。",
+                "evidence": "Dropbox is the sole daily queue.",
                 "readiness": "ready",
                 "unblock_action": "none",
-                "prerequisites": [{"name": "scripts/resume_check.py", "kind": "repo_file", "verify_scope": "ci", "status": "verified", "evidence": {"method": "test fixture", "checked_at": "2026-09-20", "blob_sha": git_blob_sha(resume_check)}}],
+                "prerequisites": [],
             },
             "work_pc": {"clone_status": "unverified"},
             "resume_manifest": {
@@ -98,12 +74,14 @@ class CurrentStateGuardTests(unittest.TestCase):
         guard.validate_state(self.base_state())
 
 
+    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
     def test_next_step_repeating_verified_scope_fails(self):
         state = self.base_state()
         state["next_step"]["scope"] = "resume_check"
         with self.assertRaises(ValueError):
             guard.validate_state(state)
 
+    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
     def test_missing_next_step_scope_fails(self):
         state = self.base_state()
         state["next_step"].pop("scope")
@@ -129,6 +107,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         guard.validate_state(state)
 
     @unittest.skip("legacy GitHub work-item view retired; historical items are not rendered in Dropbox mode")
+    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
     def test_retired_name_in_generated_historical_work_item_is_allowed(self):
         state = self.base_state()
         state["work_items"][0]["title"] = "VAIO Pのサーバー化の経験を記事として整理する"
@@ -248,6 +227,7 @@ class CurrentStateGuardTests(unittest.TestCase):
             guard.validate_state(state)
 
 
+    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
     def test_stale_unfinished_prose_conflicts_with_done_step(self):
         state = self.base_state()
         state["work_items"] = [{
@@ -266,6 +246,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stale prose contradicts completed work step"):
             guard.validate_completed_step_prose(state)
 
+    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
     def test_unrelated_unconfirmed_status_does_not_conflict_with_done_step(self):
         state = self.base_state()
         state["work_items"] = [{
@@ -284,6 +265,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         guard.validate_completed_step_prose(state)
 
 
+    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
     def test_waiting_external_step_rejects_stale_investigation_title(self):
         state = self.base_state()
         stale_title = "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する"
@@ -307,6 +289,7 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stale prose contradicts waiting_external work step"):
             guard.validate_completed_step_prose(state)
 
+    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
     def test_waiting_external_step_accepts_waiting_title(self):
         state = self.base_state()
         waiting_title = "GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する"
@@ -356,11 +339,17 @@ class CurrentStateGuardTests(unittest.TestCase):
 
 
 
-    def test_dropbox_mode_does_not_require_work_items(self):
+    def test_legacy_queue_data_must_be_empty(self):
         state = self.base_state()
-        state["work_queue_source"] = "dropbox_board"
-        state.pop("work_items", None)
-        guard.validate_state(state)
+        state["work_items"] = [{"id": "OLD"}]
+        with self.assertRaisesRegex(ValueError, "legacy GitHub work_items must be empty"):
+            guard.validate_state(state)
+
+    def test_legacy_queue_source_is_rejected(self):
+        state = self.base_state()
+        state["work_queue_source"] = "github_json"
+        with self.assertRaisesRegex(ValueError, "Dropbox is the only daily queue"):
+            guard.validate_state(state)
 
     def test_dropbox_board_mode_does_not_treat_legacy_work_items_as_queue(self):
         state = self.base_state()
