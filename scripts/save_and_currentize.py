@@ -139,7 +139,7 @@ def main() -> int:
     if embedded_patch is not None:
         merge_patch(state, embedded_patch)
 
-    sync_next_step(state)
+    validate_queue_retirement(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render_views()
 
