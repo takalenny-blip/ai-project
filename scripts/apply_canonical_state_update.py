@@ -37,7 +37,7 @@ def main():
     state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
     merge_patch(state, patch)
     state["updated"] = date.today().isoformat()
-    sync_next_step(state)
+    validate_queue_retirement(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     audit = {"schema_version": 1, "date": uid[:10], "kind": "canonical_state_update",
              "purpose": req["purpose"], "source": req["source"],
