@@ -17,6 +17,10 @@ CANONICAL_TIMESTAMP_OFFSET = "+0900"
 TIMESTAMP_CHAT = re.compile(
     r"^(?P<date>\d{4}-\d{2}-\d{2})_直チャット即時保存_(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}(?:\.\d{6})?[+-]\d{4})\.md$"
 )
+TIMESTAMP_CHAT_PART = re.compile(
+    r"^\d{4}-\d{2}-\d{2}_直チャット即時保存_\d{4}-\d{2}-\d{2}T"
+    r"\d{2}-\d{2}-\d{2}(?:\.\d{6})?[+-]\d{4}\.part-\d{2}\.md$"
+)
 SERIAL_CHAT = re.compile(
     r"^(?P<date>\d{4}-\d{2}-\d{2})(?:_\d{2}-\d{2}-\d{2})?_直チャット即時保存_(?P<serial>\d{3})\.md$"
 )
@@ -129,6 +133,7 @@ def check_chat_names(files: list[str]) -> None:
     bad = [
         n for n in marked
         if not TIMESTAMP_CHAT.fullmatch(n)
+        and not TIMESTAMP_CHAT_PART.fullmatch(n)
         and not SERIAL_CHAT.fullmatch(n)
         and not HISTORIC_TIMESTAMP_CHAT.fullmatch(n)
     ]
@@ -169,6 +174,7 @@ def self_test() -> None:
     check_chat_names([
         "直チャット/2026-09-15_直チャット即時保存_2026-09-15T12-34-56+0900.md",
         "直チャット/2026-09-15_直チャット即時保存_2026-09-15T12-34-56.123456+0900.md",
+        "直チャット/2026-09-15_直チャット即時保存_2026-09-15T12-34-56.123456+0900.part-01.md",
         "直チャット/2026-09-15_12-34-56_直チャット即時保存_043.md",
     ])
 

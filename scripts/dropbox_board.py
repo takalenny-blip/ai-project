@@ -39,7 +39,8 @@ def fetch_remote_board(token: str, remote_path: str = DEFAULT_REMOTE_PATH, timeo
         data=None,
         headers={
             "Authorization": "Bearer " + token,
-            "Dropbox-API-Arg": json.dumps({"path": remote_path}, ensure_ascii=False),
+            # Keep HTTP header bytes ASCII-only; Dropbox paths may contain Japanese.
+            "Dropbox-API-Arg": json.dumps({"path": remote_path}, ensure_ascii=True),
         },
         method="POST",
     )
