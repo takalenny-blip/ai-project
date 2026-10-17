@@ -80,6 +80,27 @@ def validate_retired_queue_manual(text: str) -> list[str]:
             errors.append(f"obsolete active GitHub queue instruction remains: {statement}")
     return errors
 
+def validate_roadmap_queue_guidance(text: str) -> list[str]:
+    """Ensure the roadmap does not restore BUD as the daily queue or let the AI choose tasks unilaterally."""
+    errors: list[str] = []
+    required = (
+        "日常作業キュー・作業候補・優先度・次のアクションの唯一の正本はDropbox固定ボード",
+        "バドが独断で作業候補を選び直したり、ボード上の優先順位を変更したりしない",
+        "技術状態・履歴・証拠の正本は `docs/現在状態.json`",
+    )
+    for statement in required:
+        if statement not in text:
+            errors.append(f"roadmap missing current queue boundary: {statement}")
+    obsolete_instructions = (
+        "現在の事実・現在の次の一手の正本は `BUD.md`",
+        "バドが次の作業レーンを選び",
+        "現在の事実が変わった場合はまずBUDを更新する",
+    )
+    for statement in obsolete_instructions:
+        if statement in text:
+            errors.append(f"obsolete roadmap queue instruction remains: {statement}")
+    return errors
+
 def validate_map(text: str) -> list[str]:
     errors: list[str] = []
     for path in REQUIRED_PATHS:
@@ -124,6 +145,13 @@ def main() -> int:
         return 1
     errors = validate_map(text)
     errors.extend(validate_retired_queue_files())
+    roadmap_path = ROOT / "docs" / "全体進行設計図.md"
+    try:
+        roadmap_text = roadmap_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"cannot read roadmap queue guidance: {exc}")
+    else:
+        errors.extend(validate_roadmap_queue_guidance(roadmap_text))
     try:
         retired_manual_text = RETIRED_QUEUE_MANUAL_PATH.read_text(encoding="utf-8")
     except OSError as exc:
