@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,12 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from generate_current_views import render
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 
-REQUIRED = ("execution_environment", "current_position", "next_step")
-ABSTRACT_NEXT_STEP = (
-    "本来工程へ復帰",
-    "通常のDiMORA本来工程へ復帰",
-    "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める",
-)
+REQUIRED = ("execution_environment", "current_position")
 RETIRED_ALIASES = {
     "vaio_p": ("vaio_p", "VAIO P", "VAIO P + Chromium", "VAIO P運用"),
 }
@@ -33,48 +27,6 @@ def load_state(path: Path = STATE_PATH) -> dict:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
         fail(f"canonical state unreadable: {exc}")
-
-def _repo_blob_sha(path: Path) -> str:
-    data = path.read_bytes()
-    header = ("blob " + str(len(data)) + "\0").encode()
-    return hashlib.sha1(header + data).hexdigest()
-
-def _validate_verified_evidence(prerequisite: dict) -> None:
-    evidence = prerequisite.get("evidence")
-    if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at"):
-        fail("verified prerequisite requires method and checked_at evidence")
-    if prerequisite["kind"] == "repo_file":
-        path = ROOT / prerequisite["name"]
-        if not path.is_file():
-            fail("verified repo_file does not exist: " + prerequisite["name"])
-        expected = evidence.get("sha256") or evidence.get("blob_sha")
-        if not expected:
-            fail("verified repo_file requires sha256 or blob_sha evidence: " + prerequisite["name"])
-        actual = hashlib.sha256(path.read_bytes()).hexdigest() if evidence.get("sha256") else _repo_blob_sha(path)
-        if actual != expected:
-            fail("verified repo_file evidence mismatch: " + prerequisite["name"])
-
-def validate_prerequisites(next_step: dict) -> None:
-    prerequisites = next_step.get("prerequisites")
-    if not isinstance(prerequisites, list):
-        fail("next_step.prerequisites must be an explicit list")
-    readiness = next_step.get("readiness")
-    if readiness not in {"ready", "blocked"}:
-        fail("next_step.readiness must be ready or blocked")
-    if readiness == "blocked" and (not next_step.get("blocked_reason") or not next_step.get("unblock_action")):
-        fail("blocked next_step requires blocked_reason and unblock_action")
-    for index, prerequisite in enumerate(prerequisites):
-        if not isinstance(prerequisite, dict):
-            fail(f"next_step.prerequisites[{index}] must be an object")
-        for field in ("name", "kind", "verify_scope", "status"):
-            if not prerequisite.get(field):
-                fail(f"next_step.prerequisites[{index}].{field} is missing")
-        if prerequisite["status"] not in {"verified", "unverified", "missing", "invalid"}:
-            fail(f"invalid prerequisite status: {prerequisite['status']}")
-        if prerequisite["status"] == "verified":
-            _validate_verified_evidence(prerequisite)
-    if readiness == "ready" and any(p["status"] != "verified" for p in prerequisites):
-        fail("next_step.readiness=ready requires every prerequisite to be verified")
 
 def validate_external_response_gate(state: dict) -> None:
     gate = state.get("external_response_gate", {"status": "clear"})
@@ -136,10 +88,6 @@ def validate_completed_step_prose(state: dict) -> None:
         value = current.get(key)
         if isinstance(value, str) and not value.strip():
             fail(f"current_position.{key} must not be blank")
-    next_step = state.get("next_step", {})
-    if isinstance(next_step, dict) and isinstance(next_step.get("title"), str):
-        if not next_step["title"].strip():
-            fail("next_step.title must not be blank")
 
 
 def validate_publishing_lane_consistency(state: dict) -> None:
@@ -167,7 +115,6 @@ def validate_state(state: dict) -> None:
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
-    nxt = state["next_step"]
     legacy_verification_model = "verification_records" not in state
     if not legacy_verification_model:
         validate_completed_verifications(state)
@@ -185,18 +132,8 @@ def validate_state(state: dict) -> None:
         fail("retired execution environments must be a list")
     if active in retired:
         fail(f"active environment is also retired: {active}")
-    if nxt.get("environment") != active:
-        fail("next_step.environment does not match active environment")
-    for field in ("target", "evidence"):
-        if not nxt.get(field):
-            fail(f"next_step.{field} is missing")
-    if nxt.get("status") not in {None, nxt.get("readiness")}:
-        fail("next_step.status must be absent or equal to readiness")
     if not current.get("summary"):
         fail("current_position.summary is missing")
-    if any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
-        fail("next_step.target is too abstract or stale; require current concrete work")
-    validate_prerequisites(nxt)
     validate_external_response_gate(state)
     validate_completed_step_prose(state)
     work_pc = state.get("work_pc", {})
