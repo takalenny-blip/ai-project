@@ -123,6 +123,28 @@ def validate_handoff_readme(text: str) -> list[str]:
             errors.append(f"obsolete handoff queue instruction remains: {statement}")
     return errors
 
+def validate_startup_reference_docs(master_plan: str, canonical_repo: str) -> list[str]:
+    """Prevent stale BUD-first startup instructions from reviving the retired queue."""
+    errors: list[str] = []
+    for name, text in (("master plan", master_plan), ("canonical repository guide", canonical_repo)):
+        required = (
+            "docs/現在状態.json",
+            "Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`",
+            "日常作業キューの正本",
+        )
+        for statement in required:
+            if statement not in text:
+                errors.append(f"{name} missing current startup boundary: {statement}")
+    obsolete = (
+        "現在の読解基準は `BUD.md`",
+        "通常開始時は、このリポジトリの次の2ファイルを最初に確認する。",
+        "1. `BUD.md`\\n2. `rules/運用ルール.md`",
+    )
+    for statement in obsolete:
+        if statement in master_plan or statement in canonical_repo:
+            errors.append(f"obsolete BUD-first startup instruction remains: {statement}")
+    return errors
+
 def validate_map(text: str) -> list[str]:
     errors: list[str] = []
     for path in REQUIRED_PATHS:
@@ -167,6 +189,13 @@ def main() -> int:
         return 1
     errors = validate_map(text)
     errors.extend(validate_retired_queue_files())
+    try:
+        master_plan_text = (ROOT / "docs" / "マスタープラン.md").read_text(encoding="utf-8")
+        canonical_repo_text = (ROOT / "docs" / "正本リポジトリ.md").read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"cannot read startup reference docs: {exc}")
+    else:
+        errors.extend(validate_startup_reference_docs(master_plan_text, canonical_repo_text))
     handoff_readme_path = ROOT / "docs" / "引き継ぎ" / "README.md"
     try:
         handoff_readme_text = handoff_readme_path.read_text(encoding="utf-8")
