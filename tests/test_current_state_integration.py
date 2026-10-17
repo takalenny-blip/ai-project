@@ -22,7 +22,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
 
     def test_dropbox_is_the_only_daily_queue_and_legacy_data_is_empty(self):
         self.assertEqual(self.state["work_queue_source"], "dropbox_board")
-        self.assertEqual(self.state.get("work_items"), [])
+        self.assertNotIn("work_items", self.state)
         self.assertNotIn("next_step", self.state)
         self.assertIn("Issue #1059", " ".join(self.state["known_constraints"]))
         current_state_guard.validate_state(self.state)
