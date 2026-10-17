@@ -74,7 +74,6 @@ class CurrentStateGuardTests(unittest.TestCase):
         guard.validate_state(self.base_state())
 
 
-    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
 
 
     def test_verified_record_without_evidence_fails(self):
@@ -94,8 +93,6 @@ class CurrentStateGuardTests(unittest.TestCase):
         state["next_step"]["target"] = "VAIO Pのサーバー化の経験を記事として整理する"
         guard.validate_state(state)
 
-    @unittest.skip("legacy GitHub work-item view retired; historical items are not rendered in Dropbox mode")
-    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
 
     def test_abstract_next_step_fails(self):
         state = self.base_state()
@@ -200,7 +197,6 @@ class CurrentStateGuardTests(unittest.TestCase):
             guard.validate_state(state)
 
 
-    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
 
 
 
