@@ -9,6 +9,16 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from save_and_currentize import merge_patch, sync_next_step, render_views, STATE_PATH, BUD_PATH, HANDOVER_PATH
 
 
+def validate_technical_patch(patch: object, request: dict) -> dict:
+    if not isinstance(patch, dict):
+        raise SystemExit("patch must be an object")
+    if not patch:
+        raise SystemExit("provide a non-empty technical-state patch")
+    if "work_items" in patch or "work_item_updates" in request:
+        raise SystemExit("GitHub work_items updates are retired; update the Dropbox board for daily queue changes")
+    return patch
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--request-file", type=Path, required=True)
@@ -17,13 +27,7 @@ def main():
     uid = req.get("update_id", "")
     if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9][a-z0-9-]{2,70}", uid):
         raise SystemExit("invalid update_id")
-    patch = req.get("patch", {})
-    if not isinstance(patch, dict):
-        raise SystemExit("patch must be an object")
-    if not patch:
-        raise SystemExit("provide a non-empty technical-state patch")
-    if "work_items" in patch or "work_item_updates" in req:
-        raise SystemExit("GitHub work_items updates are retired; update the Dropbox board for daily queue changes")
+    patch = validate_technical_patch(req.get("patch", {}), req)
     for key in ("purpose", "source"):
         if not isinstance(req.get(key), str) or not req[key].strip():
             raise SystemExit(f"{key} must be a non-empty string")
