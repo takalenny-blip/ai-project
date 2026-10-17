@@ -120,8 +120,8 @@ def validate_state(state: dict) -> None:
         validate_completed_verifications(state)
     if state.get("work_queue_source") != "dropbox_board":
         fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
-    if state.get("work_items") != []:
-        fail("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
+    if "work_items" in state:
+        fail("legacy GitHub work_items field is retired and must not be reintroduced")
     if "next_step" in state:
         fail("legacy next_step field is retired and must not be reintroduced")
     # Staged migration compatibility: the current canonical state predates the
@@ -162,8 +162,8 @@ def validate_generated_views(state: dict) -> None:
     queue_source = state.get("work_queue_source")
     if queue_source != "dropbox_board":
         fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
-    if state.get("work_items") != []:
-        fail("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
+    if "work_items" in state:
+        fail("legacy GitHub work_items field is retired and must not be reintroduced")
     if "next_step" in state:
         fail("legacy next_step field is retired and must not be reintroduced")
     bud_text, handover_text = render(state)
