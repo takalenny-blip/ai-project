@@ -15,8 +15,6 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import derived_next_step
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 DIRECT_CHAT_DIR = ROOT / "直チャット"
 BUD_PATH = ROOT / "BUD.md"
@@ -71,16 +69,14 @@ def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | No
 
 
 def sync_next_step(state: dict) -> None:
-    item = derived_next_step(state["work_items"], state.get("updated"))
-    if item is None:
-        state["next_step"] = {}
-        return
-    fields = ("id", "title", "priority", "depends_on", "not_before", "environment",
-              "scope", "target", "evidence", "readiness", "unblock_action")
-    state["next_step"] = {key: item[key] for key in fields}
-    if item.get("readiness") == "blocked":
-        state["next_step"]["blocked_reason"] = item["blocked_reason"]
-    state["next_step"]["prerequisites"] = item.get("prerequisites", [])
+    """Enforce the Dropbox-only queue contract without deriving a GitHub queue."""
+    if state.get("work_queue_source") != "dropbox_board":
+        raise SystemExit("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
+    if state.get("work_items") != []:
+        raise SystemExit("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
+    next_step = state.get("next_step")
+    if not isinstance(next_step, dict) or next_step.get("id") != "LEGACY-QUEUE-RETIRED":
+        raise SystemExit("next_step must remain a retirement marker, not a daily work item")
 
 
 def render_views() -> None:
