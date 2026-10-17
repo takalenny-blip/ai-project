@@ -327,16 +327,6 @@
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。GitHub Pagesトップページの404確認、robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みで、再実施しない。WordPressに関する過去の公開・インデックス確認は履歴として保持し、WordPressを本番公開先として扱わない。",
     "next_focus": "日常作業の優先順位・次の作業はDropbox固定ボードで管理する。GitHub側では技術状態・検証証拠のみを保持し、旧work_items/next_stepから作業候補を定義しない。"
   },
-  "next_step": {
-    "id": "LEGACY-QUEUE-RETIRED",
-    "title": "旧GitHub作業キュー廃止（技術状態のみ）",
-    "environment": "work_pc",
-    "target": "日常作業の選定・優先順位・再開判断はDropbox固定ボードのみから行う。GitHub next_stepは日常作業キューとして使用しない。",
-    "evidence": "2026-10-17: work_queue_source=dropbox_board。Dropbox /ChatGPT/Dropbox作業管理統合ボード.xlsx を唯一の日常作業キューとする。",
-    "readiness": "ready",
-    "unblock_action": "none",
-    "prerequisites": []
-  },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
     "tests": "tests/test_current_state_guard.py",
