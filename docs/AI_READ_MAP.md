@@ -14,7 +14,7 @@
 
 ## 正本の優先順位
 
-**日常作業キュー：Dropbox `/ChatGPT/Dropbox作業管理統合ボード.xlsx` > GitHubの旧 `work_items` / `next_step`。技術状態・履歴・証拠：`docs/現在状態.json` + `rules/運用ルール.md`。BUD/引き継ぎは生成ビューであり作業キューの正本ではない。**
+**日常作業キューの唯一の正本はDropbox `/ChatGPT/Dropbox作業管理統合ボード.xlsx`。旧GitHub `work_items` / `next_step` は廃止済みで、参照・比較・作業選定・フォールバックに使用しない。技術状態・履歴・証拠は `docs/現在状態.json` と `rules/運用ルール.md` を参照する。BUD/引き継ぎは生成ビューであり作業キューの正本ではない。**
 
 Dropboxボードを読み取れない場合は停止し、旧GitHubキューや古い生成ビューへフォールバックしない。
 
