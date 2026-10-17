@@ -115,7 +115,9 @@ Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
 日常作業キューの変更はDropbox固定ボードへ反映"""
         resume = """BUD・引き継ぎ・過去ログから作業候補を補完しない
 Dropbox固定ボードで確認する"""
-        self.assertEqual(validate_supporting_rule_docs(rules, currentization, resume), [])
+        bud_manual = """日常作業キューの管理・作業候補の選択・優先度・次のアクションの決定には使わない
+日常作業キューの唯一の正本はDropbox固定ボード"""
+        self.assertEqual(validate_supporting_rule_docs(rules, currentization, resume, bud_manual), [])
 
     def test_legacy_bud_queue_rule_is_rejected(self):
         rules = """日常作業キュー・優先度・状態・次のアクションの唯一の正本
@@ -124,7 +126,9 @@ Dropbox固定ボードで確認する"""
 日常作業キューの変更はDropbox固定ボードへ反映"""
         resume = """BUD・引き継ぎ・過去ログから作業候補を補完しない
 Dropbox固定ボードで確認する"""
-        errors = validate_supporting_rule_docs(rules, currentization, resume)
+        bud_manual = """日常作業キューの管理・作業候補の選択・優先度・次のアクションの決定には使わない
+日常作業キューの唯一の正本はDropbox固定ボード"""
+        errors = validate_supporting_rule_docs(rules, currentization, resume, bud_manual)
         self.assertTrue(any("retains obsolete queue instruction" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
