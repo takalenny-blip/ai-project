@@ -15,7 +15,6 @@ class InteractionSessionTests(unittest.TestCase):
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
             "current_position": {"summary": "mutable prose"},
             "work_queue_source": "dropbox_board",
-            "work_items": [],
         }
 
     def write_state(self, root, state):
