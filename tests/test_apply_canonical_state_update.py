@@ -27,12 +27,12 @@ class CanonicalStateUpdateTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "patch must be an object"):
             validate_technical_patch([], {})
 
-    def test_save_pipeline_preserves_retirement_marker_without_deriving_queue(self):
+    def test_save_pipeline_preserves_empty_queue_contract(self):
         state = {
             "work_queue_source": "dropbox_board",
             "work_items": [],
         }
-        sync_next_step(state)
+        validate_queue_retirement(state)
 
     def test_save_pipeline_rejects_reintroduced_legacy_queue(self):
         state = {
@@ -40,7 +40,7 @@ class CanonicalStateUpdateTests(unittest.TestCase):
             "work_items": [{"id": "old"}],
         }
         with self.assertRaisesRegex(SystemExit, "work_items must be empty"):
-            sync_next_step(state)
+            validate_queue_retirement(state)
 
 
 if __name__ == "__main__":
