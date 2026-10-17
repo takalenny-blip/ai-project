@@ -122,6 +122,8 @@ def validate_state(state: dict) -> None:
         fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
     if state.get("work_items") != []:
         fail("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
+    if "next_step" in state:
+        fail("legacy next_step field is retired and must not be reintroduced")
     # Staged migration compatibility: the current canonical state predates the
     # verification_records/scope fields. Allow it to pass until the normal save
     # pipeline applies the explicit migration patch; do not silently invent evidence.
@@ -162,6 +164,8 @@ def validate_generated_views(state: dict) -> None:
         fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
     if state.get("work_items") != []:
         fail("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
+    if "next_step" in state:
+        fail("legacy next_step field is retired and must not be reintroduced")
     bud_text, handover_text = render(state)
     for name, text in (("BUD.md", bud_text), ("docs/引き継ぎ/現在の引き継ぎ.md", handover_text)):
         required = [
