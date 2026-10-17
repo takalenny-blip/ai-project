@@ -49,6 +49,8 @@ def main():
         return fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
     if state.get("work_items") != []:
         return fail("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
+    if "next_step" in state:
+        return fail("legacy next_step field is retired and must not be reintroduced")
     required = REQUIRED_BASE
     missing = [k for k in required if k not in state]
     if missing:
