@@ -16,7 +16,7 @@ from work_queue import validate_work_items, derived_next_step, select_actionable
 from generate_current_views import render
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 
-REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
+REQUIRED = ("execution_environment", "current_position", "next_step")
 ABSTRACT_NEXT_STEP = (
     "本来工程へ復帰",
     "通常のDiMORA本来工程へ復帰",
