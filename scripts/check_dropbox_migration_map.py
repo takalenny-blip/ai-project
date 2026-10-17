@@ -167,6 +167,8 @@ def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, 
     obsolete = (
         ("rules README", rules_readme, "- `BUD.md`：現在の目的・現在状態・現在の次の一手"),
         ("resume/search guard", resume_guard, "`BUD.md`、最新の引き継ぎ、実際の直近ユーザー発言で確認済みとされている事実"),
+        ("Note operating design", note_design, "現在状態は `docs/現在状態.json` の `work_items` を正本とする。"),
+        ("Note operating design", note_design, "`docs/現在状態.json` の `work_items` を作業キューの正本とし"),
     )
     for name, text, statement in obsolete:
         if statement in text:
