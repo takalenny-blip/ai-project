@@ -15,6 +15,12 @@ class ActionableProgressHandoffTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             render(state)
 
+    def test_retired_work_items_field_is_rejected_even_when_empty(self):
+        state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
+        state["work_items"] = []
+        with self.assertRaisesRegex(ValueError, "legacy work_items field is retired"):
+            render(state)
+
     def test_retired_next_step_field_is_rejected(self):
         state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
         state["next_step"] = {"target": "old queue"}
