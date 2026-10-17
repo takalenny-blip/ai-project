@@ -35,10 +35,10 @@ class CurrentStateGuardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "legacy next_step field is retired"):
             guard.validate_state(state)
 
-    def test_missing_legacy_queue_data_is_not_silently_accepted(self):
+    def test_empty_legacy_work_items_field_is_also_rejected(self):
         state = copy.deepcopy(self.state)
-        state.pop("work_items")
-        with self.assertRaisesRegex(ValueError, "legacy GitHub work_items must be empty"):
+        state["work_items"] = []
+        with self.assertRaisesRegex(ValueError, "legacy GitHub work_items field is retired"):
             guard.validate_state(state)
 
     def test_active_environment_cannot_also_be_retired(self):
