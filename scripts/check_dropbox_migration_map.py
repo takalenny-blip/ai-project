@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MAP_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理依存関係対応表_20261016.md"
 DESIGN_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理移行設計.md"
 NO_REWORK_GUARD_PATH = ROOT / "docs" / "計画" / "Dropbox作業管理002再作業禁止ガード.md"
+RETIRED_QUEUE_MANUAL_PATH = ROOT / "docs" / "作業キュー管理マニュアル.md"
 
 REQUIRED_PATHS = (
     "README.md",
@@ -57,6 +58,28 @@ def validate_retired_queue_files(root: Path = ROOT) -> list[str]:
     return errors
 
 
+def validate_retired_queue_manual(text: str) -> list[str]:
+    """Prevent the obsolete GitHub queue manual from becoming an active instruction again."""
+    errors: list[str] = []
+    required = (
+        "# 廃止済み：旧GitHub作業キュー管理マニュアル",
+        "現行手順として実行してはならない",
+        "Dropbox固定ファイル `/ChatGPT/Dropbox作業管理統合ボード.xlsx`",
+        "作業候補の抽出・登録・状態更新には使用しない",
+    )
+    for statement in required:
+        if statement not in text:
+            errors.append(f"retired GitHub queue manual missing retirement boundary: {statement}")
+    obsolete_active_instructions = (
+        "現在の作業キューの正本は `docs/現在状態.json` の `work_items`",
+        "work_items の現在の一覧を見る",
+        "その場でwork_itemsへ登録",
+    )
+    for statement in obsolete_active_instructions:
+        if statement in text:
+            errors.append(f"obsolete active GitHub queue instruction remains: {statement}")
+    return errors
+
 def validate_map(text: str) -> list[str]:
     errors: list[str] = []
     for path in REQUIRED_PATHS:
@@ -101,6 +124,12 @@ def main() -> int:
         return 1
     errors = validate_map(text)
     errors.extend(validate_retired_queue_files())
+    try:
+        retired_manual_text = RETIRED_QUEUE_MANUAL_PATH.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"cannot read retired GitHub queue manual: {exc}")
+    else:
+        errors.extend(validate_retired_queue_manual(retired_manual_text))
     try:
         design_text = DESIGN_PATH.read_text(encoding="utf-8")
     except OSError as exc:
