@@ -39,8 +39,8 @@ def state_fingerprint(state: dict, board_path: Path) -> str:
     """Fingerprint the actual Dropbox board, never retired GitHub queue fields."""
     if state.get("work_queue_source") != "dropbox_board":
         raise ValueError("work_queue_source must be dropbox_board")
-    if state.get("work_items") != []:
-        raise ValueError("legacy GitHub work_items must be empty")
+    if "work_items" in state:
+        raise ValueError("legacy GitHub work_items field is retired")
     if "next_step" in state:
         raise ValueError("legacy next_step field is retired")
     if not board_path.is_file():
