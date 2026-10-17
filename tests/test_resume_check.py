@@ -24,19 +24,7 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             },
             "current_position": {"summary": "current"},
             "updated": "2026-09-27",
-            "work_items": [{
-                "id": "WORK-TEST", "title": "test", "priority": 10, "status": "queued",
-                "depends_on": [], "not_before": None, "scope": "test",
-                "target": "target", "evidence": "evidence", "readiness": readiness,
-                "unblock_action": "none", "environment": "work_pc",
-                "execution_state": "actionable",
-                "progress": {
-                    "current_step": "step-1",
-                    "steps": [{"id": "step-1", "title": "step 1", "status": "pending"}],
-                    "updated_at": "2026-09-27",
-                },
-                "created_at": "2026-09-27", "updated_at": "2026-09-27",
-            }],
+            "work_queue_source": "dropbox_board",
             "next_step": {
                 "id": "WORK-TEST",
                 "environment": "work_pc",
@@ -59,7 +47,6 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             },
         }
         if readiness == "blocked":
-            state["work_items"][0]["unblock_action"] = "preflight"
             state["next_step"] = {}
         (root / "docs").mkdir()
         (root / "docs" / "現在状態.json").write_text(json.dumps(state), encoding="utf-8")
@@ -201,6 +188,26 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
             state_path.write_text(json.dumps(state), encoding="utf-8")
             self.assertEqual(self.run_check(root, artifact), 0)
 
+
+    def test_github_queue_source_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "dimora.json"
+            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
+            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            prerequisite = {
+                "name": "dimora-favorite-programs.json", "kind": "external_artifact",
+                "verify_scope": "runtime", "status": "verified",
+                "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
+                             "sha256": digest, "record_count": 1},
+            }
+            self.write_state(root, prerequisite)
+            state_path = root / "docs" / "現在状態.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["work_queue_source"] = "github_json"
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.write_minimal_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, artifact), 1)
 
     def test_dropbox_mode_ignores_legacy_work_items_and_reports_board_as_queue(self):
         with tempfile.TemporaryDirectory() as td:
