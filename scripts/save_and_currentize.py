@@ -68,15 +68,12 @@ def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | No
     return cleaned, patch
 
 
-def sync_next_step(state: dict) -> None:
+def validate_queue_retirement(state: dict) -> None:
     """Enforce the Dropbox-only queue contract without deriving a GitHub queue."""
     if state.get("work_queue_source") != "dropbox_board":
         raise SystemExit("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
     if state.get("work_items") != []:
         raise SystemExit("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
-    next_step = state.get("next_step")
-    if not isinstance(next_step, dict) or next_step.get("id") != "LEGACY-QUEUE-RETIRED":
-        raise SystemExit("next_step must remain a retirement marker, not a daily work item")
 
 
 def render_views() -> None:
