@@ -74,6 +74,8 @@ def validate_queue_retirement(state: dict) -> None:
         raise SystemExit("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
     if state.get("work_items") != []:
         raise SystemExit("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
+    if "next_step" in state:
+        raise SystemExit("legacy next_step field is retired and must not be reintroduced")
 
 
 def render_views() -> None:
