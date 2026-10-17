@@ -12,6 +12,7 @@ from check_dropbox_migration_map import (
     validate_roadmap_queue_guidance,
     validate_handoff_readme,
     validate_startup_reference_docs,
+    validate_supporting_rule_docs,
 )
 
 
@@ -107,6 +108,24 @@ Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
 日常作業キューの正本"""
         errors = validate_startup_reference_docs(master, canonical)
         self.assertTrue(any("obsolete BUD-first startup instruction remains" in error for error in errors))
+
+    def test_supporting_rules_keep_dropbox_as_daily_queue(self):
+        rules = """日常作業キュー・優先度・状態・次のアクションの唯一の正本"""
+        currentization = """技術状態・履歴・証拠の正本は `docs/現在状態.json`
+日常作業キューの変更はDropbox固定ボードへ反映"""
+        resume = """BUD・引き継ぎ・過去ログから作業候補を補完しない
+Dropbox固定ボードで確認する"""
+        self.assertEqual(validate_supporting_rule_docs(rules, currentization, resume), [])
+
+    def test_legacy_bud_queue_rule_is_rejected(self):
+        rules = """日常作業キュー・優先度・状態・次のアクションの唯一の正本
+- `BUD.md`：現在の目的・現在状態・現在の次の一手"""
+        currentization = """技術状態・履歴・証拠の正本は `docs/現在状態.json`
+日常作業キューの変更はDropbox固定ボードへ反映"""
+        resume = """BUD・引き継ぎ・過去ログから作業候補を補完しない
+Dropbox固定ボードで確認する"""
+        errors = validate_supporting_rule_docs(rules, currentization, resume)
+        self.assertTrue(any("retains obsolete queue instruction" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
         content = "\n".join(
