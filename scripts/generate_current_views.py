@@ -27,6 +27,8 @@ def render(state: dict) -> tuple[str, str]:
     queue_source = state.get("work_queue_source")
     if queue_source != "dropbox_board":
         raise ValueError(f"unsupported work_queue_source: {queue_source!r}; Dropbox board is the only daily queue")
+    if "work_items" in state:
+        raise ValueError("legacy work_items field is retired and must not be reintroduced")
     if "next_step" in state:
         raise ValueError("legacy next_step field is retired and must not be reintroduced")
     queue_section = (
