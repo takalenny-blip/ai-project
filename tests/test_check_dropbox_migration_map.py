@@ -11,6 +11,7 @@ from check_dropbox_migration_map import (
     validate_retired_queue_manual,
     validate_roadmap_queue_guidance,
     validate_handoff_readme,
+    validate_startup_reference_docs,
 )
 
 
@@ -86,6 +87,26 @@ Dropbox固定ファイル `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
 """
         errors = validate_handoff_readme(content)
         self.assertTrue(any("obsolete handoff queue instruction remains" in error for error in errors))
+
+    def test_startup_docs_use_dropbox_as_daily_queue(self):
+        master = """docs/現在状態.json
+Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
+日常作業キューの正本ではない"""
+        canonical = """docs/現在状態.json
+Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
+日常作業キューの正本"""
+        self.assertEqual(validate_startup_reference_docs(master, canonical), [])
+
+    def test_stale_bud_first_startup_instruction_is_rejected(self):
+        master = """docs/現在状態.json
+Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
+日常作業キューの正本ではない
+現在の読解基準は `BUD.md`"""
+        canonical = """docs/現在状態.json
+Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
+日常作業キューの正本"""
+        errors = validate_startup_reference_docs(master, canonical)
+        self.assertTrue(any("obsolete BUD-first startup instruction remains" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
         content = "\n".join(
