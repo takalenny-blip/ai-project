@@ -61,14 +61,27 @@ def strip_retired_embedded_state_patch(content: str) -> tuple[str, bool]:
     return cleaned.strip() + "\n", True
 
 
+RETIRED_QUEUE_KEYS = {"work_items", "next_step", "work_item_updates"}
+
+
+def contains_retired_queue_key(value: object) -> bool:
+    """Reject retired queue fields at every nesting level of an update payload."""
+    if isinstance(value, dict):
+        return any(
+            key in RETIRED_QUEUE_KEYS or contains_retired_queue_key(child)
+            for key, child in value.items()
+        )
+    if isinstance(value, list):
+        return any(contains_retired_queue_key(item) for item in value)
+    return False
+
+
 def validate_queue_retirement(state: dict) -> None:
     """Enforce the Dropbox-only queue contract without deriving a GitHub queue."""
     if state.get("work_queue_source") != "dropbox_board":
         raise SystemExit("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
-    if "work_items" in state:
-        raise SystemExit("legacy GitHub work_items field is retired and must not be reintroduced")
-    if "next_step" in state:
-        raise SystemExit("legacy next_step field is retired and must not be reintroduced")
+    if contains_retired_queue_key(state):
+        raise SystemExit("legacy GitHub queue fields work_items/next_step/work_item_updates are retired and must not be reintroduced")
 
 
 def render_views() -> None:
