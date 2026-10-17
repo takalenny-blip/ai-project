@@ -44,28 +44,21 @@ STATE_PATCH_BEGIN = "<!-- BUD_STATE_PATCH_BEGIN"
 STATE_PATCH_END = "BUD_STATE_PATCH_END -->"
 
 
-def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | None]:
-    """Extract an optional canonical-state patch from a save-queue markdown payload.
+def strip_retired_embedded_state_patch(content: str) -> tuple[str, bool]:
+    """Strip retired legacy queue metadata without parsing or trusting its contents.
 
-    The patch is transport metadata, not direct-chat content, so it is removed before
-    the saved chat record is written. This keeps canonical state changes on the normal
-    atomic save path while allowing the queue entry to request an explicit state patch.
+    Archived save-queue payloads are historical records, not an authority to update
+    canonical state. The marker block is removed before saving, and its body is never
+    parsed as JSON. Authorized technical-state changes must use --state-patch-file.
     """
     pattern = re.compile(
-        re.escape(STATE_PATCH_BEGIN) + r"\s*\n(.*?)\n" + re.escape(STATE_PATCH_END),
+        re.escape(STATE_PATCH_BEGIN) + r"\s*\n.*?\n" + re.escape(STATE_PATCH_END),
         re.DOTALL,
     )
-    match = pattern.search(content)
-    if not match:
-        return content, None
-    try:
-        patch = json.loads(match.group(1))
-    except json.JSONDecodeError as exc:
-        raise SystemExit(f"invalid embedded state patch JSON: {exc}") from exc
-    if not isinstance(patch, dict):
-        raise SystemExit("embedded state patch must be a JSON object")
-    cleaned = (content[:match.start()] + content[match.end():]).strip() + "\n"
-    return cleaned, patch
+    cleaned, count = pattern.subn("", content, count=1)
+    if count == 0:
+        return content, False
+    return cleaned.strip() + "\n", True
 
 
 def validate_queue_retirement(state: dict) -> None:
@@ -106,7 +99,7 @@ def main() -> int:
         raise SystemExit("refusing to run with pre-staged changes")
 
     content = (args.content_file.read_text(encoding="utf-8") if args.content_file else sys.stdin.read())
-    content, embedded_patch = extract_embedded_state_patch(content)
+    content, had_retired_patch = strip_retired_embedded_state_patch(content)
     if not content.endswith("\n"):
         content += "\n"
 
@@ -138,7 +131,7 @@ def main() -> int:
         if not isinstance(patch, dict):
             raise SystemExit("state patch must be a JSON object")
         merge_patch(state, patch)
-    if embedded_patch is not None:
+    if had_retired_patch:
         # Legacy save-queue payloads are historical intake records, not an authority
         # to mutate current canonical state. Only an explicit --state-patch-file may
         # request a canonical-state change.
