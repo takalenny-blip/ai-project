@@ -53,6 +53,7 @@ jobs:
             DROPBOX_REQUIRE_REMOTE=1 python scripts/resume_check.py
           else
             echo "NOTICE: live Dropbox fetch is opt-in; running local-fixture preflight."
+            unset DROPBOX_ACCESS_TOKEN
             python -c "import zipfile; z=zipfile.ZipFile('/tmp/ci-dropbox-board.xlsx','w'); z.writestr('[Content_Types].xml','<Types></Types>'); z.writestr('xl/workbook.xml','<workbook></workbook>'); z.close()"
             DROPBOX_WORK_QUEUE_PATH=/tmp/ci-dropbox-board.xlsx python scripts/resume_check.py
           fi
