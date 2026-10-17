@@ -14,8 +14,8 @@ def validate_technical_patch(patch: object, request: dict) -> dict:
         raise SystemExit("patch must be an object")
     if not patch:
         raise SystemExit("provide a non-empty technical-state patch")
-    if "work_items" in patch or "work_item_updates" in request:
-        raise SystemExit("GitHub work_items updates are retired; update the Dropbox board for daily queue changes")
+    if "work_items" in patch or "next_step" in patch or "work_item_updates" in request:
+        raise SystemExit("GitHub work_items/next_step updates are retired; update the Dropbox board for daily queue changes")
     return patch
 
 
