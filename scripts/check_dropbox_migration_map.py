@@ -145,7 +145,7 @@ def validate_startup_reference_docs(master_plan: str, canonical_repo: str) -> li
             errors.append(f"obsolete BUD-first startup instruction remains: {statement}")
     return errors
 
-def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, resume_guard: str) -> list[str]:
+def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, resume_guard: str, bud_manual: str) -> list[str]:
     """Ensure supporting rule indexes and guards do not restore BUD as the task queue."""
     errors: list[str] = []
     requirements = (
@@ -154,6 +154,8 @@ def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, 
         ("currentization guard", currentization_guard, "日常作業キューの変更はDropbox固定ボードへ反映"),
         ("resume/search guard", resume_guard, "BUD・引き継ぎ・過去ログから作業候補を補完しない"),
         ("resume/search guard", resume_guard, "Dropbox固定ボードで確認する"),
+        ("BUD maintenance manual", bud_manual, "日常作業キューの管理・作業候補の選択・優先度・次のアクションの決定には使わない"),
+        ("BUD maintenance manual", bud_manual, "日常作業キューの唯一の正本はDropbox固定ボード"),
     )
     for name, text, statement in requirements:
         if statement not in text:
@@ -215,10 +217,11 @@ def main() -> int:
         rules_readme_text = (ROOT / "rules" / "README.md").read_text(encoding="utf-8")
         currentization_guard_text = (ROOT / "rules" / "現在化・旧情報ガード.md").read_text(encoding="utf-8")
         resume_guard_text = (ROOT / "rules" / "再開・検索ガード.md").read_text(encoding="utf-8")
+        bud_manual_text = (ROOT / "docs" / "BUD二重管理解消・運用マニュアル.md").read_text(encoding="utf-8")
     except OSError as exc:
         errors.append(f"cannot read supporting rule docs: {exc}")
     else:
-        errors.extend(validate_supporting_rule_docs(rules_readme_text, currentization_guard_text, resume_guard_text))
+        errors.extend(validate_supporting_rule_docs(rules_readme_text, currentization_guard_text, resume_guard_text, bud_manual_text))
     try:
         master_plan_text = (ROOT / "docs" / "マスタープラン.md").read_text(encoding="utf-8")
         canonical_repo_text = (ROOT / "docs" / "正本リポジトリ.md").read_text(encoding="utf-8")
