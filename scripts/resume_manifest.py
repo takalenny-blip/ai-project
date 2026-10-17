@@ -20,13 +20,11 @@ def main() -> int:
         "source_updated": state["updated"],
         "execution_environment": state["execution_environment"],
         "current_position": state["current_position"],
-        "next_step": state["next_step"],
         "required_first_check": "scripts/resume_check.py",
         "stop_if": [
             "canonical state unreadable",
             "required current-state fields missing",
             "active/retired environment conflict",
-            "next_step.environment differs from active environment",
             "generated views are not regenerated from the canonical state",
         ],
     }
