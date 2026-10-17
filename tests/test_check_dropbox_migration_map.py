@@ -10,6 +10,7 @@ from check_dropbox_migration_map import (
     validate_retired_queue_files,
     validate_retired_queue_manual,
     validate_roadmap_queue_guidance,
+    validate_handoff_readme,
 )
 
 
@@ -67,6 +68,24 @@ Dropbox固定ファイル `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
 """
         errors = validate_roadmap_queue_guidance(content)
         self.assertTrue(any("obsolete roadmap queue instruction remains" in error for error in errors))
+
+    def test_handoff_readme_uses_current_state_then_dropbox_queue(self):
+        content = """1. `docs/現在状態.json` — 技術状態・履歴・証拠を確認する。
+2. Dropbox `/ChatGPT/Dropbox作業管理統合ボード.xlsx` — 日常作業の候補・状態・優先度・次のアクションを確認する。
+これらから作業候補を選ばない。
+日常作業の未着手項目・優先順位・次のアクションはDropbox固定ボードで管理
+"""
+        self.assertEqual(validate_handoff_readme(content), [])
+
+    def test_obsolete_handoff_first_workflow_is_rejected(self):
+        content = """1. `docs/現在状態.json` — 技術状態・履歴・証拠を確認する。
+2. Dropbox `/ChatGPT/Dropbox作業管理統合ボード.xlsx` — 日常作業の候補・状態・優先度・次のアクションを確認する。
+これらから作業候補を選ばない。
+日常作業の未着手項目・優先順位・次のアクションはDropbox固定ボードで管理
+1. `BUD.md`
+"""
+        errors = validate_handoff_readme(content)
+        self.assertTrue(any("obsolete handoff queue instruction remains" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
         content = "\n".join(
