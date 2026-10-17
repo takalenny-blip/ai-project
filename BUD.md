@@ -21,12 +21,9 @@
 ## 作業キュー
 
 - 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx
-- GitHubの work_items / next_step は日常作業キューとして使用しない。
+- GitHubは技術状態・履歴・検証証拠を保持し、日常作業の状態を複製しない。
 - ボードを読み取れない場合は停止し、古いGitHub項目へフォールバックしない。
 
-## 次の一手（作業キューではない技術状態）
-
-- 日常作業の次の一手はDropboxボードから取得する。
 ## 現在の作業レーン
 
 **experience-log → Blogger下書き確認 → GitHub Pages本番公開**
@@ -44,7 +41,7 @@
 ## 現在状態モデル
 
 - docs/現在状態.jsonを技術状態・履歴・証拠の正本とし、日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx とする。BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdは生成ビュー。
-- 自動生成：GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubのwork_items/next_stepを日常作業キューとして使用しない。
+- 自動生成：GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubに作業候補や次の行動を複製しない。
 
 ## 直チャット
 
