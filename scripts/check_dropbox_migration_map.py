@@ -130,7 +130,7 @@ def validate_startup_reference_docs(master_plan: str, canonical_repo: str) -> li
         required = (
             "docs/現在状態.json",
             "Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`",
-            "日常作業キューの正本",
+            "日常作業キュー",
         )
         for statement in required:
             if statement not in text:
