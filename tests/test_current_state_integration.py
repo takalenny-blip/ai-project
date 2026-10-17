@@ -19,6 +19,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.state_path = ROOT / "docs" / "現在状態.json"
         self.state = json.loads(self.state_path.read_text(encoding="utf-8"))
 
+    @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
     def test_current_state_work_queue_marks_url_checks_done_and_waits_for_google(self):
         validate_work_items(self.state["work_items"])
         actionable = select_actionable(self.state["work_items"], self.state["updated"])
@@ -39,6 +40,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertEqual(gsc_steps["github-pages-sitemap-retrieval"]["status"], "waiting_external")
         self.assertIn("再実施しない", gsc_steps["site-index-status-check"]["evidence"])
 
+    @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
     def test_current_state_preserves_structured_progress(self):
         work_item = next(item for item in self.state["work_items"] if item["id"] == "GITHUB-PAGES-PRODUCTION")
         steps = {step["id"]: step for step in work_item["progress"]["steps"]}
@@ -57,6 +59,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertEqual(current_step, "ongoing-publication")
         self.assertEqual(steps["wp-icon"]["status"], "done")
 
+    @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
     def test_removed_dependencies_are_not_referenced(self):
         ids = {item["id"] for item in self.state["work_items"]}
         for item in self.state["work_items"]:
@@ -65,6 +68,22 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
                 ref = prerequisite.get("id")
                 if ref:
                     self.assertIn(ref, ids, item["id"])
+
+    def test_dropbox_is_the_only_daily_queue_and_legacy_data_is_absent(self):
+        self.assertEqual(self.state["work_queue_source"], "dropbox_board")
+        self.assertNotIn("work_items", self.state)
+        self.assertEqual(self.state["next_step"]["id"], "LEGACY-QUEUE-RETIRED")
+        self.assertIn("Issue #1059", " ".join(self.state["known_constraints"]))
+
+    def test_technical_evidence_survives_queue_removal(self):
+        summary = self.state["current_position"]["summary"]
+        self.assertIn("部分合格", summary)
+        self.assertIn("チェックボックス", summary)
+        self.assertIn("WritingBlock", summary)
+        self.assertIn("sitemap.xml", summary)
+        closeout = self.state["verification_records"]["closeout_sync_gap_2026_10_08"]
+        self.assertEqual(closeout["status"], "verified")
+        self.assertIn("一本化", closeout["corrective_action"])
 
     def test_resume_check_accepts_canonical_state(self):
         old_state = resume_check.STATE
@@ -85,6 +104,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
             else:
                 os.environ["DROPBOX_WORK_QUEUE_PATH"] = old_board
 
+    @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
     def test_ai_manual_validation_record_cannot_regress_to_unperformed(self):
         work_item = next(item for item in self.state["work_items"] if item["id"] == "AI-MANUAL-PRODUCTION")
         steps = {step["id"]: step for step in work_item["progress"]["steps"]}
@@ -99,6 +119,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertEqual(work_item["progress"]["current_step"], "validation-findings-follow-up")
         self.assertIn("未実施として再提示しない", work_item["target"])
 
+    @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
     def test_ai_manual_state_has_no_stale_validation_or_ci_status(self):
         state_text = self.state_path.read_text(encoding="utf-8")
         self.assertNotIn("正本・生成ビュー同期後の最新headのCIは再実行中。", state_text)
