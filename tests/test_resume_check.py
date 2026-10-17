@@ -1,55 +1,36 @@
 #!/usr/bin/env python3
-import hashlib
 import json
 import os
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
-
 import sys
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
 import resume_check
 
 
-class ResumeCheckExternalArtifactTests(unittest.TestCase):
-    def write_state(self, root, prerequisite, readiness="ready"):
+class ResumeCheckDropboxOnlyTests(unittest.TestCase):
+    def write_state(self, root):
         state = {
             "execution_environment": {"active": "work_pc", "retired": ["vaio_p"]},
+            "current_position": {"summary": "technical state preserved"},
+            "work_queue_source": "dropbox_board",
             "interaction_control": {
                 "status": "implemented_preflight",
                 "guard_script": "scripts/interaction_guard.py",
                 "loop_detection": {"threshold": 2, "action": "強制停止して人間判断へ戻す"},
                 "blocked_output": {"exit_code": 2},
             },
-            "current_position": {"summary": "current"},
-            "updated": "2026-09-27",
-            "work_items": [{
-                "id": "WORK-TEST", "title": "test", "priority": 10, "status": "queued",
-                "depends_on": [], "not_before": None, "scope": "test",
-                "target": "target", "evidence": "evidence", "readiness": readiness,
-                "unblock_action": "none", "environment": "work_pc",
-                "execution_state": "actionable",
-                "progress": {
-                    "current_step": "step-1",
-                    "steps": [{"id": "step-1", "title": "step 1", "status": "pending"}],
-                    "updated_at": "2026-09-27",
-                },
-                "created_at": "2026-09-27", "updated_at": "2026-09-27",
-            }],
-            "next_step": {
-                "id": "WORK-TEST",
-                "environment": "work_pc",
-                "scope": "test",
-                "target": "target",
-                "evidence": "evidence",
-                "readiness": readiness,
-                "prerequisites": [prerequisite],
+            "resume_manifest": {
+                "source": "docs/現在状態.json",
+                "generator": "scripts/resume_manifest.py",
             },
-            "resume_manifest": {"source": "docs/現在状態.json", "generator": "scripts/resume_manifest.py"},
             "external_response_gate": {
                 "status": "clear",
-                "clear_reason": "no_pending_external_proposal",
+                "clear_reason": "no pending external proposal",
                 "reaction_contract": {
                     "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
                     "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
@@ -57,211 +38,129 @@ class ResumeCheckExternalArtifactTests(unittest.TestCase):
                     "clear_condition": "all five valid",
                 },
             },
+            "work_pc": {"clone_status": "unverified"},
         }
-        if readiness == "blocked":
-            state["work_items"][0]["unblock_action"] = "preflight"
-            state["next_step"] = {}
-        (root / "docs").mkdir()
-        (root / "docs" / "現在状態.json").write_text(json.dumps(state), encoding="utf-8")
+        (root / "docs").mkdir(exist_ok=True)
+        path = root / "docs" / "現在状態.json"
+        path.write_text(json.dumps(state), encoding="utf-8")
+        return path
 
-    def run_check(self, root, artifact):
-        old_state = resume_check.STATE
-        old_root = resume_check.ROOT
-        old_path = os.environ.get("DIMORA_ARTIFACT_PATH")
-        old_board = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
-        resume_check.STATE = root / "docs" / "現在状態.json"
-        resume_check.ROOT = root
-        os.environ["DIMORA_ARTIFACT_PATH"] = str(artifact)
-        os.environ["DROPBOX_WORK_QUEUE_PATH"] = str(root / "Dropbox作業管理統合ボード.xlsx")
-        try:
-            return resume_check.main()
-        finally:
-            resume_check.STATE = old_state
-            resume_check.ROOT = old_root
-            if old_path is None:
-                os.environ.pop("DIMORA_ARTIFACT_PATH", None)
-            else:
-                os.environ["DIMORA_ARTIFACT_PATH"] = old_path
-            if old_board is None:
-                os.environ.pop("DROPBOX_WORK_QUEUE_PATH", None)
-            else:
-                os.environ["DROPBOX_WORK_QUEUE_PATH"] = old_board
-
-    def write_minimal_xlsx(self, path):
+    def write_xlsx(self, path):
         with zipfile.ZipFile(path, "w") as workbook:
             workbook.writestr("[Content_Types].xml", "<Types></Types>")
             workbook.writestr("xl/workbook.xml", "<workbook></workbook>")
 
-    def test_ready_valid_json_and_count(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
-            artifact.write_text(json.dumps([{"eventId": 1}, {"eventId": 2}]), encoding="utf-8")
-            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 2}}
-            self.write_state(root, p)
-            self.assertEqual(self.run_check(root, artifact), 0)
+    def run_check(self, root, state_path):
+        old_state, old_root = resume_check.STATE, resume_check.ROOT
+        old_board = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
+        old_remote = os.environ.get("DROPBOX_REQUIRE_REMOTE")
+        old_token = os.environ.get("DROPBOX_ACCESS_TOKEN")
+        resume_check.STATE, resume_check.ROOT = state_path, root
+        os.environ["DROPBOX_WORK_QUEUE_PATH"] = str(root / "Dropbox作業管理統合ボード.xlsx")
+        os.environ.pop("DROPBOX_REQUIRE_REMOTE", None)
+        os.environ.pop("DROPBOX_ACCESS_TOKEN", None)
+        try:
+            return resume_check.main()
+        finally:
+            resume_check.STATE, resume_check.ROOT = old_state, old_root
+            if old_board is None:
+                os.environ.pop("DROPBOX_WORK_QUEUE_PATH", None)
+            else:
+                os.environ["DROPBOX_WORK_QUEUE_PATH"] = old_board
+            if old_remote is None:
+                os.environ.pop("DROPBOX_REQUIRE_REMOTE", None)
+            else:
+                os.environ["DROPBOX_REQUIRE_REMOTE"] = old_remote
+            if old_token is None:
+                os.environ.pop("DROPBOX_ACCESS_TOKEN", None)
+            else:
+                os.environ["DROPBOX_ACCESS_TOKEN"] = old_token
 
-    def test_invalid_json_fails(self):
+    def test_valid_state_and_readable_board_pass(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            artifact = root / "dimora.json"
-            artifact.write_text("{invalid", encoding="utf-8")
-            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 1}}
-            self.write_state(root, p)
-            self.assertEqual(self.run_check(root, artifact), 1)
+            state = self.write_state(root)
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state), 0)
 
-    def test_record_count_mismatch_fails(self):
+    def test_github_queue_source_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            artifact = root / "dimora.json"
-            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
-            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": digest, "record_count": 2}}
-            self.write_state(root, p)
-            self.assertEqual(self.run_check(root, artifact), 1)
-
-    def test_pending_external_response_gate_stops_with_exit_3(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "unverified"}
-            self.write_state(root, p, readiness="blocked")
-            state_path = root / "docs" / "現在状態.json"
+            state_path = self.write_state(root)
             state = json.loads(state_path.read_text(encoding="utf-8"))
-            state["external_response_gate"] = {
-                "status": "pending", "purpose": "react", "trigger": "proposal received",
-                "required_action": "respond", "completion": "reaction presented",
-                "reaction_contract": {
-                    "required_fields": ["proposal", "judgment", "reason", "next_action", "consistency"],
-                    "judgment_values": ["adopt", "adopt_modified", "hold", "reject", "info_only"],
-                    "rule": "all five required",
-                    "clear_condition": "all five valid",
-                },
-            }
+            state["work_queue_source"] = "github_json"
             state_path.write_text(json.dumps(state), encoding="utf-8")
-            self.assertEqual(self.run_check(root, artifact), 3)
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state_path), 1)
 
-    def test_missing_artifact_fails(self):
+    def test_retired_next_step_field_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            artifact = root / "missing.json"
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                 "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                              "sha256": "0" * 64, "record_count": 0}}
-            self.write_state(root, p)
-            self.assertEqual(self.run_check(root, artifact), 1)
-
-    def test_pending_gate_reaction_missing_field_fails(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            artifact = root / "dimora.json"
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "unverified"}
-            self.write_state(root, p, readiness="blocked")
-            state_path = root / "docs" / "現在状態.json"
+            state_path = self.write_state(root)
             state = json.loads(state_path.read_text(encoding="utf-8"))
-            state["external_response_gate"] = {
-                "status": "pending", "purpose": "react", "trigger": "proposal received",
-                "required_action": "respond", "completion": "reaction presented",
-                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"],"judgment_values": ["adopt","adopt_modified","hold","reject","info_only"],"rule": "all five required","clear_condition": "all five valid"},
-                "last_reaction": {"proposal": "x", "judgment": "adopt", "reason": "r", "next_action": "n"}
-            }
+            state["next_step"] = {"target": "old queue"}
             state_path.write_text(json.dumps(state), encoding="utf-8")
-            self.assertEqual(self.run_check(root, artifact), 1)
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state_path), 1)
 
-    def test_reaction_contract_accepts_complete_consistent_reaction(self):
+    def test_nonempty_legacy_queue_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            artifact = root / "dimora.json"
-            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
-            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            p = {"name": "dimora-favorite-programs.json", "kind": "external_artifact", "verify_scope": "runtime", "status": "verified",
-                 "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20", "sha256": digest, "record_count": 1}}
-            self.write_state(root, p)
-            state_path = root / "docs" / "現在状態.json"
+            state_path = self.write_state(root)
             state = json.loads(state_path.read_text(encoding="utf-8"))
-            state["external_response_gate"] = {
-                "status": "clear", "purpose": "react", "trigger": "proposal received",
-                "required_action": "respond", "completion": "reaction presented",
-                "reaction_contract": {"required_fields": ["proposal","judgment","reason","next_action","consistency"],"judgment_values": ["adopt","adopt_modified","hold","reject","info_only"],"rule": "all five required","clear_condition": "all five valid"},
-                "last_reaction": {"proposal": "x", "judgment": "adopt_modified", "reason": "r", "next_action": "n", "consistency": True}
-            }
+            state["work_items"] = [{"id": "obsolete"}]
             state_path.write_text(json.dumps(state), encoding="utf-8")
-            self.assertEqual(self.run_check(root, artifact), 0)
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state_path), 1)
 
-
-    def test_dropbox_mode_ignores_legacy_work_items_and_reports_board_as_queue(self):
+    def test_missing_board_stops_without_fallback(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            artifact = root / "dimora.json"
-            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
-            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            prerequisite = {
-                "name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                "verify_scope": "runtime", "status": "verified",
-                "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                             "sha256": digest, "record_count": 1},
-            }
-            self.write_state(root, prerequisite)
-            state_path = root / "docs" / "現在状態.json"
-            state = json.loads(state_path.read_text(encoding="utf-8"))
-            state["work_queue_source"] = "dropbox_board"
-            state.pop("work_items")
-            state_path.write_text(json.dumps(state), encoding="utf-8")
-            self.write_minimal_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
-            self.assertEqual(self.run_check(root, artifact), 0)
+            state_path = self.write_state(root)
+            self.assertEqual(self.run_check(root, state_path), 1)
 
-    def test_dropbox_mode_stops_when_board_is_missing_and_never_falls_back(self):
+    def test_unreadable_board_stops_without_fallback(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            artifact = root / "dimora.json"
-            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
-            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            prerequisite = {
-                "name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                "verify_scope": "runtime", "status": "verified",
-                "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                             "sha256": digest, "record_count": 1},
-            }
-            self.write_state(root, prerequisite)
-            state_path = root / "docs" / "現在状態.json"
-            state = json.loads(state_path.read_text(encoding="utf-8"))
-            state["work_queue_source"] = "dropbox_board"
-            state["work_items"] = [{"id": "LEGACY-STALE-ITEM"}]
-            state_path.write_text(json.dumps(state), encoding="utf-8")
-            self.assertEqual(self.run_check(root, artifact), 1)
+            state_path = self.write_state(root)
+            (root / "Dropbox作業管理統合ボード.xlsx").write_text("not xlsx", encoding="utf-8")
+            self.assertEqual(self.run_check(root, state_path), 1)
 
-    def test_dropbox_mode_stops_when_board_file_is_not_a_readable_xlsx(self):
+    def test_pending_external_response_stops(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            artifact = root / "dimora.json"
-            artifact.write_text(json.dumps([{"eventId": 1}]), encoding="utf-8")
-            digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-            prerequisite = {
-                "name": "dimora-favorite-programs.json", "kind": "external_artifact",
-                "verify_scope": "runtime", "status": "verified",
-                "evidence": {"method": "runtime preflight", "checked_at": "2026-09-20",
-                             "sha256": digest, "record_count": 1},
-            }
-            self.write_state(root, prerequisite)
-            state_path = root / "docs" / "現在状態.json"
+            state_path = self.write_state(root)
             state = json.loads(state_path.read_text(encoding="utf-8"))
-            state["work_queue_source"] = "dropbox_board"
+            state["external_response_gate"].update({
+                "status": "pending",
+                "purpose": "react",
+                "trigger": "proposal received",
+                "required_action": "respond",
+                "completion": "reaction presented",
+            })
             state_path.write_text(json.dumps(state), encoding="utf-8")
-            (root / "Dropbox作業管理統合ボード.xlsx").write_text("not an xlsx", encoding="utf-8")
-            self.assertEqual(self.run_check(root, artifact), 1)
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state_path), 3)
+
+    def test_environment_conflict_stops(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            state_path = self.write_state(root)
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["execution_environment"]["retired"].append("work_pc")
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state_path), 1)
+
+    def test_stale_manifest_source_stops(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            state_path = self.write_state(root)
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            state["resume_manifest"]["source"] = "README.md"
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            self.write_xlsx(root / "Dropbox作業管理統合ボード.xlsx")
+            self.assertEqual(self.run_check(root, state_path), 1)
 
 
 if __name__ == "__main__":

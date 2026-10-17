@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import zipfile
 from pathlib import Path
 
 BLOCKED_PROGRESS_PATTERNS = (
@@ -34,41 +35,37 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def state_fingerprint(state: dict) -> str:
-    """Fingerprint actual work progress, not mutable prose in the handoff."""
-    work_items = []
-    for item in state.get("work_items", []):
-        progress = item.get("progress") or {}
-        work_items.append({
-            "id": item.get("id"),
-            "status": item.get("status"),
-            "readiness": item.get("readiness"),
-            "execution_state": item.get("execution_state"),
-            "current_step": progress.get("current_step"),
-            "steps": sorted(
-                (
-                    {"id": step.get("id"), "status": step.get("status")}
-                    for step in progress.get("steps", [])
-                ),
-                key=lambda step: str(step["id"]),
-            ),
-        })
-    payload = {"work_items": sorted(work_items, key=lambda item: str(item["id"]))}
+def state_fingerprint(state: dict, board_path: Path) -> str:
+    """Fingerprint the actual Dropbox board, never retired GitHub queue fields."""
+    if state.get("work_queue_source") != "dropbox_board":
+        raise ValueError("work_queue_source must be dropbox_board")
+    if "work_items" in state:
+        raise ValueError("legacy GitHub work_items field is retired")
+    if "next_step" in state:
+        raise ValueError("legacy next_step field is retired")
+    if not board_path.is_file():
+        raise ValueError("Dropbox work board is missing or unavailable: " + str(board_path))
+    try:
+        with zipfile.ZipFile(board_path) as workbook:
+            if workbook.testzip() is not None:
+                raise ValueError("Dropbox work board contains a corrupt XLSX member")
+            required = {"[Content_Types].xml", "xl/workbook.xml"}
+            missing = required.difference(workbook.namelist())
+            if missing:
+                raise ValueError("Dropbox work board is not a valid XLSX workbook")
+    except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
+        raise ValueError("Dropbox work board is unreadable: " + str(exc)) from exc
+    payload = {
+        "work_queue_source": "dropbox_board",
+        "execution_environment": state.get("execution_environment", {}),
+        "dropbox_board_sha256": hashlib.sha256(board_path.read_bytes()).hexdigest(),
+    }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def has_progress_claim(text: str) -> bool:
     return any(re.search(pattern, text, re.IGNORECASE) for pattern in CLAIM_PATTERNS)
-
-
-def validate_blocked_output(state: dict, text: str) -> None:
-    readiness = (state.get("next_step") or {}).get("readiness")
-    if readiness == "blocked" and has_progress_claim(text):
-        raise ValueError(
-            "blocked next_step rejects progress/completion claims; "
-            "only evidence acquisition, preflight, or unblock work may be reported"
-        )
 
 
 def validate_evidence_claim(text: str, evidence: list[dict] | None) -> None:
@@ -113,7 +110,6 @@ def main() -> int:
     args = parser.parse_args()
     try:
         state = load_json(args.state)
-        validate_blocked_output(state, args.text)
         evidence = None
         if args.evidence_json:
             evidence = json.loads(args.evidence_json.read_text(encoding="utf-8"))

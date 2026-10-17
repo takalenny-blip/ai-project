@@ -15,8 +15,6 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import derived_next_step
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 DIRECT_CHAT_DIR = ROOT / "直チャット"
 BUD_PATH = ROOT / "BUD.md"
@@ -46,41 +44,44 @@ STATE_PATCH_BEGIN = "<!-- BUD_STATE_PATCH_BEGIN"
 STATE_PATCH_END = "BUD_STATE_PATCH_END -->"
 
 
-def extract_embedded_state_patch(content: str) -> tuple[str, dict[str, Any] | None]:
-    """Extract an optional canonical-state patch from a save-queue markdown payload.
+def strip_retired_embedded_state_patch(content: str) -> tuple[str, bool]:
+    """Strip retired legacy queue metadata without parsing or trusting its contents.
 
-    The patch is transport metadata, not direct-chat content, so it is removed before
-    the saved chat record is written. This keeps canonical state changes on the normal
-    atomic save path while allowing the queue entry to request an explicit state patch.
+    Archived save-queue payloads are historical records, not an authority to update
+    canonical state. The marker block is removed before saving, and its body is never
+    parsed as JSON. Authorized technical-state changes must use --state-patch-file.
     """
     pattern = re.compile(
-        re.escape(STATE_PATCH_BEGIN) + r"\s*\n(.*?)\n" + re.escape(STATE_PATCH_END),
+        re.escape(STATE_PATCH_BEGIN) + r"\s*\n.*?\n" + re.escape(STATE_PATCH_END),
         re.DOTALL,
     )
-    match = pattern.search(content)
-    if not match:
-        return content, None
-    try:
-        patch = json.loads(match.group(1))
-    except json.JSONDecodeError as exc:
-        raise SystemExit(f"invalid embedded state patch JSON: {exc}") from exc
-    if not isinstance(patch, dict):
-        raise SystemExit("embedded state patch must be a JSON object")
-    cleaned = (content[:match.start()] + content[match.end():]).strip() + "\n"
-    return cleaned, patch
+    cleaned, count = pattern.subn("", content, count=1)
+    if count == 0:
+        return content, False
+    return cleaned.strip() + "\n", True
 
 
-def sync_next_step(state: dict) -> None:
-    item = derived_next_step(state["work_items"], state.get("updated"))
-    if item is None:
-        state["next_step"] = {}
-        return
-    fields = ("id", "title", "priority", "depends_on", "not_before", "environment",
-              "scope", "target", "evidence", "readiness", "unblock_action")
-    state["next_step"] = {key: item[key] for key in fields}
-    if item.get("readiness") == "blocked":
-        state["next_step"]["blocked_reason"] = item["blocked_reason"]
-    state["next_step"]["prerequisites"] = item.get("prerequisites", [])
+RETIRED_QUEUE_KEYS = {"work_items", "next_step", "work_item_updates"}
+
+
+def contains_retired_queue_key(value: object) -> bool:
+    """Reject retired queue fields at every nesting level of an update payload."""
+    if isinstance(value, dict):
+        return any(
+            key in RETIRED_QUEUE_KEYS or contains_retired_queue_key(child)
+            for key, child in value.items()
+        )
+    if isinstance(value, list):
+        return any(contains_retired_queue_key(item) for item in value)
+    return False
+
+
+def validate_queue_retirement(state: dict) -> None:
+    """Enforce the Dropbox-only queue contract without deriving a GitHub queue."""
+    if state.get("work_queue_source") != "dropbox_board":
+        raise SystemExit("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
+    if contains_retired_queue_key(state):
+        raise SystemExit("legacy GitHub queue fields work_items/next_step/work_item_updates are retired and must not be reintroduced")
 
 
 def render_views() -> None:
@@ -111,7 +112,7 @@ def main() -> int:
         raise SystemExit("refusing to run with pre-staged changes")
 
     content = (args.content_file.read_text(encoding="utf-8") if args.content_file else sys.stdin.read())
-    content, embedded_patch = extract_embedded_state_patch(content)
+    content, had_retired_patch = strip_retired_embedded_state_patch(content)
     if not content.endswith("\n"):
         content += "\n"
 
@@ -143,10 +144,17 @@ def main() -> int:
         if not isinstance(patch, dict):
             raise SystemExit("state patch must be a JSON object")
         merge_patch(state, patch)
-    if embedded_patch is not None:
-        merge_patch(state, embedded_patch)
+    if had_retired_patch:
+        # Legacy save-queue payloads are historical intake records, not an authority
+        # to mutate current canonical state. Only an explicit --state-patch-file may
+        # request a canonical-state change.
+        print(
+            "warning: embedded legacy state patch was not applied; "
+            "use --state-patch-file for an explicitly authorized state update",
+            file=sys.stderr,
+        )
 
-    sync_next_step(state)
+    validate_queue_retirement(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render_views()
 

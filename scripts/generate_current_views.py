@@ -9,7 +9,6 @@ import tempfile
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[0]))
-from work_queue import select_actionable
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "docs" / "現在状態.json"
@@ -25,34 +24,19 @@ def render(state: dict) -> tuple[str, str]:
     migration = state["migration"]
     env = state["execution_environment"]
     current = state["current_position"]
-    nxt = state.get("next_step")
-    queue_source = state.get("work_queue_source", "github_json")
-    if queue_source == "dropbox_board":
-        actionable = []
-        queue_section = (
-            "## 作業キュー\n\n"
-            "- 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx\n"
-            "- GitHubの work_items / next_step は日常作業キューとして使用しない。\n"
-            "- ボードを読み取れない場合は停止し、古いGitHub項目へフォールバックしない。"
-        )
-        next_step_section = (
-            "## 次の一手（作業キューではない技術状態）\n\n"
-            "- 日常作業の次の一手はDropboxボードから取得する。"
-        )
-    elif queue_source == "github_json":
-        actionable = select_actionable(state["work_items"], state.get("updated"))
-        queue_section = (
-            "## 作業キュー\n\n"
-            f"- actionable：{len(actionable)}件\n"
-            "- 一覧：\n"
-            + (chr(10).join("- [" + item["id"] + "] priority=" + str(item["priority"]) + "：" + item["title"] + chr(10) + chr(10).join("  - 未完了工程：" + step["id"] + " [" + step["status"] + "] " + step["title"] for step in item["progress"]["steps"] if step["status"] != "done") for item in actionable) or "- actionableな作業なし")
-        )
-        next_step_section = (
-            "## 次の一手（互換ビュー）\n\n"
-            + (("- [" + nxt["id"] + "] " + nxt["target"]) if nxt else "- actionableな作業なし")
-        )
-    else:
-        raise ValueError(f"unsupported work_queue_source: {queue_source}")
+    queue_source = state.get("work_queue_source")
+    if queue_source != "dropbox_board":
+        raise ValueError(f"unsupported work_queue_source: {queue_source!r}; Dropbox board is the only daily queue")
+    if "work_items" in state:
+        raise ValueError("legacy work_items field is retired and must not be reintroduced")
+    if "next_step" in state:
+        raise ValueError("legacy next_step field is retired and must not be reintroduced")
+    queue_section = (
+        "## 作業キュー\n\n"
+        "- 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx\n"
+        "- GitHubは技術状態・履歴・検証証拠を保持し、日常作業の状態を複製しない。\n"
+        "- ボードを読み取れない場合は停止し、古いGitHub項目へフォールバックしない。"
+    )
 
     header = f"""更新日：{state["updated"]}
 
@@ -74,7 +58,6 @@ def render(state: dict) -> tuple[str, str]:
 
 {queue_section}
 
-{next_step_section}
 """.rstrip("\n")
 
     bud = f"""# BUD — バドのための最上位ダッシュボード

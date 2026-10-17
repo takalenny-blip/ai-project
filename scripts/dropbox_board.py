@@ -47,6 +47,13 @@ def fetch_remote_board(token: str, remote_path: str = DEFAULT_REMOTE_PATH, timeo
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
             data = response.read()
+    except urllib.error.HTTPError as exc:
+        # Report only safe diagnostic metadata; never expose headers, tokens, or response bodies.
+        request_id = exc.headers.get("x-dropbox-request-id") if exc.headers else None
+        detail = f"HTTP {exc.code}"
+        if request_id:
+            detail += f", Dropbox request id {request_id}"
+        raise ValueError(f"Dropbox API download failed ({detail})") from None
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         # Do not include request headers or credentials in the diagnostic.
         raise ValueError(f"Dropbox API download failed ({type(exc).__name__})") from None

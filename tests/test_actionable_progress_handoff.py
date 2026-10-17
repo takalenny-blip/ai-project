@@ -6,34 +6,26 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from generate_current_views import render
-from work_queue import select_actionable
 
 
 class ActionableProgressHandoffTests(unittest.TestCase):
-    def test_actionable_work_view_exposes_only_unfinished_substeps(self):
+    def test_legacy_github_queue_source_is_rejected(self):
         state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
         state["work_queue_source"] = "github_json"
-        bud, handover = render(state)
-        actionable = select_actionable(state["work_items"], state.get("updated"))
+        with self.assertRaises(ValueError):
+            render(state)
 
-        self.assertTrue(actionable, "fixture must include actionable work")
-        for view in (bud, handover):
-            for item in actionable:
-                for step in item["progress"]["steps"]:
-                    rendered_step = f"{step['id']} [{step['status']}] {step['title']}"
-                    if step["status"] == "done":
-                        self.assertNotIn(
-                            rendered_step,
-                            view,
-                            f"completed step must not be listed as unfinished: {rendered_step}",
-                        )
-                    else:
-                        self.assertIn(
-                            rendered_step,
-                            view,
-                            f"unfinished actionable step must remain visible: {rendered_step}",
-                        )
+    def test_retired_work_items_field_is_rejected_even_when_empty(self):
+        state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
+        state["work_items"] = []
+        with self.assertRaisesRegex(ValueError, "legacy work_items field is retired"):
+            render(state)
 
+    def test_retired_next_step_field_is_rejected(self):
+        state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
+        state["next_step"] = {"target": "old queue"}
+        with self.assertRaisesRegex(ValueError, "legacy next_step field is retired"):
+            render(state)
 
     def test_dropbox_queue_view_never_renders_legacy_items(self):
         state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))

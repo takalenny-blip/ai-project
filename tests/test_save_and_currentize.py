@@ -10,4 +10,43 @@ def test_save_currentize_does_not_overwrite_canonical_next_design_item():
 def test_save_currentize_allows_explicit_state_patch():
     source = Path("scripts/save_and_currentize.py").read_text(encoding="utf-8")
     assert "--state-patch-file" in source
-    assert "embedded_patch" in source
+    assert "strip_retired_embedded_state_patch" in source
+    assert "had_retired_patch" in source
+    assert "--state-patch-file" in source
+
+
+def test_retired_embedded_patch_is_stripped_without_parsing_its_body():
+    from scripts.save_and_currentize import strip_retired_embedded_state_patch
+
+    content = (
+        "historical record\n"
+        "<!-- BUD_STATE_PATCH_BEGIN\n"
+        "this is deliberately not JSON and must never be parsed\n"
+        "BUD_STATE_PATCH_END -->\n"
+        "historical tail\n"
+    )
+    cleaned, found = strip_retired_embedded_state_patch(content)
+    assert found is True
+    assert "BUD_STATE_PATCH_BEGIN" not in cleaned
+    assert "not JSON" not in cleaned
+    assert "historical record" in cleaned
+    assert "historical tail" in cleaned
+
+
+def test_content_without_retired_embedded_patch_is_unchanged():
+    from scripts.save_and_currentize import strip_retired_embedded_state_patch
+
+    content = "ordinary direct-chat record\n"
+    cleaned, found = strip_retired_embedded_state_patch(content)
+    assert cleaned == content
+    assert found is False
+
+
+def test_retired_queue_fields_are_rejected_when_nested():
+    from scripts.save_and_currentize import contains_retired_queue_key
+
+    assert contains_retired_queue_key({"metadata": {"work_items": []}})
+    assert contains_retired_queue_key({"nested": [{"next_step": "old task"}]})
+    assert contains_retired_queue_key({"request": {"work_item_updates": [{"id": "old"}]}})
+    assert not contains_retired_queue_key({"technical": {"status": "verified"}})
+

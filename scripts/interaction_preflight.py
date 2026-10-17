@@ -20,7 +20,6 @@ def run_preflight(*, state_path: Path, text: str, evidence_path: Path, history_p
         raise ValueError("evidence must be a JSON list")
     if not isinstance(history, list):
         raise ValueError("history must be a JSON list")
-    guard.validate_blocked_output(state, text)
     guard.validate_evidence_claim(text, evidence)
     guard.validate_loop(history, loop_threshold)
 

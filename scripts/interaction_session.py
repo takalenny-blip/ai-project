@@ -46,10 +46,13 @@ def atomic_write_json(path: Path, data: list[dict]) -> None:
         raise
 
 
-def record_turn(state_path: Path, history_path: Path, threshold: int = 2) -> str:
+def record_turn(state_path: Path, history_path: Path, threshold: int = 2, board_path: Path | None = None) -> str:
     state = guard.load_json(state_path)
     history = load_history(history_path)
-    fingerprint = guard.state_fingerprint(state)
+    if board_path is None:
+        configured = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
+        board_path = Path(configured) if configured else state_path.parent.parent / "Dropbox作業管理統合ボード.xlsx"
+    fingerprint = guard.state_fingerprint(state, board_path)
     candidate = history + [{"state_fingerprint": fingerprint}]
     guard.validate_loop(candidate, threshold)
     atomic_write_json(history_path, candidate)
@@ -63,9 +66,10 @@ def main() -> int:
     parser.add_argument("--state", type=Path, required=True, help="Path to docs/現在状態.json")
     parser.add_argument("--history", type=Path, required=True, help="Private JSON ledger for this conversation")
     parser.add_argument("--loop-threshold", type=int, default=2)
+    parser.add_argument("--board", type=Path, help="readable local Dropbox-sync XLSX used as the queue fingerprint")
     args = parser.parse_args()
     try:
-        fingerprint = record_turn(args.state, args.history, args.loop_threshold)
+        fingerprint = record_turn(args.state, args.history, args.loop_threshold, args.board)
         print("OK: turn state recorded; fingerprint=" + fingerprint)
         return 0
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:

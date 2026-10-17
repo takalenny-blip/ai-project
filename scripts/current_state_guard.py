@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,16 +11,10 @@ BUD_PATH = ROOT / "BUD.md"
 HANDOVER_PATH = ROOT / "docs" / "引き継ぎ" / "現在の引き継ぎ.md"
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import validate_work_items, derived_next_step, select_actionable
 from generate_current_views import render
 STATE_PATH = ROOT / "docs" / "現在状態.json"
 
-REQUIRED = ("execution_environment", "current_position", "work_items", "next_step")
-ABSTRACT_NEXT_STEP = (
-    "本来工程へ復帰",
-    "通常のDiMORA本来工程へ復帰",
-    "PR3完了後のcanonical現在状態を確認し、次の実装単位を決める",
-)
+REQUIRED = ("execution_environment", "current_position")
 RETIRED_ALIASES = {
     "vaio_p": ("vaio_p", "VAIO P", "VAIO P + Chromium", "VAIO P運用"),
 }
@@ -34,48 +27,6 @@ def load_state(path: Path = STATE_PATH) -> dict:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
         fail(f"canonical state unreadable: {exc}")
-
-def _repo_blob_sha(path: Path) -> str:
-    data = path.read_bytes()
-    header = ("blob " + str(len(data)) + "\0").encode()
-    return hashlib.sha1(header + data).hexdigest()
-
-def _validate_verified_evidence(prerequisite: dict) -> None:
-    evidence = prerequisite.get("evidence")
-    if not isinstance(evidence, dict) or not evidence.get("method") or not evidence.get("checked_at"):
-        fail("verified prerequisite requires method and checked_at evidence")
-    if prerequisite["kind"] == "repo_file":
-        path = ROOT / prerequisite["name"]
-        if not path.is_file():
-            fail("verified repo_file does not exist: " + prerequisite["name"])
-        expected = evidence.get("sha256") or evidence.get("blob_sha")
-        if not expected:
-            fail("verified repo_file requires sha256 or blob_sha evidence: " + prerequisite["name"])
-        actual = hashlib.sha256(path.read_bytes()).hexdigest() if evidence.get("sha256") else _repo_blob_sha(path)
-        if actual != expected:
-            fail("verified repo_file evidence mismatch: " + prerequisite["name"])
-
-def validate_prerequisites(next_step: dict) -> None:
-    prerequisites = next_step.get("prerequisites")
-    if not isinstance(prerequisites, list):
-        fail("next_step.prerequisites must be an explicit list")
-    readiness = next_step.get("readiness")
-    if readiness not in {"ready", "blocked"}:
-        fail("next_step.readiness must be ready or blocked")
-    if readiness == "blocked" and (not next_step.get("blocked_reason") or not next_step.get("unblock_action")):
-        fail("blocked next_step requires blocked_reason and unblock_action")
-    for index, prerequisite in enumerate(prerequisites):
-        if not isinstance(prerequisite, dict):
-            fail(f"next_step.prerequisites[{index}] must be an object")
-        for field in ("name", "kind", "verify_scope", "status"):
-            if not prerequisite.get(field):
-                fail(f"next_step.prerequisites[{index}].{field} is missing")
-        if prerequisite["status"] not in {"verified", "unverified", "missing", "invalid"}:
-            fail(f"invalid prerequisite status: {prerequisite['status']}")
-        if prerequisite["status"] == "verified":
-            _validate_verified_evidence(prerequisite)
-    if readiness == "ready" and any(p["status"] != "verified" for p in prerequisites):
-        fail("next_step.readiness=ready requires every prerequisite to be verified")
 
 def validate_external_response_gate(state: dict) -> None:
     gate = state.get("external_response_gate", {"status": "clear"})
@@ -130,95 +81,13 @@ def validate_completed_verifications(state: dict) -> None:
                 fail(f"verified verification record requires method and checked_at: {scope}")
 
 
-def validate_work_queue(state: dict) -> None:
-    items = state.get("work_items")
-    if not isinstance(items, list) or not items:
-        fail("work_items must be a non-empty list")
-    try:
-        validate_work_items(items)
-    except ValueError as exc:
-        fail(str(exc))
-    derived = derived_next_step(items, state.get("updated"))
-    cached = state.get("next_step")
-    if derived is None:
-        if cached not in (None, {}):
-            fail("next_step must be empty when no actionable work exists")
-        return
-    if not isinstance(cached, dict):
-        fail("next_step must be an object derived from work_items")
-    if cached.get("id") != derived.get("id"):
-        fail("next_step does not match the highest-priority actionable work item")
-    for key in ("target", "evidence", "environment", "scope", "readiness", "unblock_action"):
-        if cached.get(key) != derived.get(key):
-            fail("next_step is not an exact derived view of work_items: " + key)
-    if derived.get("readiness") == "blocked" and cached.get("blocked_reason") != derived.get("blocked_reason"):
-        fail("next_step blocked_reason is not derived from work_items")
-
 def validate_completed_step_prose(state: dict) -> None:
-    """Reject stale unfinished claims that contradict a completed canonical step.
-
-    Check only current-state descriptions, not historical evidence or chat logs.
-    Sentences are checked independently so an unrelated '未確認' elsewhere in
-    the same paragraph does not trigger a false positive.
-    """
-    prose_fields = []
+    """Check only current technical-state prose; old queue-step status rules are retired."""
     current = state.get("current_position", {})
     for key in ("summary", "next_stage_boundary", "next_focus"):
         value = current.get(key)
-        if isinstance(value, str):
-            prose_fields.append(f"current_position.{key}: {value}")
-    next_step = state.get("next_step", {})
-    if isinstance(next_step.get("title"), str):
-        prose_fields.append(f"next_step.title: {next_step['title']}")
-    for item in state.get("work_items", []):
-        for key in ("title", "target", "blocked_reason"):
-            value = item.get(key)
-            if isinstance(value, str):
-                prose_fields.append(f"work_items[{item.get('id')}].{key}: {value}")
-        for step in item.get("progress", {}).get("steps", []):
-            value = step.get("title")
-            if isinstance(value, str):
-                prose_fields.append(f"work_items[{item.get('id')}].progress.steps[{step.get('id')}].title: {value}")
-
-    # Rules live in the canonical state so new work/status vocabularies can
-    # be covered without editing the guard implementation itself.
-    rules = state.get("prose_status_consistency_rules", [])
-    if not isinstance(rules, list):
-        fail("prose_status_consistency_rules must be a list")
-    for index, rule in enumerate(rules):
-        if not isinstance(rule, dict):
-            fail(f"prose_status_consistency_rules[{index}] must be an object")
-        for field in ("work_item_id", "step_id", "keywords", "stale_markers"):
-            if not rule.get(field):
-                fail(f"prose_status_consistency_rules[{index}].{field} is required")
-        expected_status = rule.get("expected_step_status", "done")
-        if expected_status not in {"pending", "in_progress", "waiting_external", "done"}:
-            fail(f"prose_status_consistency_rules[{index}].expected_step_status is invalid")
-        if (not isinstance(rule["keywords"], list)
-                or not all(isinstance(value, str) and value for value in rule["keywords"])):
-            fail(f"prose_status_consistency_rules[{index}].keywords must be non-empty strings")
-        if (not isinstance(rule["stale_markers"], list)
-                or not all(isinstance(value, str) and value for value in rule["stale_markers"])):
-            fail(f"prose_status_consistency_rules[{index}].stale_markers must be non-empty strings")
-    items = {item.get("id"): item for item in state.get("work_items", [])}
-    for rule in rules:
-        item = items.get(rule["work_item_id"])
-        if not item:
-            continue
-        steps = item.get("progress", {}).get("steps", [])
-        step = next((s for s in steps if s.get("id") == rule["step_id"]), None)
-        expected_status = rule.get("expected_step_status", "done")
-        if not step or step.get("status") != expected_status:
-            continue
-        for entry in prose_fields:
-            for sentence in entry.replace("。", "。\n").splitlines():
-                if (all(word in sentence for word in rule["keywords"])
-                        and any(marker in sentence for marker in rule["stale_markers"])):
-                    status_label = "completed" if expected_status == "done" else expected_status
-                    fail(
-                        f"stale prose contradicts {status_label} work step "
-                        f"{rule['work_item_id']}/{rule['step_id']}: {entry}"
-                    )
+        if isinstance(value, str) and not value.strip():
+            fail(f"current_position.{key} must not be blank")
 
 
 def validate_publishing_lane_consistency(state: dict) -> None:
@@ -246,19 +115,15 @@ def validate_state(state: dict) -> None:
     env = state["execution_environment"]
     active = env.get("active")
     retired = env.get("retired", [])
-    nxt = state["next_step"]
     legacy_verification_model = "verification_records" not in state
     if not legacy_verification_model:
         validate_completed_verifications(state)
-        if state.get("work_queue_source", "github_json") == "github_json":
-            validate_work_queue(state)
-            if not nxt.get("scope"):
-                fail("next_step.scope is missing")
-            completed = state["verification_records"].get(nxt["scope"])
-            if isinstance(completed, dict) and completed.get("status") == "verified":
-                fail("next_step repeats an already verified scope: " + nxt["scope"])
-        elif state.get("work_queue_source") != "dropbox_board":
-            fail("work_queue_source must be github_json or dropbox_board")
+    if state.get("work_queue_source") != "dropbox_board":
+        fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
+    if "work_items" in state:
+        fail("legacy GitHub work_items field is retired and must not be reintroduced")
+    if "next_step" in state:
+        fail("legacy next_step field is retired and must not be reintroduced")
     # Staged migration compatibility: the current canonical state predates the
     # verification_records/scope fields. Allow it to pass until the normal save
     # pipeline applies the explicit migration patch; do not silently invent evidence.
@@ -269,21 +134,10 @@ def validate_state(state: dict) -> None:
         fail("retired execution environments must be a list")
     if active in retired:
         fail(f"active environment is also retired: {active}")
-    if nxt.get("environment") != active:
-        fail("next_step.environment does not match active environment")
-    for field in ("target", "evidence"):
-        if not nxt.get(field):
-            fail(f"next_step.{field} is missing")
-    if nxt.get("status") not in {None, nxt.get("readiness")}:
-        fail("next_step.status must be absent or equal to readiness")
     if not current.get("summary"):
         fail("current_position.summary is missing")
-    if any(phrase in nxt["target"] for phrase in ABSTRACT_NEXT_STEP):
-        fail("next_step.target is too abstract or stale; require current concrete work")
-    validate_prerequisites(nxt)
     validate_external_response_gate(state)
-    if state.get("work_queue_source", "github_json") == "github_json":
-        validate_completed_step_prose(state)
+    validate_completed_step_prose(state)
     work_pc = state.get("work_pc", {})
     if work_pc.get("clone_status") == "cloned" and not work_pc.get("clone_evidence"):
         fail("work_pc clone_status=cloned requires clone_evidence")
@@ -305,9 +159,13 @@ def validate_generated_views(state: dict) -> None:
     """
     env = state["execution_environment"]
     current = state["current_position"]
-    queue_source = state.get("work_queue_source", "github_json")
-    actionable_items = select_actionable(state["work_items"], state.get("updated")) if queue_source == "github_json" else []
-    actionable = actionable_items[0] if actionable_items else None
+    queue_source = state.get("work_queue_source")
+    if queue_source != "dropbox_board":
+        fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
+    if "work_items" in state:
+        fail("legacy GitHub work_items field is retired and must not be reintroduced")
+    if "next_step" in state:
+        fail("legacy next_step field is retired and must not be reintroduced")
     bud_text, handover_text = render(state)
     for name, text in (("BUD.md", bud_text), ("docs/引き継ぎ/現在の引き継ぎ.md", handover_text)):
         required = [
@@ -315,20 +173,11 @@ def validate_generated_views(state: dict) -> None:
             f"退役：{', '.join(env.get('retired', [])) or '(なし)'}",
             f"**{current['summary']}**",
         ]
-        if queue_source == "github_json":
-            required.append(f"actionable：{len(actionable_items)}件")
-        elif queue_source == "dropbox_board":
-            required.append("Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx")
-            required.append("古いGitHub項目へフォールバックしない")
-        else:
-            fail("work_queue_source must be github_json or dropbox_board")
+        required.append("Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx")
+        required.append("古いGitHub項目へフォールバックしない")
         for fragment in required:
             if fragment not in text:
                 fail(f"generated view is stale or incomplete: {name} missing {fragment}")
-        if actionable:
-            marker = f"- [{actionable['id']}] priority={actionable['priority']}：{actionable['title']}"
-            if marker not in text:
-                fail(f"generated view is missing actionable work item: {name}: {actionable['id']}")
 
 def validate_projects(state: dict) -> None:
     retired = retired_tokens(state)

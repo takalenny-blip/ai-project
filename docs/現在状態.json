@@ -8,8 +8,8 @@
     "target": "docs/現在状態.jsonを技術状態・履歴・証拠の正本とし、日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx とする。BUD.mdとdocs/引き継ぎ/現在の引き継ぎ.mdは生成ビュー。",
     "status": "structurally_complete",
     "manual_duplicate_management_allowed": false,
-    "generation_flow": "GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubのwork_items/next_stepを日常作業キューとして使用しない。",
-    "work_queue": "日常作業キューの正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。GitHubのwork_items/next_stepは旧形式の技術履歴として保持し、キュー候補・次の作業選定・フォールバックに使用しない。Dropboxを読めない場合は停止して利用不可を明示する。"
+    "generation_flow": "GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubに作業候補や次の行動を複製しない。",
+    "work_queue": "日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。旧GitHub work_itemsとnext_stepのキューデータは削除済み。Dropboxを読めない場合は停止し、会話履歴や生成ビューから補完しない。"
   },
   "direct_chat": {
     "latest_saved": "2026-10-17T09-07-03.144000+0900",
@@ -241,15 +241,15 @@
     "保存要求に保存対象種別を必須化し、保存機構メタ報告は新しい決定事項なしでは入口拒否する機械ゲートを導入",
     "BUD.md二重管理解消の運用マニュアルを追加し、docs/現在状態.jsonを唯一の現在状態正本とする手順を次回も再現可能にした",
     "巨大直チャット保存の運用マニュアルを追加し、direct-chat-large-intake.ymlのRun workflow、Dropbox原本確認、プレビューHTML誤取得防止、canonical readbackとSHA一致確認を明文化した",
-    "チャット開始・再開時はGitHubのdocs/現在状態.jsonを最初に直接読み、BUD/引き継ぎ等の生成ビューを先に現在状態として採用しない。前回作業後のPR/merge/commitによるwork_items・next_stepの stale 状態を開始前に検出する。",
-    "work_itemsの途中成果をprogress.stepsへ構造化し、完了済みstep・現在のstep・外部待機stepを正本に保持して、次回起動時の作業巻き戻りを防ぐ",
+    "チャット開始・再開時はGitHubのdocs/現在状態.jsonで技術状態・証拠を確認し、日常作業の状態・優先順位・次の行動はDropbox固定ボードから取得する。",
     "終了時の作業状態同期では、成果物の生成・GitHub保存・実環境への適用・実表示確認を別々のprogress.stepsとして記録し、保存完了を実環境適用完了と混同しない。",
     "公開先・制作作業場所を分離し、GitHub Pagesを本番公開先、Bloggerを下書き・表示確認の作業場所とする。WordPressを本番公開先として扱わない。"
   ],
   "known_constraints": [
     "GitHub Contents APIの大量個別取得を通常検索に使わない",
     "既知事項を理由なく再調査しない",
-    "認証情報・Cookie・セッション情報等を保存しない"
+    "認証情報・Cookie・セッション情報等を保存しない",
+    "GitHub Issue #1059: 保存・承認フローのPAT期限切れ対策は未完了。SAVE_PR_TOKEN / SAVE_APPROVE_TAKA2_TOKEN依存の移行方式選択とGitHub App設定が必要。"
   ],
   "save_pipeline": {
     "status": "canonical_route_documented_and_guarded",
@@ -324,48 +324,22 @@
       "note": "2026-10-11、サイトアイコン・本文・画像・引用／吹き出し／コマンド表示・モバイル表示は確認済み。WordPressトップページとBLOG-0001〜0003のインデックス状況確認は過去に実施済みだが、これは過去の確認記録であり、WordPressを現在の本番公開先とする根拠ではない。WordPress各URLの具体的な登録結果は正本記録に残っていないため推定しない。GitHub Pagesのrobots.txt・sitemap.xml・トップページは2026-10-12に正常表示を確認済み。GSC sitemap.xmlはGoogle側の処理結果待ち。 2026-10-14、PR #1082をマージし、scripts/build_cloudflare_site.pyへ「基本の実践は完全無料」のトップページ訴求を追加。mainの読み戻しで生成処理への反映を確認。公開ページの実表示・デプロイ反映は未確認のため、公開完了とは扱わない。 第2章PR #1102では2026-10-15に公式情報確認・本文更新を完了。本文コミット74b995ef6c9720caf901cfc51027e553f69c7493の4 CIチェック成功を確認。正本・生成ビュー同期後の最新head 9c62aa307fd293a270d1ada15166eb7a97afe888の4 CIチェックはすべて成功。実サービス画面での登録／ログイン／初回会話の操作確認は未完了。Markdown保存の実地検証は2026-10-14に実施済み・部分合格。 2026-10-14のMarkdown保存実地検証は実施済みで部分合格。実ファイル `markdown保存_20261014_1817.md` の確認記録では日本語・見出し・箇条書き・Pythonコード・GitHubリンク・会話と時刻は保持。チェックボックスが通常箇条書きに変換され、WritingBlockタグが混入。原因と外部送信有無は未確認。 公開ソース候補の予備調査では、ボタン要素を出力から除外し、ネイティブcheckbox入力だけをMarkdown記号化する実装を確認。これがチェックボックス欠落の有力仮説だが、実機の拡張機能名・版と当日のDOMが未確認のため断定しない。公開ソースの変換処理にWritingBlockタグを直接出力する箇所は見当たらず、本文中の文字列を保持した可能性。公開ソースの通信処理・権限・プライバシー説明を確認したが、実機インストール版の外部送信有無は未確認。"
     },
     "next_stage_boundary": "GitHub PagesのGSC sitemap.xmlはブラウザーでHTTP 200 OK、application/xml、XML内4 URL表示可能、URLライブテストの取得・クロール・インデックス許可成功を確認済み。取得失敗の原因切り分けは実施済みでGoogle側の処理結果待ち。GSCの正常化は未確認。GitHub Pagesトップページの404確認、robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みで、再実施しない。WordPressに関する過去の公開・インデックス確認は履歴として保持し、WordPressを本番公開先として扱わない。",
-    "next_focus": "GitHub Pagesを本番公開先として扱う。robots.txt・sitemap.xml・トップページの公開表示確認は2026-10-12に完了済みのため、公開物の再確認・サイトマップ詳細の再確認・原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ正本を更新する。GSC-確認は外部待ち、BLOG-0004はGSC-確認の解消待ち。WordPressを本番公開先として継続運用する作業は存在しない。"
-  },
-  "next_step": {
-    "id": "AI-MANUAL-PRODUCTION",
-    "title": "AI作業のセッティングマニュアル本文作成・実地検証",
-    "priority": 15,
-    "depends_on": [],
-    "not_before": null,
-    "environment": "work_pc",
-    "scope": "AI_manual_creation_with_note_demand_validation",
-    "target": "初版本文・最終修正はmain反映済み。第2章の承認済み構成に沿った本文更新と公式案内の確認は2026-10-15に完了。PR #1102は未マージ。Markdown保存の実地検証は2026-10-14に実施済みで部分合格。公開ソースの予備調査ではチェックボックス欠落の有力仮説（独自DOMのボタン要素が出力時に除外される）を得たが、実機の拡張機能名・版と当日のDOMは未確認。WritingBlockタグ混入はソース上の直接生成箇所を確認できず、表示本文に含まれた文字列を保持した可能性。公開ソースに外部通信処理は見当たらないが、実機インストール版の外部送信有無は未確認。既実施の検証を未実施として再提示しない。次は実機拡張の識別と該当版のソース確認。原因調査・修正後に限り必要な回帰確認を別工程とする。公開準備と需要検証は未完了。決定済みの対象読者・無料前提は再検討しない。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-    "evidence": "初版本文はPR #1086・#1088でmain反映済み。第2章の承認済み構成と本文・公式案内確認はPR #1102で完了。本文コミット74b995ef6c9720caf901cfc51027e553f69c7493に対するInteraction control guard #592、Main work progress gate #275、current-state-guard #1863、Current state views #1161はすべて成功。正本・生成ビュー同期後の最新head 0a4fcf3b41f45444c7f4827b7ccfd991cd737792に対する4 CIチェック（Interaction control guard #596、Main work progress gate #279、current-state-guard #1867、Current state views #1165）もすべて成功。PR #1102はopen・未マージ。2026-10-14 18:17 JSTごろに実地検証を実施し、実ファイル `markdown保存_20261014_1817.md` を確認（2026-10-14 09:39:32Zの記録）。日本語・見出し・箇条書き・Pythonコードブロック・GitHubリンク・会話内容・時刻は保持され、部分合格。欠陥としてチェックボックス `- [ ]` が `-` に変換され、`<WritingBlock id=\"58321\" variant=\"document\">...</WritingBlock>` が混入。原因は未特定。外部送信の有無は未確認。これは検証実施済み・結果あり（部分合格）であり、未実施に戻さない。",
-    "readiness": "ready",
-    "unblock_action": "none",
-    "prerequisites": []
+    "next_focus": "日常作業の優先順位・状態・次の行動はDropbox固定ボードだけで管理する。GitHub側は技術状態・検証証拠・履歴を保持し、日常作業キューを複製しない。"
   },
   "current_state_guards": {
     "script": "scripts/current_state_guard.py",
     "tests": "tests/test_current_state_guard.py",
     "workflow": ".github/workflows/current-state-guard.yml",
-    "purpose": "active/retiredの矛盾、抽象next_step、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入に加え、save-track以外の通常PRが状態・生成ビューだけを更新して本線作業を進めたことにするループをCIで停止する",
+    "purpose": "実行環境の矛盾、clone evidence欠落、生成ビュー不一致、非historicalなretired policy混入、Dropbox以外のキュー参照をCIで検出する。",
     "main_work_progress_guard": "scripts/main_work_progress_guard.py",
     "main_work_progress_workflow": ".github/workflows/main-pr-progress-gate.yml"
   },
   "resume_manifest": {
     "generator": "scripts/resume_manifest.py",
     "source": "docs/現在状態.json",
-    "purpose": "再開時にcanonical stateの鮮度と実行環境・現在地点・next_stepを一括確認するための生成manifest",
+    "purpose": "再開時にcanonical stateの鮮度、実行環境、現在地点、生成ビュー契約を確認するためのmanifest",
     "required_first_check": "scripts/resume_check.py",
-    "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、生成ビューより優先する。前回作業後のPR/merge/commitがwork_itemsとnext_stepへ反映済みか確認してから作業を開始する。"
-  },
-  "verification_contract": {
-    "status": "implemented",
-    "verification_required_statuses": [
-      "recorded_unverified",
-      "verified"
-    ],
-    "rule": "readiness=ready only when every prerequisite is independently verified; blocked permits only unblock_action/preflight; next_step.status is deprecated and omitted.",
-    "readiness_states": [
-      "ready",
-      "blocked"
-    ]
+    "startup_contract": "GitHubのdocs/現在状態.jsonを最初に直接読み、技術状態・証拠を確認する。日常作業の候補・状態・優先順位・次の行動はDropbox固定ボードから取得し、GitHubの旧キューデータや生成ビューへフォールバックしない。"
   },
   "external_response_gate": {
     "status": "clear",
@@ -448,16 +422,17 @@
         "cause": "PR #962のマージ後、回答はGitHubへの画像保存完了のみを報告し、WordPressへの適用・実表示確認の未完了状態をwork_itemsへ分離記録しなかった。後続のPR #964は直チャット保存と既存の現在状態の同期を行ったが、終了時の作業キュー再照合は含まれていなかった。加えて、PR #942のGSC sitemap.xml取得失敗調査がオープンのまま、現在状態のwork_itemsに独立した実行可能な作業として反映されていなかった。",
         "corrective_action": "work_itemsを実際の残作業へ同期し、終了時の照合漏れをverification_recordsへ記録。state-onlyのsave/currentize PRがmain-work progress gateで正しく許可されるようbranch分類の回帰テストを追加する。"
       },
-      "note": " 2026-10-09訂正：Bloggerは3記事ともインデックス登録成功を2026-10-08にユーザー確認済み。未確認として残すのはGitHub Pages・WordPressのみ。"
+      "note": " 2026-10-09訂正：Bloggerは3記事ともインデックス登録成功を2026-10-08にユーザー確認済み。未確認として残すのはGitHub Pages・WordPressのみ。",
+      "corrective_action": "当時の是正処置としてwork_itemsの同期漏れを調査・記録し、state-only PRの進捗ゲートを修正した。日常作業キューはその後Dropbox固定ボードへ一本化したため、GitHub work_itemsへの日常キュー同期は再導入しない。"
     }
   },
   "interaction_control": {
     "status": "implemented_preflight",
-    "scope": "next_step と対話上の進捗・完了主張",
+    "scope": "進捗・完了主張の証拠検査と同一状態ループのpreflight",
     "principle": "文書ルールだけでAIの自己抑制を期待せず、進捗主張の受理前に機械的preflightを通す",
     "guard_script": "scripts/interaction_guard.py",
     "blocked_output": {
-      "trigger": "next_step.readiness=blocked",
+      "trigger": "preflightが証拠不足・検証失敗・ループを検出",
       "action": "進捗・完了・検証済み等の主張を停止し、証拠取得・preflight・unblock_actionに限定",
       "exit_code": 2
     },
@@ -474,421 +449,6 @@
     },
     "limitation": "GitHub/リポジトリ側guardはChatGPTの生成出力そのものを直接遮断しない。対話実行層のpreflight呼び出しを強制するための機械契約として実装し、CIで回帰テストする。"
   },
-  "prose_status_consistency_rules": [
-    {
-      "work_item_id": "GITHUB-PAGES-PRODUCTION",
-      "step_id": "wp-icon",
-      "keywords": [
-        "サイトアイコン",
-        "実表示確認"
-      ],
-      "stale_markers": [
-        "未完了",
-        "未確認",
-        "未実施",
-        "残る作業"
-      ]
-    },
-    {
-      "work_item_id": "GSC-確認",
-      "step_id": "github-pages-sitemap-retrieval",
-      "expected_step_status": "waiting_external",
-      "keywords": [
-        "サイトマップ取得失敗"
-      ],
-      "stale_markers": [
-        "切り分け"
-      ]
-    }
-  ],
-  "work_items": [
-    {
-      "id": "GSC-確認",
-      "title": "GSCサイトマップ処理待ち（URL検査・表示確認は実施済み）",
-      "priority": 20,
-      "status": "in_progress",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "experience_log_to_blogger",
-      "target": "Google側のGSC sitemap.xml処理結果を待つ。GitHub Pagesの公開表示確認および既知URLの確認作業は実施済みのため再実行しない。Google側の処理結果が変化した場合だけ記録を更新する。GSCプロパティ登録・原因切り分け・同じURL検査を繰り返さない。WordPressの過去の確認記録は履歴であり、現在の本番公開先を意味しない。",
-      "evidence": "2026-10-10確認結果：sitemap.xml詳細は最終読み込み2026/10/09、検出ページ0・動画0、追加エラー詳細なしで「サイトマップを読み込めませんでした」。sitemap.xmlはブラウザーでHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能。sitemap.xml自身のURLライブテストはクロール許可=はい、取得=成功、インデックス許可=はいだが、GSCサイトマップ処理の成功を意味しない。URL検査：vaio-p-again-and-beyond.htmlはインデックス登録済み。github-ai-conversation.htmlは「クロール済み - インデックス未登録」、前回クロール2026/10/06 13:18:01、取得成功、クロール・インデックス許可あり、ユーザー指定・Google選択の正規URLは自身、参照元サイトマップなし。トップページは「URLがGoogleに認識されていません」、参照元サイトマップ・参照元ページなし。トップページのライブテストは2026/10/10 17:53:48、取得成功、クロール・インデックス許可あり、正規URLは自身。トップページのインデックス登録リクエストは「URLを優先クロールキューに追加しました」と受け付けられた。インデックス登録結果は未確認。GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認は2026-10-11に実施済み。これらを再確認しない。WordPress各URLの具体的な登録結果はこの正本に記録されていないため推定しない。Bloggerの3記事は登録成功確認済みのため再確認せず、GSC登録も再実行しない。 2026-10-11、たかより原因切り分けは実施済みでGoogle側の処理待ちとの確認。トップページは404になっていないとの訂正あり。 2026-10-11、たかより追加確認：GitHub Pagesトップページの404確認、WordPressトップページとBLOG-0001〜0003のインデックス状況確認を含む対象確認はすべて実施済み。これらの確認作業を再度の未完了タスクとして提示しない。今回の正本にWordPress各URLの具体的な登録結果が残っていないため、登録済み／未登録を推定して記載しない。既知のGitHub Pages URL検査結果は履歴として保持し、同じ検査を再実施しない。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-10-06",
-      "updated_at": "2026-10-11",
-      "prerequisites": [],
-      "execution_state": "waiting_external",
-      "progress": {
-        "current_step": "github-pages-sitemap-retrieval",
-        "steps": [
-          {
-            "id": "github-pages-registration",
-            "title": "GitHub PagesのGSC登録",
-            "status": "done",
-            "evidence": "たかよりGSC登録実施済みとの確認。"
-          },
-          {
-            "id": "wordpress-registration",
-            "title": "WordPressのGSC登録",
-            "status": "done",
-            "evidence": "たかよりGSC登録実施済みとの確認。"
-          },
-          {
-            "id": "github-pages-robots-txt",
-            "title": "GitHub Pagesのrobots.txt公開確認",
-            "status": "done",
-            "evidence": "PR #942の記録：Actions run 37604271713のBuild/Upload/Deploy成功。公開内容をたかが確認済み。PR #942自体は古い状態反映PRとして未整理。"
-          },
-          {
-            "id": "github-pages-sitemap-retrieval",
-            "title": "Google側のGSC sitemap.xml処理結果待ち",
-            "status": "waiting_external",
-            "evidence": "GSCサイトマップ詳細：最終読み込み2026/10/09、検出ページ0、検出動画0、追加エラー詳細なし、「サイトマップを読み込めませんでした」。2026-10-10のライブテストではsitemap.xmlのクロール許可=はい、ページ取得=成功、インデックス登録許可=はい。作業PCブラウザーでもHTTP 200 OK / Content-Type: application/xml、XML内4 URLすべて表示可能を確認済み。ただし、URLライブテストの取得成功はGSCサイトマップ処理の成功を証明しない。2026-10-11、たか確認：原因切り分けは実施済み。Google側の処理結果待ちであり、原因調査・サイトマップ詳細の再確認を繰り返さない。"
-          },
-          {
-            "id": "site-index-status-check",
-            "title": "GitHub Pages・WordPressのインデックス状況確認（確認作業完了）",
-            "status": "done",
-            "evidence": "2026-10-11、たかより確認作業すべて完了との明示。対象にはGitHub Pagesトップページが現在404にならないことの確認、およびWordPressトップページ・BLOG-0001〜0003のインデックス状況確認を含む。確認作業の実施は完了として扱い、再実施しない。正本にWordPress各URLの具体的な登録結果が残っていないため、実際の登録状態は推定せず未記録として区別する。GitHub Pagesの既知の過去結果（vaio-p-again-and-beyond.html登録済み、github-ai-conversation.htmlクロール済み・未登録、トップページは過去に未認識・優先クロール要求済み）は履歴として保持する。"
-          },
-          {
-            "id": "work-pc-http-headers",
-            "title": "作業PCでsitemap.xmlのHTTPステータスとContent-Typeを確認",
-            "status": "done",
-            "evidence": "2026-10-10、たかが作業PCで確認。https://takalenny-blip.github.io/ai-project/sitemap.xml はHTTP 200 OK、Content-Type: application/xml。XMLにはルートURLと3つのHTML URLの計4 URLが記載され、たかの確認で4 URLすべて表示可能。ブラウザ側のHTTP応答・MIME・URL表示は確認済み。"
-          }
-        ],
-        "updated_at": "2026-10-11"
-      },
-      "wait_reason": "Google側のGSC sitemap.xml処理結果待ち。対象URLの確認作業は実施済みで、再確認しない。"
-    },
-    {
-      "id": "BLOG-0004",
-      "title": "BLOG-0004を作成する",
-      "priority": 30,
-      "status": "queued",
-      "depends_on": [
-        "GSC-確認"
-      ],
-      "not_before": null,
-      "scope": "experience_log_to_Blogger",
-      "target": "GSC確認を終えた後、BLOG-0004の企画・一次資料確認・制作を行う。Bloggerは下書き・表示確認の作業場所として使用し、GitHub Pagesを本番公開先とする。WordPressを本番公開先として扱わない。",
-      "evidence": "BLOG-0004は未着手。次のブログ制作対象として現在状態へ追加。Bloggerは下書き・表示確認の作業場所であり、公開先ではない。GitHub Pagesが本番公開先。",
-      "readiness": "blocked",
-      "unblock_action": "GSC-確認の外部待機が解消し、GSC確認が完了したらBLOG-0004へ進む。",
-      "environment": "work_pc",
-      "created_at": "2026-10-07",
-      "updated_at": "2026-10-08",
-      "prerequisites": [
-        {
-          "id": "GSC-確認",
-          "status": "pending",
-          "reason": "Google側の登録処理待ち"
-        }
-      ],
-      "execution_state": "actionable",
-      "progress": {
-        "current_step": "gsc-confirmation",
-        "steps": [
-          {
-            "id": "gsc-confirmation",
-            "title": "GSC確認完了を待つ",
-            "status": "pending",
-            "evidence": "GSC-確認がGoogle側処理待ち"
-          },
-          {
-            "id": "primary-source-check",
-            "title": "一次資料確認と企画",
-            "status": "pending"
-          },
-          {
-            "id": "production",
-            "title": "BLOG-0004制作",
-            "status": "pending"
-          },
-          {
-            "id": "publication",
-            "title": "公開と実表示確認",
-            "status": "pending"
-          }
-        ],
-        "updated_at": "2026-10-08"
-      },
-      "blocked_reason": "GSC-確認がGoogle側の登録処理待ちのため、BLOG-0004はまだ開始できない。"
-    },
-    {
-      "id": "GITHUB-PAGES-PRODUCTION",
-      "title": "GitHub Pagesを本番公開先として継続運用",
-      "priority": 23,
-      "status": "in_progress",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "experience-log_to_GitHub_Pages",
-      "target": "GitHub Pagesを本番公開先として継続運用する。robots.txt・sitemap.xml・トップページの公開表示は2026-10-12に確認済み。確認済み工程を繰り返さず、新たな不具合・変更要求またはGoogle側のGSC処理結果の変化があった場合のみ対応する。WordPressは本番公開先として扱わない。",
-      "evidence": "2026-10-12、たかが作業PCのブラウザーでGitHub Pagesのrobots.txt、sitemap.xml、トップページの正常表示を確認済み。GSC sitemap.xml処理結果はGoogle側の外部待ち。以前の状態正本がWordPressを本番公開先としていたのは誤りであり、2026-10-13にたかが訂正。今後はGitHub Pagesを本番公開先とし、WordPress本番運用を次の一手として提示しない。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-10-07",
-      "updated_at": "2026-10-13",
-      "prerequisites": [],
-      "execution_state": "actionable",
-      "progress": {
-        "current_step": "ongoing-publication",
-        "steps": [
-          {
-            "id": "free-account",
-            "title": "無料アカウント作成",
-            "status": "done"
-          },
-          {
-            "id": "subdomain",
-            "title": "無料サブドメイン取得",
-            "status": "done"
-          },
-          {
-            "id": "admin-login",
-            "title": "管理画面ログイン",
-            "status": "done"
-          },
-          {
-            "id": "wordpress-install",
-            "title": "WordPress導入",
-            "status": "done"
-          },
-          {
-            "id": "script-installer-recheck",
-            "title": "Script Installer再確認",
-            "status": "done"
-          },
-          {
-            "id": "https",
-            "title": "HTTPS確認",
-            "status": "done"
-          },
-          {
-            "id": "sitemap",
-            "title": "サイトマップ確認",
-            "status": "done"
-          },
-          {
-            "id": "blog2-publication",
-            "title": "BLOG-0002をWordPressで公開",
-            "status": "done",
-            "evidence": "たかによる公開確認"
-          },
-          {
-            "id": "blog3-publication",
-            "title": "BLOG-0003をWordPressで公開",
-            "status": "done",
-            "evidence": "たかによる公開確認"
-          },
-          {
-            "id": "blog1-publication",
-            "title": "BLOG-0001をWordPressで公開",
-            "status": "done",
-            "evidence": "2026-10-11、たかよりWordPressで公開済みとの確認。"
-          },
-          {
-            "id": "wp-icon-asset",
-            "title": "サイトアイコン画像を作成してGitHubへ保存",
-            "status": "done",
-            "evidence": "PR #962マージ済み。docs/assets/site-icon.pngとして64×64px PNGを保存。"
-          },
-          {
-            "id": "wp-icon",
-            "title": "WordPressへサイトアイコン画像を適用して実表示を確認する",
-            "status": "done",
-            "evidence": "2026-10-11、たか確認：WordPressの設定画面とブラウザーのタブ／サイト表示でサイトアイコンを確認。"
-          },
-          {
-            "id": "wp-design-template",
-            "title": "WordPressのデザインテンプレートを整える",
-            "status": "done",
-            "evidence": "2026-10-09、たかの確認により完了として記録。Cocoonスキン「モノクロ」を採用。赤字・赤字＋黄色背景は維持し、引用の大きな「”」を控えめにする対応、吹き出しの見た目の検討、コマンド・スクリプトの見た目の検討を完了したとのユーザー報告。バドによる公開ページの独立した実表示確認は行っていない。"
-          },
-          {
-            "id": "blog1-image",
-            "title": "BLOG-0001の画像問題を解消",
-            "status": "done",
-            "evidence": "PR #1000で3枚の画像をGitHubへ保存、PR #1001でHTMLの画像参照6か所をGitHub raw URLへ変更。両PRマージ済み。2026-10-11、たかがWordPress下書きへHTMLを貼り付け、画像3枚が表示できることを確認。"
-          },
-          {
-            "id": "operation-check",
-            "title": "WordPressの表示・更新・運用確認",
-            "status": "done",
-            "evidence": "2026-10-11、たか確認：本文・画像、引用・吹き出し・コマンド表示、モバイル表示は問題なし。更新・保存確認は既に複数回実施済みのため重複確認不要。"
-          },
-          {
-            "id": "wordpress-production-judgment",
-            "title": "旧方針：WordPress本番化判断（訂正済み）",
-            "status": "done",
-            "evidence": "過去にWordPressを本番公開先と判断した記録。2026-10-13、たかの明示によりこの判断は誤りとして撤回済み。履歴として完了扱いで保持し、現在方針の根拠にしない。現在の本番公開先はGitHub Pages。"
-          },
-          {
-            "id": "ongoing-publication",
-            "title": "GitHub Pagesを本番公開先として継続運用",
-            "status": "in_progress",
-            "evidence": "本番公開先はGitHub Pages。公開表示確認済みのrobots.txt・sitemap.xml・トップページを繰り返し確認しない。Google側のGSC処理結果が変化した場合または新たな不具合・変更要求が発生した場合のみ対応する。WordPressを本番公開先として扱わない。"
-          }
-        ],
-        "updated_at": "2026-10-13"
-      }
-    },
-    {
-      "id": "AI-MANUAL-PRODUCTION",
-      "title": "AI作業のセッティングマニュアル本文作成・実地検証",
-      "priority": 15,
-      "status": "in_progress",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "AI_manual_creation_with_note_demand_validation",
-      "target": "初版本文・最終修正はmain反映済み。第2章の承認済み構成に沿った本文更新と公式案内の確認は2026-10-15に完了。PR #1102は未マージ。Markdown保存の実地検証は2026-10-14に実施済みで部分合格。公開ソースの予備調査ではチェックボックス欠落の有力仮説（独自DOMのボタン要素が出力時に除外される）を得たが、実機の拡張機能名・版と当日のDOMは未確認。WritingBlockタグ混入はソース上の直接生成箇所を確認できず、表示本文に含まれた文字列を保持した可能性。公開ソースに外部通信処理は見当たらないが、実機インストール版の外部送信有無は未確認。既実施の検証を未実施として再提示しない。次は実機拡張の識別と該当版のソース確認。原因調査・修正後に限り必要な回帰確認を別工程とする。公開準備と需要検証は未完了。決定済みの対象読者・無料前提は再検討しない。販売、価格、正式仕様、開始時期は未決定のまま管理する。",
-      "evidence": "初版本文はPR #1086・#1088でmain反映済み。第2章の承認済み構成と本文・公式案内確認はPR #1102で完了。本文コミット74b995ef6c9720caf901cfc51027e553f69c7493に対するInteraction control guard #592、Main work progress gate #275、current-state-guard #1863、Current state views #1161はすべて成功。正本・生成ビュー同期後の最新head 0a4fcf3b41f45444c7f4827b7ccfd991cd737792に対する4 CIチェック（Interaction control guard #596、Main work progress gate #279、current-state-guard #1867、Current state views #1165）もすべて成功。PR #1102はopen・未マージ。2026-10-14 18:17 JSTごろに実地検証を実施し、実ファイル `markdown保存_20261014_1817.md` を確認（2026-10-14 09:39:32Zの記録）。日本語・見出し・箇条書き・Pythonコードブロック・GitHubリンク・会話内容・時刻は保持され、部分合格。欠陥としてチェックボックス `- [ ]` が `-` に変換され、`<WritingBlock id=\"58321\" variant=\"document\">...</WritingBlock>` が混入。原因は未特定。外部送信の有無は未確認。これは検証実施済み・結果あり（部分合格）であり、未実施に戻さない。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-10-13",
-      "updated_at": "2026-10-15",
-      "prerequisites": [],
-      "execution_state": "actionable",
-      "progress": {
-        "current_step": "validation-findings-follow-up",
-        "steps": [
-          {
-            "id": "chapter-design",
-            "title": "セッティングマニュアルの章別設計",
-            "status": "done",
-            "evidence": "PR #1048 merged at 5edc8e3dae96537f7d9eddf01fb7cfeb242bac4b。章ごとの手順・成果物・確認テストを具体化済み。本文・実地検証・公開は未完了。"
-          },
-          {
-            "id": "reader-and-scope",
-            "title": "決定済み対象読者・無料前提を確認する",
-            "status": "done",
-            "evidence": "ユーザーが対象読者と無料前提を明示。docs/企画/AI作業セッティングマニュアル_決定済み対象読者.md を正本としてPR #1051で固定し、rules/運用ルール.md に巻き戻し防止を規定。対象読者を再度絞る工程は終了。"
-          },
-          {
-            "id": "production-format-and-style",
-            "title": "制作形式・文体の決定",
-            "status": "done",
-            "evidence": "たかが2026-10-13に制作形式・文体仕様を承認。正本 docs/企画/AI作業セッティングマニュアル_制作形式・文体仕様.md にMarkdown原稿、GitHub Pages無料公開、文章・手順・コマンド中心、初版のWord・図・イラスト原則なしを記録。"
-          },
-          {
-            "id": "minimum-scope-and-problem",
-            "title": "既決方針を前提に先行マニュアルの最小提供範囲を定める",
-            "status": "done",
-            "evidence": "PR #1053（merge commit 03d25713332aa87127c1985538c7cd33ce2710c3）で初版の目的・最小提供範囲・完成条件を承認・確定。本文完成、実地検証、公開、需要検証は別工程として未完了。"
-          },
-          {
-            "id": "body-drafting",
-            "title": "セッティングマニュアル本文を作成する",
-            "status": "done",
-            "evidence": "初版本文はPR #1086でmainへ反映済み。最終修正PR #1088は2026-10-14にmerge commit e8403498d1161c5af9fe13959a343a3da13ebc67でmainへ反映済み。merge commitのcurrent-state-guard run 38519296625とPublish GitHub Pages run 38519296622はいずれも成功。本文作成工程は完了。作業PCでの実地検証・公開後の実表示確認は別工程であり未完了。"
-          },
-          {
-            "id": "chapter-2-structure-and-shared-rule",
-            "title": "承認済み構成に沿って第2章本文と共通ルールを更新する",
-            "status": "done",
-            "evidence": "2026-10-15：承認済み構成どおりの本文をPR #1102で更新。公式案内を確認し、ChatGPT無料版・データコントロール、Claudeの料金・プライバシー、Geminiのプライバシー・アクティビティ・ログイン案内を反映。見出し階層と2.2.1.6の配置を読み戻し確認。PR head 74b995ef6c9720caf901cfc51027e553f69c7493でInteraction control guard #592、Main work progress gate #275、current-state-guard #1863、Current state views #1161がすべて成功。PRは未マージ。実サービス画面での登録／ログイン／初回会話の操作確認は未完了。Markdown保存の実地検証は別工程として実施済み・部分合格。"
-          },
-          {
-            "id": "practical-validation",
-            "title": "手順を実環境で通して効果・限界を検証する",
-            "status": "done",
-            "evidence": "2026-10-14 18:17 JSTごろに実地検証を実施し、実ファイル `markdown保存_20261014_1817.md` を確認（2026-10-14 09:39:32Zの記録）。日本語・見出し・箇条書き・Pythonコードブロック・GitHubリンク・会話内容・時刻は保持され、部分合格。欠陥としてチェックボックス `- [ ]` が `-` に変換され、`<WritingBlock id=\"58321\" variant=\"document\">...</WritingBlock>` が混入。原因は未特定。外部送信の有無は未確認。これは検証実施済み・結果あり（部分合格）であり、未実施に戻さない。 実施作業としては完了（判定は部分合格）であり、手順全体の合格や拡張機能の安全性を意味しない。"
-          },
-          {
-            "id": "validation-findings-follow-up",
-            "title": "実地検証で見つかった保存不具合と外部送信の未確認を切り分ける",
-            "status": "in_progress",
-            "evidence": "2026-10-15に過去記録から実地検証結果を回復。保存ファイルは今回のDropbox検索では再発見できず。公開ソース調査（候補：otaliptus/ChatGPT Exporter）では、DOMをMarkdownへ変換する実装に、通常のボタン要素を出力から除外する処理と、`input[type=checkbox]` だけを `[ ]`/`[x]` に変換する処理がある。ChatGPTのチェックリストがボタン等の独自DOMとして描画されていた場合、チェックボックス記号が落ちて `-` だけになる可能性が高い。ただし、当日のDOMと実際にインストールされた拡張機能名・版は未確認のため、原因確定ではなくソース上の有力仮説。`WritingBlock` という文字列は公開ソースに見当たらず、汎用変換処理はテキストノードをそのまま保持するため、タグが画面上の本文に文字として含まれていた可能性がある。公開ソースのcontent.js/popup.jsに外部通信処理は見当たらず、manifestのホスト権限もChatGPTドメインに限定。公開ソースのプライバシー文書はローカル処理・会話内容をサーバー送信しないと説明している。ただし公開ストア記載版は1.1.1、GitHub mainのmanifestは1.2.0で版が異なるため、実機インストール版の通信を確認したことにはならない。外部送信は引き続き未確認。 次に必要なのは実機に入っている拡張機能の名前・版を記録と照合し、その版のソース／権限／通信先を確認すること。初回の保存テストは繰り返さない。"
-          },
-          {
-            "id": "publication-preparation",
-            "title": "GitHub Pages向け無料記事・サンプルと公開準備を整える",
-            "status": "pending"
-          },
-          {
-            "id": "note-demand-validation",
-            "title": "noteを候補に需要・購入意向を検証する",
-            "status": "pending"
-          },
-          {
-            "id": "writing-rules-and-ch1-ch2",
-            "title": "執筆・編集ルールを固定し、第1・第2章の重複を整理する",
-            "status": "done",
-            "evidence": "PR #1077 merged (merge commit b3adadbb2d4bfebfe87dcf2bfe738bcb8d8aa6db)。執筆・編集ルールを追加し、第1・第2章を再構成。merge commit head SHA 6f4ed6626aad653319de7e9b41b3cbc7442880e5に対する Main work progress gate run #212 と current-state-guard run #1777 は成功。"
-          },
-          {
-            "id": "validation-plan",
-            "title": "本文を一巡する実地検証計画を用意する",
-            "status": "done",
-            "evidence": "PR #1076 merged (merge commit dac0858d3d3c30e86cc6469897e2c0a8a3ee7b7a)。計画書は作成済みだが、実地検証の実施・合格は未完了。"
-          },
-          {
-            "id": "tool-selection-and-official-verification",
-            "title": "具体的なツール候補・公式情報・無料条件・権限を確認し本文へ反映する",
-            "status": "done",
-            "evidence": "PR #1078（merge commit dffa49b2d5290e240be535624988a7651380ca3e）とPR #1079（merge commit 011a9a38e7e433f65120220cef992bbf0c448252）で候補比較・選定理由・公式ストアの無料範囲・権限・プライバシー開示を本文へ反映。mainのguard、interaction-guard、render-and-check、sync-generated-views、publishは成功。候補の公開情報調査は完了。実地インストールは未実施。Markdown保存実地検証は2026-10-14に実施済み（部分合格）。"
-          }
-        ],
-        "updated_at": "2026-10-15"
-      }
-    },
-    {
-      "id": "PAT-EXPIRY",
-      "title": "保存・承認フローのPAT期限切れ対策",
-      "priority": 16,
-      "status": "in_progress",
-      "depends_on": [],
-      "not_before": null,
-      "scope": "github_auth_reliability",
-      "target": "保存・承認フローで固定PATの期限切れにより停止する再発を防ぐ。認証依存箇所と権限を棚卸しし、GitHub Appの短命インストールトークンへの移行可能性、秘密鍵管理、ロールバックを設計する。移行完了まではPAT期限前通知も検討する。",
-      "evidence": "GitHub Issue #1059。PAT依存箇所の棚卸し完了（PR #1061 merged、merge commit 2b6cc7a31dadf9c57448adf5c702e8e86d5b3d26、マージ後CI成功）。SAVE_PR_TOKENはsave-request-intake.ymlとcanonical-state-update.ymlのPR作成に、SAVE_APPROVE_TAKA2_TOKENはauto-approve-save-pr.ymlのtaka2-devとしての承認とマージに使用。方式選択とGitHub App登録／シークレット設定は未完了。",
-      "readiness": "ready",
-      "unblock_action": "none",
-      "environment": "work_pc",
-      "created_at": "2026-10-13",
-      "updated_at": "2026-10-13",
-      "prerequisites": [],
-      "execution_state": "waiting_external",
-      "progress": {
-        "current_step": "github-app-design",
-        "steps": [
-          {
-            "id": "inventory",
-            "title": "PAT依存箇所・必要権限・API操作を棚卸しする",
-            "status": "done",
-            "evidence": "2026-10-13にmainの16 workflowファイルを棚卸し。auto-approve-save-pr.ymlではSAVE_APPROVE_TAKA2_TOKENをgh pr review --approve（taka2-devとして）とgh pr mergeに使用。save-request-intake.ymlとcanonical-state-update.ymlではSAVE_PR_TOKENをPR作成に使用。PR情報・チェック取得はgithub.token、current-state-views等はGITHUB_TOKENを使用。固定PATの用途は承認・マージとPR作成に分かれる。承認用トークンはユーザー taka2-dev のレビュー身份を担うため、GitHub Appへ単純置換できるかはレビュー要件の確認が必要。秘密の値や有効期限の実値は取得していない。"
-          },
-          {
-            "id": "github-app-design",
-            "title": "GitHub App移行方式と秘密鍵管理を設計する",
-            "status": "waiting_external",
-            "evidence": "workflow棚卸しと方式比較を実施。SAVE_PR_TOKENはPR作成用途なのでGitHub Appの短命インストールトークンへ移行する候補。SAVE_APPROVE_TAKA2_TOKENはtaka2-dev本人として承認する用途で、App botへの変更はレビュー身份を変える。安全な次の工程を決めるため、承認身份を維持するか変更するかのユーザー判断が必要。GitHub App登録・インストールとActions変数／シークレット設定もユーザー操作が必要。GitHub公式Docs: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app"
-          },
-          {
-            "id": "migration-pr",
-            "title": "移行PRを作成する",
-            "status": "pending"
-          },
-          {
-            "id": "end-to-end-verification",
-            "title": "保存PRからマージ後CI・正本読み戻しまで検証する",
-            "status": "pending"
-          },
-          {
-            "id": "temporary-expiry-notice",
-            "title": "移行完了までのPAT期限前通知を検討する",
-            "status": "pending"
-          }
-        ],
-        "updated_at": "2026-10-13"
-      },
-      "wait_reason": "承認identityをtaka2-devのまま維持するか、GitHub App botへ変更するかのユーザー判断待ち。GitHub Appの登録・インストールとActions変数／シークレット設定もユーザー操作が必要。"
-    }
-  ],
   "next_stage_boundary": "GitHub Pages SEOの生成コード整備はPR #1031〜#1033でマージ済み。残作業は公開反映・実表示確認。Google側のGSC sitemap.xml処理結果待ちは別の外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを再実施しない。WordPress本番設定は変更しない。",
   "next_focus": "GitHub Pagesを本番公開先として扱う。公開表示確認は2026-10-12に完了済み。robots.txt・sitemap.xml・トップページの再確認やGSC原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ記録を更新する。GSC-確認は外部待ち、BLOG-0004はその解消待ち。現在の作業方針はGitHub Pages本番公開であり、WordPress本番運用は行わない。",
   "work_queue_source": "dropbox_board"
