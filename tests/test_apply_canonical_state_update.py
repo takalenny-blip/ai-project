@@ -29,20 +29,18 @@ class CanonicalStateUpdateTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "patch must be an object"):
             validate_technical_patch([], {})
 
-    def test_save_pipeline_preserves_empty_queue_contract(self):
-        state = {
-            "work_queue_source": "dropbox_board",
-            "work_items": [],
-        }
+    def test_save_pipeline_preserves_retired_queue_contract(self):
+        state = {"work_queue_source": "dropbox_board"}
         validate_queue_retirement(state)
 
     def test_save_pipeline_rejects_reintroduced_legacy_queue(self):
-        state = {
-            "work_queue_source": "dropbox_board",
-            "work_items": [{"id": "old"}],
-        }
-        with self.assertRaisesRegex(SystemExit, "work_items must be empty"):
-            validate_queue_retirement(state)
+        for legacy_items in ([], [{"id": "old"}]):
+            state = {
+                "work_queue_source": "dropbox_board",
+                "work_items": legacy_items,
+            }
+            with self.assertRaisesRegex(SystemExit, "legacy GitHub work_items field is retired"):
+                validate_queue_retirement(state)
 
 
 if __name__ == "__main__":
