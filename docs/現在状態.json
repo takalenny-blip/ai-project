@@ -451,6 +451,5 @@
   },
   "next_stage_boundary": "GitHub Pages SEOの生成コード整備はPR #1031〜#1033でマージ済み。残作業は公開反映・実表示確認。Google側のGSC sitemap.xml処理結果待ちは別の外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを再実施しない。WordPress本番設定は変更しない。",
   "next_focus": "GitHub Pagesを本番公開先として扱う。公開表示確認は2026-10-12に完了済み。robots.txt・sitemap.xml・トップページの再確認やGSC原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ記録を更新する。GSC-確認は外部待ち、BLOG-0004はその解消待ち。現在の作業方針はGitHub Pages本番公開であり、WordPress本番運用は行わない。",
-  "work_queue_source": "dropbox_board",
-  "work_items": []
+  "work_queue_source": "dropbox_board"
 }
