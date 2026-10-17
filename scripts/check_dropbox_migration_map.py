@@ -101,6 +101,28 @@ def validate_roadmap_queue_guidance(text: str) -> list[str]:
             errors.append(f"obsolete roadmap queue instruction remains: {statement}")
     return errors
 
+def validate_handoff_readme(text: str) -> list[str]:
+    """Keep session handoff guidance from restoring the retired BUD-first queue workflow."""
+    errors: list[str] = []
+    required = (
+        "1. `docs/現在状態.json` — 技術状態・履歴・証拠を確認する。",
+        "2. Dropbox `/ChatGPT/Dropbox作業管理統合ボード.xlsx` — 日常作業の候補・状態・優先度・次のアクションを確認する。",
+        "これらから作業候補を選ばない。",
+        "日常作業の未着手項目・優先順位・次のアクションはDropbox固定ボードで管理",
+    )
+    for statement in required:
+        if statement not in text:
+            errors.append(f"handoff README missing current queue boundary: {statement}")
+    obsolete_instructions = (
+        "1. `BUD.md`",
+        "docs/00_CURRENT_STATE.md",
+        "必ず `docs/引き継ぎ/現在の引き継ぎ.md` を更新し",
+    )
+    for statement in obsolete_instructions:
+        if statement in text:
+            errors.append(f"obsolete handoff queue instruction remains: {statement}")
+    return errors
+
 def validate_map(text: str) -> list[str]:
     errors: list[str] = []
     for path in REQUIRED_PATHS:
@@ -145,6 +167,13 @@ def main() -> int:
         return 1
     errors = validate_map(text)
     errors.extend(validate_retired_queue_files())
+    handoff_readme_path = ROOT / "docs" / "引き継ぎ" / "README.md"
+    try:
+        handoff_readme_text = handoff_readme_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"cannot read handoff README: {exc}")
+    else:
+        errors.extend(validate_handoff_readme(handoff_readme_text))
     roadmap_path = ROOT / "docs" / "全体進行設計図.md"
     try:
         roadmap_text = roadmap_path.read_text(encoding="utf-8")
