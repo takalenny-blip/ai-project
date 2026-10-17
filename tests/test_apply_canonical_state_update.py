@@ -16,9 +16,11 @@ class CanonicalStateUpdateTests(unittest.TestCase):
         self.assertEqual(target, {"a": {"b": 3, "keep": 2}, "items": [4]})
 
     def test_technical_patch_rejects_retired_queue_data(self):
-        with self.assertRaisesRegex(SystemExit, "work_items updates are retired"):
+        with self.assertRaisesRegex(SystemExit, "work_items/next_step updates are retired"):
             validate_technical_patch({"work_items": [{"id": "old"}]}, {})
-        with self.assertRaisesRegex(SystemExit, "work_items updates are retired"):
+        with self.assertRaisesRegex(SystemExit, "work_items/next_step updates are retired"):
+            validate_technical_patch({"next_step": {"target": "old queue"}}, {})
+        with self.assertRaisesRegex(SystemExit, "work_items/next_step updates are retired"):
             validate_technical_patch({"current_position": {"summary": "x"}}, {"work_item_updates": [{"id": "old"}]})
 
     def test_technical_patch_requires_nonempty_object(self):
