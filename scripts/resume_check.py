@@ -68,6 +68,8 @@ def main():
     queue_source = state.get("work_queue_source")
     if queue_source != "dropbox_board":
         return fail("work_queue_source must be dropbox_board; GitHub queue fallback is disabled")
+    if state.get("work_items") != []:
+        return fail("legacy GitHub work_items must be empty; Dropbox is the only daily queue")
     required = REQUIRED_BASE
     missing = [k for k in required if k not in state]
     if missing:
