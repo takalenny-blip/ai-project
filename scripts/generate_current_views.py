@@ -24,19 +24,14 @@ def render(state: dict) -> tuple[str, str]:
     migration = state["migration"]
     env = state["execution_environment"]
     current = state["current_position"]
-    nxt = state.get("next_step")
     queue_source = state.get("work_queue_source")
     if queue_source != "dropbox_board":
         raise ValueError(f"unsupported work_queue_source: {queue_source!r}; Dropbox board is the only daily queue")
     queue_section = (
         "## 作業キュー\n\n"
         "- 正本：Dropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx\n"
-        "- GitHubの work_items / next_step は日常作業キューとして使用しない。\n"
+        "- GitHubは技術状態・履歴・検証証拠を保持し、日常作業の状態を複製しない。\n"
         "- ボードを読み取れない場合は停止し、古いGitHub項目へフォールバックしない。"
-    )
-    next_step_section = (
-        "## 次の一手（作業キューではない技術状態）\n\n"
-        "- 日常作業の次の一手はDropboxボードから取得する。"
     )
 
     header = f"""更新日：{state["updated"]}
@@ -59,7 +54,6 @@ def render(state: dict) -> tuple[str, str]:
 
 {queue_section}
 
-{next_step_section}
 """.rstrip("\n")
 
     bud = f"""# BUD — バドのための最上位ダッシュボード
