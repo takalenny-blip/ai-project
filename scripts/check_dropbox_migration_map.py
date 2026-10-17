@@ -149,7 +149,7 @@ def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, 
     """Ensure supporting rule indexes and guards do not restore BUD as the task queue."""
     errors: list[str] = []
     requirements = (
-        ("rules README", rules_readme, "日常作業キュー・優先度・状態・次のアクションの唯一の正本はDropbox固定ボード"),
+        ("rules README", rules_readme, "日常作業キュー・優先度・状態・次のアクションの唯一の正本"),
         ("currentization guard", currentization_guard, "技術状態・履歴・証拠の正本は `docs/現在状態.json`"),
         ("currentization guard", currentization_guard, "日常作業キューの変更はDropbox固定ボードへ反映"),
         ("resume/search guard", resume_guard, "BUD・引き継ぎ・過去ログから作業候補を補完しない"),
