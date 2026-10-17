@@ -139,7 +139,14 @@ def main() -> int:
             raise SystemExit("state patch must be a JSON object")
         merge_patch(state, patch)
     if embedded_patch is not None:
-        merge_patch(state, embedded_patch)
+        # Legacy save-queue payloads are historical intake records, not an authority
+        # to mutate current canonical state. Only an explicit --state-patch-file may
+        # request a canonical-state change.
+        print(
+            "warning: embedded legacy state patch was not applied; "
+            "use --state-patch-file for an explicitly authorized state update",
+            file=sys.stderr,
+        )
 
     validate_queue_retirement(state)
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
