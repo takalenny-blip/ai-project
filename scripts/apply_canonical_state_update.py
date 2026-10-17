@@ -9,12 +9,28 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from save_and_currentize import merge_patch, validate_queue_retirement, render_views, STATE_PATH, BUD_PATH, HANDOVER_PATH
 
 
+RETIRED_QUEUE_KEYS = {"work_items", "next_step", "work_item_updates"}
+
+
+def contains_retired_queue_key(value: object) -> bool:
+    """Reject retired queue fields anywhere in an incoming update payload."""
+    if isinstance(value, dict):
+        return any(
+            key in RETIRED_QUEUE_KEYS
+            or contains_retired_queue_key(child)
+            for key, child in value.items()
+        )
+    if isinstance(value, list):
+        return any(contains_retired_queue_key(item) for item in value)
+    return False
+
+
 def validate_technical_patch(patch: object, request: dict) -> dict:
     if not isinstance(patch, dict):
         raise SystemExit("patch must be an object")
     if not patch:
         raise SystemExit("provide a non-empty technical-state patch")
-    if "work_items" in patch or "next_step" in patch or "work_item_updates" in request:
+    if contains_retired_queue_key(patch) or contains_retired_queue_key(request):
         raise SystemExit("GitHub work_items/next_step updates are retired; update the Dropbox board for daily queue changes")
     return patch
 
