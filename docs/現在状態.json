@@ -9,7 +9,7 @@
     "status": "structurally_complete",
     "manual_duplicate_management_allowed": false,
     "generation_flow": "GitHub JSONは技術状態・履歴・証拠を保持する。日常作業キューはDropbox固定ボードから取得し、GitHubのwork_items/next_stepを日常作業キューとして使用しない。",
-    "work_queue": "日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。GitHubの旧 work_items データは技術上の事実・証拠を必要な正本へ移管した後に削除し、キュー候補・次の作業選定・フォールバックには使用しない。Dropboxを読めない場合は停止して利用不可を明示する。"
+    "work_queue": "日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。旧GitHub work_itemsデータは空にリセット済み。next_stepは廃止状態を示す技術メタデータのみで、キュー候補・次の作業選定・フォールバックには使用しない。Dropboxを読めない場合は停止して利用不可を明示する。"
   },
   "direct_chat": {
     "latest_saved": "2026-10-17T09-07-03.144000+0900",
@@ -501,5 +501,6 @@
   ],
   "next_stage_boundary": "GitHub Pages SEOの生成コード整備はPR #1031〜#1033でマージ済み。残作業は公開反映・実表示確認。Google側のGSC sitemap.xml処理結果待ちは別の外部待機として維持し、既に実施済みのURL検査・サイトマップ原因切り分けを再実施しない。WordPress本番設定は変更しない。",
   "next_focus": "GitHub Pagesを本番公開先として扱う。公開表示確認は2026-10-12に完了済み。robots.txt・sitemap.xml・トップページの再確認やGSC原因切り分けは行わず、Google側のGSC sitemap.xml処理結果が変化した場合だけ記録を更新する。GSC-確認は外部待ち、BLOG-0004はその解消待ち。現在の作業方針はGitHub Pages本番公開であり、WordPress本番運用は行わない。",
-  "work_queue_source": "dropbox_board"
+  "work_queue_source": "dropbox_board",
+  "work_items": []
 }
