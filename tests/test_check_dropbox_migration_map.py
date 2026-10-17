@@ -119,7 +119,9 @@ Dropbox固定ボードで確認する"""
 日常作業キューの唯一の正本はDropbox固定ボード"""
         note_design = """日常作業キュー・候補・優先度・状態・次のアクションはDropbox固定ボード
 旧 `work_items` / `next_step`、BUD、引き継ぎ、会話履歴から復元しない"""
-        self.assertEqual(validate_supporting_rule_docs(rules, currentization, resume, bud_manual, note_design), [])
+        migration_design = """本書は現在の作業キューや実行手順ではなく
+ここに列挙されたPhase・タスクを現在の指示としてそのまま実行しない"""
+        self.assertEqual(validate_supporting_rule_docs(rules, currentization, resume, bud_manual, note_design, migration_design), [])
 
     def test_legacy_bud_queue_rule_is_rejected(self):
         rules = """日常作業キュー・優先度・状態・次のアクションの唯一の正本
@@ -132,7 +134,9 @@ Dropbox固定ボードで確認する"""
 日常作業キューの唯一の正本はDropbox固定ボード"""
         note_design = """日常作業キュー・候補・優先度・状態・次のアクションはDropbox固定ボード
 旧 `work_items` / `next_step`、BUD、引き継ぎ、会話履歴から復元しない"""
-        errors = validate_supporting_rule_docs(rules, currentization, resume, bud_manual, note_design)
+        migration_design = """本書は現在の作業キューや実行手順ではなく
+ここに列挙されたPhase・タスクを現在の指示としてそのまま実行しない"""
+        errors = validate_supporting_rule_docs(rules, currentization, resume, bud_manual, note_design, migration_design)
         self.assertTrue(any("retains obsolete queue instruction" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
