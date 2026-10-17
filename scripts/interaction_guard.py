@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import zipfile
 from pathlib import Path
 
 BLOCKED_PROGRESS_PATTERNS = (
@@ -32,6 +33,35 @@ CLAIM_PATTERNS = BLOCKED_PROGRESS_PATTERNS + (
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def state_fingerprint(state: dict, board_path: Path) -> str:
+    """Fingerprint the actual Dropbox board, never retired GitHub queue fields."""
+    if state.get("work_queue_source") != "dropbox_board":
+        raise ValueError("work_queue_source must be dropbox_board")
+    if state.get("work_items") != []:
+        raise ValueError("legacy GitHub work_items must be empty")
+    if "next_step" in state:
+        raise ValueError("legacy next_step field is retired")
+    if not board_path.is_file():
+        raise ValueError("Dropbox work board is missing or unavailable: " + str(board_path))
+    try:
+        with zipfile.ZipFile(board_path) as workbook:
+            if workbook.testzip() is not None:
+                raise ValueError("Dropbox work board contains a corrupt XLSX member")
+            required = {"[Content_Types].xml", "xl/workbook.xml"}
+            missing = required.difference(workbook.namelist())
+            if missing:
+                raise ValueError("Dropbox work board is not a valid XLSX workbook")
+    except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
+        raise ValueError("Dropbox work board is unreadable: " + str(exc)) from exc
+    payload = {
+        "work_queue_source": "dropbox_board",
+        "execution_environment": state.get("execution_environment", {}),
+        "dropbox_board_sha256": hashlib.sha256(board_path.read_bytes()).hexdigest(),
+    }
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def has_progress_claim(text: str) -> bool:
