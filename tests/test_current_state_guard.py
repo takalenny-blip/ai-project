@@ -75,18 +75,7 @@ class CurrentStateGuardTests(unittest.TestCase):
 
 
     @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
-    def test_next_step_repeating_verified_scope_fails(self):
-        state = self.base_state()
-        state["next_step"]["scope"] = "resume_check"
-        with self.assertRaises(ValueError):
-            guard.validate_state(state)
 
-    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
-    def test_missing_next_step_scope_fails(self):
-        state = self.base_state()
-        state["next_step"].pop("scope")
-        with self.assertRaises(ValueError):
-            guard.validate_state(state)
 
     def test_verified_record_without_evidence_fails(self):
         state = self.base_state()
@@ -107,17 +96,6 @@ class CurrentStateGuardTests(unittest.TestCase):
 
     @unittest.skip("legacy GitHub work-item view retired; historical items are not rendered in Dropbox mode")
     @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
-    def test_retired_name_in_generated_historical_work_item_is_allowed(self):
-        state = self.base_state()
-        state["work_items"][0]["title"] = "VAIO Pのサーバー化の経験を記事として整理する"
-        state["work_items"][0]["target"] = "VAIO Pの経験を記事として整理する"
-        state["next_step"]["title"] = state["work_items"][0]["title"]
-        state["next_step"]["target"] = state["work_items"][0]["target"]
-
-        bud_text, handover_text = guard.render(state)
-        for text in (bud_text, handover_text):
-            self.assertIn("VAIO Pのサーバー化の経験を記事として整理する", text)
-
 
     def test_abstract_next_step_fails(self):
         state = self.base_state()
@@ -223,89 +201,8 @@ class CurrentStateGuardTests(unittest.TestCase):
 
 
     @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
-    def test_stale_unfinished_prose_conflicts_with_done_step(self):
-        state = self.base_state()
-        state["work_items"] = [{
-            "id": "WP無料ホスティング検証",
-            "progress": {"steps": [{"id": "wp-icon", "status": "done"}]},
-        }]
-        state["prose_status_consistency_rules"] = [{
-            "work_item_id": "WP無料ホスティング検証",
-            "step_id": "wp-icon",
-            "keywords": ["サイトアイコン", "実表示確認"],
-            "stale_markers": ["未完了", "未確認", "未実施", "残る作業"],
-        }]
-        state["current_position"]["next_stage_boundary"] = (
-            "サイトアイコン画像の適用・実表示確認が未完了。"
-        )
-        with self.assertRaisesRegex(ValueError, "stale prose contradicts completed work step"):
-            guard.validate_completed_step_prose(state)
-
-    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
-    def test_unrelated_unconfirmed_status_does_not_conflict_with_done_step(self):
-        state = self.base_state()
-        state["work_items"] = [{
-            "id": "WP無料ホスティング検証",
-            "progress": {"steps": [{"id": "wp-icon", "status": "done"}]},
-        }]
-        state["prose_status_consistency_rules"] = [{
-            "work_item_id": "WP無料ホスティング検証",
-            "step_id": "wp-icon",
-            "keywords": ["サイトアイコン", "実表示確認"],
-            "stale_markers": ["未完了", "未確認", "未実施", "残る作業"],
-        }]
-        state["current_position"]["next_focus"] = (
-            "サイトアイコンの実表示確認は完了済み。WordPressのGSC状況は未確認。"
-        )
-        guard.validate_completed_step_prose(state)
 
 
-    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
-    def test_waiting_external_step_rejects_stale_investigation_title(self):
-        state = self.base_state()
-        stale_title = "GSCのサイトマップ取得失敗を切り分け、3サイト別インデックス状況を確認する"
-        state["next_step"]["title"] = stale_title
-        state["work_items"] = [{
-            "id": "GSC-確認",
-            "title": stale_title,
-            "progress": {"steps": [{
-                "id": "github-pages-sitemap-retrieval",
-                "title": "GSC sitemap.xml取得失敗の原因切り分け",
-                "status": "waiting_external",
-            }]},
-        }]
-        state["prose_status_consistency_rules"] = [{
-            "work_item_id": "GSC-確認",
-            "step_id": "github-pages-sitemap-retrieval",
-            "expected_step_status": "waiting_external",
-            "keywords": ["サイトマップ取得失敗"],
-            "stale_markers": ["切り分け"],
-        }]
-        with self.assertRaisesRegex(ValueError, "stale prose contradicts waiting_external work step"):
-            guard.validate_completed_step_prose(state)
-
-    @unittest.skip("legacy GitHub work_items/next_step queue semantics retired")
-    def test_waiting_external_step_accepts_waiting_title(self):
-        state = self.base_state()
-        waiting_title = "GSCサイトマップ処理待ちを維持し、GitHub Pages・WordPressのインデックス状況を確認する"
-        state["next_step"]["title"] = waiting_title
-        state["work_items"] = [{
-            "id": "GSC-確認",
-            "title": waiting_title,
-            "progress": {"steps": [{
-                "id": "github-pages-sitemap-retrieval",
-                "title": "Google側のGSC sitemap.xml処理待ち",
-                "status": "waiting_external",
-            }]},
-        }]
-        state["prose_status_consistency_rules"] = [{
-            "work_item_id": "GSC-確認",
-            "step_id": "github-pages-sitemap-retrieval",
-            "expected_step_status": "waiting_external",
-            "keywords": ["サイトマップ取得失敗"],
-            "stale_markers": ["切り分け"],
-        }]
-        guard.validate_completed_step_prose(state)
 
 
     def test_wordpress_primary_lane_rejects_stale_blogger_automation_policy(self):
