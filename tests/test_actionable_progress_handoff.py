@@ -10,6 +10,7 @@ from work_queue import select_actionable
 
 
 class ActionableProgressHandoffTests(unittest.TestCase):
+    @unittest.skip("legacy GitHub work_items view retired; Dropbox is the only daily queue")
     def test_actionable_work_view_exposes_only_unfinished_substeps(self):
         state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
         state["work_queue_source"] = "github_json"
@@ -34,6 +35,12 @@ class ActionableProgressHandoffTests(unittest.TestCase):
                             f"unfinished actionable step must remain visible: {rendered_step}",
                         )
 
+
+    def test_legacy_github_queue_source_is_rejected(self):
+        state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
+        state["work_queue_source"] = "github_json"
+        with self.assertRaises(ValueError):
+            render(state)
 
     def test_dropbox_queue_view_never_renders_legacy_items(self):
         state = json.loads((ROOT / "docs" / "現在状態.json").read_text(encoding="utf-8"))
