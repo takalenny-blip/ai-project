@@ -26,7 +26,7 @@ class CurrentStateGuardTests(unittest.TestCase):
     def test_nonempty_legacy_work_items_are_rejected(self):
         state = copy.deepcopy(self.state)
         state["work_items"] = [{"id": "obsolete"}]
-        with self.assertRaisesRegex(ValueError, "legacy GitHub work_items must be empty"):
+        with self.assertRaisesRegex(ValueError, "legacy GitHub work_items field is retired"):
             guard.validate_state(state)
 
     def test_retired_next_step_field_is_rejected(self):
