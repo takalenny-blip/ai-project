@@ -18,8 +18,6 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.state_path = ROOT / "docs" / "現在状態.json"
         self.state = json.loads(self.state_path.read_text(encoding="utf-8"))
 
-    @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
-    @unittest.skip("legacy GitHub work_items queue tests retired; Dropbox-only migration tests replace them")
 
 
 
@@ -58,7 +56,6 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
             else:
                 os.environ["DROPBOX_WORK_QUEUE_PATH"] = old_board
 
-    @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
 
 
 if __name__ == "__main__":
