@@ -40,3 +40,13 @@ def test_content_without_retired_embedded_patch_is_unchanged():
     cleaned, found = strip_retired_embedded_state_patch(content)
     assert cleaned == content
     assert found is False
+
+
+def test_retired_queue_fields_are_rejected_when_nested():
+    from scripts.save_and_currentize import contains_retired_queue_key
+
+    assert contains_retired_queue_key({"metadata": {"work_items": []}})
+    assert contains_retired_queue_key({"nested": [{"next_step": "old task"}]})
+    assert contains_retired_queue_key({"request": {"work_item_updates": [{"id": "old"}]}})
+    assert not contains_retired_queue_key({"technical": {"status": "verified"}})
+
