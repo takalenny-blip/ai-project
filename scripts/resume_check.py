@@ -2,7 +2,6 @@
 """Validate the canonical state before resuming work."""
 from __future__ import annotations
 import json
-import hashlib
 import os
 import zipfile
 from pathlib import Path
@@ -12,16 +11,7 @@ import sys
 sys.path.insert(0, str(ROOT / "scripts"))
 from dropbox_board import validate_remote_board_from_env
 STATE = ROOT / "docs" / "現在状態.json"
-REQUIRED_BASE = ("execution_environment", "current_position", "next_step")
-
-def repo_blob_sha(path):
-    data = path.read_bytes()
-    header = ("blob " + str(len(data)) + "\0").encode()
-    return hashlib.sha1(header + data).hexdigest()
-
-def external_artifact_path(prerequisite):
-    configured = os.environ.get("DIMORA_ARTIFACT_PATH")
-    return Path(configured) if configured else ROOT / prerequisite["name"]
+REQUIRED_BASE = ("execution_environment", "current_position")
 
 def dropbox_board_path():
     configured = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
@@ -42,17 +32,6 @@ def validate_dropbox_board(path):
                 raise ValueError("not a valid XLSX workbook; missing: " + ", ".join(sorted(missing)))
     except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
         raise ValueError(f"Dropbox work board is unreadable: {exc}") from exc
-
-def external_record_count(data):
-    if isinstance(data, list):
-        records = data
-    elif isinstance(data, dict) and isinstance(data.get("record"), list):
-        records = data["record"]
-    else:
-        raise ValueError("external_artifact JSON must be an array or object with record array")
-    if not all(isinstance(item, dict) for item in records):
-        raise ValueError("external_artifact records must be objects")
-    return len(records)
 
 def fail(message):
     print(f"STOP: {message}")
@@ -127,7 +106,6 @@ def main():
     active = env.get("active")
     retired = env.get("retired", [])
     current = state["current_position"]
-    nxt = state["next_step"]
 
     if not active:
         return fail("active execution environment is not defined")
@@ -135,14 +113,9 @@ def main():
         return fail("retired execution environments must be a list")
     if active in retired:
         return fail(f"active environment is also retired: {active}")
-    if nxt.get("environment") != active:
-        return fail("next_step.environment does not match active environment")
-    if not nxt.get("target") or not nxt.get("evidence"):
-        return fail("next_step requires target and evidence")
-    if not isinstance(nxt.get("prerequisites"), list):
-        return fail("next_step.prerequisites must be explicit")
-    if nxt.get("readiness") not in {"ready", "blocked"}:
-        return fail("next_step.readiness must be ready or blocked")
+    if not current.get("summary"):
+        return fail("current_position.summary is missing")
+
     interaction = state.get("interaction_control")
     if not isinstance(interaction, dict):
         return fail("interaction_control must be defined")
@@ -157,47 +130,6 @@ def main():
     blocked = interaction.get("blocked_output") or {}
     if blocked.get("exit_code") != 2:
         return fail("interaction_control.blocked_output.exit_code must be 2")
-    if nxt.get("status") not in {None, nxt.get("readiness")}:
-        return fail("next_step.status must be absent or equal to readiness")
-    for p in nxt["prerequisites"]:
-        if p.get("status") == "verified" and p.get("kind") == "external_artifact":
-            path = external_artifact_path(p)
-            ev = p.get("evidence") or {}
-            expected = ev.get("sha256")
-            expected_count = ev.get("record_count")
-            if not path.is_file() or not expected or expected_count is None:
-                return fail("verified external_artifact requires runtime file, sha256, and record_count: " + p.get("name", "?"))
-            actual = hashlib.sha256(path.read_bytes()).hexdigest()
-            if actual != expected:
-                return fail("verified external_artifact SHA-256 mismatch: " + p.get("name", "?"))
-            try:
-                with path.open(encoding="utf-8") as f:
-                    data = json.load(f)
-                actual_count = external_record_count(data)
-            except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
-                return fail("verified external_artifact JSON invalid: " + str(exc))
-            if actual_count != expected_count:
-                return fail("verified external_artifact record_count mismatch: " + p.get("name", "?"))
-        if p.get("status") == "verified" and p.get("kind") == "repo_file":
-            path = ROOT / p["name"]
-            ev = p.get("evidence") or {}
-            expected = ev.get("sha256") or ev.get("blob_sha")
-            if not path.is_file() or not expected:
-                return fail("verified repo_file cannot be proven: " + p.get("name", "?"))
-            actual = hashlib.sha256(path.read_bytes()).hexdigest() if ev.get("sha256") else repo_blob_sha(path)
-            if actual != expected:
-                return fail("verified repo_file evidence mismatch: " + p.get("name", "?"))
-    bad = [p.get("name", "?") for p in nxt["prerequisites"] if p.get("status") != "verified"]
-    if nxt["readiness"] == "ready" and bad:
-        return fail("next_step is ready but prerequisites are not verified: " + ", ".join(bad))
-    if nxt["readiness"] == "blocked":
-        if not nxt.get("blocked_reason") or not nxt.get("unblock_action"):
-            return fail("blocked next_step requires blocked_reason and unblock_action")
-        print("BLOCKED: next_step is blocked: " + nxt["blocked_reason"])
-        print("UNBLOCK: " + nxt["unblock_action"])
-        return 2
-    if not current.get("summary"):
-        return fail("current_position.summary is missing")
 
     manifest = state.get("resume_manifest", {})
     if manifest.get("source") != "docs/現在状態.json":
@@ -213,7 +145,6 @@ def main():
     print(f"retired_environments: {', '.join(retired) if retired else '(none)'}")
     print(f"current_position: {current['summary']}")
     print("daily_next_action: read from Dropbox board; not derived from GitHub JSON")
-    print(f"next_step_environment: {nxt['environment']}")
     print(f"manifest_generator: {manifest['generator']}")
     return 0
 
