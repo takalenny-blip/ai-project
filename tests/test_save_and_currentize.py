@@ -10,7 +10,9 @@ def test_save_currentize_does_not_overwrite_canonical_next_design_item():
 def test_save_currentize_allows_explicit_state_patch():
     source = Path("scripts/save_and_currentize.py").read_text(encoding="utf-8")
     assert "--state-patch-file" in source
-    assert "embedded_patch" in source
+    assert "strip_retired_embedded_state_patch" in source
+    assert "had_retired_patch" in source
+    assert "--state-patch-file" in source
 
 
 def test_retired_embedded_patch_is_stripped_without_parsing_its_body():
