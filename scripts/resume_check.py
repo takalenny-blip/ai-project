@@ -10,7 +10,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from work_queue import validate_work_items, derived_next_step, select_actionable
 from dropbox_board import validate_remote_board_from_env
 STATE = ROOT / "docs" / "現在状態.json"
 REQUIRED_BASE = ("execution_environment", "current_position", "next_step")
@@ -211,10 +210,7 @@ def main():
     print(f"active_environment: {active}")
     print(f"retired_environments: {', '.join(retired) if retired else '(none)'}")
     print(f"current_position: {current['summary']}")
-    if queue_source == "github_json":
-        print(f"next_step: {nxt['target']}")
-    else:
-        print("daily_next_action: read from Dropbox board; not derived from GitHub JSON")
+    print("daily_next_action: read from Dropbox board; not derived from GitHub JSON")
     print(f"next_step_environment: {nxt['environment']}")
     print(f"manifest_generator: {manifest['generator']}")
     return 0
