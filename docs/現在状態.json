@@ -302,7 +302,7 @@
   },
   "current_position": {
     "status": "current",
-    "summary": "AI作業セッティングマニュアル第2章の承認済み構成に沿った本文更新と公式案内の確認は完了。PR #1102はopen・未マージ。2026-10-14のMarkdown保存実地検証は実施済み・部分合格で、チェックボックス変換とWritingBlockタグ混入を確認。公開ソース調査ではチェックボックス欠落の有力仮説を得たが、実機の拡張機能名・版と当日のDOMは未確認。公開ソースに外部通信処理は見当たらない一方、実機版の外部送信は未確認。GitHub Pagesのトップページ、sitemap.xml、robots.txtのURL確認は実施済みで、Google側のサイトマップ処理結果は未確認。",
+    "summary": "AI作業セッティングマニュアル第2章の承認済み構成に沿った本文更新と公式案内の確認が完了。PR #1102はopen・未マージ。2026-10-14のMarkdown保存実地検証は実施済み・部分合格で、チェックボックス変換とWritingBlockタグ混入を確認。公開ソース調査ではチェックボックス欠落の有力仮説を得たが、実機の拡張機能名・版と当日のDOMは未確認。公開ソースに外部通信処理は見当たらない一方、実機版の外部送信は未確認。初回検証を繰り返さず、次は実機拡張の識別と該当版のソース確認。GitHub Pagesのトップページ、sitemap.xml、robots.txtのURL確認は実施済みで、Google側の処理結果待ちのため同じURL確認を再実施しない。",
     "evidence": {
       "type": "repository_record_and_user_confirmation",
       "checked_at": "2026-10-15",
