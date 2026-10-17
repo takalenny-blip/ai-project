@@ -58,6 +58,23 @@ class DropboxRemoteBoardTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Dropbox API download failed"):
                 dropbox_board.fetch_remote_board("test-token")
 
+    def test_http_error_reports_status_and_request_id_without_response_body(self):
+        error = urllib.error.HTTPError(
+            dropbox_board.DOWNLOAD_URL,
+            401,
+            "Unauthorized",
+            {"x-dropbox-request-id": "request-test-123"},
+            io.BytesIO(b"private response body"),
+        )
+        with patch.object(dropbox_board.urllib.request, "urlopen", side_effect=error):
+            with self.assertRaises(ValueError) as caught:
+                dropbox_board.fetch_remote_board("test-token")
+        message = str(caught.exception)
+        self.assertIn("HTTP 401", message)
+        self.assertIn("request-test-123", message)
+        self.assertNotIn("private response body", message)
+        self.assertNotIn("test-token", message)
+
     def test_invalid_remote_response_fails_closed(self):
         class Response:
             def __enter__(self):
