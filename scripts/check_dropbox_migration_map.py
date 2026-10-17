@@ -145,7 +145,7 @@ def validate_startup_reference_docs(master_plan: str, canonical_repo: str) -> li
             errors.append(f"obsolete BUD-first startup instruction remains: {statement}")
     return errors
 
-def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, resume_guard: str, bud_manual: str, note_design: str) -> list[str]:
+def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, resume_guard: str, bud_manual: str, note_design: str, migration_design: str) -> list[str]:
     """Ensure supporting rule indexes and guards do not restore BUD as the task queue."""
     errors: list[str] = []
     requirements = (
@@ -158,6 +158,8 @@ def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, 
         ("BUD maintenance manual", bud_manual, "日常作業キューの唯一の正本はDropbox固定ボード"),
         ("Note operating design", note_design, "日常作業キュー・候補・優先度・状態・次のアクションはDropbox固定ボード"),
         ("Note operating design", note_design, "旧 `work_items` / `next_step`、BUD、引き継ぎ、会話履歴から復元しない"),
+        ("migration design", migration_design, "本書は現在の作業キューや実行手順ではなく"),
+        ("migration design", migration_design, "ここに列挙されたPhase・タスクを現在の指示としてそのまま実行しない"),
     )
     for name, text, statement in requirements:
         if statement not in text:
@@ -221,10 +223,11 @@ def main() -> int:
         resume_guard_text = (ROOT / "rules" / "再開・検索ガード.md").read_text(encoding="utf-8")
         bud_manual_text = (ROOT / "docs" / "BUD二重管理解消・運用マニュアル.md").read_text(encoding="utf-8")
         note_design_text = (ROOT / "docs" / "企画" / "Noteマニュアル群_企画制作公開運用設計.md").read_text(encoding="utf-8")
+        migration_design_text = (ROOT / "docs" / "計画" / "Dropbox作業管理移行設計.md").read_text(encoding="utf-8")
     except OSError as exc:
         errors.append(f"cannot read supporting rule docs: {exc}")
     else:
-        errors.extend(validate_supporting_rule_docs(rules_readme_text, currentization_guard_text, resume_guard_text, bud_manual_text, note_design_text))
+        errors.extend(validate_supporting_rule_docs(rules_readme_text, currentization_guard_text, resume_guard_text, bud_manual_text, note_design_text, migration_design_text))
     try:
         master_plan_text = (ROOT / "docs" / "マスタープラン.md").read_text(encoding="utf-8")
         canonical_repo_text = (ROOT / "docs" / "正本リポジトリ.md").read_text(encoding="utf-8")
