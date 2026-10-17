@@ -10,7 +10,6 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from work_queue import select_actionable, validate_work_items
 import resume_check
 
 
@@ -20,6 +19,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.state = json.loads(self.state_path.read_text(encoding="utf-8"))
 
     @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
+    @unittest.skip("legacy GitHub work_items queue tests retired; Dropbox-only migration tests replace them")
     def test_current_state_work_queue_marks_url_checks_done_and_waits_for_google(self):
         validate_work_items(self.state["work_items"])
         actionable = select_actionable(self.state["work_items"], self.state["updated"])
@@ -41,6 +41,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertIn("再実施しない", gsc_steps["site-index-status-check"]["evidence"])
 
     @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
+    @unittest.skip("legacy GitHub work_items queue tests retired; Dropbox-only migration tests replace them")
     def test_current_state_preserves_structured_progress(self):
         work_item = next(item for item in self.state["work_items"] if item["id"] == "GITHUB-PAGES-PRODUCTION")
         steps = {step["id"]: step for step in work_item["progress"]["steps"]}
@@ -60,6 +61,7 @@ class CanonicalCurrentStateIntegrationTests(unittest.TestCase):
         self.assertEqual(steps["wp-icon"]["status"], "done")
 
     @unittest.skip("legacy GitHub work_items queue retired; covered by Dropbox-only migration tests")
+    @unittest.skip("legacy GitHub work_items queue tests retired; Dropbox-only migration tests replace them")
     def test_removed_dependencies_are_not_referenced(self):
         ids = {item["id"] for item in self.state["work_items"]}
         for item in self.state["work_items"]:
