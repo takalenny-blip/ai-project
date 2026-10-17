@@ -9,6 +9,7 @@ from check_dropbox_migration_map import (
     validate_design_status,
     validate_retired_queue_files,
     validate_retired_queue_manual,
+    validate_roadmap_queue_guidance,
 )
 
 
@@ -50,6 +51,22 @@ Dropbox固定ファイル `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
 """
         errors = validate_retired_queue_manual(content)
         self.assertTrue(any("obsolete active GitHub queue instruction remains" in error for error in errors))
+
+    def test_roadmap_uses_dropbox_for_daily_queue(self):
+        content = """日常作業キュー・作業候補・優先度・次のアクションの唯一の正本はDropbox固定ボード
+バドが独断で作業候補を選び直したり、ボード上の優先順位を変更したりしない
+技術状態・履歴・証拠の正本は `docs/現在状態.json`
+"""
+        self.assertEqual(validate_roadmap_queue_guidance(content), [])
+
+    def test_obsolete_bud_as_queue_instruction_is_rejected(self):
+        content = """日常作業キュー・作業候補・優先度・次のアクションの唯一の正本はDropbox固定ボード
+バドが独断で作業候補を選び直したり、ボード上の優先順位を変更したりしない
+技術状態・履歴・証拠の正本は `docs/現在状態.json`
+現在の事実・現在の次の一手の正本は `BUD.md`
+"""
+        errors = validate_roadmap_queue_guidance(content)
+        self.assertTrue(any("obsolete roadmap queue instruction remains" in error for error in errors))
 
     def test_missing_dependency_is_reported(self):
         content = "\n".join(
