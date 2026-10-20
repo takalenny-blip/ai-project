@@ -123,6 +123,22 @@ Dropbox固定ボードで確認する"""
 ここに列挙されたPhase・タスクを現在の指示としてそのまま実行しない"""
         self.assertEqual(validate_supporting_rule_docs(rules, currentization, resume, bud_manual, note_design, migration_design), [])
 
+    def test_bud_manual_marks_old_update_steps_as_forbidden_and_checker_rejects_unmarked_steps(self):
+        rules = """日常作業キュー・優先度・状態・次のアクションの唯一の正本"""
+        currentization = """技術状態・履歴・証拠の正本は `docs/現在状態.json`
+日常作業キューの変更はDropbox固定ボードへ反映"""
+        resume = """BUD・引き継ぎ・過去ログから作業候補を補完しない
+Dropbox固定ボードで確認する"""
+        bud_manual = """日常作業キューの管理・作業候補の選択・優先度・次のアクションの決定には使わない
+日常作業キューの唯一の正本はDropbox固定ボード
+- BUD.mdを現在状態の正本として更新する."""
+        note_design = """日常作業キュー・候補・優先度・状態・次のアクションはDropbox固定ボード
+旧 `work_items` / `next_step`、BUD、引き継ぎ、会話履歴から復元しない"""
+        migration_design = """本書は現在の作業キューや実行手順ではなく
+ここに列挙されたPhase・タスクを現在の指示としてそのまま実行しない"""
+        errors = validate_supporting_rule_docs(rules, currentization, resume, bud_manual, note_design, migration_design)
+        self.assertTrue(any("BUD maintenance manual retains obsolete queue instruction" in error for error in errors))
+
     def test_legacy_bud_queue_rule_is_rejected(self):
         rules = """日常作業キュー・優先度・状態・次のアクションの唯一の正本
 - `BUD.md`：現在の目的・現在状態・現在の次の一手"""
