@@ -537,9 +537,9 @@ Chromeでは[Chrome ウェブストア](https://chromewebstore.google.com/)、�
 
 実際に行った保存テストでは、日本語、見出し、箇条書き、Pythonのコードブロック、GitHubへのリンク、会話内容、タイムスタンプは残っていました。一方、チェックボックス（`- [ ]`）が通常の箇条書きのようになり、ChatGPTのWritingBlockタグが出力ファイルに混入する問題も確認しました。このテスト結果は部分合格であり、保存しただけで元の表示や構造がすべて保たれるとは限りません。
 
-2026年10月15日に作業PCで確認した有効な拡張機能は「ChatGPT Exporter — Export Chat to PDF, Markdown, JSON & CSV」（バージョン1.0.2、ID `kagppdkdkbbddehcgonlnlblclcihpcg`、開発者サイト `http://vmste.org/chatgpt-exporter/`）です。ただし、保存テストは10月14日に行われており、記録上、この拡張機能がそのテストで実際に使われたことまでは確定していません。したがって、上記の不具合をこの製品・版の挙動と断定しません。
+2026年10月15日に作業PCで確認した有効な拡張機能は「ChatGPT Exporter — Export Chat to PDF, Markdown, JSON & CSV」（バージョン1.0.2、ID `kagppdkdkbbddehcgonlnlblclcihpcg`、[Chrome ウェブストア掲載ページ](https://chromewebstore.google.com/detail/chatgpt-exporter-%E2%80%94-export/kagppdkdkbbddehcgonlnlblclcihpcg)、開発者サイト `http://vmste.org/chatgpt-exporter/`）です。ただし、保存テストは10月14日に行われており、記録上、この拡張機能がそのテストで実際に使われたことまでは確定していません。したがって、上記の不具合をこの製品・版の挙動と断定しません。
 
-10月15日に確認した公開ソースのコミット `f19322b09e14dd4866834fd1db66d359be2100b8` では、確認範囲内に会話内容を外部サービスへ送る処理や分析・追跡用の外部通信は見当たらず、会話取得はChatGPTへのリクエスト、Markdown化はブラウザー内で処理される構成でした。ただし、Chrome ウェブストアから配布された実機ファイルがこのコミットと完全に一致することは独立検証していないため、実機版の外部送信有無は「未確認」のままです。
+10月15日に確認した[公開ソースのバージョン1.0.2のコミット](https://github.com/VMSTE/chatgpt-exporter/commit/f19322b09e14dd4866834fd1db66d359be2100b8)では、確認範囲内に会話内容を外部サービスへ送る処理や分析・追跡用の外部通信は見当たらず、会話取得はChatGPTへのリクエスト、Markdown化はブラウザー内で処理される構成でした（確認対象：[content.js](https://github.com/VMSTE/chatgpt-exporter/blob/f19322b09e14dd4866834fd1db66d359be2100b8/content.js)、[manifest.json](https://github.com/VMSTE/chatgpt-exporter/blob/f19322b09e14dd4866834fd1db66d359be2100b8/manifest.json)）。ただし、Chrome ウェブストアから配布された実機ファイルがこのコミットと完全に一致することは独立検証していないため、実機版の外部送信有無は「未確認」のままです。
 
 チェックボックスの形式変化とWritingBlockタグ混入については、保存ファイルの読み込み・情報抽出に支障がないことを確認したため、実運用上の支障が出るまで追加調査・修正を保留します。初回の保存テストをやり直しません。
 
