@@ -369,6 +369,10 @@ AIの提案をそのまま採用する必要はありません。自分の目的
 5. 必要に応じてREADMEを追加し、リポジトリを作成します。
 6. 作成後、リポジトリ名・所有者・公開範囲をもう一度確認します。
 
+GitHub Freeでは、GitHub Pagesを利用できる条件がリポジトリの公開範囲などに左右されます。公式案内で、利用中のプランと公開方法を確認してください：[GitHub Pagesの概要と利用条件](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)。公開用のページを公開するために、個人記録のリポジトリ全体を公開する必要はありません。
+
+リポジトリの公開・非公開を後から変更すると、公開ページやフォークなどに影響する場合があります。特に、非公開化するとGitHub Freeで公開中のPagesサイトが非公開化・停止される場合があるため、変更前に[リポジトリの公開範囲変更に伴う影響](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility)を確認してください。
+
 #### 3.3.1　ブラウザーだけで初期セットアップを完了する
 
 この章の基本手順は、追加ソフトをインストールせず、GitHubのWeb画面で進めます。GitやGitHub Desktop、SSH鍵の設定は、この基本手順を始めるための必須条件ではありません。PC上でファイルを編集する方法が必要になった場合は、別途その環境に合わせて設定します。
@@ -381,10 +385,6 @@ AIの提案をそのまま採用する必要はありません。自分の目的
 6. 保存後、リポジトリのトップ画面へ戻り、READMEが表示され、本文が正しく読めることを確認します。表示されない場合は、リポジトリ・ブランチ・ファイル名を確認します。
 
 ここまでできれば、GitHub上でファイルを管理するための最小限の初期セットアップは完了です。次の節では、AIにMarkdownファイルを作ってもらい、保存して内容を確認する手順に進みます。画面の項目名は変更されることがあるため、実際の表示と公式ヘルプを優先してください。
-
-GitHub Freeでは、GitHub Pagesを利用できる条件がリポジトリの公開範囲などに左右されます。公式案内で、利用中のプランと公開方法を確認してください：[GitHub Pagesの概要と利用条件](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)。公開用のページを公開するために、個人記録のリポジトリ全体を公開する必要はありません。
-
-リポジトリの公開・非公開を後から変更すると、公開ページやフォークなどに影響する場合があります。特に、非公開化するとGitHub Freeで公開中のPagesサイトが非公開化・停止される場合があるため、変更前に[リポジトリの公開範囲変更に伴う影響](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility)を確認してください。
 
 ### 3.4　MarkdownファイルをAIに作ってもらう
 
