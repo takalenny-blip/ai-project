@@ -13,6 +13,7 @@ from check_dropbox_migration_map import (
     validate_handoff_readme,
     validate_startup_reference_docs,
     validate_supporting_rule_docs,
+    validate_bud_manual_retirement,
 )
 
 
@@ -108,6 +109,23 @@ Dropbox固定ボード `/ChatGPT/Dropbox作業管理統合ボード.xlsx`
 日常作業キューの正本"""
         errors = validate_startup_reference_docs(master, canonical)
         self.assertTrue(any("obsolete BUD-first startup instruction remains" in error for error in errors))
+
+    def test_bud_manual_rejects_reworded_unretired_canonical_update(self):
+        for instruction in (
+            "- BUD.mdを現在状態の唯一の正本として更新する。",
+            "- docs/引き継ぎ/現在の引き継ぎ.mdを現在状態の正本として更新する。",
+        ):
+            with self.subTest(instruction=instruction):
+                errors = validate_bud_manual_retirement(instruction)
+                self.assertTrue(any("unretired canonical-view update instruction" in error for error in errors))
+
+    def test_bud_manual_accepts_explicitly_retired_canonical_update(self):
+        for instruction in (
+            "- 【禁止・旧手順：実行不可】BUD.mdを現在状態の正本として更新する。",
+            "- 【禁止・旧手順：実行不可】docs/引き継ぎ/現在の引き継ぎ.mdを現在状態の正本として更新する。",
+        ):
+            with self.subTest(instruction=instruction):
+                self.assertEqual(validate_bud_manual_retirement(instruction), [])
 
     def test_supporting_rules_keep_dropbox_as_daily_queue(self):
         rules = """日常作業キュー・優先度・状態・次のアクションの唯一の正本"""
