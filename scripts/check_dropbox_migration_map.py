@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -145,6 +146,21 @@ def validate_startup_reference_docs(master_plan: str, canonical_repo: str) -> li
             errors.append(f"obsolete BUD-first startup instruction remains: {statement}")
     return errors
 
+def validate_bud_manual_retirement(text: str) -> list[str]:
+    """Require explicit retirement labels on any BUD/handoff-as-canonical update instruction."""
+    errors: list[str] = []
+    obsolete_instruction = re.compile(
+        r"(?:BUD\\.md|docs/引き継ぎ/現在の引き継ぎ\\.md).*現在状態.*正本.*更新"
+    )
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if obsolete_instruction.search(line) and "禁止・旧手順：実行不可" not in line:
+            errors.append(
+                "BUD maintenance manual contains an unretired canonical-view update "
+                f"instruction at line {line_number}: {line.strip()}"
+            )
+    return errors
+
+
 def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, resume_guard: str, bud_manual: str, note_design: str, migration_design: str) -> list[str]:
     """Ensure supporting rule indexes and guards do not restore BUD as the task queue."""
     errors: list[str] = []
@@ -164,11 +180,10 @@ def validate_supporting_rule_docs(rules_readme: str, currentization_guard: str, 
     for name, text, statement in requirements:
         if statement not in text:
             errors.append(f"{name} missing retired-queue boundary: {statement}")
+    errors.extend(validate_bud_manual_retirement(bud_manual))
     obsolete = (
         ("rules README", rules_readme, "- `BUD.md`：現在の目的・現在状態・現在の次の一手"),
         ("resume/search guard", resume_guard, "`BUD.md`、最新の引き継ぎ、実際の直近ユーザー発言で確認済みとされている事実"),
-        ("BUD maintenance manual", bud_manual, "- BUD.mdを現在状態の正本として更新する。"),
-        ("BUD maintenance manual", bud_manual, "- docs/引き継ぎ/現在の引き継ぎ.mdを現在状態の正本として更新する。"),
         ("Note operating design", note_design, "現在状態は `docs/現在状態.json` の `work_items` を正本とする。"),
         ("Note operating design", note_design, "`docs/現在状態.json` の `work_items` を作業キューの正本とし"),
     )
