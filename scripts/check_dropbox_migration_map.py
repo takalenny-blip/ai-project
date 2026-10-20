@@ -150,7 +150,7 @@ def validate_bud_manual_retirement(text: str) -> list[str]:
     """Require explicit retirement labels on any BUD/handoff-as-canonical update instruction."""
     errors: list[str] = []
     obsolete_instruction = re.compile(
-        r"(?:BUD\\.md|docs/引き継ぎ/現在の引き継ぎ\\.md).*現在状態.*正本.*更新"
+        r"(?:BUD\.md|docs/引き継ぎ/現在の引き継ぎ\.md).*現在状態.*正本.*更新"
     )
     for line_number, line in enumerate(text.splitlines(), start=1):
         if obsolete_instruction.search(line) and "禁止・旧手順：実行不可" not in line:
