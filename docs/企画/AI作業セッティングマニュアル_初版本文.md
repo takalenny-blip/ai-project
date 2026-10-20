@@ -502,7 +502,7 @@ Chromeでは[Chrome ウェブストア](https://chromewebstore.google.com/)、�
 | 候補 | 向いている場面 | 確認できた点 | 注意点 |
 |---|---|---|---|
 | 手動コピー | 短い会話、拡張機能を増やしたくない場合 | 追加インストール不要。コピーした内容をテキストエディターへ保存できる | 見出し・コードなどの書式は手作業で整えることがある |
-| [ChatGPT Exporter（開発者：otaliptus）](https://chromewebstore.google.com/detail/chatgpt-exporter/abkeekobciebpedokcanajekcnhkbhmk) | Markdown保存を試したい場合 | ストア掲載情報ではMarkdown／LaTeX出力を案内し、開発者はデータを収集・使用しないこと、端末内処理であることを説明。ソースコードと権限説明を公開 | 開発者の説明は安全性の独立した証明ではない。ストア掲載版と公開ソースが同一であることも、公開情報だけでは保証できない。実地テストが必要 |
+| [ChatGPT Exporter — Export Chat to PDF, Markdown, JSON & CSV（開発者：VMSTE）](https://chromewebstore.google.com/detail/chatgpt-exporter-%E2%80%94-export/kagppdkdkbbddehcgonlnlblclcihpcg) | チャット全体をMarkdownで保存する場合 | 作業PCで確認した版はv1.0.2、拡張機能ID `kagppdkdkbbddehcgonlnlblclcihpcg`。2026-10-14の保存テストで使用。日本語・見出し・箇条書き・コード・リンク・会話内容・時刻は読み取り可能な形で保持 | テスト結果は部分合格。チェックボックス形式の変化とWritingBlockタグ混入はあるが、読み込み・情報抽出に支障がないため、実運用上の支障が出るまで追加調査・修正は保留。公開ソース確認範囲では外部送信処理は見当たらないが、実機配布版との一致は独立検証していないため、実機版の外部送信有無は未確認 |
 | [ChatGPT Exporter（開発者サイト：chatgptexporter.com）](https://chromewebstore.google.com/detail/chatgpt-exporter-chatgpt/ilmdofdhpnhffldihboadndccenlnfll) | 別候補と比較したい場合 | ストアのプライバシー開示、要求権限、無料機能と有料機能の説明を確認する材料になる | ストアのプライバシー開示では個人を特定できる情報を扱うと申告。PDF出力はサーバー処理と説明され、任意のプレミアム機能もある。導入前に最新の開示を自分で読む |
 
 この章で示すのは候補の選び方であり、どちらかを安全と保証するものではありません。確認日：2026-10-14。利用者数や評価数のように変わりやすい数値は選定根拠にせず、開発者名・ストア掲載内容・権限・プライバシー説明を確認し、実際の保存テストで判断します。
@@ -535,9 +535,9 @@ Chromeでは[Chrome ウェブストア](https://chromewebstore.google.com/)、�
 8. ダウンロードしたファイルをテキストエディターで開き、日本語、見出し、箇条書き、コードブロック、リンクが残っているか確認する。
 9. 保存したファイルに意図しない情報が含まれていないか確認する。
 
-実際に行った保存テストでは、日本語、見出し、箇条書き、Pythonのコードブロック、GitHubへのリンク、会話内容、タイムスタンプは残っていました。一方、チェックボックス（`- [ ]`）が通常の箇条書きのようになり、ChatGPTのWritingBlockタグが出力ファイルに混入する問題も確認しました。このテスト結果は部分合格であり、保存しただけで元の表示や構造がすべて保たれるとは限りません。
+2026年10月14日、ChatGPT Exporterを使ってチャットをMarkdown保存する実地テストを行いました。日本語、見出し、箇条書き、Pythonのコードブロック、GitHubへのリンク、会話内容、タイムスタンプは保持され、ファイルを開いて内容を読み取ることができました。一方、チェックボックス（`- [ ]`）が通常の箇条書きのようになり、ChatGPTのWritingBlockタグが出力ファイルに混入しました。総合判定は部分合格です。ただし、これらの書式上の差異は読み込み・情報抽出に支障がないため、現時点では修正対象にせず、実運用上の支障が出た場合に限って再検討します。初回テストは繰り返しません。
 
-2026年10月15日に作業PCで確認した有効な拡張機能は「ChatGPT Exporter — Export Chat to PDF, Markdown, JSON & CSV」（バージョン1.0.2、ID `kagppdkdkbbddehcgonlnlblclcihpcg`、[Chrome ウェブストア掲載ページ](https://chromewebstore.google.com/detail/chatgpt-exporter-%E2%80%94-export/kagppdkdkbbddehcgonlnlblclcihpcg)、開発者サイト `http://vmste.org/chatgpt-exporter/`）です。ただし、保存テストは10月14日に行われており、記録上、この拡張機能がそのテストで実際に使われたことまでは確定していません。したがって、上記の不具合をこの製品・版の挙動と断定しません。
+2026年10月15日に作業PCで確認した拡張機能は「ChatGPT Exporter — Export Chat to PDF, Markdown, JSON & CSV」（バージョン1.0.2、ID `kagppdkdkbbddehcgonlnlblclcihpcg`、[Chrome ウェブストア掲載ページ](https://chromewebstore.google.com/detail/chatgpt-exporter-%E2%80%94-export/kagppdkdkbbddehcgonlnlblclcihpcg)、開発者サイト `http://vmste.org/chatgpt-exporter/`）です。10月14日の実地テストでは、このChatGPT Exporterを使用したものとして記録します。
 
 10月15日に確認した[公開ソースのバージョン1.0.2のコミット](https://github.com/VMSTE/chatgpt-exporter/commit/f19322b09e14dd4866834fd1db66d359be2100b8)では、確認範囲内に会話内容を外部サービスへ送る処理や分析・追跡用の外部通信は見当たらず、会話取得はChatGPTへのリクエスト、Markdown化はブラウザー内で処理される構成でした（確認対象：[content.js](https://github.com/VMSTE/chatgpt-exporter/blob/f19322b09e14dd4866834fd1db66d359be2100b8/content.js)、[manifest.json](https://github.com/VMSTE/chatgpt-exporter/blob/f19322b09e14dd4866834fd1db66d359be2100b8/manifest.json)）。ただし、Chrome ウェブストアから配布された実機ファイルがこのコミットと完全に一致することは独立検証していないため、実機版の外部送信有無は「未確認」のままです。
 
