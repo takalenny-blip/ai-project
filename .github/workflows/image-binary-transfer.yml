@@ -65,7 +65,7 @@ jobs:
           p = Path("/tmp/nonexistent")
           data = Path(__import__("os").environ.get("RUNNER_TEMP", "/tmp")) / "blog-0004-four-panel.png"
           b = data.read_bytes()
-          if len(b) < 8 or b[:8] != b"\\x89PNG\\r\\n\\x1a\\n":
+          if len(b) < 8 or b[:8] != b"\x89PNG\r\n\x1a\n":
               raise SystemExit("Downloaded file is not a PNG (PNG signature check failed).")
           if len(b) > 10 * 1024 * 1024:
               raise SystemExit("Image exceeds the 10 MiB limit.")
