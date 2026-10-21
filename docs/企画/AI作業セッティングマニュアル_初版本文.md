@@ -581,11 +581,11 @@ Chromeでは[Chrome ウェブストア](https://chromewebstore.google.com/)、�
 
 この章で示すのは候補の選び方であり、どちらかを安全と保証するものではありません。候補情報を確認した日：2026-10-14。これは執筆時点の確認記録であり、現在の掲載内容・バージョン・権限・料金を保証しません。利用前にストア掲載ページと開発者の説明を開き直し、確認した日付と実際に試した環境を自分の記録に残してください。確認できていない項目は「未確認」とします。利用者数や評価数のように変わりやすい数値は選定根拠にせず、開発者名・ストア掲載内容・権限・プライバシー説明を確認し、実際の保存テストで判断します。
 
-確認先：
-- [Chrome ウェブストアの候補ページ](https://chromewebstore.google.com/detail/chatgpt-exporter/abkeekobciebpedokcanajekcnhkbhmk)
-- [開発者のソースコード・説明](https://github.com/otaliptus/chatgpt-markdown-exporter)
-- [開発者のプライバシー説明](https://github.com/otaliptus/chatgpt-markdown-exporter/blob/main/PRIVACY.md)
-- [別候補のChrome ウェブストア掲載情報](https://chromewebstore.google.com/detail/chatgpt-exporter-chatgpt/ilmdofdhpnhffldihboadndccenlnfll)
+候補ごとの確認先：
+- **ChatGPT Exporter（VMSTE）**：[Chrome ウェブストア掲載ページ](https://chromewebstore.google.com/detail/chatgpt-exporter-%E2%80%94-export/kagppdkdkbbddehcgonlnlblclcihpcg) ／ [開発者のソースコード・説明](https://github.com/VMSTE/chatgpt-exporter)
+- **ChatGPT Exporter（chatgptexporter.com）**：[Chrome ウェブストア掲載ページ](https://chromewebstore.google.com/detail/chatgpt-exporter-chatgpt/ilmdofdhpnhffldihboadndccenlnfll)
+
+リンク先が表の候補名・開発者と一致していることを確認してから参照してください。ストア掲載ページが開けない、候補を特定できない、説明が現在の表示と異なる場合は、その候補を推奨済みとみなさず、手動コピーを選んで構いません。
 
 ### 4.3　AIに手順を案内してもらい、保存テストを行う
 
@@ -609,13 +609,13 @@ Chromeでは[Chrome ウェブストア](https://chromewebstore.google.com/)、�
 8. ダウンロードしたファイルをテキストエディターで開き、日本語、見出し、箇条書き、コードブロック、リンクが残っているか確認する。
 9. 保存したファイルに意図しない情報が含まれていないか確認する。
 
-2026年10月14日、ChatGPT Exporterを使ってチャットをMarkdown保存する実地テストを行いました。日本語、見出し、箇条書き、Pythonのコードブロック、GitHubへのリンク、会話内容、タイムスタンプは保持され、ファイルを開いて内容を読み取ることができました。一方、チェックボックス（`- [ ]`）が通常の箇条書きのようになり、ChatGPTのWritingBlockタグが出力ファイルに混入しました。総合判定は部分合格です。ただし、これらの書式上の差異は読み込み・情報抽出に支障がないため、現時点では修正対象にせず、実運用上の支障が出た場合に限って再検討します。初回テストは繰り返しません。
+**筆者による過去のテスト例（2026年10月14日）**：当時の作業環境でChatGPT Exporterを使い、チャットをMarkdown形式で保存しました。日本語、見出し、箇条書き、Pythonのコードブロック、GitHubへのリンク、会話内容、タイムスタンプは、保存ファイル上で読み取れました。一方、チェックボックス（`- [ ]`）の形式が変わり、ChatGPTのWritingBlockタグが出力ファイルに混入しました。このテストの判定は部分合格です。これは当時の一環境での結果であり、現在のバージョンや他の環境で同じ動作を保証するものではありません。
 
-2026年10月15日に作業PCで確認した拡張機能は「ChatGPT Exporter — Export Chat to PDF, Markdown, JSON & CSV」（バージョン1.0.2、ID `kagppdkdkbbddehcgonlnlblclcihpcg`、[Chrome ウェブストア掲載ページ](https://chromewebstore.google.com/detail/chatgpt-exporter-%E2%80%94-export/kagppdkdkbbddehcgonlnlblclcihpcg)、開発者サイト `http://vmste.org/chatgpt-exporter/`）です。10月14日の実地テストでは、このChatGPT Exporterを使用したものとして記録します。
+2026年10月15日の記録では、作業PCで確認した拡張機能は「ChatGPT Exporter — Export Chat to PDF, Markdown, JSON & CSV」（バージョン1.0.2、ID `kagppdkdkbbddehcgonlnlblclcihpcg`、[Chrome ウェブストア掲載ページ](https://chromewebstore.google.com/detail/chatgpt-exporter-%E2%80%94-export/kagppdkdkbbddehcgonlnlblclcihpcg)、開発者サイト [vmste.org](http://vmste.org/chatgpt-exporter/)）でした。この記録は当時の識別情報です。導入前にはストア上の名前・開発者・バージョン・要求権限を改めて確認してください。
 
 10月15日に確認した[公開ソースのバージョン1.0.2のコミット](https://github.com/VMSTE/chatgpt-exporter/commit/f19322b09e14dd4866834fd1db66d359be2100b8)では、確認範囲内に会話内容を外部サービスへ送る処理や分析・追跡用の外部通信は見当たらず、会話取得はChatGPTへのリクエスト、Markdown化はブラウザー内で処理される構成でした（確認対象：[content.js](https://github.com/VMSTE/chatgpt-exporter/blob/f19322b09e14dd4866834fd1db66d359be2100b8/content.js)、[manifest.json](https://github.com/VMSTE/chatgpt-exporter/blob/f19322b09e14dd4866834fd1db66d359be2100b8/manifest.json)）。ただし、Chrome ウェブストアから配布された実機ファイルがこのコミットと完全に一致することは独立検証していないため、実機版の外部送信有無は「未確認」のままです。
 
-チェックボックスの形式変化とWritingBlockタグ混入については、保存ファイルの読み込み・情報抽出に支障がないことを確認したため、実運用上の支障が出るまで追加調査・修正を保留します。初回の保存テストをやり直しません。
+このテストで見つかった書式上の差異は、当時の保存ファイルの読み取りを妨げませんでした。ただし、別の用途でチェックボックスやWritingBlockの保持が必要な場合は、その用途に合わせて保存結果を確認してください。
 
 開発者のREADMEでは、エクスポート操作を利用者が開始したときに開いているChatGPTタブを読み取り、ブラウザー内でMarkdownへ変換して端末へ保存すると説明されています。長い会話では、ページ内の追加読み込みや自動スクロールが必要になる場合もあるとされています。これは開発者の説明であり、実地検証の結果ではありません。実際の動作やデータの扱いを自分で確認できない場合は、重要な会話には使わず、手動コピーを選んでください。
 
