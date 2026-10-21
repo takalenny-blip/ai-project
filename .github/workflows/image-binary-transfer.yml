@@ -52,8 +52,10 @@ jobs:
           import os
           from urllib.parse import urlparse
           u = urlparse(os.environ["SOURCE_URL"])
-          allowed = {"www.dropbox.com", "dl.dropboxusercontent.com", "dropbox.com"}
-          if u.scheme != "https" or u.hostname not in allowed:
+          host = (u.hostname or "").lower()
+          allowed_exact = {"www.dropbox.com", "dropbox.com", "dl.dropboxusercontent.com"}
+          allowed_temp_subdomain = host.endswith(".dl.dropboxusercontent.com")
+          if u.scheme != "https" or not (host in allowed_exact or allowed_temp_subdomain):
               raise SystemExit("source_url must be an HTTPS Dropbox download URL.")
           if not u.path:
               raise SystemExit("source_url has no path.")
@@ -63,7 +65,6 @@ jobs:
             "$SOURCE_URL" -o "$RUNNER_TEMP/blog-0004-four-panel.png"
           python - <<'PY'
           from pathlib import Path
-          p = Path("/tmp/nonexistent")
           data = Path(__import__("os").environ.get("RUNNER_TEMP", "/tmp")) / "blog-0004-four-panel.png"
           b = data.read_bytes()
           if len(b) < 8 or b[:8] != b"\x89PNG\r\n\x1a\n":
