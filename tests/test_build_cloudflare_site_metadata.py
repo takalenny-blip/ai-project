@@ -26,6 +26,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "ai-blog-start.html": "AIとのやりとりからブログ制作の仕組みを考え始めた記録。Claudeのブラウザ操作をきっかけに、GeminiやPythonでの自動化、経験を記事として残す発想につながっていく。",
             "vaio-p-again-and-beyond.html": "VAIO Pをもう一度動かすためにDebianを導入し、環境を整えた記録。DIGA／DiMORAの番組予約情報を扱う自動化テストを通して、試行錯誤と次の発想を振り返る。",
             "github-ai-conversation.html": "AIとのやりとりをGitHubに残し、現在状態や作業の進み具合を管理する仕組みを作った経験。会話を保存するだけでなく、あとから再開できる形に整えていく過程を紹介する。",
+            "ai-trial-and-record.html": "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。",
         }
         self.assertIn(
             f'<meta name="description" content="{expected_descriptions[permalink]}">',
@@ -63,12 +64,19 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか",
         )
 
+    def test_blog_0004_metadata_matches_its_own_url_and_title(self):
+        self.assert_article_metadata(
+            "ai-trial-and-record.html",
+            "AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと",
+        )
+
     def test_canonical_pages_have_consistent_social_metadata_and_valid_json_ld(self):
         expected_types = {
             "index.html": ("website", "WebSite"),
             "ai-blog-start.html": ("article", "BlogPosting"),
             "vaio-p-again-and-beyond.html": ("article", "BlogPosting"),
             "github-ai-conversation.html": ("article", "BlogPosting"),
+            "ai-trial-and-record.html": ("article", "BlogPosting"),
             "about.html": ("website", "AboutPage"),
             "privacy.html": ("website", "PrivacyPolicy"),
             "sitemap.html": ("website", "WebPage"),
@@ -157,6 +165,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             f"{BASE_URL}/ai-blog-start.html",
             f"{BASE_URL}/vaio-p-again-and-beyond.html",
             f"{BASE_URL}/github-ai-conversation.html",
+            f"{BASE_URL}/ai-trial-and-record.html",
             f"{BASE_URL}/about.html",
             f"{BASE_URL}/privacy.html",
         }
@@ -191,6 +200,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "ai-blog-start.html",
             "vaio-p-again-and-beyond.html",
             "github-ai-conversation.html",
+            "ai-trial-and-record.html",
             "about.html",
             "privacy.html",
             "sitemap.html",
@@ -208,6 +218,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "ai-blog-start.html",
             "vaio-p-again-and-beyond.html",
             "github-ai-conversation.html",
+            "ai-trial-and-record.html",
         ):
             html = (DIST / permalink).read_text(encoding="utf-8")
             self.assertIn('<nav class="sidebar-section" aria-label="記事を探す">', html)
@@ -220,7 +231,8 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         expected = {
             "ai-blog-start.html": (None, "vaio-p-again-and-beyond.html"),
             "vaio-p-again-and-beyond.html": ("ai-blog-start.html", "github-ai-conversation.html"),
-            "github-ai-conversation.html": ("vaio-p-again-and-beyond.html", None),
+            "github-ai-conversation.html": ("vaio-p-again-and-beyond.html", "ai-trial-and-record.html"),
+            "ai-trial-and-record.html": ("github-ai-conversation.html", None),
         }
         for permalink, (previous, following) in expected.items():
             html = (DIST / permalink).read_text(encoding="utf-8")
@@ -254,6 +266,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "ai-blog-start.html",
             "vaio-p-again-and-beyond.html",
             "github-ai-conversation.html",
+            "ai-trial-and-record.html",
         ):
             html = (DIST / permalink).read_text(encoding="utf-8")
             self.assertIn('href="sitemap.html">記事一覧</a>', html)
