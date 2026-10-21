@@ -1,0 +1,109 @@
+name: Image binary transfer
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_url:
+        description: "Short-lived direct-download URL for the PNG (for example, a Dropbox download URL)"
+        required: true
+        type: string
+  pull_request:
+    paths:
+      - ".github/workflows/image-binary-transfer.yml"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: image-binary-transfer
+  cancel-in-progress: false
+
+jobs:
+  validate-workflow:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate workflow file
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path(".github/workflows/image-binary-transfer.yml")
+          s = p.read_text()
+          required = ["workflow_dispatch:", "source_url:", "contents: write", "pull-requests: write", "PNG signature"]
+          missing = [x for x in required if x not in s]
+          if missing:
+              raise SystemExit(f"Missing expected workflow safeguards: {missing}")
+          print("Workflow structure checks passed.")
+          PY
+
+  transfer:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate source URL and download image
+        env:
+          SOURCE_URL: ${{ inputs.source_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          from urllib.parse import urlparse
+          u = urlparse(os.environ["SOURCE_URL"])
+          allowed = {"www.dropbox.com", "dl.dropboxusercontent.com", "dropbox.com"}
+          if u.scheme != "https" or u.hostname not in allowed:
+              raise SystemExit("source_url must be an HTTPS Dropbox download URL.")
+          if not u.path:
+              raise SystemExit("source_url has no path.")
+          PY
+          curl --fail --silent --show-error --location --max-filesize 10485760 \
+            --proto '=https' --proto-redir '=https' \
+            "$SOURCE_URL" -o "$RUNNER_TEMP/blog-0004-four-panel.png"
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("/tmp/nonexistent")
+          data = Path(__import__("os").environ.get("RUNNER_TEMP", "/tmp")) / "blog-0004-four-panel.png"
+          b = data.read_bytes()
+          if len(b) < 8 or b[:8] != b"\x89PNG\r\n\x1a\n":
+              raise SystemExit("Downloaded file is not a PNG (PNG signature check failed).")
+          if len(b) > 10 * 1024 * 1024:
+              raise SystemExit("Image exceeds the 10 MiB limit.")
+          print(f"PNG signature verified; {len(b)} bytes.")
+          PY
+
+      - name: Create isolated branch and commit image
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init repo
+          cd repo
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth=1 origin main
+          git checkout -b "image-transfer/${GITHUB_RUN_ID}" FETCH_HEAD
+          mkdir -p docs/site/images
+          cp "$RUNNER_TEMP/blog-0004-four-panel.png" docs/site/images/blog-0004-four-panel.png
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/site/images/blog-0004-four-panel.png
+          git commit -m "Add Blog 4 four-panel manga image"
+          git push origin HEAD
+          echo "branch=image-transfer/${GITHUB_RUN_ID}" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Open pull request for review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.commit.outputs.branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh pr create --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$BRANCH" \
+            --title "Add Blog 4 four-panel manga image" \
+            --body "Image transferred by the image-binary-transfer workflow. PNG signature and file-size checks passed. Review the asset before merging."
