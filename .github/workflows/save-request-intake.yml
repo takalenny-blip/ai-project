@@ -288,11 +288,12 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$GH_TOKEN" || { echo "SAVE_PR_TOKEN repository secret is required." >&2; exit 1; }
+          body="$(printf 'Canonical save for queue PR #%s.\n\n<!-- save-request-source-pr: %s -->\n<!-- save-request-source-head-sha: %s -->\n<!-- save-request-queue-file: %s -->' "$SOURCE_PR" "$SOURCE_PR" "$SOURCE_HEAD_SHA" "$QUEUE_FILE")"
           final_pr_json="$(gh api "repos/${GITHUB_REPOSITORY}/pulls" \
             -f base=main \
             -f head="$BRANCH" \
             -f title='直チャット保存＋現在状態と生成ビューを一括同期' \
-            -f body="Canonical save for queue PR #${SOURCE_PR}.\n\n<!-- save-request-source-pr: ${SOURCE_PR} -->\n<!-- save-request-source-head-sha: ${SOURCE_HEAD_SHA} -->\n<!-- save-request-queue-file: ${QUEUE_FILE} -->")"
+            -f body="$body")"
           final_pr_number="$(printf '%s' "$final_pr_json" | jq -r '.number')"
           test -n "$final_pr_number"
           echo "number=$final_pr_number" >> "$GITHUB_OUTPUT"
