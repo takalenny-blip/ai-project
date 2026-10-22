@@ -55,12 +55,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          prs_json="$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --json number,headRefName,title)"
+          prs_json="$(gh pr list --repo "$GITHUB_REPOSITORY" --state all --base main --limit 1000 --json number,headRefName,title,state)"
           existing="$(printf '%s' "$prs_json" | jq -r --arg filename "$FILENAME" '.[] | select(.headRefName | startswith("chat-save-request/direct-large-")) | select(.title == ("Save direct chat: " + $filename)) | [.number,.headRefName,.title] | @tsv')"
           if [ -n "$existing" ]; then
-            echo "Existing large-file queue PR found for $FILENAME:" >&2
+            echo "Existing large-file queue PR (open or closed) found for $FILENAME:" >&2
             printf '%s\n' "$existing" >&2
-            echo "Do not re-run intake for the same save request." >&2
+            echo "Do not re-run intake for the same save request. If the original request failed, recover it through save-request-intake.yml using queue_pr_number; do not create another queue PR." >&2
             exit 1
           fi
 
