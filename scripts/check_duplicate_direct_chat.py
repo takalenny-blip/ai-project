@@ -16,7 +16,9 @@ def strip_retired_patch(content: str) -> str:
         re.escape(PATCH_BEGIN) + r"\s*\n.*?\n" + re.escape(PATCH_END),
         re.DOTALL,
     )
-    content = pattern.sub("", content, count=1)
+    cleaned, count = pattern.subn("", content, count=1)
+    if count:
+        return cleaned.strip() + "\n"
     if not content.endswith("\n"):
         content += "\n"
     return content
