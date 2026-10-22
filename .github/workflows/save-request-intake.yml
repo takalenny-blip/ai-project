@@ -6,8 +6,12 @@ on:
   workflow_dispatch:
     inputs:
       queue_filename:
-        description: "Queue filename under .github/save-queue/"
-        required: true
+        description: "Queue filename under .github/save-queue/ (optional when queue_pr_number is supplied)"
+        required: false
+        type: string
+      queue_pr_number:
+        description: "Existing save-request PR number; can resolve open or closed PRs safely"
+        required: false
         type: string
 
 concurrency:
@@ -56,39 +60,58 @@ jobs:
 
       - name: Resolve manual queue input
         id: manual
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: \${{ github.event_name == 'workflow_dispatch' }}
         env:
-          GH_TOKEN: ${{ github.token }}
-          QUEUE_FILENAME: ${{ inputs.queue_filename }}
+          GH_TOKEN: \${{ github.token }}
+          QUEUE_FILENAME: \${{ inputs.queue_filename }}
+          QUEUE_PR_NUMBER: \${{ inputs.queue_pr_number }}
         shell: bash
         run: |
           set -euo pipefail
-          queue_file=".github/save-queue/$QUEUE_FILENAME"
-          case "$queue_file" in
-            .github/save-queue/*.md) ;;
-            *) echo "Invalid queue filename: $queue_file" >&2; exit 1 ;;
-          esac
-
-          # Queue files from automated intake live on the queue PR branch, not main.
-          # Resolve the unique open save-request PR containing the requested file.
-          mapfile -t prs < <(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("chat-save-request/")) | [.number,.headRefName] | @tsv')
-          matches=()
-          for item in "${prs[@]}"; do
-            read -r number head_ref <<< "$item"
-            if gh api "repos/${GITHUB_REPOSITORY}/pulls/$number/files?per_page=100" --paginate --jq '.[].filename' | grep -Fxq "$queue_file"; then
-              head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/$number" --jq '.head.sha')"
-              matches+=("$number"$'\t'"$head_ref"$'\t'"$head_sha")
-            fi
-          done
-          if [ "${#matches[@]}" -ne 1 ]; then
-            printf 'Expected exactly one open save-request PR for %s; found %s\n' "$queue_file" "${#matches[@]}" >&2
-            printf '%s\n' "${matches[@]}" >&2
-            exit 1
+          if [ -z "$QUEUE_PR_NUMBER" ] && [ -z "$QUEUE_FILENAME" ]; then
+            echo "Provide queue_pr_number or queue_filename." >&2; exit 1
           fi
-          IFS=$'\t' read -r pr_number head_ref head_sha <<< "${matches[0]}"
+          if [ -n "$QUEUE_PR_NUMBER" ]; then
+            [[ "$QUEUE_PR_NUMBER" =~ ^[0-9]+$ ]] || { echo "queue_pr_number must be numeric." >&2; exit 1; }
+            pr_json="$(gh api "repos/\${GITHUB_REPOSITORY}/pulls/$QUEUE_PR_NUMBER")"
+            head_ref="$(printf '%s' "$pr_json" | jq -r '.head.ref // ""')"
+            head_sha="$(printf '%s' "$pr_json" | jq -r '.head.sha // ""')"
+            head_repo="$(printf '%s' "$pr_json" | jq -r '.head.repo.full_name // ""')"
+            base_ref="$(printf '%s' "$pr_json" | jq -r '.base.ref // ""')"
+            test "$head_repo" = "$GITHUB_REPOSITORY" || { echo "Queue PR must be from this repository." >&2; exit 1; }
+            test "$base_ref" = "main" || { echo "Queue PR must target main." >&2; exit 1; }
+            case "$head_ref" in chat-save-request/*) ;; *) echo "PR #$QUEUE_PR_NUMBER is not a save-request PR." >&2; exit 1 ;; esac
+            mapfile -t changed < <(gh api "repos/\${GITHUB_REPOSITORY}/pulls/$QUEUE_PR_NUMBER/files?per_page=100" --paginate --jq '.[].filename' | sort)
+            test "\${#changed[@]}" = "1" || { echo "Queue PR #$QUEUE_PR_NUMBER must change exactly one file; found \${#changed[@]}." >&2; exit 1; }
+            queue_file="\${changed[0]}"
+            case "$queue_file" in .github/save-queue/*.md) ;; *) echo "Unexpected queue path: $queue_file" >&2; exit 1 ;; esac
+            if [ -n "$QUEUE_FILENAME" ] && [ "$queue_file" != ".github/save-queue/$QUEUE_FILENAME" ]; then
+              echo "queue_filename does not match PR #$QUEUE_PR_NUMBER ($queue_file)." >&2; exit 1
+            fi
+            pr_number="$QUEUE_PR_NUMBER"
+          else
+            case "$QUEUE_FILENAME" in ""|*/*|*..*) echo "Invalid queue filename: $QUEUE_FILENAME" >&2; exit 1 ;; *.md) ;; *) echo "Queue filename must end in .md." >&2; exit 1 ;; esac
+            queue_file=".github/save-queue/$QUEUE_FILENAME"
+            # Closed PRs remain resolvable by their immutable head SHA after cleanup.
+            mapfile -t prs < <(gh pr list --repo "$GITHUB_REPOSITORY" --state all --base main --limit 1000 --json number,headRefName --jq '.[] | select(.headRefName | startswith("chat-save-request/")) | [.number,.headRefName] | @tsv')
+            matches=()
+            for item in "\${prs[@]}"; do
+              read -r number head_ref <<< "$item"
+              if gh api "repos/\${GITHUB_REPOSITORY}/pulls/$number/files?per_page=100" --paginate --jq '.[].filename' | grep -Fxq "$queue_file"; then
+                head_sha="$(gh api "repos/\${GITHUB_REPOSITORY}/pulls/$number" --jq '.head.sha')"
+                matches+=("$number"$'\t'"$head_ref"$'\t'"$head_sha")
+              fi
+            done
+            if [ "\${#matches[@]}" -ne 1 ]; then
+              printf 'Could not resolve one source PR for %s across open and closed PRs; found %s. No save was started. Supply queue_pr_number to disambiguate.\\n' "$queue_file" "\${#matches[@]}" >&2
+              printf '%s\\n' "\${matches[@]}" >&2; exit 1
+            fi
+            IFS=$'\t' read -r pr_number head_ref head_sha <<< "\${matches[0]}"
+          fi
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
           echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
           echo "source_pr=$pr_number" >> "$GITHUB_OUTPUT"
+          echo "source_head_sha=$head_sha" >> "$GITHUB_OUTPUT"
 
       - name: Checkout trusted base branch
         uses: actions/checkout@v4
@@ -119,12 +142,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ steps.pr.outputs.number }}
+          MANUAL_SOURCE_PR: ${{ steps.manual.outputs.source_pr || '' }}
         shell: bash
         run: |
           set -euo pipefail
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             queue_file="${{ steps.manual.outputs.queue_file }}"
             head_sha="${{ steps.manual.outputs.head_sha }}"
+            source_pr="$MANUAL_SOURCE_PR"
           else
           mapfile -t changed < <(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" --paginate --jq '.[].filename' | sort)
           test "${#changed[@]}" = "1"
@@ -135,6 +160,7 @@ jobs:
           esac
           head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq '.head.sha')"
           fi
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then source_pr="$PR_NUMBER"; fi
           tree_url="repos/${GITHUB_REPOSITORY}/git/trees/${head_sha}?recursive=1"
           tree_json="$(gh api "$tree_url")"
           blob_sha="$(printf '%s' "$tree_json" | jq -r --arg path "$queue_file" '.tree[] | select(.path == $path) | .sha')"
@@ -143,6 +169,8 @@ jobs:
             tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
           test -s "$RUNNER_TEMP/direct-chat.md"
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
+          echo "source_pr=$source_pr" >> "$GITHUB_OUTPUT"
+          echo "source_head_sha=$head_sha" >> "$GITHUB_OUTPUT"
 
       - name: Diagnose runtime save category files
         shell: bash
@@ -166,7 +194,41 @@ jobs:
           } > "$validation_file"
           python scripts/check_save_request_category.py "$validation_file"
 
+      - name: Run save-intake regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest scripts.test_check_duplicate_direct_chat
+
+      - name: Detect duplicate or already-processed save request
+        id: idempotency
+        env:
+          GH_TOKEN: \${{ github.token }}
+          SOURCE_PR: \${{ steps.queue.outputs.source_pr }}
+          SOURCE_HEAD_SHA: \${{ steps.queue.outputs.source_head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          all_prs="$(gh pr list --repo "$GITHUB_REPOSITORY" --state all --base main --limit 1000 --json number,title,body)"
+          existing_pr="$(printf '%s' "$all_prs" | jq -r --arg pr "$SOURCE_PR" --arg sha "$SOURCE_HEAD_SHA" '
+            .[] |
+            select(.title == "直チャット保存＋現在状態と生成ビューを一括同期") |
+            select(((.body // "") | contains("<!-- save-request-source-pr: " + $pr + " -->")) or ((.body // "") | contains("<!-- save-request-source-head-sha: " + $sha + " -->"))) |
+            .number
+          ' | head -n 1)"
+          if [ -n "$existing_pr" ]; then
+            echo "Canonical save PR #$existing_pr already records source PR #$SOURCE_PR / head $SOURCE_HEAD_SHA; skipping duplicate intake."
+            echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          duplicate_path="$(python scripts/check_duplicate_direct_chat.py "$RUNNER_TEMP/direct-chat.md" "直チャット")"
+          if [ -n "$duplicate_path" ]; then
+            echo "Identical conversation is already canonical at $duplicate_path; skipping duplicate intake."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Create isolated save branch from main
+        if: ${{ steps.idempotency.outputs.skip != 'true' }}
         id: branch
         shell: bash
         run: |
@@ -181,12 +243,14 @@ jobs:
           echo "base_sha=$base_sha" >> "$GITHUB_OUTPUT"
 
       - name: Run canonical save script
+        if: ${{ steps.idempotency.outputs.skip != 'true' }}
         shell: bash
         run: |
           set -euo pipefail
           python scripts/save_and_currentize.py             --content-file "$RUNNER_TEMP/direct-chat.md"             --message '直チャット保存＋現在状態と生成ビューを一括同期'
 
       - name: Verify atomic save result
+        if: ${{ steps.idempotency.outputs.skip != 'true' }}
         env:
           BASE_SHA: ${{ steps.branch.outputs.base_sha }}
         shell: bash
@@ -203,6 +267,7 @@ jobs:
           test "$actual" = "$(printf '%s\n' "$expected" | sort)"
 
       - name: Push save branch
+        if: ${{ steps.idempotency.outputs.skip != 'true' }}
         env:
           BRANCH: ${{ steps.branch.outputs.branch }}
         shell: bash
@@ -211,10 +276,14 @@ jobs:
           git push --set-upstream origin "$BRANCH"
 
       - name: Open canonical save pull request
+        if: ${{ steps.idempotency.outputs.skip != 'true' }}
         id: final_pr
         env:
           GH_TOKEN: ${{ secrets.SAVE_PR_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
+          SOURCE_PR: ${{ steps.queue.outputs.source_pr }}
+          SOURCE_HEAD_SHA: ${{ steps.queue.outputs.source_head_sha }}
+          QUEUE_FILE: ${{ steps.queue.outputs.queue_file }}
         shell: bash
         run: |
           set -euo pipefail
@@ -223,13 +292,13 @@ jobs:
             -f base=main \
             -f head="$BRANCH" \
             -f title='直チャット保存＋現在状態と生成ビューを一括同期' \
-            -f body=)"
+            -f body="Canonical save for queue PR #${SOURCE_PR}.\n\n<!-- save-request-source-pr: ${SOURCE_PR} -->\n<!-- save-request-source-head-sha: ${SOURCE_HEAD_SHA} -->\n<!-- save-request-queue-file: ${QUEUE_FILE} -->")"
           final_pr_number="$(printf '%s' "$final_pr_json" | jq -r '.number')"
           test -n "$final_pr_number"
           echo "number=$final_pr_number" >> "$GITHUB_OUTPUT"
 
       - name: Resolve save lifecycle after verified intake
-        if: ${{ github.event_name == 'pull_request_target' }}
+        if: ${{ steps.idempotency.outputs.skip != 'true' && github.event_name == 'pull_request_target' }}
         env:
           QUEUE_PR_NUMBER: ${{ steps.pr.outputs.number || '' }}
           FINAL_PR_NUMBER: ${{ steps.final_pr.outputs.number }}
@@ -269,7 +338,7 @@ jobs:
           PY
 
       - name: Cleanup request branch
-        if: ${{ success() && github.event_name == 'pull_request_target' }}
+        if: ${{ success() && steps.idempotency.outputs.skip != 'true' && github.event_name == 'pull_request_target' }}
         env:
           SOURCE_BRANCH: ${{ steps.pr.outputs.head_ref }}
         shell: bash
