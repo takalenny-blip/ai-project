@@ -50,7 +50,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         html = (DIST / "ai-trial-and-record.html").read_text(encoding="utf-8")
         self.assertIn('<figure class="blog4-manga">', html)
         self.assertIn(
-            'src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/site/images/blog-0004-four-panel.png"',
+            'src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0004/images/blog-0004-four-panel.png"',
             html,
         )
         self.assertIn('alt="AIと試し、結果を確かめ、経験を記録して次につなげる流れを描いた4コマ漫画"', html)
