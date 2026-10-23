@@ -46,6 +46,16 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         )
         self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
 
+    def test_blog_0004_four_panel_manga_is_rendered(self):
+        html = (DIST / "ai-trial-and-record.html").read_text(encoding="utf-8")
+        self.assertIn('<figure class="blog4-manga">', html)
+        self.assertIn(
+            'src="https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/site/images/blog-0004-four-panel.png"',
+            html,
+        )
+        self.assertIn('alt="AIと試し、結果を確かめ、経験を記録して次につなげる流れを描いた4コマ漫画"', html)
+        self.assertIn("試して、確かめて、記録する。AIとの実践で大切にしていること。", html)
+
     def test_blog_0001_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
             "ai-blog-start.html",
