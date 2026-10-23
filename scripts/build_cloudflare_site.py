@@ -17,7 +17,7 @@ TITLE = "GitHub編：AIとのやりとりを、どうやって「残るもの」
 PERMALINK = "github-ai-conversation.html"
 BLOG1_SOURCE = ROOT / "docs/企画/BLOG-0001_Blogger掲載用.html"
 BLOG2_SOURCE = ROOT / "docs/企画/BLOG-0002/BLOG-0002_Blogger掲載用.html"
-BLOG2_IMAGE_DIR = ROOT / "docs/企画/BLOG-0002/画像"
+BLOG2_IMAGE_DIR = ROOT / "docs/企画/BLOG-0002/images"
 BLOG1_TITLE = "AIとのやりとりを残してみる――それは「便利そうだな」から始まった"
 BLOG2_TITLE = "もう一度動かしてみた――その先で考えたこと"
 BLOG1_PERMALINK = "ai-blog-start.html"
@@ -101,7 +101,7 @@ for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE):
 if DIST.exists():
     shutil.rmtree(DIST)
 (DIST / "images").mkdir(parents=True)
-BANNER = ROOT / "docs/site/images/taka-blog-banner.jpg"
+BANNER = ROOT / "docs/assets/taka-blog-banner.jpg"
 if not BANNER.is_file():
     raise SystemExit(f"missing banner: {BANNER}")
 (DIST / "images" / "blog-0002").mkdir(parents=True)
@@ -113,7 +113,7 @@ blog4_html = BLOG4_SOURCE.read_text(encoding="utf-8")
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
-blog2_raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/%E7%94%BB%E5%83%8F/"
+blog2_raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0002/images/"
 blog2_html = blog2_html.replace(blog2_raw_base, "images/blog-0002/")
 
 for image in sorted(IMAGE_DIR.iterdir()):
