@@ -9,6 +9,7 @@ import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "docs/企画/BLOG-0003/BLOG-0003_Blogger掲載用.html"
+BLOG4_SOURCE = ROOT / "docs/企画/BLOG-0004/BLOG-0004_Blogger掲載用.html"
 IMAGE_DIR = ROOT / "docs/企画/BLOG-0003/images"
 DIST = ROOT / "dist"
 
@@ -24,11 +25,15 @@ BLOG2_PERMALINK = "vaio-p-again-and-beyond.html"
 BLOG1_DESCRIPTION = "AIとのやりとりからブログ制作の仕組みを考え始めた記録。Claudeのブラウザ操作をきっかけに、GeminiやPythonでの自動化、経験を記事として残す発想につながっていく。"
 BLOG2_DESCRIPTION = "VAIO Pをもう一度動かすためにDebianを導入し、環境を整えた記録。DIGA／DiMORAの番組予約情報を扱う自動化テストを通して、試行錯誤と次の発想を振り返る。"
 BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作業の進み具合を管理する仕組みを作った経験。会話を保存するだけでなく、あとから再開できる形に整えていく過程を紹介する。"
+BLOG4_TITLE = "AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと"
+BLOG4_PERMALINK = "ai-trial-and-record.html"
+BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
     {"title": BLOG2_TITLE, "permalink": BLOG2_PERMALINK, "part": "第2部｜VAIO P", "description": BLOG2_DESCRIPTION},
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
+    {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "第4部｜AIとの実践", "description": BLOG4_DESCRIPTION},
 ]
 
 
@@ -89,7 +94,7 @@ def render_article_navigation(permalink):
 
 
 
-for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE):
+for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE):
     if not required_source.is_file():
         raise SystemExit(f"missing source: {required_source}")
 
@@ -104,6 +109,7 @@ if not BANNER.is_file():
 html = SOURCE.read_text(encoding="utf-8")
 blog1_html = BLOG1_SOURCE.read_text(encoding="utf-8")
 blog2_html = BLOG2_SOURCE.read_text(encoding="utf-8")
+blog4_html = BLOG4_SOURCE.read_text(encoding="utf-8")
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
@@ -312,20 +318,21 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   <h1 id="free-entry-title">AIで何か始めたい人へ。基本の実践は完全無料で。</h1>
   <p>AIを使う、作業環境を整える、試行錯誤を記録する、経験や成果を公開する。そんな一連の実践を、有料プランや有料ツールを前提にせず始められる方法を紹介していきます。</p>
   <p class="free-note">無料プランの制限や、無料ではできないことも隠さず説明します。noteの有料記事は別枠です。セッティングマニュアルは準備中です。</p>
-  <a href="ai-blog-start.html">まずは、AIを使ってみた経験の記事を読む →</a>
+  <a href="ai-trial-and-record.html">AIと試行錯誤した経験から、学んだことを読む →</a>
 </section>
 <div class="layout">
 <section class="content">
-<h1>THREE PARTS / ONE STORY</h1>
-<a class="feature" href="ai-blog-start.html">
-  <p class="part">第1部｜経験ログ</p>
-  <h2>AIとのやりとりを残してみる――それは「便利そうだな」から始まった</h2>
-  <p>AIと一緒にブログを作ろうと思うまで。その最初の気持ちから始まった記録。</p>
+<h1>AIとの実践から学んだこと</h1>
+<a class="feature" href="ai-trial-and-record.html">
+  <p class="part">まず読んでほしい記事</p>
+  <h2>AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと</h2>
+  <p>AIと一緒に試し、結果を確かめ、経験を記録して次につなげる。実際に取り組んできたことから、おすすめしたい使い方をまとめました。</p>
   <span class="feature-arrow" aria-hidden="true">→</span>
 </a>
 <div class="others">
-  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>VAIO Pをもう一度動かしていった記録。</p></a>
-  <a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった――GitHubで作った仕組み</h2><p>保存し、現在を間違えない仕組みにしていった経験。</p></a>
+  <a class="card" href="ai-blog-start.html"><p class="part">経験ログの始まり</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
+  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">実際に試す</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
+  <a class="card" href="github-ai-conversation.html"><p class="part">経験を残す</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
 </div>
 </section>
 {render_sidebar()}
@@ -376,6 +383,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG1_PERMALINK: "FIRST PART / EXPERIENCE",
         BLOG2_PERMALINK: "SECOND PART / VAIO P",
         PERMALINK: "THIRD PART / GITHUB",
+        BLOG4_PERMALINK: "FOURTH PART / AI PRACTICE",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
@@ -387,6 +395,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG1_PERMALINK: BLOG1_DESCRIPTION,
         BLOG2_PERMALINK: BLOG2_DESCRIPTION,
         PERMALINK: BLOG3_DESCRIPTION,
+        BLOG4_PERMALINK: BLOG4_DESCRIPTION,
     }
     description = descriptions.get(permalink, title)
     base_page = re.sub(
@@ -431,9 +440,11 @@ def article_variant(base_page, title, permalink, body_html):
 page1 = article_variant(page, BLOG1_TITLE, BLOG1_PERMALINK, blog1_html)
 page2 = article_variant(page, BLOG2_TITLE, BLOG2_PERMALINK, blog2_html)
 page3 = article_variant(page, TITLE, PERMALINK, html)
+page4 = article_variant(page, BLOG4_TITLE, BLOG4_PERMALINK, blog4_html)
 (DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
 (DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
 (DIST / PERMALINK).write_text(page3, encoding="utf-8")
+(DIST / BLOG4_PERMALINK).write_text(page4, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
@@ -813,4 +824,5 @@ print(f"built {DIST / 'index.html'}")
 print(f"built {DIST / PERMALINK}")
 print(f"built {DIST / BLOG1_PERMALINK}")
 print(f"built {DIST / BLOG2_PERMALINK}")
+print(f"built {DIST / BLOG4_PERMALINK}")
 print(f"images: {len(list((DIST / 'images').iterdir()))}")
