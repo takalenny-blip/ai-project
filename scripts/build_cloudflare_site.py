@@ -101,7 +101,7 @@ for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE):
 if DIST.exists():
     shutil.rmtree(DIST)
 (DIST / "images").mkdir(parents=True)
-BANNER = ROOT / "docs/site/images/taka-blog-banner.jpg"
+BANNER = ROOT / "docs/assets/taka-blog-banner.jpg"
 if not BANNER.is_file():
     raise SystemExit(f"missing banner: {BANNER}")
 (DIST / "images" / "blog-0002").mkdir(parents=True)
