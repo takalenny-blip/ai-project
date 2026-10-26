@@ -240,6 +240,11 @@ code {{ background:#35322e; padding:.1em .3em; border-radius:2px; }}
   .header-inner {{ padding:22px 18px 18px; }}
   .site-signboard img {{ max-height:180px; }}
   .banner-inner {{ padding:11px 18px; }}
+  .series-banner-inner {{ padding:24px 18px 22px; }}
+  .series-title {{ font-size:1.7rem; }}
+  .series-description {{ font-size:.84rem; }}
+  .series-links {{ gap:7px; }}
+  .series-links .series-link {{ min-height:40px; padding:7px 10px; font-size:.8rem; }}
   main {{ padding:38px 18px 60px; }}
   .layout {{ grid-template-columns:1fr; gap:42px; }}
   article h1 {{ font-size:2rem; }}
