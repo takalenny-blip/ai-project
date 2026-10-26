@@ -38,6 +38,27 @@ ARTICLES = [
 ]
 
 
+def render_series_banner(current_permalink=None):
+    links = []
+    for item in ARTICLES:
+        is_current = item["permalink"] == current_permalink
+        label = "総括・実践ガイド" if item["permalink"] == BLOG4_PERMALINK else item["part"]
+        current_attr = ' aria-current="page"' if is_current else ""
+        guide_class = " series-link-guide" if item["permalink"] == BLOG4_PERMALINK else ""
+        links.append(
+            f'<a class="series-link{guide_class}" href="{item["permalink"]}"{current_attr}>'
+            f'{html_module.escape(label)}</a>'
+        )
+    return f"""<section class="series-banner" aria-labelledby="series-title">
+  <div class="series-banner-inner">
+    <p class="series-kicker">AI実践シリーズ｜全3部作＋総括ガイド</p>
+    <h2 class="series-title" id="series-title">{html_module.escape(SERIES_TITLE)}</h2>
+    <p class="series-description">第1部から第3部まで実体験をたどり、最後に総括・実践ガイドで学びを整理します。</p>
+    <nav class="series-links" aria-label="シリーズ全記事">{''.join(links)}</nav>
+  </div>
+</section>"""
+
+
 def render_sidebar():
     recent_links = "\n".join(
         f'<li><a href="{item["permalink"]}">{html_module.escape(item["title"])}</a></li>'
@@ -154,6 +175,17 @@ body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-
 .header-kicker {{ margin:.55rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; }}
 .banner {{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }}
 .banner-inner {{ max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }}
+.banner-inner {{ max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }}
+.series-banner {{ border-top:1px solid #786342; border-bottom:1px solid #786342; background:linear-gradient(115deg,#292722 0%,#3a342a 55%,#292722 100%); }}
+.series-banner-inner {{ max-width:1120px; margin:0 auto; padding:30px 28px 27px; }}
+.series-kicker {{ margin:0 0 8px; color:#d8b979; font-size:.76rem; font-weight:700; letter-spacing:.12em; }}
+.series-title {{ margin:0; color:#fff4df; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.7rem,3.7vw,2.8rem); font-weight:600; line-height:1.35; letter-spacing:.015em; }}
+.series-description {{ margin:10px 0 18px; color:#e1d5c1; font-size:.9rem; }}
+.series-links {{ display:flex; flex-wrap:wrap; gap:9px; margin:0; padding:0; border:0; background:transparent; }}
+.series-links .series-link {{ display:inline-flex; align-items:center; min-height:42px; padding:8px 14px; border:1px solid #796b53; border-radius:4px; color:#f5e8d0; background:#353128; font-size:.84rem; font-weight:600; text-decoration:none; }}
+.series-links .series-link[aria-current="page"] {{ border-color:#f0ca77; background:#5a492d; box-shadow:inset 0 0 0 1px #f0ca77; }}
+.series-links .series-link-guide {{ border-color:#b3945a; background:#443824; }}
+.series-links .series-link:hover {{ border-color:#f0ca77; background:#51442f; }}
 main {{ max-width:1120px; margin:0 auto; padding:58px 28px 90px; }}
 .layout {{ display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; }}
 article {{ min-width:0; }}
@@ -223,7 +255,7 @@ code {{ background:#35322e; padding:.1em .3em; border-radius:2px; }}
     </a>
   </div>
 </header>
-<div class="banner"><div class="banner-inner">{SERIES_TITLE}</div></div>
+{render_series_banner(PERMALINK)}
 <main>
   <div class="layout">
     <article>
@@ -270,6 +302,16 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .header-kicker { margin:.7rem 0 0; color:var(--muted); font-size:.72rem; letter-spacing:.2em; }
 .banner { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
 .banner-inner { max-width:1120px; margin:0 auto; padding:13px 28px; color:var(--muted); font-size:.78rem; letter-spacing:.08em; }
+.series-banner { border-top:1px solid #786342; border-bottom:1px solid #786342; background:linear-gradient(115deg,#292722 0%,#3a342a 55%,#292722 100%); }
+.series-banner-inner { max-width:1120px; margin:0 auto; padding:30px 28px 27px; }
+.series-kicker { margin:0 0 8px; color:#d8b979; font-size:.76rem; font-weight:700; letter-spacing:.12em; }
+.series-title { margin:0; color:#fff4df; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.7rem,3.7vw,2.8rem); font-weight:600; line-height:1.35; letter-spacing:.015em; }
+.series-description { margin:10px 0 18px; color:#e1d5c1; font-size:.9rem; }
+.series-links { display:flex; flex-wrap:wrap; gap:9px; margin:0; padding:0; border:0; background:transparent; }
+.series-links .series-link { display:inline-flex; align-items:center; min-height:42px; padding:8px 14px; border:1px solid #796b53; border-radius:4px; color:#f5e8d0; background:#353128; font-size:.84rem; font-weight:600; text-decoration:none; }
+.series-links .series-link[aria-current="page"] { border-color:#f0ca77; background:#5a492d; box-shadow:inset 0 0 0 1px #f0ca77; }
+.series-links .series-link-guide { border-color:#b3945a; background:#443824; }
+.series-links .series-link:hover { border-color:#f0ca77; background:#51442f; }
 .free-entry { max-width:1064px; margin:34px auto 0; padding:32px 34px; border:1px solid var(--accent); background:var(--cream); }
 .free-entry .eyebrow { margin:0 0 10px; color:var(--accent); font-size:.72rem; font-weight:600; letter-spacing:.15em; }
 .free-entry h1 { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.7rem,3.4vw,2.5rem); font-weight:500; line-height:1.45; }
@@ -301,6 +343,11 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   .header-inner { padding:22px 18px 18px; }
   .site-signboard img { max-height:180px; }
   .banner-inner { padding:11px 18px; }
+  .series-banner-inner { padding:24px 18px 22px; }
+  .series-title { font-size:1.7rem; }
+  .series-description { font-size:.84rem; }
+  .series-links { gap:7px; }
+  .series-links .series-link { min-height:40px; padding:7px 10px; font-size:.8rem; }
   .free-entry { margin:22px 18px 0; padding:24px 20px; }
   .layout { grid-template-columns:1fr; gap:42px; padding:42px 18px 60px; }
   .feature { padding:30px 0 34px; }
@@ -313,7 +360,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </head>
 <body>
 <header class="site-header"><div class="header-inner"><a class="site-signboard" href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></div></header>
-<div class="banner"><div class="banner-inner">{SERIES_TITLE}</div></div>
+<!--SERIES_BANNER_PLACEHOLDER-->
 <section class="free-entry" aria-labelledby="free-entry-title">
   <p class="eyebrow">AIを始めたい人へ</p>
   <h1 id="free-entry-title">AIで何か始めたい人へ。基本の実践は完全無料で。</h1>
@@ -342,7 +389,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </body>
 </html>
 """
-home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer()).replace('{SERIES_TITLE}', SERIES_TITLE)
+home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer()).replace('<!--SERIES_BANNER_PLACEHOLDER-->', render_series_banner())
 
 quote_samples = """<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
