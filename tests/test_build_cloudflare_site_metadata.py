@@ -58,8 +58,16 @@ class ArticleSeoMetadataTests(unittest.TestCase):
                 html = (DIST / permalink).read_text(encoding="utf-8")
                 self.assertIn("AIと一緒に。無料で試して、残して、育てる", html)
                 self.assertIn(f'<p class="eyebrow">{part}</p>', html)
+                self.assertIn('<section class="series-banner" aria-labelledby="series-title">', html)
+                self.assertIn('<p class="series-kicker">AI実践シリーズ｜全3部作＋総括ガイド</p>', html)
+                self.assertIn('<h2 class="series-title" id="series-title">AIと一緒に。無料で試して、残して、育てる</h2>', html)
+                self.assertIn('href="ai-blog-start.html"', html)
+                self.assertIn('href="vaio-p-again-and-beyond.html"', html)
+                self.assertIn('href="github-ai-conversation.html"', html)
+                self.assertIn('href="ai-trial-and-record.html"', html)
         home = (DIST / "index.html").read_text(encoding="utf-8")
         self.assertIn("AIと一緒に。無料で試して、残して、育てる", home)
+        self.assertIn('<p class="series-kicker">AI実践シリーズ｜全3部作＋総括ガイド</p>', home)
         self.assertNotIn("{SERIES_TITLE}", home)
 
     def test_blog_0004_four_panel_manga_is_rendered(self):
