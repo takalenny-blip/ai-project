@@ -377,15 +377,15 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 <section class="content">
 <h1>AIとの実践から学んだこと</h1>
 <a class="feature" href="ai-trial-and-record.html">
-  <p class="part">まず読んでほしい記事</p>
+  <p class="part">総括・実践ガイド</p>
   <h2>AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと</h2>
   <p>AIと一緒に試し、結果を確かめ、経験を記録して次につなげる。実際に取り組んできたことから、おすすめしたい使い方をまとめました。</p>
   <span class="feature-arrow" aria-hidden="true">→</span>
 </a>
 <div class="others">
-  <a class="card" href="ai-blog-start.html"><p class="part">経験ログの始まり</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
-  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">実際に試す</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
-  <a class="card" href="github-ai-conversation.html"><p class="part">経験を残す</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
+  <a class="card" href="ai-blog-start.html"><p class="part">第1章</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
+  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2章</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
+  <a class="card" href="github-ai-conversation.html"><p class="part">第3章</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
 </div>
 </section>
 {render_sidebar()}
