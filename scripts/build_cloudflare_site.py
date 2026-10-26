@@ -251,7 +251,7 @@ home = """<!doctype html>
 <meta name="description" content="AIを使って何かできないかな？基本の実践は完全無料で。AIを試す、経験を記録する、成果を公開するための方法と実体験を紹介します。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="たか’sブログ">
-<meta property="og:description" content="{SERIES_TITLE}ブログです。">
+<meta property="og:description" content="シリーズ「AIと一緒に。無料で試して、残して、育てる」を紹介するブログです。">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/">
 <meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">
 <meta property="og:image:alt" content="たか’sブログのサイトバナー">
@@ -342,7 +342,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </body>
 </html>
 """
-home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer())
+home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer()).replace('{SERIES_TITLE}', SERIES_TITLE)
 
 quote_samples = """<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
