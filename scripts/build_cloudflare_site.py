@@ -13,19 +13,20 @@ BLOG4_SOURCE = ROOT / "docs/企画/BLOG-0004/BLOG-0004_Blogger掲載用.html"
 IMAGE_DIR = ROOT / "docs/企画/BLOG-0003/images"
 DIST = ROOT / "dist"
 
-TITLE = "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか"
+SERIES_TITLE = "AIと一緒に。無料で試して、残して、育てる"
+TITLE = "第3部｜GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか"
 PERMALINK = "github-ai-conversation.html"
 BLOG1_SOURCE = ROOT / "docs/企画/BLOG-0001_Blogger掲載用.html"
 BLOG2_SOURCE = ROOT / "docs/企画/BLOG-0002/BLOG-0002_Blogger掲載用.html"
 BLOG2_IMAGE_DIR = ROOT / "docs/企画/BLOG-0002/images"
-BLOG1_TITLE = "AIとのやりとりを残してみる――それは「便利そうだな」から始まった"
-BLOG2_TITLE = "もう一度動かしてみた――その先で考えたこと"
+BLOG1_TITLE = "第1部｜AIとのやりとりを残してみる――それは「便利そうだな」から始まった"
+BLOG2_TITLE = "第2部｜もう一度動かしてみた――その先で考えたこと"
 BLOG1_PERMALINK = "ai-blog-start.html"
 BLOG2_PERMALINK = "vaio-p-again-and-beyond.html"
 BLOG1_DESCRIPTION = "AIとのやりとりからブログ制作の仕組みを考え始めた記録。Claudeのブラウザ操作をきっかけに、GeminiやPythonでの自動化、経験を記事として残す発想につながっていく。"
 BLOG2_DESCRIPTION = "VAIO Pをもう一度動かすためにDebianを導入し、環境を整えた記録。DIGA／DiMORAの番組予約情報を扱う自動化テストを通して、試行錯誤と次の発想を振り返る。"
 BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作業の進み具合を管理する仕組みを作った経験。会話を保存するだけでなく、あとから再開できる形に整えていく過程を紹介する。"
-BLOG4_TITLE = "AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと"
+BLOG4_TITLE = "総括・実践ガイドのご案内｜AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと"
 BLOG4_PERMALINK = "ai-trial-and-record.html"
 BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
@@ -33,7 +34,7 @@ ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
     {"title": BLOG2_TITLE, "permalink": BLOG2_PERMALINK, "part": "第2部｜VAIO P", "description": BLOG2_DESCRIPTION},
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
-    {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "第4部｜AIとの実践", "description": BLOG4_DESCRIPTION},
+    {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
 ]
 
 
@@ -222,7 +223,7 @@ code {{ background:#35322e; padding:.1em .3em; border-radius:2px; }}
     </a>
   </div>
 </header>
-<div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
+<div class="banner"><div class="banner-inner">{SERIES_TITLE}</div></div>
 <main>
   <div class="layout">
     <article>
@@ -250,7 +251,7 @@ home = """<!doctype html>
 <meta name="description" content="AIを使って何かできないかな？基本の実践は完全無料で。AIを試す、経験を記録する、成果を公開するための方法と実体験を紹介します。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="たか’sブログ">
-<meta property="og:description" content="AIとのやりとりと、そこから生まれた経験を残していくブログです。">
+<meta property="og:description" content="シリーズ「AIと一緒に。無料で試して、残して、育てる」を紹介するブログです。">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/">
 <meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">
 <meta property="og:image:alt" content="たか’sブログのサイトバナー">
@@ -312,7 +313,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </head>
 <body>
 <header class="site-header"><div class="header-inner"><a class="site-signboard" href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></div></header>
-<div class="banner"><div class="banner-inner">AIとのやりとりと、そこから生まれた経験を残していく</div></div>
+<div class="banner"><div class="banner-inner">{SERIES_TITLE}</div></div>
 <section class="free-entry" aria-labelledby="free-entry-title">
   <p class="eyebrow">AIを始めたい人へ</p>
   <h1 id="free-entry-title">AIで何か始めたい人へ。基本の実践は完全無料で。</h1>
@@ -341,7 +342,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </body>
 </html>
 """
-home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer())
+home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer()).replace('{SERIES_TITLE}', SERIES_TITLE)
 
 quote_samples = """<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -380,14 +381,14 @@ robots_txt = "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.
 
 def article_variant(base_page, title, permalink, body_html):
     labels = {
-        BLOG1_PERMALINK: "FIRST PART / EXPERIENCE",
-        BLOG2_PERMALINK: "SECOND PART / VAIO P",
-        PERMALINK: "THIRD PART / GITHUB",
-        BLOG4_PERMALINK: "FOURTH PART / AI PRACTICE",
+        BLOG1_PERMALINK: "第1部｜経験ログ",
+        BLOG2_PERMALINK: "第2部｜VAIO P",
+        PERMALINK: "第3部｜GitHub",
+        BLOG4_PERMALINK: "総括・実践ガイドのご案内",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
-        f'<p class="eyebrow">{labels.get(permalink, "ARTICLE / RECORD")}</p>',
+        f'<p class="eyebrow">{labels.get(permalink, "記事")}</p>',
     )
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
     base_page = re.sub(r"<title>.*?</title>", f"<title>{title}</title>", base_page, count=1)
@@ -619,7 +620,7 @@ a {{ color:#c4a46a; }}
 </head>
 <body>
 <header class="site-header"><a href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></header>
-<div class="banner">AIとのやりとりと、そこから生まれた経験を残していく</div>
+<div class="banner">{SERIES_TITLE}</div>
 <main>
 <h1>{title}</h1>
 {body}

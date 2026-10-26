@@ -46,6 +46,22 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         )
         self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
 
+    def test_series_title_and_article_parts_are_rendered_consistently(self):
+        expected_parts = {
+            "ai-blog-start.html": "第1部｜経験ログ",
+            "vaio-p-again-and-beyond.html": "第2部｜VAIO P",
+            "github-ai-conversation.html": "第3部｜GitHub",
+            "ai-trial-and-record.html": "総括・実践ガイドのご案内",
+        }
+        for permalink, part in expected_parts.items():
+            with self.subTest(permalink=permalink):
+                html = (DIST / permalink).read_text(encoding="utf-8")
+                self.assertIn("AIと一緒に。無料で試して、残して、育てる", html)
+                self.assertIn(f'<p class="eyebrow">{part}</p>', html)
+        home = (DIST / "index.html").read_text(encoding="utf-8")
+        self.assertIn("AIと一緒に。無料で試して、残して、育てる", home)
+        self.assertNotIn("{SERIES_TITLE}", home)
+
     def test_blog_0004_four_panel_manga_is_rendered(self):
         html = (DIST / "ai-trial-and-record.html").read_text(encoding="utf-8")
         self.assertIn('<figure class="blog4-manga">', html)
@@ -59,25 +75,25 @@ class ArticleSeoMetadataTests(unittest.TestCase):
     def test_blog_0001_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
             "ai-blog-start.html",
-            "AIとのやりとりを残してみる――それは「便利そうだな」から始まった",
+            "第1部｜AIとのやりとりを残してみる――それは「便利そうだな」から始まった",
         )
 
     def test_blog_0002_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
             "vaio-p-again-and-beyond.html",
-            "もう一度動かしてみた――その先で考えたこと",
+            "第2部｜もう一度動かしてみた――その先で考えたこと",
         )
 
     def test_blog_0003_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
             "github-ai-conversation.html",
-            "GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか",
+            "第3部｜GitHub編：AIとのやりとりを、どうやって「残るもの」にしていったか",
         )
 
     def test_blog_0004_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
             "ai-trial-and-record.html",
-            "AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと",
+            "総括・実践ガイドのご案内｜AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと",
         )
 
     def test_canonical_pages_have_consistent_social_metadata_and_valid_json_ld(self):
