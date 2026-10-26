@@ -68,6 +68,10 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         home = (DIST / "index.html").read_text(encoding="utf-8")
         self.assertIn("AIと一緒に。無料で試して、残して、育てる", home)
         self.assertIn('<p class="series-kicker">AI実践シリーズ｜全3部作＋総括ガイド</p>', home)
+        self.assertIn('<p class="part">第1章</p><h2>「便利そうだな」から始まった</h2>', home)
+        self.assertIn('<p class="part">第2章</p><h2>もう一度動かしてみた――その先で考えたこと</h2>', home)
+        self.assertIn('<p class="part">第3章</p><h2>AIとのやりとりを「残るもの」にしていった</h2>', home)
+        self.assertIn('<p class="part">総括・実践ガイド</p>', home)
         self.assertNotIn("{SERIES_TITLE}", home)
 
     def test_blog_0004_four_panel_manga_is_rendered(self):
