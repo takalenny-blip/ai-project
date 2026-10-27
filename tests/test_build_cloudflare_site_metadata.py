@@ -61,11 +61,18 @@ class ArticleSeoMetadataTests(unittest.TestCase):
                 self.assertIn('<section class="series-banner" aria-labelledby="series-title">', html)
                 self.assertIn('<p class="series-kicker">AI実践シリーズ｜全3部作＋総括ガイド</p>', html)
                 self.assertIn('<h2 class="series-title" id="series-title">AIと一緒に。無料で試して、残して、育てる</h2>', html)
-                self.assertEqual(html.count('aria-current="page"'), 1)
-                self.assertIn(f'href="{permalink}" aria-current="page"', html)
+                series_nav_match = re.search(
+                    r'<nav class="series-links" aria-label="シリーズ全記事">(.*?)</nav>',
+                    html,
+                    re.DOTALL,
+                )
+                self.assertIsNotNone(series_nav_match)
+                series_nav = series_nav_match.group(1)
+                self.assertEqual(series_nav.count('aria-current="page"'), 1)
+                self.assertIn(f'href="{permalink}" aria-current="page"', series_nav)
                 for other_permalink in expected_parts:
                     if other_permalink != permalink:
-                        self.assertNotIn(f'href="{other_permalink}" aria-current="page"', html)
+                        self.assertNotIn(f'href="{other_permalink}" aria-current="page"', series_nav)
                 self.assertIn('href="ai-blog-start.html"', html)
                 self.assertIn('href="vaio-p-again-and-beyond.html"', html)
                 self.assertIn('href="github-ai-conversation.html"', html)
