@@ -260,7 +260,7 @@ code {{ background:#35322e; padding:.1em .3em; border-radius:2px; }}
     </a>
   </div>
 </header>
-{render_series_banner(PERMALINK)}
+<!--SERIES_BANNER_PLACEHOLDER -->
 <main>
   <div class="layout">
     <article>
@@ -432,6 +432,10 @@ robots_txt = "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.
 # The canonical article is written after article_variant adds the shared article navigation.
 
 def article_variant(base_page, title, permalink, body_html):
+    base_page = base_page.replace(
+        "<!--SERIES_BANNER_PLACEHOLDER -->",
+        render_series_banner(permalink),
+    )
     labels = {
         BLOG1_PERMALINK: "第1部｜経験ログ",
         BLOG2_PERMALINK: "第2部｜VAIO P",
