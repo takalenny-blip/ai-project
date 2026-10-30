@@ -7,6 +7,9 @@ ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 AUDIT_RULE = ROOT / "rules" / "構造変更時・独立監査ガード.md"
 OPERATING_RULE = ROOT / "rules" / "運用ルール.md"
+CHAT_RULE = ROOT / "rules" / "直チャット保存.md"
+BLOG_RULE = ROOT / "rules" / "ブログ制作.md"
+RULES_README = ROOT / "rules" / "README.md"
 READ_MAP = ROOT / "docs" / "AI_READ_MAP.md"
 
 
@@ -19,6 +22,9 @@ def main() -> int:
     readme = README.read_text(encoding="utf-8")
     audit_rule = AUDIT_RULE.read_text(encoding="utf-8")
     operating_rule = OPERATING_RULE.read_text(encoding="utf-8")
+    chat_rule = CHAT_RULE.read_text(encoding="utf-8")
+    blog_rule = BLOG_RULE.read_text(encoding="utf-8")
+    rules_readme = RULES_README.read_text(encoding="utf-8")
     read_map = READ_MAP.read_text(encoding="utf-8")
 
     require(readme, "日常作業キューの唯一の正本はDropboxの固定ファイル", "README Dropbox queue source")
@@ -37,6 +43,17 @@ def main() -> int:
     require(audit_rule, "次に参加するAI", "next-agent safety check")
     require(audit_rule, "通常工程へ戻る", "return-to-normal-operation rule")
     require(operating_rule, "GitHub上の `docs/現在状態.json` を最初に直接読み", "rule canonical startup state")
+    require(operating_rule, "操作別ルールの読み込みゲート", "operation-specific routing gate")
+    require(operating_rule, "rules/直チャット保存.md", "chat rule route")
+    require(operating_rule, "rules/ブログ制作.md", "blog rule route")
+    require(operating_rule, "宣言だけでは読み込み済みと認めない", "read-before-declare gate")
+    require(chat_rule, "### 4-1. 保存目的", "chat rule content moved")
+    require(blog_rule, "7-5-4-1. ブログ制作における勝手な判断", "blog top rule moved")
+    require(blog_rule, "## 8. Blogger掲載用HTML整形規約", "blog HTML rules moved")
+    require(rules_readme, "rules/直チャット保存.md", "rules README chat route")
+    require(rules_readme, "rules/ブログ制作.md", "rules README blog route")
+    if "### 4-1. 保存目的" in operating_rule or "## 7. ブログ記事作成時のインタビュー方針" in operating_rule or "## 8. Blogger掲載用HTML整形規約" in operating_rule:
+        raise SystemExit("FAIL: operation-specific rule body remains duplicated in common operating rule")
 
     require(read_map, "Dropbox `/ChatGPT/Dropbox作業管理統合ボード.xlsx` — 日常作業キュー・優先度・状態・次のアクションの唯一の正本", "AI read map Dropbox queue source")
     require(read_map, "`BUD.md` / `docs/引き継ぎ/現在の引き継ぎ.md` — 正本から生成された互換ビュー", "AI read map generated views")
