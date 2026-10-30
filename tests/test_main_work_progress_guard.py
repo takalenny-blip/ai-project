@@ -28,6 +28,13 @@ class MainWorkProgressGuardTests(unittest.TestCase):
         ok, _ = validate("work/real-change", ["tests/test_dimora_adapter.py"])
         self.assertTrue(ok)
 
+    def test_work_branch_accepts_project_document(self):
+        ok, _ = validate(
+            "work/27-star-wars-readme-20261030",
+            ["projects/27_スター・ウォーズ続編再構築/README.md"],
+        )
+        self.assertTrue(ok)
+
     def test_work_branch_accepts_japanese_rules_path(self):
         ok, _ = validate("work/blog-publication-roles-20261009", ["rules/運用ルール.md"])
         self.assertTrue(ok)

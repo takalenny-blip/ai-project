@@ -21,6 +21,7 @@ SUBSTANTIVE_PREFIXES = (
     "tools/",
     "docs/企画/",
     "docs/設計/",
+    "projects/",
     "schemas/",
     "rules/",
     "経験ログ/",
