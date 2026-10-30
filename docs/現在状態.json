@@ -1,6 +1,6 @@
 {
   "schema_version": 5,
-  "updated": "2026-10-29",
+  "updated": "2026-10-30",
   "canonical_repository": "takalenny-blip/ai-project",
   "primary_lane": "experience-log → Blogger下書き確認 → GitHub Pages本番公開",
   "original_lane": "DIGA / DiMORA自動化",
@@ -12,9 +12,9 @@
     "work_queue": "日常作業キューの唯一の正本はDropboxの固定ファイル /ChatGPT/Dropbox作業管理統合ボード.xlsx。旧GitHub work_itemsとnext_stepのキューデータは削除済み。Dropboxを読めない場合は停止し、会話履歴や生成ビューから補完しない。"
   },
   "direct_chat": {
-    "latest_saved": "2026-10-29T20-55-32.810320+0900",
-    "latest_path": "直チャット/2026-10-29_直チャット即時保存_2026-10-29T20-55-32.810320+0900.md",
-    "latest_content_sha": "a9e6f9e048cd7525774a4e7dd284457024f7844f",
+    "latest_saved": "2026-10-30T18-54-01.570261+0900",
+    "latest_path": "直チャット/2026-10-30_直チャット即時保存_2026-10-30T18-54-01.570261+0900.md",
+    "latest_content_sha": "44465127952ccfcb395c5fb5097e7d2c436abb58",
     "legacy_serial_files_preserved": true,
     "new_timestamp_naming_allowed": true
   },
