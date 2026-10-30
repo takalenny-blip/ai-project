@@ -71,7 +71,7 @@ def validate_commit(root: Path, commit: str) -> tuple[bool, str]:
         return False, "atomic-save validation requires a single-parent commit"
     parent = parents[1]
     raw = git(root, "-c", "core.quotepath=false", "diff-tree", "--no-commit-id", "--name-status", "-r", parent, commit)
-    entries = [line.split("\\t", 1) for line in raw.splitlines() if line]
+    entries = [line.split("\t", 1) for line in raw.splitlines() if line]
     statuses = {parts[1]: parts[0] for parts in entries if len(parts) == 2}
     changed = set(statuses)
     bundle_touched = changed & BUNDLE
