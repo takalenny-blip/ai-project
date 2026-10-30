@@ -75,6 +75,16 @@ class SaveRequestCategoryTests(unittest.TestCase):
         self.assertTrue(ok, message)
         self.assertEqual(extracted, body)
 
+    def test_template_is_recognized_and_extracts_only_original_body(self):
+        content = TEMPLATE.read_text(encoding="utf-8")
+        body = "# 20261030-3\\n\\n会話本文\\n\\n"
+        request_content = content.replace("## 本文\\n\\n", "## 本文\\n\\n" + body, 1)
+        ok, message, extracted = prepare_request(request_content)
+        self.assertTrue(ok, message)
+        self.assertEqual(extracted, body)
+        self.assertNotIn("保存対象種別", extracted)
+        self.assertNotIn("直チャット保存要求", extracted)
+
 
 if __name__ == "__main__":
     unittest.main()
