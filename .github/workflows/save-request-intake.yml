@@ -130,12 +130,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t saves < <(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --json number,headRefName,createdAt --jq '.[] | select(.headRefName | startswith("save/direct-chat-")) | [.number,.createdAt] | @tsv')
-          if [ "${#saves[@]}" -eq 0 ]; then
-            exit 0
-          fi
-          echo "Existing canonical save PRs: ${saves[*]}"
-          echo "Stale canonical save PRs do not block intake; concurrency serializes intake runs."
+          gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --limit 1000 --json number,headRefName,state | python scripts/check_save_backlog.py
 
       - name: Validate and read queue entry
         id: queue
@@ -166,8 +161,8 @@ jobs:
           blob_sha="$(printf '%s' "$tree_json" | jq -r --arg path "$queue_file" '.tree[] | select(.path == $path) | .sha')"
           test -n "$blob_sha"
           gh api "repos/${GITHUB_REPOSITORY}/git/blobs/${blob_sha}" --jq '.content' |
-            tr -d '\n' | base64 --decode > "$RUNNER_TEMP/direct-chat.md"
-          test -s "$RUNNER_TEMP/direct-chat.md"
+            tr -d '\n' | base64 --decode > "$RUNNER_TEMP/save-request.md"
+          test -s "$RUNNER_TEMP/save-request.md"
           echo "queue_file=$queue_file" >> "$GITHUB_OUTPUT"
           echo "source_pr=$source_pr" >> "$GITHUB_OUTPUT"
           echo "source_head_sha=$head_sha" >> "$GITHUB_OUTPUT"
@@ -181,24 +176,19 @@ jobs:
           echo "expected_script_hash=$(git show HEAD:scripts/check_save_request_category.py | git hash-object --stdin)"
           grep -n "re.escape(heading)" scripts/check_save_request_category.py
 
-      - name: Validate save request category
+      - name: Validate and extract save request body
         shell: bash
         run: |
           set -euo pipefail
-          validation_file="$RUNNER_TEMP/save-request-category.md"
-          {
-            printf '%s\n' '## 保存対象種別'
-            printf '%s\n' '会話記録'
-            printf '\n'
-            cat "$RUNNER_TEMP/direct-chat.md"
-          } > "$validation_file"
-          python scripts/check_save_request_category.py "$validation_file"
+          python scripts/check_save_request_category.py "$RUNNER_TEMP/save-request.md" \
+            --prepare-chat-to "$RUNNER_TEMP/direct-chat.md"
+          test -s "$RUNNER_TEMP/direct-chat.md"
 
       - name: Run save-intake regression tests
         shell: bash
         run: |
           set -euo pipefail
-          python -m unittest scripts.test_check_duplicate_direct_chat
+          python -m unittest scripts.test_check_duplicate_direct_chat scripts.test_check_save_request_category scripts.test_check_save_backlog
 
       - name: Detect duplicate or already-processed save request
         id: idempotency
@@ -210,16 +200,20 @@ jobs:
         run: |
           set -euo pipefail
           echo "skip=false" >> "$GITHUB_OUTPUT"
-          all_prs="$(gh pr list --repo "$GITHUB_REPOSITORY" --state all --base main --limit 1000 --json number,title,body)"
-          existing_pr="$(printf '%s' "$all_prs" | jq -r --arg pr "$SOURCE_PR" --arg sha "$SOURCE_HEAD_SHA" '
-            .[] |
-            select(.title == "直チャット保存＋現在状態と生成ビューを一括同期") |
-            select(((.body // "") | contains("<!-- save-request-source-pr: " + $pr + " -->")) or ((.body // "") | contains("<!-- save-request-source-head-sha: " + $sha + " -->"))) |
-            .number
-          ' | head -n 1)"
-          if [ -n "$existing_pr" ]; then
-            echo "Canonical save PR #$existing_pr already records source PR #$SOURCE_PR / head $SOURCE_HEAD_SHA; skipping duplicate intake."
+          all_prs="$(gh pr list --repo "$GITHUB_REPOSITORY" --state all --base main --limit 1000 --json number,title,body,state,mergedAt)"
+          existing_prs="$(printf '%s' "$all_prs" | jq -c --arg pr "$SOURCE_PR" --arg sha "$SOURCE_HEAD_SHA" '
+            [.[] |
+              select(.title == "直チャット保存＋現在状態と生成ビューを一括同期") |
+              select(((.body // "") | contains("<!-- save-request-source-pr: " + $pr + " -->")) or ((.body // "") | contains("<!-- save-request-source-head-sha: " + $sha + " -->"))) |
+              {number, state, mergedAt}
+            ]')"
+          active_pr="$(printf '%s' "$existing_prs" | jq -r '[.[] | select(.state == "OPEN" or .mergedAt != null) | .number] | first // empty')"
+          if [ -n "$active_pr" ]; then
+            echo "Canonical save PR #$active_pr for this source is open or already merged; skipping duplicate intake."
             echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if [ "$(printf '%s' "$existing_prs" | jq 'length')" -gt 0 ]; then
+            echo "Only closed, unmerged canonical save PRs exist for this source. A controlled retry is allowed after the backlog gate and duplicate-content check."
           fi
           duplicate_path="$(python scripts/check_duplicate_direct_chat.py "$RUNNER_TEMP/direct-chat.md" "直チャット")"
           if [ -n "$duplicate_path" ]; then
