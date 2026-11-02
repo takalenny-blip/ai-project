@@ -12,12 +12,32 @@ FILES = {
     "read_map": ROOT / "docs" / "AI_READ_MAP.md",
 }
 RETIRED = ("docs/現在状態.json", "BUD.md", "docs/引き継ぎ/現在の引き継ぎ.md")
+RETIRED_PATHS = (
+    "docs/現在状態.json",
+    "BUD.md",
+    "docs/引き継ぎ/現在の引き継ぎ.md",
+    "docs/引き継ぎ/README.md",
+    "generated/current-views/BUD.md",
+    "generated/current-views/現在の引き継ぎ.md",
+    "docs/BUD二重管理解消・運用マニュアル.md",
+    "scripts/current_state_guard.py",
+    "scripts/generate_current_views.py",
+    "scripts/resume_manifest.py",
+    "scripts/save_and_currentize.py",
+    ".github/workflows/canonical-state-request-intake.yml",
+    ".github/workflows/canonical-state-update.yml",
+    ".github/workflows/current-state-guard.yml",
+    ".github/workflows/current-state-views.yml",
+)
 
 def require(text: str, needle: str, label: str) -> None:
     if needle not in text:
         raise SystemExit(f"FAIL: {label}: missing required text: {needle}")
 
 def main() -> int:
+    for rel in RETIRED_PATHS:
+        if (ROOT / rel).exists():
+            raise SystemExit(f"FAIL: retired current-state artifact still exists: {rel}")
     content = {}
     for name, path in FILES.items():
         if not path.is_file():
