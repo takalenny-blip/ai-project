@@ -24,3 +24,24 @@ jobs:
           --branch "${{ github.event.pull_request.head.ref }}" \
           --base "origin/${{ github.base_ref }}" \
           --head "${{ github.event.pull_request.head.sha }}"
+
+      - name: Run current-state retirement and direct-chat regression tests
+        run: |
+          python3 -m unittest discover -s tests -p 'test_atomic_save_commit.py' -v
+          python3 -m unittest discover -s tests -p 'test_check_direct_chat_immutability.py' -v
+          python3 -m unittest discover -s tests -p 'test_save_direct_chat.py' -v
+          python3 -m unittest discover -s tests -p 'test_save_lifecycle_status.py' -v
+          python3 -m unittest discover -s tests -p 'test_resume_check.py' -v
+          python3 -m unittest discover -s tests -p 'test_main_work_progress_guard.py' -v
+          python3 -m unittest discover -s tests -p 'test_interaction_preflight.py' -v
+          python3 -m unittest discover -s tests -p 'test_interaction_session.py' -v
+          python3 -m unittest scripts.test_check_duplicate_direct_chat scripts.test_check_save_request_category scripts.test_check_save_backlog -v
+      - name: Verify historical direct-chat originals are unchanged
+        run: python3 scripts/check_direct_chat_immutability.py --base "origin/${{ github.base_ref }}" --head "${{ github.event.pull_request.head.sha }}"
+      - name: Check repository entry documents
+        run: python3 scripts/check_entry_docs.py
+      - name: Run repository integrity checks
+        run: |
+          python3 scripts/check_repo_integrity.py
+          python3 -m compileall -q scripts tests
+          python3 scripts/check_repo_integrity.py --self-test

@@ -13,13 +13,13 @@ SCRIPT = ROOT / "scripts" / "interaction_preflight.py"
 class InteractionPreflightTests(unittest.TestCase):
     def test_requires_history_and_evidence_arguments(self):
         result = subprocess.run(
-            [sys.executable, str(SCRIPT), "--state", str(ROOT / "docs" / "現在状態.json"), "--text", ""],
+            [sys.executable, str(SCRIPT), "--text", ""],
             capture_output=True,
             text=True,
         )
         self.assertNotEqual(result.returncode, 0)
 
-    def test_accepts_complete_preflight_inputs(self):
+    def test_accepts_complete_preflight_inputs_without_state_snapshot(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             evidence_file = tmp / "evidence.txt"
@@ -30,23 +30,10 @@ class InteractionPreflightTests(unittest.TestCase):
                 "path": str(evidence_file),
                 "sha256": hashlib.sha256(evidence_file.read_bytes()).hexdigest(),
             }]), encoding="utf-8")
-            state = tmp / "state.json"
-            state.write_text(json.dumps({
-                "current_position": {},
-            }), encoding="utf-8")
             history = tmp / "history.json"
-            history.write_text(json.dumps([{
-                "state_fingerprint": "a",
-                "progress": False,
-            }]), encoding="utf-8")
+            history.write_text(json.dumps([{"state_fingerprint": "a"}]), encoding="utf-8")
             result = subprocess.run(
-                [
-                    sys.executable, str(SCRIPT),
-                    "--state", str(state),
-                    "--text", "証拠を確認する。",
-                    "--evidence-json", str(evidence),
-                    "--history", str(history),
-                ],
+                [sys.executable, str(SCRIPT), "--text", "証拠を確認する。", "--evidence-json", str(evidence), "--history", str(history)],
                 capture_output=True,
                 text=True,
             )

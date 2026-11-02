@@ -11,9 +11,9 @@ class SaveBacklogTests(unittest.TestCase):
         prs = [{"number": 12, "headRefName": "save/direct-chat-12", "state": "OPEN"}]
         self.assertEqual(blocking_prs(prs), prs)
 
-    def test_open_currentize_pr_blocks_intake(self):
+    def test_legacy_currentize_branch_is_not_a_save_track(self):
         prs = [{"number": 13, "headRefName": "save/currentize-13", "state": "OPEN"}]
-        self.assertEqual(blocking_prs(prs), prs)
+        self.assertEqual(blocking_prs(prs), [])
 
     def test_closed_save_pr_does_not_block_intake(self):
         prs = [{"number": 14, "headRefName": "save/direct-chat-14", "state": "CLOSED"}]

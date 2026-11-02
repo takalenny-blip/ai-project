@@ -10,8 +10,7 @@ except ModuleNotFoundError:
     import interaction_guard as guard
     import blog_work_state
 
-def run_preflight(*, state_path: Path, text: str, evidence_path: Path, history_path: Path, loop_threshold: int = 2, work_state_path: Path | None = None) -> None:
-    state = guard.load_json(state_path)
+def run_preflight(*, text: str, evidence_path: Path, history_path: Path, loop_threshold: int = 2, work_state_path: Path | None = None) -> None:
     if work_state_path:
         blog_work_state.load(work_state_path)
     evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
@@ -25,7 +24,6 @@ def run_preflight(*, state_path: Path, text: str, evidence_path: Path, history_p
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--state", type=Path, required=True)
     parser.add_argument("--text", required=True)
     parser.add_argument("--evidence-json", type=Path, required=True)
     parser.add_argument("--history", type=Path, required=True)
@@ -33,7 +31,7 @@ def main() -> int:
     parser.add_argument("--work-state", type=Path)
     args = parser.parse_args()
     try:
-        run_preflight(state_path=args.state,text=args.text,evidence_path=args.evidence_json,history_path=args.history,loop_threshold=args.loop_threshold,work_state_path=args.work_state)
+        run_preflight(text=args.text,evidence_path=args.evidence_json,history_path=args.history,loop_threshold=args.loop_threshold,work_state_path=args.work_state)
         print("OK: mandatory interaction preflight passed")
         return 0
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
