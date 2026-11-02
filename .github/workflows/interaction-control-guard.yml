@@ -26,7 +26,6 @@ on:
       - 'tests/test_dropbox_board_remote.py'
       - 'tests/test_interaction_guard.py'
       - 'tests/test_interaction_session.py'
-      - 'docs/現在状態.json'
       - '.github/workflows/interaction-control-guard.yml'
 
 permissions:

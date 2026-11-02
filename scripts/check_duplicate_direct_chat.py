@@ -40,7 +40,7 @@ def find_duplicate(source_text: str, directory: Path) -> Path | None:
             continue
 
         if not source_has_own_title and saved.startswith("# 直チャット") and "\n\n" in saved:
-            # save_and_currentize.py prepends this title only when the incoming
+            # save_direct_chat.py prepends this title only when the incoming
             # source does not already start with "# 直チャット".
             saved_body = saved.split("\n\n", 1)[1]
         else:
