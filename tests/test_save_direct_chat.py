@@ -45,7 +45,7 @@ class SaveDirectChatTests(unittest.TestCase):
             content = (
                 "  original start\r\n"
                 "<!-- BUD_STATE_PATCH_BEGIN\r\n"
-                "{\\"work_items\\": [1]}\r\n"
+                '{"work_items": [1]}\r\n'
                 "BUD_STATE_PATCH_END -->\r\n"
                 "original end  \r\n"
             )
@@ -74,7 +74,7 @@ class SaveDirectChatTests(unittest.TestCase):
                 text=True,
             ).splitlines()
             self.assertEqual(len(changed), 1, changed)
-            status, relative = changed[0].split("\\t", 1)
+            status, relative = changed[0].split("\t", 1)
             self.assertEqual(status, "A")
             self.assertTrue(relative.startswith("直チャット/"))
             saved = repo / relative
