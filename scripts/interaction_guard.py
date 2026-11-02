@@ -3,7 +3,10 @@
 from __future__ import annotations
 import argparse, hashlib, json, os, re, zipfile
 from pathlib import Path
-from current_state_guard import validate_rules
+try:
+    from scripts.current_state_guard import validate_rules
+except ModuleNotFoundError:
+    from current_state_guard import validate_rules
 
 BLOCKED_PROGRESS_PATTERNS = (
     r"完了(?:しました|済み|した)", r"進(?:みました|んだ|めました|めた)",
