@@ -32,6 +32,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_save_direct_chat.py' -v
           python3 -m unittest discover -s tests -p 'test_save_lifecycle_status.py' -v
           python3 -m unittest discover -s tests -p 'test_resume_check.py' -v
+          python3 -m unittest discover -s tests -p 'test_main_work_progress_guard.py' -v
           python3 -m unittest discover -s tests -p 'test_interaction_preflight.py' -v
           python3 -m unittest discover -s tests -p 'test_interaction_session.py' -v
           python3 -m unittest scripts.test_check_duplicate_direct_chat scripts.test_check_save_request_category scripts.test_check_save_backlog -v
@@ -42,4 +43,5 @@ jobs:
       - name: Run repository integrity checks
         run: |
           python3 scripts/check_repo_integrity.py
+          python3 -m compileall -q scripts tests
           python3 scripts/check_repo_integrity.py --self-test
