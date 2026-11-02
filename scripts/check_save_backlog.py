@@ -7,7 +7,7 @@ import json
 import sys
 from typing import Any
 
-SAVE_BRANCH_PREFIXES = ("save/direct-chat-", "save/currentize-")
+SAVE_BRANCH_PREFIXES = ("save/direct-chat-",)
 
 
 def blocking_prs(prs: list[dict[str, Any]]) -> list[dict[str, Any]]:

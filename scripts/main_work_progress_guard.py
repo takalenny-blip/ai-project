@@ -8,11 +8,7 @@ from pathlib import Path
 import subprocess
 
 
-ADMIN_ONLY = {
-    "BUD.md",
-    "docs/現在状態.json",
-    "docs/引き継ぎ/現在の引き継ぎ.md",
-}
+ADMIN_ONLY: set[str] = set()
 SUBSTANTIVE_PREFIXES = (
     "scripts/",
     "tests/",
