@@ -14,7 +14,7 @@ def run(*args: str) -> str:
     return subprocess.check_output(args, cwd=ROOT, text=True).strip()
 
 def git_blob_sha(data: bytes) -> str:
-    header = f"blob {len(data)}\\0".encode("utf-8")
+    header = f"blob {len(data)}\0".encode("utf-8")
     return hashlib.sha1(header + data).hexdigest()
 
 STATE_PATCH_BEGIN = "<!-- BUD_STATE_PATCH_BEGIN"
@@ -22,14 +22,14 @@ STATE_PATCH_END = "BUD_STATE_PATCH_END -->"
 
 def strip_retired_embedded_state_patch(content: str) -> tuple[str, bool]:
     """Remove legacy embedded JSON patches without parsing or applying them."""
-    pattern = re.compile(re.escape(STATE_PATCH_BEGIN) + r"\\s*\\n.*?\\n" + re.escape(STATE_PATCH_END), re.DOTALL)
+    pattern = re.compile(re.escape(STATE_PATCH_BEGIN) + r"\s*\n.*?\n" + re.escape(STATE_PATCH_END), re.DOTALL)
     cleaned, count = pattern.subn("", content, count=1)
     if count == 0:
         return content, False
-    return cleaned.strip() + "\\n", True
+    return cleaned.strip() + "\n", True
 
 def update_latest_save_record(rules: str, timestamp: str, relative_path: str, blob_sha: str) -> str:
-    pattern = re.compile(r"(#### 直チャット保存記録（現行）\\s*\\n)(.*?)(?=\\n#### |\\n### |\\Z)", re.DOTALL)
+    pattern = re.compile(r"(#### 直チャット保存記録（現行）\s*\n)(.*?)(?=\n#### |\n### |\Z)", re.DOTALL)
     match = pattern.search(rules)
     if not match:
         raise SystemExit("rules/運用ルール.md has no current direct-chat save record section")
@@ -51,8 +51,8 @@ def main() -> int:
         raise SystemExit("refusing to run with pre-staged changes")
     content = args.content_file.read_text(encoding="utf-8") if args.content_file else sys.stdin.read()
     content, had_retired_patch = strip_retired_embedded_state_patch(content)
-    if not content.endswith("\\n"):
-        content += "\\n"
+    if not content.endswith("\n"):
+        content += "\n"
     now = datetime.now(ZoneInfo("Asia/Tokyo"))
     save_date = now.strftime("%Y-%m-%d")
     timestamp = f"{save_date}T{now:%H-%M-%S.%f%z}"
@@ -62,7 +62,7 @@ def main() -> int:
     if path.exists():
         raise SystemExit(f"refusing to overwrite existing record: {path}")
     if not content.startswith("# 直チャット"):
-        content = f"# 直チャット{timestamp}\\n\\n" + content.lstrip()
+        content = f"# 直チャット{timestamp}\n\n" + content.lstrip()
     rules = RULES_PATH.read_text(encoding="utf-8")
     blob_sha = git_blob_sha(content.encode("utf-8"))
     updated_rules = update_latest_save_record(rules, timestamp, relative_path, blob_sha)
@@ -73,7 +73,7 @@ def main() -> int:
     subprocess.run(["git", "add", str(path), str(RULES_PATH)], cwd=ROOT, check=True)
     expected = {relative_path, "rules/運用ルール.md"}
     staged_raw = subprocess.check_output(["git", "diff", "--cached", "--name-only", "-z"], cwd=ROOT)
-    staged = {p for p in staged_raw.decode("utf-8").split("\\0") if p}
+    staged = {p for p in staged_raw.decode("utf-8").split("\0") if p}
     if staged != expected:
         raise SystemExit(f"unexpected staged paths: {sorted(staged)}")
     subprocess.run([sys.executable, "scripts/check_repo_integrity.py"], cwd=ROOT, check=True)
