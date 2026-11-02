@@ -10,13 +10,13 @@ FILES = {
     "blog_rule": ROOT / "rules" / "ブログ制作.md",
     "rules_readme": ROOT / "rules" / "README.md",
     "read_map": ROOT / "docs" / "AI_READ_MAP.md",
+    "handoff_readme": ROOT / "docs" / "引き継ぎ" / "README.md",
 }
 RETIRED = ("docs/現在状態.json", "BUD.md", "docs/引き継ぎ/現在の引き継ぎ.md")
 RETIRED_PATHS = (
     "docs/現在状態.json",
     "BUD.md",
     "docs/引き継ぎ/現在の引き継ぎ.md",
-    "docs/引き継ぎ/README.md",
     "generated/current-views/BUD.md",
     "generated/current-views/現在の引き継ぎ.md",
     "docs/BUD二重管理解消・運用マニュアル.md",
@@ -53,11 +53,13 @@ def main() -> int:
     require(content["blog_rule"], "Blogger掲載用HTML整形規約", "blog operation rule remains available")
     require(content["rules_readme"], "rules/運用ルール.md", "rules readme common rule source")
     require(content["read_map"], "Dropbox", "read map Dropbox queue")
+    require(content["handoff_readme"], "rules/運用ルール.md", "handoff folder current rule source")
+    require(content["handoff_readme"], "Dropbox固定ボード", "handoff folder work queue source")
     for name, text in content.items():
         for retired in RETIRED:
             if retired in text:
                 raise SystemExit(f"FAIL: {name} still references retired current-state file: {retired}")
-    for name in ("README", "operating_rule", "chat_rule", "rules_readme", "read_map"):
+    for name in ("README", "operating_rule", "chat_rule", "rules_readme", "read_map", "handoff_readme"):
         if "save_and_currentize.py" in content[name] or "current_state_guard.py" in content[name] or "generate_current_views.py" in content[name]:
             raise SystemExit(f"FAIL: {name} still references retired current-state machinery")
     print("OK: repository entry documents use the single operating-rule source")
