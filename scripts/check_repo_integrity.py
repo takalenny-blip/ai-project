@@ -45,13 +45,13 @@ def timestamp_key(timestamp: str) -> datetime:
 
 
 def git_blob_sha(data: bytes) -> str:
-    return hashlib.sha1(f"blob {len(data)}\\0".encode("utf-8") + data).hexdigest()
+    return hashlib.sha1(f"blob {len(data)}\0".encode("utf-8") + data).hexdigest()
 
 
 def check_state(files: list[str]) -> None:
     text = (ROOT / RULES_PATH).read_text(encoding="utf-8")
     match = re.search(
-        r"#### 直チャット保存記録（現行）\\s*\\n(.*?)(?=\\n#### |\\n### |\\Z)",
+        r"#### 直チャット保存記録（現行）\s*\n(.*?)(?=\n#### |\n### |\Z)",
         text,
         re.DOTALL,
     )
