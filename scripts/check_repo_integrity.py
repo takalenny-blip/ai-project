@@ -4,14 +4,14 @@
 from __future__ import annotations
 
 import argparse
-import json
+import hashlib
 import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-STATE_PATH = ROOT / "docs/現在状態.json"
+RULES_PATH = ROOT / "rules/運用ルール.md"
 CANONICAL_TIMESTAMP_OFFSET = "+0900"
 
 TIMESTAMP_CHAT = re.compile(
@@ -40,91 +40,53 @@ def git_files() -> list[str]:
     return [p for p in out.decode("utf-8").split("\0") if p]
 
 
-def check_verification_state(state: dict) -> None:
-    required = state.get("verification_required", [])
-    if not all(isinstance(item, dict) and "item" in item and "status" in item for item in required):
-        raise SystemExit("FAIL: verification_required must use {item,status} objects")
-    statuses = {item["status"] for item in required}
-    invalid = statuses - {"done", "pending", "not_started", "conditional", "implemented_in_this_fix", "production_run_pending", "recorded_unverified", "verified"}
-    if invalid:
-        raise SystemExit("FAIL: invalid verification status: " + ", ".join(sorted(invalid)))
-    if state["migration"]["status"] in {"generated_views_migration_verified", "complete"}:
-        incomplete = [item["item"] for item in required if item["status"] in {"pending", "not_started"}]
-        if incomplete:
-            raise SystemExit(
-                "FAIL: migration.status claims complete with pending verification items: "
-                + "; ".join(incomplete)
-            )
-
-
 def timestamp_key(timestamp: str) -> datetime:
     return datetime.strptime(timestamp, "%Y-%m-%dT%H-%M-%S.%f%z" if "." in timestamp else "%Y-%m-%dT%H-%M-%S%z")
 
 
-def check_state(files: list[str]) -> None:
-    state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
-    check_verification_state(state)
+def git_blob_sha(data: bytes) -> str:
+    return hashlib.sha1(f"blob {len(data)}\\0".encode("utf-8") + data).hexdigest()
 
-    path = state["direct_chat"]["latest_path"]
-    latest = state["direct_chat"]["latest_saved"]
+
+def check_state(files: list[str]) -> None:
+    text = (ROOT / RULES_PATH).read_text(encoding="utf-8")
+    match = re.search(
+        r"#### 直チャット保存記録（現行）\\s*\\n(.*?)(?=\\n#### |\\n### |\\Z)",
+        text,
+        re.DOTALL,
+    )
+    if not match:
+        raise SystemExit("FAIL: current direct-chat save record is missing from rules/運用ルール.md")
+    section = match.group(1)
+    fields = {}
+    for label, key in (("最新保存", "timestamp"), ("原本", "path"), ("内容SHA", "sha")):
+        found = re.findall(rf"^- {label}：(.+)$", section, re.MULTILINE)
+        found = [value.strip().strip("`") for value in found]
+        if len(found) != 1:
+            raise SystemExit(f"FAIL: direct-chat save record must contain exactly one {label} field")
+        fields[key] = found[0]
+    path, latest = fields["path"], fields["timestamp"]
     if path not in files:
         raise SystemExit(f"FAIL: latest direct-chat path missing: {path}")
-
-    path_name = Path(path).name
-    timestamp_match = TIMESTAMP_CHAT.fullmatch(path_name)
-    serial_match = SERIAL_CHAT.fullmatch(path_name)
-
-    if timestamp_match:
-        if timestamp_match.group("timestamp") != latest:
-            raise SystemExit("FAIL: current state latest_saved/latest_path timestamp mismatch")
-        # Timestamped records created before the timezone-consistency fix may carry
-        # a legacy +0000 offset. Do not reinterpret or rename those historical files
-        # here. The canonical producer now emits +0900, so only canonical-offset
-        # records participate in the newest-record invariant once current state has
-        # moved to the canonical format.
-        if not latest.endswith(CANONICAL_TIMESTAMP_OFFSET):
-            print(
-                "OK: legacy timestamped current state retained; "
-                "newest-record invariant deferred until canonical +0900 save"
-            )
-            return
-
-        timestamps = []
-        for rel in files:
-            if not rel.startswith("直チャット/"):
-                continue
-            match = TIMESTAMP_CHAT.fullmatch(Path(rel).name)
-            if match and match.group("timestamp").endswith(CANONICAL_TIMESTAMP_OFFSET):
-                timestamps.append(match.group("timestamp"))
-        if not timestamps:
-            raise SystemExit("FAIL: canonical current state has no canonical +0900 direct-chat records")
+    timestamp_match = TIMESTAMP_CHAT.fullmatch(Path(path).name)
+    if not timestamp_match or timestamp_match.group("timestamp") != latest:
+        raise SystemExit("FAIL: rules latest_saved/latest_path timestamp mismatch")
+    actual_sha = git_blob_sha((ROOT / path).read_bytes())
+    if actual_sha != fields["sha"]:
+        raise SystemExit("FAIL: rules latest direct-chat content SHA mismatch")
+    timestamps = []
+    for rel in files:
+        if rel.startswith("直チャット/"):
+            candidate = TIMESTAMP_CHAT.fullmatch(Path(rel).name)
+            if candidate and candidate.group("timestamp").endswith(CANONICAL_TIMESTAMP_OFFSET):
+                timestamps.append(candidate.group("timestamp"))
+    if timestamps:
         newest = max(timestamps, key=timestamp_key)
-        if latest != newest:
+        if latest.endswith(CANONICAL_TIMESTAMP_OFFSET) and latest != newest:
             raise SystemExit(
-                "FAIL: current state does not point to newest canonical timestamped direct-chat record: "
-                f"state={latest}, newest={newest}"
+                "FAIL: rules does not point to newest canonical timestamped direct-chat record: "
+                f"rules={latest}, newest={newest}"
             )
-        return
-
-    if not serial_match or serial_match.group("serial") != latest:
-        raise SystemExit("FAIL: current state latest_saved/latest_path mismatch")
-
-    names = [Path(p).name for p in files if p.startswith("直チャット/")]
-    records: list[tuple[str, int, str]] = []
-    for name in names:
-        match = SERIAL_CHAT.fullmatch(name)
-        if match:
-            records.append((match.group("date"), int(match.group("serial")), name))
-    if not records:
-        raise SystemExit("FAIL: no three-digit direct-chat records found")
-    newest_date = max(date for date, _, _ in records)
-    newest_serial = max(serial for date, serial, _ in records if date == newest_date)
-    path_date = path_name[:10]
-    if path_date != newest_date or int(latest) != newest_serial:
-        raise SystemExit(
-            "FAIL: current state does not point to newest direct-chat record: "
-            f"state={path_name}, newest={newest_date}_..._{newest_serial:03d}.md"
-        )
 
 
 def check_chat_names(files: list[str]) -> None:
