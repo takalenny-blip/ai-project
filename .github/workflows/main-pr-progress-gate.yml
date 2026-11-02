@@ -30,6 +30,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_atomic_save_commit.py' -v
           python3 -m unittest discover -s tests -p 'test_check_direct_chat_immutability.py' -v
           python3 -m unittest discover -s tests -p 'test_save_direct_chat.py' -v
+          python3 -m unittest discover -s tests -p 'test_save_lifecycle_status.py' -v
           python3 -m unittest discover -s tests -p 'test_resume_check.py' -v
           python3 -m unittest discover -s tests -p 'test_interaction_preflight.py' -v
           python3 -m unittest discover -s tests -p 'test_interaction_session.py' -v
