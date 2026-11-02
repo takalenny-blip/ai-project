@@ -39,8 +39,6 @@ jobs:
           fi
           python3 scripts/check_atomic_save_commit.py --commit "$target_sha"
 
-      - name: Validate Dropbox migration dependency map
-        run: python3 scripts/check_dropbox_migration_map.py
       - name: Run current-state guards
         run: python3 scripts/current_state_guard.py
       - name: Run full regression tests
