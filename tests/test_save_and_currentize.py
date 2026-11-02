@@ -1,23 +1,15 @@
 from pathlib import Path
 
-
-def test_save_currentize_does_not_overwrite_canonical_next_design_item():
+def test_save_updates_operating_rules_not_retired_state_views():
     source = Path("scripts/save_and_currentize.py").read_text(encoding="utf-8")
-    assert 'state["surgery"]["next_design_item"]' not in source
-    assert "通常のDiMORA本来工程へ復帰する" not in source
-
-
-def test_save_currentize_allows_explicit_state_patch():
-    source = Path("scripts/save_and_currentize.py").read_text(encoding="utf-8")
-    assert "--state-patch-file" in source
-    assert "strip_retired_embedded_state_patch" in source
-    assert "had_retired_patch" in source
-    assert "--state-patch-file" in source
-
+    assert "rules/運用ルール.md" in source
+    assert "docs/現在状態.json" not in source
+    assert "BUD.md" not in source
+    assert "現在の引き継ぎ.md" not in source
+    assert "--state-patch-file" not in source
 
 def test_retired_embedded_patch_is_stripped_without_parsing_its_body():
     from scripts.save_and_currentize import strip_retired_embedded_state_patch
-
     content = (
         "historical record\n"
         "<!-- BUD_STATE_PATCH_BEGIN\n"
@@ -32,21 +24,24 @@ def test_retired_embedded_patch_is_stripped_without_parsing_its_body():
     assert "historical record" in cleaned
     assert "historical tail" in cleaned
 
-
 def test_content_without_retired_embedded_patch_is_unchanged():
     from scripts.save_and_currentize import strip_retired_embedded_state_patch
-
     content = "ordinary direct-chat record\n"
     cleaned, found = strip_retired_embedded_state_patch(content)
     assert cleaned == content
     assert found is False
 
-
-def test_retired_queue_fields_are_rejected_when_nested():
-    from scripts.save_and_currentize import contains_retired_queue_key
-
-    assert contains_retired_queue_key({"metadata": {"work_items": []}})
-    assert contains_retired_queue_key({"nested": [{"next_step": "old task"}]})
-    assert contains_retired_queue_key({"request": {"work_item_updates": [{"id": "old"}]}})
-    assert not contains_retired_queue_key({"technical": {"status": "verified"}})
-
+def test_update_latest_save_record_changes_only_the_three_pointer_fields():
+    from scripts.save_and_currentize import update_latest_save_record
+    rules = (
+        "#### 直チャット保存記録（現行）\n"
+        "- 最新保存：`old`\n"
+        "- 原本：`old.md`\n"
+        "- 内容SHA：`oldsha`\n"
+        "- 既存の連番方式ファイルは履歴として保持する。\n"
+    )
+    updated = update_latest_save_record(rules, "2026-11-02T12-00-00.123456+0900", "直チャット/new.md", "abc123")
+    assert "- 最新保存：`2026-11-02T12-00-00.123456+0900`" in updated
+    assert "- 原本：`直チャット/new.md`" in updated
+    assert "- 内容SHA：`abc123`" in updated
+    assert "既存の連番方式ファイルは履歴として保持する。" in updated
