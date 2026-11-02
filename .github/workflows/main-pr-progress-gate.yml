@@ -25,6 +25,14 @@ jobs:
           --base "origin/${{ github.base_ref }}" \
           --head "${{ github.event.pull_request.head.sha }}"
 
+      - name: Run current-state retirement and direct-chat regression tests
+        run: |
+          python3 -m unittest discover -s tests -p 'test_atomic_save_commit.py' -v
+          python3 -m unittest discover -s tests -p 'test_save_direct_chat.py' -v
+          python3 -m unittest discover -s tests -p 'test_resume_check.py' -v
+          python3 -m unittest discover -s tests -p 'test_interaction_preflight.py' -v
+          python3 -m unittest discover -s tests -p 'test_interaction_session.py' -v
+          python3 -m unittest scripts.test_check_duplicate_direct_chat scripts.test_check_save_request_category scripts.test_check_save_backlog -v
       - name: Check repository entry documents
         run: python3 scripts/check_entry_docs.py
       - name: Run repository integrity checks
