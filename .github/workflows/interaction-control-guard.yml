@@ -12,20 +12,20 @@ on:
       - 'tests/test_interaction_preflight.py'
       - 'tests/test_interaction_guard.py'
       - 'tests/test_interaction_session.py'
+      - 'rules/運用ルール.md'
       - 'scripts/resume_check.py'
-      - 'docs/現在状態.json'
       - '.github/workflows/interaction-control-guard.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/interaction_guard.py'
       - 'scripts/interaction_session.py'
+      - 'rules/運用ルール.md'
       - 'scripts/resume_check.py'
       - 'scripts/dropbox_board.py'
       - 'tests/test_dropbox_board_remote.py'
       - 'tests/test_interaction_guard.py'
       - 'tests/test_interaction_session.py'
-      - 'docs/現在状態.json'
       - '.github/workflows/interaction-control-guard.yml'
 
 permissions:
