@@ -11,18 +11,17 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 DIRECT_CHAT_DIR = ROOT / "直チャット"
 
-
 def write_original(path: Path, content: str) -> None:
-    """Write the supplied conversation text byte-for-text, without cleanup or sidecars."""
-    if path.exists():
-        raise FileExistsError(f"refusing to overwrite existing record: {path}")
+    """Write supplied conversation text without cleanup or sidecars."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(content, encoding="utf-8", newline="")
-
+    try:
+        with path.open("x", encoding="utf-8", newline="") as stream:
+            stream.write(content)
+    except FileExistsError as exc:
+        raise FileExistsError(f"refusing to overwrite existing record: {path}") from exc
 
 def git(*args: str) -> str:
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True, encoding="utf-8").strip()
-
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -31,7 +30,8 @@ def main() -> int:
     args = parser.parse_args()
     if not args.content_file.is_file():
         raise SystemExit(f"content file is missing: {args.content_file}")
-    content = args.content_file.read_text(encoding="utf-8", newline="")
+    with args.content_file.open("r", encoding="utf-8", newline="") as stream:
+        content = stream.read()
     if not content.strip():
         raise SystemExit("refusing to save an empty direct-chat record")
     now = datetime.now(ZoneInfo("Asia/Tokyo"))
@@ -54,7 +54,6 @@ def main() -> int:
     subprocess.run([sys.executable, "scripts/check_atomic_save_commit.py", "--commit", "HEAD"], cwd=ROOT, check=True)
     print(git("rev-parse", "HEAD"))
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
