@@ -1,34 +1,20 @@
 #!/usr/bin/env python3
-"""Explicit per-turn loop gate for callers that can supply canonical state.
-
-This does not hook into ChatGPT's runtime. A caller must invoke it once per turn
-and keep one history file per conversation/session.
-"""
+"""Explicit per-turn loop gate based on the operating rules and Dropbox board."""
 from __future__ import annotations
-
-import argparse
-import json
-import os
-import tempfile
+import argparse, json, os, tempfile
 from pathlib import Path
-
 try:
     from scripts import interaction_guard as guard
 except ModuleNotFoundError:
     import interaction_guard as guard
 
-
 def load_history(path: Path) -> list[dict]:
     if not path.exists():
         return []
     data = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(data, list) or any(
-        not isinstance(item, dict) or not isinstance(item.get("state_fingerprint"), str)
-        for item in data
-    ):
+    if not isinstance(data, list) or any(not isinstance(item, dict) or not isinstance(item.get("state_fingerprint"), str) for item in data):
         raise ValueError("history must be a JSON list of state_fingerprint records")
     return data
-
 
 def atomic_write_json(path: Path, data: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -39,43 +25,35 @@ def atomic_write_json(path: Path, data: list[dict]) -> None:
             stream.write("\n")
         os.replace(temporary, path)
     except BaseException:
-        try:
-            os.unlink(temporary)
-        except FileNotFoundError:
-            pass
+        try: os.unlink(temporary)
+        except FileNotFoundError: pass
         raise
 
-
-def record_turn(state_path: Path, history_path: Path, threshold: int = 2, board_path: Path | None = None) -> str:
-    state = guard.load_json(state_path)
+def record_turn(rules_path: Path, history_path: Path, threshold: int = 2, board_path: Path | None = None) -> str:
     history = load_history(history_path)
     if board_path is None:
         configured = os.environ.get("DROPBOX_WORK_QUEUE_PATH")
-        board_path = Path(configured) if configured else state_path.parent.parent / "Dropbox作業管理統合ボード.xlsx"
-    fingerprint = guard.state_fingerprint(state, board_path)
+        board_path = Path(configured) if configured else rules_path.parent.parent / "Dropbox作業管理統合ボード.xlsx"
+    fingerprint = guard.state_fingerprint(rules_path, board_path)
     candidate = history + [{"state_fingerprint": fingerprint}]
     guard.validate_loop(candidate, threshold)
     atomic_write_json(history_path, candidate)
     return fingerprint
 
-
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Record one turn's structured state; stop if it repeats without state change."
-    )
-    parser.add_argument("--state", type=Path, required=True, help="Path to docs/現在状態.json")
+    parser = argparse.ArgumentParser(description="Record one turn's rules+board fingerprint and stop if it repeats.")
+    parser.add_argument("--rules", type=Path, required=True, help="Path to rules/運用ルール.md")
     parser.add_argument("--history", type=Path, required=True, help="Private JSON ledger for this conversation")
     parser.add_argument("--loop-threshold", type=int, default=2)
-    parser.add_argument("--board", type=Path, help="readable local Dropbox-sync XLSX used as the queue fingerprint")
+    parser.add_argument("--board", type=Path, help="readable local Dropbox-sync XLSX")
     args = parser.parse_args()
     try:
-        fingerprint = record_turn(args.state, args.history, args.loop_threshold, args.board)
+        fingerprint = record_turn(args.rules, args.history, args.loop_threshold, args.board)
         print("OK: turn state recorded; fingerprint=" + fingerprint)
         return 0
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
         print("STOP: " + str(exc))
         return 2
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
