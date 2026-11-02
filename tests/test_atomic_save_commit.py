@@ -1,52 +1,30 @@
-import json
 import unittest
+from scripts.check_atomic_save_commit import validate_changed_paths
 
-from scripts.check_atomic_save_commit import safe_historical_backfill
-
-
-class HistoricalDirectChatBackfillTests(unittest.TestCase):
-    def setUp(self):
-        self.previous_state = json.dumps({
-            "direct_chat": {
-                "latest_saved": "2026-10-30T18-56-21.005353+0900",
-                "latest_path": "直チャット/2026-10-30_直チャット即時保存_2026-10-30T18-56-21.005353+0900.md",
-            }
-        }, ensure_ascii=False)
-        self.path = "直チャット/2026-10-30_直チャット即時保存_2026-10-30T18-54-24.839137+0900.md"
-
-    def test_accepts_new_older_record_without_state_change(self):
-        ok, reason = safe_historical_backfill(
-            self.path, "A", self.previous_state, self.previous_state, True
-        )
+class AtomicDirectChatSaveTests(unittest.TestCase):
+    def test_accepts_one_new_direct_chat_and_rules(self):
+        ok, reason = validate_changed_paths([
+            "直チャット/2026-11-02_直チャット即時保存_2026-11-02T12-00-00.123456+0900.md",
+            "rules/運用ルール.md",
+        ])
         self.assertTrue(ok, reason)
-        self.assertIn("pointer remains unchanged", reason)
+        self.assertIn("atomic direct-chat", reason)
 
-    def test_rejects_modification_of_existing_record(self):
-        ok, _ = safe_historical_backfill(
-            self.path, "M", self.previous_state, self.previous_state, True
-        )
+    def test_rejects_direct_chat_without_rules_pointer(self):
+        ok, _ = validate_changed_paths(["直チャット/new.md"])
         self.assertFalse(ok)
 
-    def test_rejects_record_newer_than_current_pointer(self):
-        newer = self.path.replace("18-54-24.839137", "18-57-24.839137")
-        ok, _ = safe_historical_backfill(
-            newer, "A", self.previous_state, self.previous_state, True
-        )
+    def test_rejects_multiple_direct_chat_files(self):
+        ok, _ = validate_changed_paths(["直チャット/a.md", "直チャット/b.md", "rules/運用ルール.md"])
         self.assertFalse(ok)
 
-    def test_rejects_any_state_change(self):
-        changed = self.previous_state.replace("18-56-21.005353", "18-57-21.005353")
-        ok, _ = safe_historical_backfill(
-            self.path, "A", self.previous_state, changed, True
-        )
-        self.assertFalse(ok)
+    def test_allows_non_save_commits(self):
+        ok, _ = validate_changed_paths(["scripts/example.py"])
+        self.assertTrue(ok)
 
-    def test_rejects_missing_current_latest_record(self):
-        ok, _ = safe_historical_backfill(
-            self.path, "A", self.previous_state, self.previous_state, False
-        )
+    def test_rejects_extra_legacy_files_in_save_commit(self):
+        ok, _ = validate_changed_paths(["直チャット/new.md", "rules/運用ルール.md", "docs/現在状態.json"])
         self.assertFalse(ok)
-
 
 if __name__ == "__main__":
     unittest.main()
