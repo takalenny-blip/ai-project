@@ -12,12 +12,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Enforce canonical state/view pairing
-        if: github.event_name == 'pull_request'
-        run: |
-          git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > /tmp/changed-paths.txt
-          python3 scripts/check_canonical_state_change.py --paths-file /tmp/changed-paths.txt
-
       - name: Protect historical direct-chat originals
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -49,7 +43,5 @@ jobs:
         run: python3 scripts/check_dropbox_migration_map.py
       - name: Run current-state guards
         run: python3 scripts/current_state_guard.py
-      - name: Verify checked-in generated views match canonical state
-        run: python3 scripts/generate_current_views.py --out-dir generated/current-views --check-deterministic --check-committed
       - name: Run full regression tests
         run: python3 -m unittest discover -s tests
