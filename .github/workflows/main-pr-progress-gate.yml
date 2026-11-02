@@ -24,3 +24,8 @@ jobs:
           --branch "${{ github.event.pull_request.head.ref }}" \
           --base "origin/${{ github.base_ref }}" \
           --head "${{ github.event.pull_request.head.sha }}"
+
+      - name: Check repository entry documents
+        run: python3 scripts/check_entry_docs.py
+      - name: Run repository integrity checks
+        run: python3 scripts/check_repo_integrity.py --self-test

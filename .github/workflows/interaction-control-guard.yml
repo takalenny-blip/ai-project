@@ -13,7 +13,8 @@ on:
       - 'tests/test_interaction_guard.py'
       - 'tests/test_interaction_session.py'
       - 'scripts/resume_check.py'
-      - 'docs/現在状態.json'
+      - 'scripts/check_entry_docs.py'
+      - 'tests/test_resume_check.py'
       - '.github/workflows/interaction-control-guard.yml'
   push:
     branches: [main]
@@ -40,6 +41,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_interaction_guard.py' -v
       - name: Run explicit interaction session tests
         run: python -m unittest discover -s tests -p 'test_interaction_session.py' -v
+      - name: Check repository entry documents
+        run: python scripts/check_entry_docs.py
       - name: Run resume preflight (remote Dropbox check is opt-in)
         env:
           DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}

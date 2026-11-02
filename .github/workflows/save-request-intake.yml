@@ -203,7 +203,6 @@ jobs:
           all_prs="$(gh pr list --repo "$GITHUB_REPOSITORY" --state all --base main --limit 1000 --json number,title,body,state,mergedAt)"
           existing_prs="$(printf '%s' "$all_prs" | jq -c --arg pr "$SOURCE_PR" --arg sha "$SOURCE_HEAD_SHA" '
             [.[] |
-              select(.title == "直チャット保存＋現在状態と生成ビューを一括同期") |
               select(((.body // "") | contains("<!-- save-request-source-pr: " + $pr + " -->")) or ((.body // "") | contains("<!-- save-request-source-head-sha: " + $sha + " -->"))) |
               {number, state, mergedAt}
             ]')"
@@ -241,7 +240,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/save_and_currentize.py             --content-file "$RUNNER_TEMP/direct-chat.md"             --message '直チャット保存＋現在状態と生成ビューを一括同期'
+          python scripts/save_direct_chat.py \
+            --content-file "$RUNNER_TEMP/direct-chat.md" \
+            --message '直チャット保存'
 
       - name: Verify atomic save result
         if: ${{ steps.idempotency.outputs.skip != 'true' }}
@@ -253,12 +254,12 @@ jobs:
           test -z "$(git status --porcelain)"
           test "$(git rev-parse HEAD^)" = "$BASE_SHA"
           mapfile -t changed < <(git -c core.quotepath=false show --format='' --name-only HEAD | sed '/^$/d')
-          test "${#changed[@]}" = "4"
-          direct_chat_path="$(printf '%s\n' "${changed[@]}" | grep '^直チャット/')"
-          test -n "$direct_chat_path"
-          expected="$(printf '%s\n'             'BUD.md'             'docs/現在状態.json'             'docs/引き継ぎ/現在の引き継ぎ.md'             "$direct_chat_path")"
-          actual="$(printf '%s\n' "${changed[@]}" | sort)"
-          test "$actual" = "$(printf '%s\n' "$expected" | sort)"
+          test "${#changed[@]}" = "1"
+          case "${changed[0]}" in
+            直チャット/*.md) ;;
+            *) echo "Canonical save commit must add exactly one direct-chat file." >&2; exit 1 ;;
+          esac
+          python scripts/check_atomic_save_commit.py --commit HEAD
 
       - name: Push save branch
         if: ${{ steps.idempotency.outputs.skip != 'true' }}
@@ -286,7 +287,7 @@ jobs:
           final_pr_json="$(gh api "repos/${GITHUB_REPOSITORY}/pulls" \
             -f base=main \
             -f head="$BRANCH" \
-            -f title='直チャット保存＋現在状態と生成ビューを一括同期' \
+            -f title='直チャット保存' \
             -f body="$body")"
           final_pr_number="$(printf '%s' "$final_pr_json" | jq -r '.number')"
           test -n "$final_pr_number"
