@@ -27,7 +27,7 @@ def main() -> int:
     require(readme,"現在状態・共通運用ルールの唯一の正本","README single current-state source")
     require(readme,"rules/運用ルール.md","README rules source")
     require(readme,"日常作業キュー","README Dropbox queue role")
-    require(readme,"Dropboxボードを読み取れない場合は停止","README stop without queue")
+    require(readme,"ボードが読めない場合は停止","README stop without queue")
     require(readme,"画像","README image prohibition")
     require(operating_rule,"現在状態・共通運用ルールの唯一の正本","rule single source")
     require(operating_rule,"操作別ルールの読み込みゲート","operation-specific routing gate")
