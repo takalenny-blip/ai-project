@@ -32,13 +32,18 @@ class SavePrProgressGateWorkflowTests(unittest.TestCase):
         workflow = PROGRESS_GATE.read_text(encoding="utf-8")
         self.assertIn("test_save_pr_progress_gate_workflow.py", workflow)
 
-    def test_auto_merge_waits_for_the_target_event_gate(self):
+    def test_auto_merge_uses_latest_exact_head_target_check_only(self):
         workflow = AUTO_MERGE.read_text(encoding="utf-8")
+        self.assertIn('commits/${HEAD_SHA}/check-runs?per_page=100', workflow)
         self.assertIn('select(.name == "progress-gate-target")', workflow)
+        self.assertIn('sort_by(.started_at // .created_at) | last', workflow)
+        self.assertIn('elif .conclusion == "success" then "pass"', workflow)
+        self.assertNotIn('gh pr checks "$PR_URL"', workflow)
+        self.assertNotIn('select(.name != "approve-and-merge")', workflow)
         self.assertNotIn('select(.name == "guard")', workflow)
         self.assertNotIn("guard_ready=", workflow)
         self.assertIn('if [ "$progress_ready" = "missing" ] && [ "$attempt" -ge 24 ]; then', workflow)
-        self.assertIn("progress-gate-target check was not created", workflow)
+        self.assertIn("No progress-gate-target check run was found for this exact HEAD", workflow)
 
 
 if __name__ == "__main__":
