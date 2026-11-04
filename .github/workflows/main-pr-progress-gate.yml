@@ -16,6 +16,7 @@ permissions:
 
 jobs:
   progress-gate:
+    name: ${{ github.event_name == 'pull_request_target' && 'progress-gate-target' || 'progress-gate' }}
     if: >-
       github.event_name == 'pull_request' ||
       (
@@ -31,12 +32,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout trusted base ref for canonical save PR target events
+      - name: Checkout current trusted base branch for canonical save PR target events
         if: github.event_name == 'pull_request_target'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
+          ref: ${{ github.event.pull_request.base.ref }}
           fetch-depth: 0
+
+      - name: Record trusted base commit
+        if: github.event_name == 'pull_request_target'
+        run: |
+          set -euo pipefail
+          echo "TRUSTED_BASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Fetch canonical save PR head without checking it out
         if: github.event_name == 'pull_request_target'
@@ -49,7 +56,7 @@ jobs:
       - name: Validate canonical save PR file scope
         if: github.event_name == 'pull_request_target'
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_SHA: ${{ env.TRUSTED_BASE_SHA }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
@@ -67,7 +74,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
           BASE_REF: ${{ github.base_ref }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_SHA: ${{ env.TRUSTED_BASE_SHA }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
@@ -100,7 +107,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_REF: ${{ github.base_ref }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_SHA: ${{ env.TRUSTED_BASE_SHA }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
