@@ -80,20 +80,26 @@ jobs:
           set -euo pipefail
           progress_ready="missing"
           for attempt in $(seq 1 120); do
-            checks="$(gh pr checks "$PR_URL" --json name,bucket,state)"
-            failed="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select((.bucket | ascii_upcase) == "FAIL" or (.bucket | ascii_upcase) == "CANCEL")] | length')"
-            [ "$failed" -eq 0 ] || { echo "A PR check failed or was cancelled."; printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'; exit 1; }
-
-            progress_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "progress-gate-target")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
+            target_check="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/check-runs?per_page=100" \
+              --jq '[.check_runs[] | select(.name == "progress-gate-target")] | sort_by(.started_at // .created_at) | last // empty')"
+            if [ -z "$target_check" ]; then
+              progress_ready="missing"
+            else
+              progress_ready="$(printf '%s' "$target_check" | jq -r 'if .status != "completed" then "pending" elif .conclusion == "success" then "pass" else "fail" end')"
+            fi
 
             if [ "$progress_ready" = "pass" ]; then
-              echo "Required progress-gate-target check passed."
-              printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'
+              echo "Latest progress-gate-target check run for this exact HEAD passed."
+              printf '%s' "$target_check" | jq '{name,head_sha,status,conclusion,started_at,completed_at,html_url}'
               break
             fi
             if [ "$progress_ready" = "missing" ] && [ "$attempt" -ge 24 ]; then
-              echo "::error::The progress-gate-target check was not created for this canonical save PR within 2 minutes."
-              printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'
+              echo "::error::No progress-gate-target check run was found for this exact HEAD within 2 minutes."
+              exit 1
+            fi
+            if [ "$progress_ready" = "fail" ]; then
+              echo "::error::The latest progress-gate-target check run for this exact HEAD did not succeed."
+              printf '%s' "$target_check" | jq '{name,head_sha,status,conclusion,started_at,completed_at,html_url}'
               exit 1
             fi
             echo "Waiting for progress-gate-target: $progress_ready"
