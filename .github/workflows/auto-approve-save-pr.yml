@@ -71,7 +71,7 @@ jobs:
           esac
           python3 scripts/check_atomic_save_commit.py --commit "$HEAD_SHA"
 
-      - name: Wait for progress-gate check
+      - name: Wait for progress-gate-target check
         env:
           GH_TOKEN: ${{ github.token }}
           PR_URL: ${{ github.event.pull_request.html_url }}
@@ -84,23 +84,23 @@ jobs:
             failed="$(printf '%s' "$checks" | jq '[.[] | select(.name != "approve-and-merge") | select((.bucket | ascii_upcase) == "FAIL" or (.bucket | ascii_upcase) == "CANCEL")] | length')"
             [ "$failed" -eq 0 ] || { echo "A PR check failed or was cancelled."; printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'; exit 1; }
 
-            progress_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "progress-gate")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
+            progress_ready="$(printf '%s' "$checks" | jq -r '[.[] | select(.name == "progress-gate-target")] | first | if . == null then "missing" elif (.bucket | ascii_upcase) == "PASS" then "pass" elif (.bucket | ascii_upcase) == "PENDING" then "pending" else "fail" end')"
 
             if [ "$progress_ready" = "pass" ]; then
-              echo "Required progress-gate check passed."
+              echo "Required progress-gate-target check passed."
               printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'
               break
             fi
             if [ "$progress_ready" = "missing" ] && [ "$attempt" -ge 24 ]; then
-              echo "::error::The progress-gate check was not created for this canonical save PR within 2 minutes."
+              echo "::error::The progress-gate-target check was not created for this canonical save PR within 2 minutes."
               printf '%s\n' "$checks" | jq -r '.[] | [.name,.bucket,.state] | @tsv'
               exit 1
             fi
-            echo "Waiting for progress-gate: $progress_ready"
+            echo "Waiting for progress-gate-target: $progress_ready"
             sleep 5
           done
           if [ "$progress_ready" != "pass" ]; then
-            echo "Timed out waiting for progress-gate to pass."
+            echo "Timed out waiting for progress-gate-target to pass."
             exit 1
           fi
           current_head="$(gh pr view "$PR_URL" --json headRefOid --jq '.headRefOid')"
