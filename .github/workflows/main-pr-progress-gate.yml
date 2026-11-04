@@ -5,25 +5,83 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   progress-gate:
-    if: github.event_name == 'pull_request'
+    if: >-
+      github.event_name == 'pull_request' ||
+      (
+        github.event_name == 'pull_request_target' &&
+        github.event.pull_request.head.repo.full_name == github.repository &&
+        startsWith(github.event.pull_request.head.ref, 'save/direct-chat-')
+      )
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout merge ref
+      - name: Checkout merge ref for regular pull requests
+        if: github.event_name == 'pull_request'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check for substantive main-work change
+
+      - name: Checkout trusted base ref for canonical save PR target events
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+
+      - name: Fetch canonical save PR head without checking it out
+        if: github.event_name == 'pull_request_target'
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
+          set -euo pipefail
+          git fetch --no-tags origin "$HEAD_SHA"
+
+      - name: Validate canonical save PR file scope
+        if: github.event_name == 'pull_request_target'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          mapfile -d '' -t changed < <(
+            git -c core.quotepath=false diff --name-only -z "$BASE_SHA...$HEAD_SHA" | sort -z
+          )
+          test "${#changed[@]}" -eq 1
+          case "${changed[0]}" in
+            直チャット/*.md) ;;
+            *) echo "Canonical save PR must change exactly one direct-chat Markdown file." >&2; exit 1 ;;
+          esac
+
+      - name: Check for substantive main-work change
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          BASE_REF: ${{ github.base_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request_target" ]; then
+            base="$BASE_SHA"
+            head="$HEAD_SHA"
+          else
+            base="origin/$BASE_REF"
+            head="$HEAD_SHA"
+          fi
           python3 scripts/main_work_progress_guard.py \
-          --branch "${{ github.event.pull_request.head.ref }}" \
-          --base "origin/${{ github.base_ref }}" \
-          --head "${{ github.event.pull_request.head.sha }}"
+            --branch "$HEAD_REF" \
+            --base "$base" \
+            --head "$head"
 
       - name: Run current-state retirement and direct-chat regression tests
         run: |
@@ -35,11 +93,29 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_main_work_progress_guard.py' -v
           python3 -m unittest discover -s tests -p 'test_interaction_preflight.py' -v
           python3 -m unittest discover -s tests -p 'test_interaction_session.py' -v
+          python3 -m unittest discover -s tests -p 'test_save_pr_progress_gate_workflow.py' -v
           python3 -m unittest scripts.test_check_duplicate_direct_chat scripts.test_check_save_request_category scripts.test_check_save_backlog -v
+
       - name: Verify historical direct-chat originals are unchanged
-        run: python3 scripts/check_direct_chat_immutability.py --base "origin/${{ github.base_ref }}" --head "${{ github.event.pull_request.head.sha }}"
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request_target" ]; then
+            base="$BASE_SHA"
+            head="$HEAD_SHA"
+          else
+            base="origin/$BASE_REF"
+            head="$HEAD_SHA"
+          fi
+          python3 scripts/check_direct_chat_immutability.py --base "$base" --head "$head"
+
       - name: Check repository entry documents
         run: python3 scripts/check_entry_docs.py
+
       - name: Run repository integrity checks
         run: |
           python3 scripts/check_repo_integrity.py
