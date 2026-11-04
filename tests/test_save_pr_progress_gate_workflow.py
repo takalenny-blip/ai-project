@@ -19,7 +19,7 @@ class SavePrProgressGateWorkflowTests(unittest.TestCase):
         workflow = PROGRESS_GATE.read_text(encoding="utf-8")
         self.assertIn("ref: ${{ github.event.pull_request.base.sha }}", workflow)
         self.assertIn('git fetch --no-tags origin "$HEAD_SHA"', workflow)
-        self.assertIn('git diff --name-only -z "$BASE_SHA...$HEAD_SHA"', workflow)
+        self.assertIn('git -c core.quotepath=false diff --name-only -z "$BASE_SHA...$HEAD_SHA"', workflow)
         self.assertIn("直チャット/*.md", workflow)
         self.assertNotIn("ref: ${{ github.event.pull_request.head.sha }}", workflow)
 
@@ -30,7 +30,8 @@ class SavePrProgressGateWorkflowTests(unittest.TestCase):
     def test_auto_merge_waits_only_for_the_real_progress_gate(self):
         workflow = AUTO_MERGE.read_text(encoding="utf-8")
         self.assertIn('select(.name == "progress-gate")', workflow)
-        self.assertNotIn("guard", workflow)
+        self.assertNotIn('select(.name == "guard")', workflow)
+        self.assertNotIn("guard_ready=", workflow)
         self.assertIn('if [ "$progress_ready" = "missing" ] && [ "$attempt" -ge 24 ]; then', workflow)
         self.assertIn("progress-gate check was not created", workflow)
 
