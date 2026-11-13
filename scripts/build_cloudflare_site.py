@@ -60,7 +60,7 @@ def render_series_banner(current_permalink=None):
     <p class="series-kicker">AI実践シリーズ｜全3部作＋総括ガイド</p>
     <h2 class="series-title" id="series-title">{html_module.escape(SERIES_TITLE)}</h2>
     <p class="series-description">第1部から第3部まで実体験をたどり、最後に総括・実践ガイドで学びを整理します。</p>
-    <nav class="series-links" aria-label="シリーズ全記事">{''.join(links)}</nav>
+    <nav class="series-links" aria-label="シリーズ記事と全記事一覧">{''.join(links)}<a class="series-link series-link-all" href="articles.html">すべての記事（新着順）</a></nav>
   </div>
 </section>"""
 
@@ -192,6 +192,7 @@ body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-
 .series-links .series-link {{ display:inline-flex; align-items:center; min-height:42px; padding:8px 14px; border:1px solid #796b53; border-radius:4px; color:#f5e8d0; background:#353128; font-size:.84rem; font-weight:600; text-decoration:none; }}
 .series-links .series-link[aria-current="page"] {{ border-color:#f0ca77; background:#5a492d; box-shadow:inset 0 0 0 1px #f0ca77; }}
 .series-links .series-link-guide {{ border-color:#b3945a; background:#443824; }}
+.series-links .series-link-all {{ margin-left:12px; border-color:#c4a46a; background:#282722; }}
 .series-links .series-link:hover {{ border-color:#f0ca77; background:#51442f; }}
 main {{ max-width:1120px; margin:0 auto; padding:58px 28px 90px; }}
 .layout {{ display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; }}
@@ -323,6 +324,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .series-links .series-link { display:inline-flex; align-items:center; min-height:42px; padding:8px 14px; border:1px solid #796b53; border-radius:4px; color:#f5e8d0; background:#353128; font-size:.84rem; font-weight:600; text-decoration:none; }
 .series-links .series-link[aria-current="page"] { border-color:#f0ca77; background:#5a492d; box-shadow:inset 0 0 0 1px #f0ca77; }
 .series-links .series-link-guide { border-color:#b3945a; background:#443824; }
+.series-links .series-link-all { margin-left:12px; border-color:#c4a46a; background:#282722; }
 .series-links .series-link:hover { border-color:#f0ca77; background:#51442f; }
 .free-entry { max-width:1064px; margin:34px auto 0; padding:32px 34px; border:1px solid var(--accent); background:var(--cream); }
 .free-entry .eyebrow { margin:0 0 10px; color:var(--accent); font-size:.72rem; font-weight:600; letter-spacing:.15em; }
@@ -341,6 +343,8 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .card { display:block; min-height:210px; padding:28px 0 10px; border-top:1px solid var(--line); color:inherit; text-decoration:none; }
 .card h2 { margin:0 0 14px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:1.35rem; line-height:1.55; }
 .card p { margin:0; color:var(--muted); font-size:.88rem; }
+.card-new { padding:22px 18px 18px; border:1px solid #8f7548; border-radius:4px; background:#302d27; }
+.card-new .new-label { display:inline-block; margin:0 0 10px; padding:3px 9px; border:1px solid #b3945a; border-radius:3px; color:#f0d59c; background:#443824; font-size:.7rem; font-weight:700; letter-spacing:.1em; }
 .card:hover h2, .feature:hover h2 { color:#c4a46a; }
 .profile { position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }
 .profile-label { margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }
@@ -393,7 +397,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   <a class="card" href="ai-blog-start.html"><p class="part">第1章</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
   <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2章</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
   <a class="card" href="github-ai-conversation.html"><p class="part">第3章</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
-  <a class="card" href="manga-to-novel-with-ai.html"><p class="part">創作・AIとの協働</p><h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2><p>マンガ制作から小説へ。AIと試行錯誤しながら創作を進めた記録。</p></a>
+  <a class="card card-new" href="manga-to-novel-with-ai.html"><p class="part">創作・AIとの協働</p><span class="new-label">新着記事</span><h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2><p>マンガ制作から小説へ。AIと試行錯誤しながら創作を進めた記録。</p></a>
 </div>
 </section>
 {render_sidebar()}
@@ -711,6 +715,22 @@ build_static_page(
     "privacy.html",
     "たか’sブログにおける個人情報と外部サービスの取扱いについて。",
     "<p>このサイトには、現時点で問い合わせフォームやコメント投稿機能を設けていません。</p><p>サイトの閲覧に伴い、ホスティングサービスなどの提供元が技術的なアクセス情報を処理する場合があります。サービス側での情報の取扱いについては、それぞれの提供元が公開する方針をご確認ください。</p><p>記事から外部サイトへ移動した場合、そのサイトでの情報の取扱いは移動先の方針に従います。</p><p>個人情報を収集する機能や外部サービスを追加した場合は、このページの記載を見直します。</p>",
+)
+build_static_page(
+    "すべての記事（新着順）",
+    "articles.html",
+    "たか’sブログの記事を新着順で一覧できます。",
+    "<p>新しい記事から順に掲載しています。</p><ol style='list-style:none; margin:28px 0; padding:0;'>"
+    + "".join(
+        f"<li style='padding:20px 0; border-bottom:1px solid #3d3933;'>"
+        f"<p style='margin:0 0 6px; color:#b3945a; font-size:.78rem; letter-spacing:.08em;'>{html_module.escape(item['part'])}</p>"
+        f"<h2 style='margin:0 0 8px; font-family:Georgia,\"Noto Serif JP\",serif; font-weight:500; line-height:1.5;'>"
+        f"<a href='{html_module.escape(item['permalink'], quote=True)}'>{html_module.escape(item['title'])}</a></h2>"
+        f"<p style='margin:0; color:#aaa093; font-size:.9rem;'>{html_module.escape(item['description'])}</p>"
+        f"</li>"
+        for item in reversed(ARTICLES)
+    )
+    + "</ol><p><a href='./'>← トップページへ戻る</a></p>",
 )
 build_html_sitemap()
 build_xml_sitemap()
