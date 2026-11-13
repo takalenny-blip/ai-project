@@ -341,6 +341,8 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .card { display:block; min-height:210px; padding:28px 0 10px; border-top:1px solid var(--line); color:inherit; text-decoration:none; }
 .card h2 { margin:0 0 14px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:1.35rem; line-height:1.55; }
 .card p { margin:0; color:var(--muted); font-size:.88rem; }
+.card-new { padding:22px 18px 18px; border:1px solid #8f7548; border-radius:4px; background:#302d27; }
+.card-new .new-label { display:inline-block; margin:0 0 10px; padding:3px 9px; border:1px solid #b3945a; border-radius:3px; color:#f0d59c; background:#443824; font-size:.7rem; font-weight:700; letter-spacing:.1em; }
 .card:hover h2, .feature:hover h2 { color:#c4a46a; }
 .profile { position:sticky; top:28px; padding:25px 0 0 26px; border-left:1px solid var(--line); color:var(--muted); }
 .profile-label { margin:0 0 18px; color:var(--accent); font-size:.68rem; letter-spacing:.2em; font-weight:600; }
@@ -393,7 +395,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   <a class="card" href="ai-blog-start.html"><p class="part">第1章</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
   <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2章</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
   <a class="card" href="github-ai-conversation.html"><p class="part">第3章</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
-  <a class="card" href="manga-to-novel-with-ai.html"><p class="part">創作・AIとの協働</p><h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2><p>マンガ制作から小説へ。AIと試行錯誤しながら創作を進めた記録。</p></a>
+  <a class="card card-new" href="manga-to-novel-with-ai.html"><p class="part">創作・AIとの協働</p><span class="new-label">新着記事</span><h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2><p>マンガ制作から小説へ。AIと試行錯誤しながら創作を進めた記録。</p></a>
 </div>
 </section>
 {render_sidebar()}
