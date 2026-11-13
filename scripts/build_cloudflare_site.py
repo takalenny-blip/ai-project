@@ -50,9 +50,8 @@ def render_series_banner(current_permalink=None):
         is_current = item["permalink"] == current_permalink
         label = "総括・実践ガイド" if item["permalink"] == BLOG4_PERMALINK else item["part"]
         current_attr = ' aria-current="page"' if is_current else ""
-        guide_class = " series-link-guide" if item["permalink"] == BLOG4_PERMALINK else ""
         links.append(
-            f'<a class="series-link{guide_class}" href="{item["permalink"]}"{current_attr}>'
+            f'<a class="series-link" href="{item["permalink"]}"{current_attr}>'
             f'{html_module.escape(label)}</a>'
         )
     return f"""<section class="series-banner" aria-labelledby="series-title">
@@ -191,7 +190,6 @@ body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-
 .series-links {{ display:flex; flex-wrap:wrap; gap:9px; margin:0; padding:0; border:0; background:transparent; }}
 .series-links .series-link {{ display:inline-flex; align-items:center; min-height:42px; padding:8px 14px; border:1px solid #796b53; border-radius:4px; color:#f5e8d0; background:#353128; font-size:.84rem; font-weight:600; text-decoration:none; }}
 .series-links .series-link[aria-current="page"] {{ border-color:#f0ca77; background:#5a492d; box-shadow:inset 0 0 0 1px #f0ca77; }}
-.series-links .series-link-guide {{ border-color:#b3945a; background:#443824; }}
 .series-links .series-link-all {{ margin-left:12px; border-color:#c4a46a; background:#282722; }}
 .series-links .series-link:hover {{ border-color:#f0ca77; background:#51442f; }}
 main {{ max-width:1120px; margin:0 auto; padding:58px 28px 90px; }}
@@ -323,7 +321,6 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .series-links { display:flex; flex-wrap:wrap; gap:9px; margin:0; padding:0; border:0; background:transparent; }
 .series-links .series-link { display:inline-flex; align-items:center; min-height:42px; padding:8px 14px; border:1px solid #796b53; border-radius:4px; color:#f5e8d0; background:#353128; font-size:.84rem; font-weight:600; text-decoration:none; }
 .series-links .series-link[aria-current="page"] { border-color:#f0ca77; background:#5a492d; box-shadow:inset 0 0 0 1px #f0ca77; }
-.series-links .series-link-guide { border-color:#b3945a; background:#443824; }
 .series-links .series-link-all { margin-left:12px; border-color:#c4a46a; background:#282722; }
 .series-links .series-link:hover { border-color:#f0ca77; background:#51442f; }
 .free-entry { max-width:1064px; margin:34px auto 0; padding:32px 34px; border:1px solid var(--accent); background:var(--cream); }
