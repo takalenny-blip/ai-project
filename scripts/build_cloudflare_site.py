@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the BLOG-0003 production page for GitHub Pages."""
+"""Build the public blog pages for GitHub Pages."""
 
 from pathlib import Path
 import html as html_module
@@ -10,6 +10,7 @@ import shutil
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "docs/企画/BLOG-0003/BLOG-0003_Blogger掲載用.html"
 BLOG4_SOURCE = ROOT / "docs/企画/BLOG-0004/BLOG-0004_Blogger掲載用.html"
+BLOG5_SOURCE = ROOT / "docs/企画/BLOG-0005/BLOG-0005_Blogger掲載用.html"
 IMAGE_DIR = ROOT / "docs/企画/BLOG-0003/images"
 DIST = ROOT / "dist"
 
@@ -29,18 +30,24 @@ BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作
 BLOG4_TITLE = "総括・実践ガイドのご案内｜AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと"
 BLOG4_PERMALINK = "ai-trial-and-record.html"
 BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。"
+BLOG5_TITLE = "マンガを作るつもりが、AIと小説を書き上げることになった"
+BLOG5_PERMALINK = "manga-to-novel-with-ai.html"
+BLOG5_DESCRIPTION = "マンガ制作から小説へ。スター・ウォーズの二次創作をAIと完成させるまでの試行錯誤と、AIと一緒に小説を作る手順やルールを紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
     {"title": BLOG2_TITLE, "permalink": BLOG2_PERMALINK, "part": "第2部｜VAIO P", "description": BLOG2_DESCRIPTION},
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
     {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
+    {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AI小説", "description": BLOG5_DESCRIPTION, "series": False},
 ]
 
 
 def render_series_banner(current_permalink=None):
     links = []
     for item in ARTICLES:
+        if not item.get("series", True):
+            continue
         is_current = item["permalink"] == current_permalink
         label = "総括・実践ガイド" if item["permalink"] == BLOG4_PERMALINK else item["part"]
         current_attr = ' aria-current="page"' if is_current else ""
@@ -116,7 +123,7 @@ def render_article_navigation(permalink):
 
 
 
-for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE):
+for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE):
     if not required_source.is_file():
         raise SystemExit(f"missing source: {required_source}")
 
@@ -132,6 +139,7 @@ html = SOURCE.read_text(encoding="utf-8")
 blog1_html = BLOG1_SOURCE.read_text(encoding="utf-8")
 blog2_html = BLOG2_SOURCE.read_text(encoding="utf-8")
 blog4_html = BLOG4_SOURCE.read_text(encoding="utf-8")
+blog5_html = BLOG5_SOURCE.read_text(encoding="utf-8")
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
@@ -386,6 +394,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   <a class="card" href="ai-blog-start.html"><p class="part">第1章</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
   <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2章</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
   <a class="card" href="github-ai-conversation.html"><p class="part">第3章</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
+  <a class="card" href="manga-to-novel-with-ai.html"><p class="part">創作・AI小説</p><h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2><p>マンガ制作から小説へ。AIと一緒に物語を完成させるまでの試行錯誤。</p></a>
 </div>
 </section>
 {render_sidebar()}
@@ -441,6 +450,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG2_PERMALINK: "第2部｜VAIO P",
         PERMALINK: "第3部｜GitHub",
         BLOG4_PERMALINK: "総括・実践ガイドのご案内",
+        BLOG5_PERMALINK: "創作・AI小説",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
@@ -453,6 +463,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG2_PERMALINK: BLOG2_DESCRIPTION,
         PERMALINK: BLOG3_DESCRIPTION,
         BLOG4_PERMALINK: BLOG4_DESCRIPTION,
+        BLOG5_PERMALINK: BLOG5_DESCRIPTION,
     }
     description = descriptions.get(permalink, title)
     base_page = re.sub(
@@ -498,10 +509,12 @@ page1 = article_variant(page, BLOG1_TITLE, BLOG1_PERMALINK, blog1_html)
 page2 = article_variant(page, BLOG2_TITLE, BLOG2_PERMALINK, blog2_html)
 page3 = article_variant(page, TITLE, PERMALINK, html)
 page4 = article_variant(page, BLOG4_TITLE, BLOG4_PERMALINK, blog4_html)
+page5 = article_variant(page, BLOG5_TITLE, BLOG5_PERMALINK, blog5_html)
 (DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
 (DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
 (DIST / PERMALINK).write_text(page3, encoding="utf-8")
 (DIST / BLOG4_PERMALINK).write_text(page4, encoding="utf-8")
+(DIST / BLOG5_PERMALINK).write_text(page5, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
@@ -882,4 +895,5 @@ print(f"built {DIST / PERMALINK}")
 print(f"built {DIST / BLOG1_PERMALINK}")
 print(f"built {DIST / BLOG2_PERMALINK}")
 print(f"built {DIST / BLOG4_PERMALINK}")
+print(f"built {DIST / BLOG5_PERMALINK}")
 print(f"images: {len(list((DIST / 'images').iterdir()))}")
