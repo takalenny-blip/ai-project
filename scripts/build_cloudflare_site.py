@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the BLOG-0003 production page for GitHub Pages."""
+"""Build the GitHub Pages site and all configured article pages."""
 
 from pathlib import Path
 import html as html_module
