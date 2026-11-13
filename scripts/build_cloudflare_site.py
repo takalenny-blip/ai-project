@@ -441,9 +441,13 @@ robots_txt = "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.
 # The canonical article is written after article_variant adds the shared article navigation.
 
 def article_variant(base_page, title, permalink, body_html):
+    is_series_article = any(
+        item["permalink"] == permalink and item.get("series", True)
+        for item in ARTICLES
+    )
     base_page = base_page.replace(
         "<!--SERIES_BANNER_PLACEHOLDER -->",
-        render_series_banner(permalink),
+        render_series_banner(permalink) if is_series_article else "",
     )
     labels = {
         BLOG1_PERMALINK: "第1部｜経験ログ",
