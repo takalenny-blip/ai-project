@@ -315,10 +315,10 @@ home = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>たか’sブログ</title>
-<meta name="description" content="AIとやってみる。マンガ制作から小説へ、AIと試行錯誤しながら創作を進めた経験を紹介します。">
+<meta name="description" content="AI環境構築とAIとの創作。AIと試行錯誤しながら取り組んだ経験や成果を記録するブログです。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="たか’sブログ">
-<meta property="og:description" content="AIとやってみる。マンガ制作から小説へ、AIと試行錯誤しながら創作を進めた経験を紹介します。">
+<meta property="og:description" content="AI環境構築とAIとの創作。AIと試行錯誤しながら取り組んだ経験や成果を記録するブログです。">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/">
 <meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">
 <meta property="og:image:alt" content="たか’sブログのサイトバナー">
@@ -428,7 +428,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </body>
 </html>
 """
-home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer()).replace('<!--SERIES_BANNER_PLACEHOLDER-->', render_series_banner())
+home = home.replace('{render_footer()}', render_footer())
 
 quote_samples = """<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -733,7 +733,7 @@ a {{ color:#c4a46a; }}
 
 def build_collection_page(title, permalink, description, articles, intro):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
-    cards = "\\n".join(
+    cards = "\n".join(
         f"""<article class="collection-card">
   <p class="collection-part">{html_module.escape(item["part"])}</p>
   <h2><a href="{html_module.escape(item["permalink"], quote=True)}">{html_module.escape(item["title"])}</a></h2>
