@@ -733,14 +733,23 @@ a {{ color:#c4a46a; }}
 
 def build_collection_page(title, permalink, description, articles, intro):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
-    cards = "\n".join(
-        f"""<article class="collection-card">
+    if permalink == "ai-try.html":
+        cards = "\n".join(
+            f"""<a class="series-button" href="{html_module.escape(item['permalink'], quote=True)}">
+  <span class="series-button-label">小説編</span>
+  <span class="series-button-description">マンガを作るつもりが、AIと小説を書き上げることになった創作の記録。</span>
+</a>"""
+            for item in articles
+        )
+    else:
+        cards = "\n".join(
+            f"""<article class="collection-card">
   <p class="collection-part">{html_module.escape(item['part'])}</p>
   <h2><a href="{html_module.escape(item['permalink'], quote=True)}">{html_module.escape(item['title'])}</a></h2>
   <p>{html_module.escape(item['description'])}</p>
 </article>"""
-        for item in articles
-    )
+            for item in articles
+        )
     page_html = f"""<!doctype html>
 <html lang="ja">
 <head>
@@ -764,6 +773,12 @@ h1 {{ margin:0; font-family:Georgia,"Noto Serif JP",serif; font-size:clamp(1.9re
 .collection-part {{ margin:0 0 7px; color:var(--accent); font-size:.76rem; letter-spacing:.06em; }}
 .collection-card h2 {{ margin:0 0 8px; font-family:Georgia,"Noto Serif JP",serif; font-size:1.25rem; font-weight:500; line-height:1.55; }}
 .collection-card p:last-child {{ margin:0; color:var(--muted); font-size:.9rem; }}
+.series-button {{ display:flex; flex-direction:column; gap:5px; padding:20px 24px; margin:0 0 14px; border:1px solid #786342; border-radius:8px; background:linear-gradient(115deg,#292722 0%,#3a342a 55%,#292722 100%); color:#fff4df; text-decoration:none; transition:border-color .15s, transform .15s; }}
+.series-button:hover {{ border-color:#d8b979; transform:translateY(-2px); }}
+.series-button-label {{ font-family:Georgia,"Noto Serif JP",serif; font-size:1.3rem; }}
+.series-button-description {{ color:var(--muted); font-size:.88rem; }}
+.collection-nav {{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }}
+.collection-nav a {{ display:inline-block; padding:10px 18px; border:1px solid var(--line); border-radius:6px; text-decoration:none; }}
 a {{ color:#c4a46a; }}
 footer {{ border-top:1px solid var(--line); color:var(--muted); text-align:center; padding:30px 18px; font-size:.76rem; letter-spacing:.04em; }}
 footer p {{ margin:.8em 0 0; }}
@@ -777,7 +792,10 @@ footer p {{ margin:.8em 0 0; }}
   <h1>{html_module.escape(title)}</h1>
   <p class="intro">{html_module.escape(intro)}</p>
   {cards}
-  <p><a href="./">← トップページへ戻る</a></p>
+  <nav class="collection-nav" aria-label="ブログ内ナビゲーション">
+    <a href="articles.html">すべての記事</a>
+    <a href="./">← トップページへ戻る</a>
+  </nav>
 </main>
 {render_footer()}
 </body>
