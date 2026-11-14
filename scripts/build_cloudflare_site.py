@@ -30,7 +30,7 @@ BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作
 BLOG4_TITLE = "総括・実践ガイドのご案内｜AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと"
 BLOG4_PERMALINK = "ai-trial-and-record.html"
 BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。"
-BLOG5_TITLE = "マンガを作るつもりが、AIと小説を書き上げることになった"
+BLOG5_TITLE = "AIとやってみる 小説編①｜マンガを作るつもりが、小説を書き上げることになった"
 BLOG5_PERMALINK = "manga-to-novel-with-ai.html"
 BLOG5_DESCRIPTION = "マンガ制作、シナリオ、小説へ。AIと試行錯誤しながらスター・ウォーズの二次創作小説を書き上げるまでの経験と、AIとの創作の進め方を紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
@@ -45,6 +45,15 @@ SERIES_ARTICLES = ARTICLES[:4]
 
 
 def render_series_banner(current_permalink=None):
+    if current_permalink is None:
+        return f"""<section class="series-banner" aria-labelledby="series-title">
+  <div class="series-banner-inner">
+    <p class="series-kicker">AIとやってみる｜小説編</p>
+    <h2 class="series-title" id="series-title">AIとやってみる</h2>
+    <p class="series-description">マンガを作るつもりが、AIと小説を書き上げることになった。AIとの創作の試行錯誤を記録したシリーズです。</p>
+    <nav class="series-links" aria-label="シリーズ記事"><a class="series-link" href="{BLOG5_PERMALINK}" aria-current="page">小説編①</a><a class="series-link series-link-all" href="articles.html">すべての記事</a></nav>
+  </div>
+</section>"""
     links = []
     for item in SERIES_ARTICLES:
         is_current = item["permalink"] == current_permalink
@@ -291,10 +300,10 @@ home = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>たか’sブログ</title>
-<meta name="description" content="AIを使って何かできないかな？基本の実践は完全無料で。AIを試す、経験を記録する、成果を公開するための方法と実体験を紹介します。">
+<meta name="description" content="AIとやってみる。マンガ制作から小説へ、AIと試行錯誤しながら創作を進めた経験を紹介します。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="たか’sブログ">
-<meta property="og:description" content="シリーズ「AIと一緒に。無料で試して、残して、育てる」を紹介するブログです。">
+<meta property="og:description" content="AIとやってみる。マンガ制作から小説へ、AIと試行錯誤しながら創作を進めた経験を紹介します。">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/">
 <meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">
 <meta property="og:image:alt" content="たか’sブログのサイトバナー">
@@ -336,6 +345,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .feature h2 { max-width:760px; margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:clamp(1.9rem,4vw,3rem); line-height:1.45; }
 .feature p { max-width:650px; margin:18px 0 0; color:var(--muted); font-size:.92rem; }
 .feature-arrow { position:absolute; right:4px; bottom:38px; color:var(--accent); font-size:1.4rem; }
+.archive-heading { margin:54px 0 0; padding-top:26px; border-top:1px solid var(--line); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.15rem; font-weight:500; color:var(--accent); }
 .others { display:grid; grid-template-columns:1fr 1fr; gap:34px; margin-top:34px; }
 .card { display:block; min-height:210px; padding:28px 0 10px; border-top:1px solid var(--line); color:inherit; text-decoration:none; }
 .card h2 { margin:0 0 14px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-weight:500; font-size:1.35rem; line-height:1.55; }
@@ -383,18 +393,18 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </section>
 <div class="layout">
 <section class="content">
-<h1>AIとの実践から学んだこと</h1>
-<a class="feature" href="ai-trial-and-record.html">
-  <p class="part">総括・実践ガイド</p>
-  <h2>AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと</h2>
-  <p>AIと一緒に試し、結果を確かめ、経験を記録して次につなげる。実際に取り組んできたことから、おすすめしたい使い方をまとめました。</p>
+<h1>AIとやってみる</h1>
+<a class="feature" href="manga-to-novel-with-ai.html">
+  <p class="part">小説編①｜創作・AIとの協働</p>
+  <h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2>
+  <p>マンガ制作から小説へ。AIと試行錯誤しながら、ひとつの物語を書き上げるまでの記録。</p>
   <span class="feature-arrow" aria-hidden="true">→</span>
 </a>
+<h2 class="archive-heading">これまでの実践記事</h2>
 <div class="others">
-  <a class="card" href="ai-blog-start.html"><p class="part">第1章</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
-  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2章</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
-  <a class="card" href="github-ai-conversation.html"><p class="part">第3章</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
-  <a class="card card-new" href="manga-to-novel-with-ai.html"><p class="part">創作・AIとの協働</p><span class="new-label">新着記事</span><h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2><p>マンガ制作から小説へ。AIと試行錯誤しながら創作を進めた記録。</p></a>
+  <a class="card" href="ai-blog-start.html"><p class="part">第1部｜経験ログ</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
+  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
+  <a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
 </div>
 </section>
 {render_sidebar()}
