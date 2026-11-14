@@ -735,9 +735,9 @@ def build_collection_page(title, permalink, description, articles, intro):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
     cards = "\n".join(
         f"""<article class="collection-card">
-  <p class="collection-part">{html_module.escape(item["part"])}</p>
-  <h2><a href="{html_module.escape(item["permalink"], quote=True)}">{html_module.escape(item["title"])}</a></h2>
-  <p>{html_module.escape(item["description"])}</p>
+  <p class="collection-part">{html_module.escape(item['part'])}</p>
+  <h2><a href="{html_module.escape(item['permalink'], quote=True)}">{html_module.escape(item['title'])}</a></h2>
+  <p>{html_module.escape(item['description'])}</p>
 </article>"""
         for item in articles
     )
