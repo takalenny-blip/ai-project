@@ -72,6 +72,21 @@ def render_series_banner(current_permalink=None):
   </div>
 </section>"""
 
+def render_novel_series_banner(current_permalink=None):
+    current_attr = ' aria-current="page"' if current_permalink == BLOG5_PERMALINK else ""
+    return f"""<section class="series-banner" aria-labelledby="novel-series-title">
+  <div class="series-banner-inner">
+    <p class="series-kicker">創作・AIとの協働</p>
+    <h2 class="series-title" id="novel-series-title">AIとやってみる</h2>
+    <p class="series-description">マンガを作るつもりが、AIと小説を書き上げることになった。AIとの創作の試行錯誤を記録したシリーズです。</p>
+    <nav class="series-links" aria-label="小説編シリーズ">
+      <a class="series-link" href="ai-try.html">シリーズの入口</a>
+      <a class="series-link"{current_attr} href="{BLOG5_PERMALINK}">小説編①</a>
+      <a class="series-link series-link-all" href="articles.html">すべての記事</a>
+    </nav>
+  </div>
+</section>"""
+
 
 def render_sidebar():
     recent_links = "\n".join(
@@ -300,10 +315,10 @@ home = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>たか’sブログ</title>
-<meta name="description" content="AIとやってみる。マンガ制作から小説へ、AIと試行錯誤しながら創作を進めた経験を紹介します。">
+<meta name="description" content="AI環境構築とAIとの創作。AIと試行錯誤しながら取り組んだ経験や成果を記録するブログです。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="たか’sブログ">
-<meta property="og:description" content="AIとやってみる。マンガ制作から小説へ、AIと試行錯誤しながら創作を進めた経験を紹介します。">
+<meta property="og:description" content="AI環境構築とAIとの創作。AIと試行錯誤しながら取り組んだ経験や成果を記録するブログです。">
 <meta property="og:url" content="https://takalenny-blip.github.io/ai-project/">
 <meta property="og:image" content="https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg">
 <meta property="og:image:alt" content="たか’sブログのサイトバナー">
@@ -332,12 +347,15 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .series-links .series-link[aria-current="page"] { border-color:#f0ca77; background:#5a492d; box-shadow:inset 0 0 0 1px #f0ca77; }
 .series-links .series-link-all { margin-left:12px; border-color:#c4a46a; background:#282722; }
 .series-links .series-link:hover { border-color:#f0ca77; background:#51442f; }
-.free-entry { max-width:1064px; margin:34px auto 0; padding:32px 34px; border:1px solid var(--accent); background:var(--cream); }
-.free-entry .eyebrow { margin:0 0 10px; color:var(--accent); font-size:.72rem; font-weight:600; letter-spacing:.15em; }
-.free-entry h1 { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.7rem,3.4vw,2.5rem); font-weight:500; line-height:1.45; }
-.free-entry p { max-width:820px; margin:14px 0 0; color:var(--muted); }
-.free-entry .free-note { font-size:.82rem; }
-.free-entry a { display:inline-block; margin-top:18px; color:#c4a46a; font-weight:600; }
+.home-main { max-width:1120px; margin:0 auto; padding:58px 28px 90px; }
+.home-intro { margin:0 0 34px; text-align:center; }
+.home-intro h1 { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.8rem,3.6vw,2.6rem); font-weight:500; letter-spacing:.06em; }
+.home-intro p { margin:12px auto 0; max-width:720px; color:var(--muted); font-size:.92rem; }
+.home-navigation { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.home-button { display:flex; min-height:160px; flex-direction:column; justify-content:center; padding:26px 24px; border:1px solid #8f7548; border-radius:5px; background:linear-gradient(145deg,#39352d,#2d2b28); color:var(--ink); text-decoration:none; transition:border-color .15s ease,background .15s ease,transform .15s ease; }
+.home-button:hover { border-color:#e0bd78; background:#40392d; transform:translateY(-2px); }
+.home-button-label { display:block; color:#f0d59c; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.2rem,2vw,1.55rem); font-weight:600; line-height:1.4; }
+.home-button-description { display:block; margin-top:12px; color:#c9c0b2; font-size:.84rem; line-height:1.7; }
 .layout { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; max-width:1120px; margin:0 auto; padding:62px 28px 90px; }
 .content h1 { margin:0 0 36px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1rem; font-weight:500; letter-spacing:.18em; color:var(--accent); }
 .feature { position:relative; display:block; padding:42px 0 40px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); color:inherit; text-decoration:none; }
@@ -371,7 +389,10 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   .series-description { font-size:.84rem; }
   .series-links { gap:7px; }
   .series-links .series-link { min-height:40px; padding:7px 10px; font-size:.8rem; }
-  .free-entry { margin:22px 18px 0; padding:24px 20px; }
+  .home-main { padding:42px 18px 60px; }
+  .home-intro { margin-bottom:26px; }
+  .home-navigation { grid-template-columns:1fr; gap:12px; }
+  .home-button { min-height:112px; padding:22px 20px; }
   .layout { grid-template-columns:1fr; gap:42px; padding:42px 18px 60px; }
   .feature { padding:30px 0 34px; }
   .feature h2 { font-size:1.8rem; }
@@ -383,37 +404,31 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </head>
 <body>
 <header class="site-header"><div class="header-inner"><a class="site-signboard" href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></div></header>
-<!--SERIES_BANNER_PLACEHOLDER-->
-<section class="free-entry" aria-labelledby="free-entry-title">
-  <p class="eyebrow">AIを始めたい人へ</p>
-  <h1 id="free-entry-title">AIで何か始めたい人へ。基本の実践は完全無料で。</h1>
-  <p>AIを使う、作業環境を整える、試行錯誤を記録する、経験や成果を公開する。そんな一連の実践を、有料プランや有料ツールを前提にせず始められる方法を紹介していきます。</p>
-  <p class="free-note">無料プランの制限や、無料ではできないことも隠さず説明します。noteの有料記事は別枠です。セッティングマニュアルは準備中です。</p>
-  <a href="ai-trial-and-record.html">AIと試行錯誤した経験から、学んだことを読む →</a>
-</section>
-<div class="layout">
-<section class="content">
-<h1>AIとやってみる</h1>
-<a class="feature" href="manga-to-novel-with-ai.html">
-  <p class="part">小説編①｜創作・AIとの協働</p>
-  <h2>マンガを作るつもりが、AIと小説を書き上げることになった</h2>
-  <p>マンガ制作から小説へ。AIと試行錯誤しながら、ひとつの物語を書き上げるまでの記録。</p>
-  <span class="feature-arrow" aria-hidden="true">→</span>
-</a>
-<h2 class="archive-heading">これまでの実践記事</h2>
-<div class="others">
-  <a class="card" href="ai-blog-start.html"><p class="part">第1部｜経験ログ</p><h2>「便利そうだな」から始まった</h2><p>AIとブログを作ろうと思うまでの、小さな気づき。</p></a>
-  <a class="card" href="vaio-p-again-and-beyond.html"><p class="part">第2部｜VAIO P</p><h2>もう一度動かしてみた――その先で考えたこと</h2><p>古いVAIO Pを動かしながら進めた試行錯誤。</p></a>
-  <a class="card" href="github-ai-conversation.html"><p class="part">第3部｜GitHub</p><h2>AIとのやりとりを「残るもの」にしていった</h2><p>GitHubで記録と作業管理の仕組みを作った経験。</p></a>
-</div>
-</section>
-{render_sidebar()}
-</div>
+<main class="home-main">
+  <section class="home-intro">
+    <h1>たか’sブログ</h1>
+    <p>AIとの実践や創作の記録を、テーマ別にまとめています。読みたい入口を選んでください。</p>
+  </section>
+  <nav class="home-navigation" aria-label="ブログの入口">
+    <a class="home-button" href="ai-environment.html">
+      <span class="home-button-label">AI環境構築</span>
+      <span class="home-button-description">AIを使う環境を整え、試行錯誤を重ねてきた記録。</span>
+    </a>
+    <a class="home-button" href="ai-try.html">
+      <span class="home-button-label">AIとやってみる</span>
+      <span class="home-button-description">AIと一緒に創作や新しいことに挑戦した記録。</span>
+    </a>
+    <a class="home-button" href="articles.html">
+      <span class="home-button-label">すべての記事</span>
+      <span class="home-button-description">テーマを横断して、公開中の記事を新着順に読む。</span>
+    </a>
+  </nav>
+</main>
 {render_footer()}
 </body>
 </html>
 """
-home = home.replace('{render_sidebar()}', render_sidebar()).replace('{render_footer()}', render_footer()).replace('<!--SERIES_BANNER_PLACEHOLDER-->', render_series_banner())
+home = home.replace('{render_footer()}', render_footer())
 
 quote_samples = """<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -451,9 +466,14 @@ robots_txt = "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.
 # The canonical article is written after article_variant adds the shared article navigation.
 
 def article_variant(base_page, title, permalink, body_html):
+    series_banner = (
+        render_novel_series_banner(permalink)
+        if permalink == BLOG5_PERMALINK
+        else render_series_banner(permalink)
+    )
     base_page = base_page.replace(
         "<!--SERIES_BANNER_PLACEHOLDER -->",
-        render_series_banner(permalink),
+        series_banner,
     )
     labels = {
         BLOG1_PERMALINK: "第1部｜経験ログ",
@@ -709,6 +729,77 @@ a {{ color:#c4a46a; }}
 </html>
 """
     (DIST / permalink).write_text(page_html, encoding="utf-8")
+
+
+def build_collection_page(title, permalink, description, articles, intro):
+    canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
+    cards = "\n".join(
+        f"""<article class="collection-card">
+  <p class="collection-part">{html_module.escape(item['part'])}</p>
+  <h2><a href="{html_module.escape(item['permalink'], quote=True)}">{html_module.escape(item['title'])}</a></h2>
+  <p>{html_module.escape(item['description'])}</p>
+</article>"""
+        for item in articles
+    )
+    page_html = f"""<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{html_module.escape(title)}｜たか’sブログ</title>
+<meta name="description" content="{html_module.escape(description, quote=True)}">
+<link rel="canonical" href="{canonical_url}">
+<style>
+* {{ box-sizing:border-box; }}
+:root {{ --ink:#eee7db; --muted:#aaa093; --paper:#363636; --line:#3d3933; --accent:#b3945a; }}
+body {{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.9; }}
+header {{ max-width:1120px; margin:0 auto; padding:30px 28px 26px; }}
+header a {{ display:block; }}
+header img {{ display:block; width:100%; max-height:240px; object-fit:cover; height:auto; border:1px solid var(--line); }}
+main {{ max-width:900px; margin:0 auto; padding:42px 24px 76px; }}
+.kicker {{ margin:0 0 10px; color:var(--accent); font-size:.76rem; letter-spacing:.12em; font-weight:700; }}
+h1 {{ margin:0; font-family:Georgia,"Noto Serif JP",serif; font-size:clamp(1.9rem,4vw,2.7rem); font-weight:500; line-height:1.4; }}
+.intro {{ margin:14px 0 32px; color:var(--muted); }}
+.collection-card {{ padding:22px 0; border-top:1px solid var(--line); }}
+.collection-part {{ margin:0 0 7px; color:var(--accent); font-size:.76rem; letter-spacing:.06em; }}
+.collection-card h2 {{ margin:0 0 8px; font-family:Georgia,"Noto Serif JP",serif; font-size:1.25rem; font-weight:500; line-height:1.55; }}
+.collection-card p:last-child {{ margin:0; color:var(--muted); font-size:.9rem; }}
+a {{ color:#c4a46a; }}
+footer {{ border-top:1px solid var(--line); color:var(--muted); text-align:center; padding:30px 18px; font-size:.76rem; letter-spacing:.04em; }}
+footer p {{ margin:.8em 0 0; }}
+@media(max-width:700px) {{ header {{ padding:22px 18px 18px; }} header img {{ max-height:180px; }} main {{ padding:34px 18px 54px; }} }}
+</style>
+</head>
+<body>
+<header><a href="./" aria-label="たか’sブログ ホーム"><img src="images/taka-blog-banner.jpg" alt="たか’sブログ"></a></header>
+<main>
+  <p class="kicker">たか’sブログ｜記事シリーズ</p>
+  <h1>{html_module.escape(title)}</h1>
+  <p class="intro">{html_module.escape(intro)}</p>
+  {cards}
+  <p><a href="./">← トップページへ戻る</a></p>
+</main>
+{render_footer()}
+</body>
+</html>
+"""
+    (DIST / permalink).write_text(page_html, encoding="utf-8")
+
+
+build_collection_page(
+    "AI環境構築",
+    "ai-environment.html",
+    "AIを使う環境を整え、試行錯誤を記録してきた記事シリーズ。",
+    ARTICLES[:4],
+    "AIとのやりとりを残す方法、古いPCの再活用、GitHubでの記録と作業管理、実践から得た学びをまとめています。",
+)
+build_collection_page(
+    "AIとやってみる",
+    "ai-try.html",
+    "AIと一緒に創作や新しいことに挑戦した記録。",
+    ARTICLES[4:],
+    "AIと一緒に試し、考え、形にしていく過程を記録するシリーズです。現在は小説編を公開しています。",
+)
 
 
 build_static_page(
