@@ -58,6 +58,10 @@ jobs:
           path: ./dist
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
 
+      # GitHub's artifact metadata can lag behind the successful upload.
+      - name: Wait for Pages artifact visibility
+        run: sleep 10
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
