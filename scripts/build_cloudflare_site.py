@@ -355,6 +355,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .home-button { display:flex; min-height:160px; flex-direction:column; justify-content:center; padding:26px 24px; border:1px solid #8f7548; border-radius:5px; background:linear-gradient(145deg,#39352d,#2d2b28); color:var(--ink); text-decoration:none; transition:border-color .15s ease,background .15s ease,transform .15s ease; }
 .home-button:hover { border-color:#e0bd78; background:#40392d; transform:translateY(-2px); }
 .home-button-label { display:block; color:#f0d59c; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.2rem,2vw,1.55rem); font-weight:600; line-height:1.4; }
+.home-button-status { display:inline-block; align-self:flex-start; margin:0 0 12px; padding:3px 9px; border:1px solid #8f7548; border-radius:3px; color:#f0d59c; font-size:.7rem; font-weight:700; letter-spacing:.06em; }
 .home-button-description { display:block; margin-top:12px; color:#c9c0b2; font-size:.84rem; line-height:1.7; }
 .layout { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:54px; align-items:start; max-width:1120px; margin:0 auto; padding:62px 28px 90px; }
 .content h1 { margin:0 0 36px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1rem; font-weight:500; letter-spacing:.18em; color:var(--accent); }
@@ -407,7 +408,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 <main class="home-main">
   <section class="home-intro">
     <h1>たか’sブログ</h1>
-    <p>AIとの実践や創作の記録を、テーマ別にまとめています。読みたい入口を選んでください。</p>
+    <p>AIとの実践や創作の記録、音楽・映画・漫画のおすすめ、暮らしに役立つ情報などを紹介しています。読みたい入口を選んでください。</p>
   </section>
   <nav class="home-navigation" aria-label="ブログの入口">
     <a class="home-button" href="ai-environment.html">
@@ -417,6 +418,16 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
     <a class="home-button" href="ai-try.html">
       <span class="home-button-label">AIとやってみる</span>
       <span class="home-button-description">AIと一緒に創作や新しいことに挑戦した記録。</span>
+    </a>
+    <a class="home-button" href="recommendations.html">
+      <span class="home-button-status">音楽記事準備中</span>
+      <span class="home-button-label">たかのおすすめ</span>
+      <span class="home-button-description">自分がいいと思った音楽・映画・漫画などを紹介。映画・漫画は今後追加予定。</span>
+    </a>
+    <a class="home-button" href="marutoku.html">
+      <span class="home-button-status">企画中・記事準備中</span>
+      <span class="home-button-label">丸徳情報</span>
+      <span class="home-button-description">電気料金や家庭の節約など、暮らしに役立つ情報を紹介する予定です。</span>
     </a>
     <a class="home-button" href="articles.html">
       <span class="home-button-label">すべての記事</span>
@@ -817,6 +828,35 @@ build_collection_page(
     "AIと一緒に創作や新しいことに挑戦した記録。",
     ARTICLES[4:],
     "AIと一緒に試し、考え、形にしていく過程を記録するシリーズです。現在は小説編を公開しています。",
+)
+
+build_static_page(
+    "たかのおすすめ",
+    "recommendations.html",
+    "自分がいいと思った音楽・映画・漫画などを紹介します。",
+    """<p>自分がいいと思った作品を、個人的な感想とともに紹介していきます。ランキングではなく、自分のおすすめです。</p>
+<section>
+<h2>音楽</h2>
+<article class="collection-card">
+  <h3>THE STREET SLIDERS『SLIDER JOINT』</h3>
+  <p>記事準備中</p>
+</article>
+</section>
+<section>
+<h2>映画</h2>
+<p>今後追加予定</p>
+</section>
+<section>
+<h2>漫画</h2>
+<p>今後追加予定</p>
+</section>""",
+)
+build_static_page(
+    "丸徳情報",
+    "marutoku.html",
+    "電気料金や家庭の節約など、暮らしに役立つ情報を紹介する企画です。",
+    """<p>電気料金や家庭の節約など、暮らしに役立つ情報を紹介する予定です。</p>
+<p>現在は企画中・記事準備中です。公開できる記事ができ次第、ここに追加します。</p>""",
 )
 
 
