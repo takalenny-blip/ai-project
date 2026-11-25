@@ -705,7 +705,14 @@ a:hover {{ text-decoration: underline; }}
 
 def build_static_page(title, permalink, description, body):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
-    sections_html = "\\n".join(
+    sections_html = "\n".join(
+        f"""<section id="{html_module.escape(anchor, quote=True)}" class="collection-card">
+  <h2>{html_module.escape(label)}</h2>
+  <p>{html_module.escape(detail)}</p>
+</section>"""
+        for label, detail, anchor in (category_sections or [])
+    )
+    sections_html = "\n".join(
         f"""<section id="{html_module.escape(anchor, quote=True)}" class="collection-card">
   <h2>{html_module.escape(label)}</h2>
   <p>{html_module.escape(detail)}</p>
@@ -752,7 +759,7 @@ a {{ color:#c4a46a; }}
 def build_collection_page(title, permalink, description, articles, intro, category_buttons=None, category_sections=None):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
     if category_buttons:
-        cards = "\\n".join(
+        cards = "\n".join(
             f"""<a class=\"series-button\" href=\"{html_module.escape(href, quote=True)}\">
   <span class=\"series-button-label\">{html_module.escape(label)}</span>
   <span class=\"series-button-description\">{html_module.escape(detail)}</span>
@@ -760,7 +767,7 @@ def build_collection_page(title, permalink, description, articles, intro, catego
             for label, detail, href in category_buttons
         )
     elif permalink == "ai-try.html":
-        cards = "\\n".join(
+        cards = "\n".join(
             f"""<a class=\"series-button\" href=\"{html_module.escape(item['permalink'], quote=True)}\">
   <span class=\"series-button-label\">小説編</span>
   <span class=\"series-button-description\">マンガを作るつもりが、AIと小説を書き上げることになった創作の記録。</span>
@@ -768,7 +775,7 @@ def build_collection_page(title, permalink, description, articles, intro, catego
             for item in articles
         )
     else:
-        cards = "\\n".join(
+        cards = "\n".join(
             f"""<article class=\"collection-card\">
   <p class=\"collection-part\">{html_module.escape(item['part'])}</p>
   <h2><a href=\"{html_module.escape(item['permalink'], quote=True)}\">{html_module.escape(item['title'])}</a></h2>
@@ -818,6 +825,7 @@ footer p {{ margin:.8em 0 0; }}
   <h1>{html_module.escape(title)}</h1>
   <p class="intro">{html_module.escape(intro)}</p>
   {cards}
+  {sections_html}
   <nav class="collection-nav" aria-label="ブログ内ナビゲーション">
     <a href="articles.html">すべての記事</a>
     <a href="./">← トップページへ戻る</a>
