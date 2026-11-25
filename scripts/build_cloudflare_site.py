@@ -742,21 +742,29 @@ a {{ color:#c4a46a; }}
     (DIST / permalink).write_text(page_html, encoding="utf-8")
 
 
-def build_collection_page(title, permalink, description, articles, intro):
+def build_collection_page(title, permalink, description, articles, intro, category_buttons=None):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
-    if permalink == "ai-try.html":
-        cards = "\n".join(
-            f"""<a class="series-button" href="{html_module.escape(item['permalink'], quote=True)}">
-  <span class="series-button-label">小説編</span>
-  <span class="series-button-description">マンガを作るつもりが、AIと小説を書き上げることになった創作の記録。</span>
+    if category_buttons:
+        cards = "\\n".join(
+            f"""<a class=\"series-button\" href=\"{html_module.escape(href, quote=True)}\">
+  <span class=\"series-button-label\">{html_module.escape(label)}</span>
+  <span class=\"series-button-description\">{html_module.escape(detail)}</span>
+</a>"""
+            for label, detail, href in category_buttons
+        )
+    elif permalink == "ai-try.html":
+        cards = "\\n".join(
+            f"""<a class=\"series-button\" href=\"{html_module.escape(item['permalink'], quote=True)}\">
+  <span class=\"series-button-label\">小説編</span>
+  <span class=\"series-button-description\">マンガを作るつもりが、AIと小説を書き上げることになった創作の記録。</span>
 </a>"""
             for item in articles
         )
     else:
-        cards = "\n".join(
-            f"""<article class="collection-card">
-  <p class="collection-part">{html_module.escape(item['part'])}</p>
-  <h2><a href="{html_module.escape(item['permalink'], quote=True)}">{html_module.escape(item['title'])}</a></h2>
+        cards = "\\n".join(
+            f"""<article class=\"collection-card\">
+  <p class=\"collection-part\">{html_module.escape(item['part'])}</p>
+  <h2><a href=\"{html_module.escape(item['permalink'], quote=True)}\">{html_module.escape(item['title'])}</a></h2>
   <p>{html_module.escape(item['description'])}</p>
 </article>"""
             for item in articles
@@ -830,26 +838,17 @@ build_collection_page(
     "AIと一緒に試し、考え、形にしていく過程を記録するシリーズです。現在は小説編を公開しています。",
 )
 
-build_static_page(
+build_collection_page(
     "たかのおすすめ",
     "recommendations.html",
-    "自分がいいと思った音楽・映画・漫画などを紹介します。",
-    """<p>自分がいいと思った作品を、個人的な感想とともに紹介していきます。ランキングではなく、自分のおすすめです。</p>
-<section>
-<h2>音楽</h2>
-<article class="collection-card">
-  <h3>THE STREET SLIDERS『SLIDER JOINT』</h3>
-  <p>記事準備中</p>
-</article>
-</section>
-<section>
-<h2>映画</h2>
-<p>今後追加予定</p>
-</section>
-<section>
-<h2>漫画</h2>
-<p>今後追加予定</p>
-</section>""",
+    "音楽・映画・漫画など、自分がいいと思った作品を紹介するシリーズ。",
+    [],
+    "自分がいいと思った作品を、個人的な感想とともに紹介していきます。ランキングではなく、自分のおすすめです。",
+    [
+        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介予定。記事準備中です。", "#music"),
+        ("映画", "今後追加予定です。", "#movies"),
+        ("漫画", "今後追加予定です。", "#manga"),
+    ],
 )
 build_static_page(
     "丸徳情報",
