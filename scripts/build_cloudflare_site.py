@@ -705,6 +705,13 @@ a:hover {{ text-decoration: underline; }}
 
 def build_static_page(title, permalink, description, body):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
+    sections_html = "\\n".join(
+        f"""<section id="{html_module.escape(anchor, quote=True)}" class="collection-card">
+  <h2>{html_module.escape(label)}</h2>
+  <p>{html_module.escape(detail)}</p>
+</section>"""
+        for label, detail, anchor in (category_sections or [])
+    )
     page_html = f"""<!doctype html>
 <html lang="ja">
 <head>
@@ -742,7 +749,7 @@ a {{ color:#c4a46a; }}
     (DIST / permalink).write_text(page_html, encoding="utf-8")
 
 
-def build_collection_page(title, permalink, description, articles, intro, category_buttons=None):
+def build_collection_page(title, permalink, description, articles, intro, category_buttons=None, category_sections=None):
     canonical_url = f"https://takalenny-blip.github.io/ai-project/{permalink}"
     if category_buttons:
         cards = "\\n".join(
@@ -848,6 +855,11 @@ build_collection_page(
         ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介予定。記事準備中です。", "#music"),
         ("映画", "今後追加予定です。", "#movies"),
         ("漫画", "今後追加予定です。", "#manga"),
+    ],
+    [
+        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介予定です。現在、記事を準備しています。", "music"),
+        ("映画", "今後追加予定です。", "movies"),
+        ("漫画", "今後追加予定です。", "manga"),
     ],
 )
 build_static_page(
