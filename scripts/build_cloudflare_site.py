@@ -790,6 +790,13 @@ def build_collection_page(title, permalink, description, articles, intro, catego
 </article>"""
             for item in articles
         )
+    sections_html = "\\n".join(
+        f"""<section id="{html_module.escape(anchor, quote=True)}" class="collection-card">
+  <h2>{html_module.escape(label)}</h2>
+  <p>{html_module.escape(detail)}</p>
+</section>"""
+        for label, detail, anchor in (category_sections or [])
+    )
     page_html = f"""<!doctype html>
 <html lang="ja">
 <head>
