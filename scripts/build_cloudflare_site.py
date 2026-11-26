@@ -44,7 +44,7 @@ ARTICLES = [
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
     {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
     {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AIとの協働", "description": BLOG5_DESCRIPTION},
-    {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "音楽｜たかのおすすめ", "description": BLOG6_DESCRIPTION},
+    {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -83,8 +83,10 @@ def render_recommendation_banner():
     <p class="series-kicker">たかのおすすめ｜音楽</p>
     <h2 class="series-title" id="recommendation-title">自分が出会った、いいものを紹介</h2>
     <p class="series-description">流行や知名度だけではなく、自分の中に何かを残してくれた音楽を紹介します。</p>
-    <nav class="series-links" aria-label="おすすめ記事">
-      <a class="series-link" href="recommendations.html">おすすめ一覧</a>
+    <nav class="series-links" aria-label="おすすめカテゴリー">
+      <a class="series-link" href="recommendations-music.html">おすすめ（音楽）</a>
+      <a class="series-link" href="recommendations-movie.html">おすすめ（映画）</a>
+      <a class="series-link" href="recommendations-manga.html">おすすめ（漫画）</a>
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
     </nav>
   </div>
@@ -878,15 +880,31 @@ build_collection_page(
     [],
     "独断と偏見で選んだ、お気に入りです。どちらかといえば、世間ではあまり知られていない、隠れた掘り出し物を紹介していきたいと思っています。",
     [
-        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介。", BLOG6_PERMALINK),
-        ("映画", "今後追加予定です。", "#movies"),
-        ("漫画", "今後追加予定です。", "#manga"),
+        ("おすすめ（音楽）", "音楽のおすすめ記事を一覧で紹介します。", "recommendations-music.html"),
+        ("おすすめ（映画）", "映画のおすすめ記事。公開できる記事を順次追加します。", "recommendations-movie.html"),
+        ("おすすめ（漫画）", "漫画のおすすめ記事。公開できる記事を順次追加します。", "recommendations-manga.html"),
     ],
-    [
-        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介しています。", "music"),
-        ("映画", "今後追加予定です。", "movies"),
-        ("漫画", "今後追加予定です。", "manga"),
-    ],
+)
+build_collection_page(
+    "おすすめ（音楽）",
+    "recommendations-music.html",
+    "たかが出会った、おすすめの音楽を紹介する記事一覧。",
+    [item for item in ARTICLES if item["permalink"] == BLOG6_PERMALINK],
+    "自分が出会った、いいと思える音楽を紹介します。記事が増えたら、この一覧に新しいものから追加していきます。",
+)
+build_collection_page(
+    "おすすめ（映画）",
+    "recommendations-movie.html",
+    "たかのおすすめ映画の記事一覧。",
+    [],
+    "映画のおすすめ記事は、これから順次追加していきます。",
+)
+build_collection_page(
+    "おすすめ（漫画）",
+    "recommendations-manga.html",
+    "たかのおすすめ漫画の記事一覧。",
+    [],
+    "漫画のおすすめ記事は、これから順次追加していきます。",
 )
 build_static_page(
     "丸徳情報",
