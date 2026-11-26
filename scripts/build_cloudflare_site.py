@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "docs/企画/BLOG-0003/BLOG-0003_Blogger掲載用.html"
 BLOG4_SOURCE = ROOT / "docs/企画/BLOG-0004/BLOG-0004_Blogger掲載用.html"
 BLOG5_SOURCE = ROOT / "docs/企画/BLOG-0005/BLOG-0005_Blogger掲載用.html"
+BLOG6_SOURCE = ROOT / "docs/企画/BLOG-0006/BLOG-0006_Blogger掲載用.html"
 IMAGE_DIR = ROOT / "docs/企画/BLOG-0003/images"
 DIST = ROOT / "dist"
 
@@ -33,6 +34,9 @@ BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験
 BLOG5_TITLE = "AIとやってみる 小説編①｜マンガを作るつもりが、小説を書き上げることになった"
 BLOG5_PERMALINK = "manga-to-novel-with-ai.html"
 BLOG5_DESCRIPTION = "マンガ制作、シナリオ、小説へ。AIと試行錯誤しながらスター・ウォーズの二次創作小説を書き上げるまでの経験と、AIとの創作の進め方を紹介する。"
+BLOG6_TITLE = "俺にロックの面白さを教えてくれた、ザ・ストリート・スライダーズ"
+BLOG6_PERMALINK = "recommend-music-00001-the-street-sliders.html"
+BLOG6_DESCRIPTION = "オープンGやボトルネック奏法、2本のギターの絡み、力強いリズム隊。ザ・ストリート・スライダーズから教わったロックと楽器の面白さを紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
@@ -40,6 +44,7 @@ ARTICLES = [
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
     {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
     {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AIとの協働", "description": BLOG5_DESCRIPTION},
+    {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "音楽｜たかのおすすめ", "description": BLOG6_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -71,6 +76,20 @@ def render_series_banner(current_permalink=None):
     <nav class="series-links" aria-label="シリーズ記事と全記事一覧">{''.join(links)}<a class="series-link series-link-all" href="articles.html">すべての記事（新着順）</a></nav>
   </div>
 </section>"""
+
+def render_recommendation_banner():
+    return """<section class="series-banner" aria-labelledby="recommendation-title">
+  <div class="series-banner-inner">
+    <p class="series-kicker">たかのおすすめ｜音楽</p>
+    <h2 class="series-title" id="recommendation-title">自分が出会った、いいものを紹介</h2>
+    <p class="series-description">流行や知名度だけではなく、自分の中に何かを残してくれた音楽を紹介します。</p>
+    <nav class="series-links" aria-label="おすすめ記事">
+      <a class="series-link" href="recommendations.html">おすすめ一覧</a>
+      <a class="series-link series-link-all" href="articles.html">すべての記事</a>
+    </nav>
+  </div>
+</section>"""
+
 
 def render_novel_series_banner(current_permalink=None):
     current_attr = ' aria-current="page"' if current_permalink == BLOG5_PERMALINK else ""
@@ -145,7 +164,7 @@ def render_article_navigation(permalink):
 
 
 
-for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE):
+for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE, BLOG6_SOURCE):
     if not required_source.is_file():
         raise SystemExit(f"missing source: {required_source}")
 
@@ -162,6 +181,7 @@ blog1_html = BLOG1_SOURCE.read_text(encoding="utf-8")
 blog2_html = BLOG2_SOURCE.read_text(encoding="utf-8")
 blog4_html = BLOG4_SOURCE.read_text(encoding="utf-8")
 blog5_html = BLOG5_SOURCE.read_text(encoding="utf-8")
+blog6_html = BLOG6_SOURCE.read_text(encoding="utf-8")
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
@@ -480,6 +500,7 @@ def article_variant(base_page, title, permalink, body_html):
     series_banner = (
         render_novel_series_banner(permalink)
         if permalink == BLOG5_PERMALINK
+        else render_recommendation_banner() if permalink == BLOG6_PERMALINK
         else render_series_banner(permalink)
     )
     base_page = base_page.replace(
@@ -492,6 +513,7 @@ def article_variant(base_page, title, permalink, body_html):
         PERMALINK: "第3部｜GitHub",
         BLOG4_PERMALINK: "総括・実践ガイドのご案内",
         BLOG5_PERMALINK: "創作・AIとの協働",
+        BLOG6_PERMALINK: "たかのおすすめ｜音楽",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
@@ -505,6 +527,7 @@ def article_variant(base_page, title, permalink, body_html):
         PERMALINK: BLOG3_DESCRIPTION,
         BLOG4_PERMALINK: BLOG4_DESCRIPTION,
         BLOG5_PERMALINK: BLOG5_DESCRIPTION,
+        BLOG6_PERMALINK: BLOG6_DESCRIPTION,
     }
     description = descriptions.get(permalink, title)
     base_page = re.sub(
@@ -551,11 +574,13 @@ page2 = article_variant(page, BLOG2_TITLE, BLOG2_PERMALINK, blog2_html)
 page3 = article_variant(page, TITLE, PERMALINK, html)
 page4 = article_variant(page, BLOG4_TITLE, BLOG4_PERMALINK, blog4_html)
 page5 = article_variant(page, BLOG5_TITLE, BLOG5_PERMALINK, blog5_html)
+page6 = article_variant(page, BLOG6_TITLE, BLOG6_PERMALINK, blog6_html)
 (DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
 (DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
 (DIST / PERMALINK).write_text(page3, encoding="utf-8")
 (DIST / BLOG4_PERMALINK).write_text(page4, encoding="utf-8")
 (DIST / BLOG5_PERMALINK).write_text(page5, encoding="utf-8")
+(DIST / BLOG6_PERMALINK).write_text(page6, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
@@ -853,12 +878,12 @@ build_collection_page(
     [],
     "独断と偏見で選んだ、お気に入りです。どちらかといえば、世間ではあまり知られていない、隠れた掘り出し物を紹介していきたいと思っています。",
     [
-        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介予定。記事準備中です。", "#music"),
+        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介。", BLOG6_PERMALINK),
         ("映画", "今後追加予定です。", "#movies"),
         ("漫画", "今後追加予定です。", "#manga"),
     ],
     [
-        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介予定です。現在、記事を準備しています。", "music"),
+        ("音楽", "THE STREET SLIDERS『SLIDER JOINT』を紹介しています。", "music"),
         ("映画", "今後追加予定です。", "movies"),
         ("漫画", "今後追加予定です。", "manga"),
     ],
@@ -1083,4 +1108,5 @@ print(f"built {DIST / BLOG1_PERMALINK}")
 print(f"built {DIST / BLOG2_PERMALINK}")
 print(f"built {DIST / BLOG4_PERMALINK}")
 print(f"built {DIST / BLOG5_PERMALINK}")
+print(f"built {DIST / BLOG6_PERMALINK}")
 print(f"images: {len(list((DIST / 'images').iterdir()))}")
