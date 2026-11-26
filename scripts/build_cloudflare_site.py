@@ -12,6 +12,7 @@ SOURCE = ROOT / "docs/企画/BLOG-0003/BLOG-0003_Blogger掲載用.html"
 BLOG4_SOURCE = ROOT / "docs/企画/BLOG-0004/BLOG-0004_Blogger掲載用.html"
 BLOG5_SOURCE = ROOT / "docs/企画/BLOG-0005/BLOG-0005_Blogger掲載用.html"
 BLOG6_SOURCE = ROOT / "docs/企画/BLOG-0006/BLOG-0006_Blogger掲載用.html"
+BLOG7_SOURCE = ROOT / "docs/企画/BLOG-0007/BLOG-0007_Blogger掲載用.html"
 IMAGE_DIR = ROOT / "docs/企画/BLOG-0003/images"
 DIST = ROOT / "dist"
 
@@ -37,6 +38,9 @@ BLOG5_DESCRIPTION = "マンガ制作、シナリオ、小説へ。AIと試行錯
 BLOG6_TITLE = "俺にロックの面白さを教えてくれた、ザ・ストリート・スライダーズ"
 BLOG6_PERMALINK = "recommend-music-00001-the-street-sliders.html"
 BLOG6_DESCRIPTION = "オープンGやボトルネック奏法、2本のギターの絡み、力強いリズム隊。ザ・ストリート・スライダーズから教わったロックと楽器の面白さを紹介する。"
+BLOG7_TITLE = "『スクール・オブ・ロック』ジャック・ブラックとラストライブに鳥肌！"
+BLOG7_PERMALINK = "recommended-movies-00001-school-of-rock.html"
+BLOG7_DESCRIPTION = "ジャック・ブラック演じるロック好きの教師と子どもたちがバンドを結成する映画『スクール・オブ・ロック』。最後のライブに鳥肌が立つ、掘り出し物の一本を紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
@@ -45,6 +49,7 @@ ARTICLES = [
     {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
     {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AIとの協働", "description": BLOG5_DESCRIPTION},
     {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
+    {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "おすすめ（映画）｜00001", "description": BLOG7_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -166,7 +171,7 @@ def render_article_navigation(permalink):
 
 
 
-for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE, BLOG6_SOURCE):
+for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE, BLOG6_SOURCE, BLOG7_SOURCE):
     if not required_source.is_file():
         raise SystemExit(f"missing source: {required_source}")
 
@@ -184,6 +189,7 @@ blog2_html = BLOG2_SOURCE.read_text(encoding="utf-8")
 blog4_html = BLOG4_SOURCE.read_text(encoding="utf-8")
 blog5_html = BLOG5_SOURCE.read_text(encoding="utf-8")
 blog6_html = BLOG6_SOURCE.read_text(encoding="utf-8")
+blog7_html = BLOG7_SOURCE.read_text(encoding="utf-8")
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
@@ -502,7 +508,7 @@ def article_variant(base_page, title, permalink, body_html):
     series_banner = (
         render_novel_series_banner(permalink)
         if permalink == BLOG5_PERMALINK
-        else render_recommendation_banner() if permalink == BLOG6_PERMALINK
+        else render_recommendation_banner() if permalink in (BLOG6_PERMALINK, BLOG7_PERMALINK)
         else render_series_banner(permalink)
     )
     base_page = base_page.replace(
@@ -516,6 +522,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG4_PERMALINK: "総括・実践ガイドのご案内",
         BLOG5_PERMALINK: "創作・AIとの協働",
         BLOG6_PERMALINK: "たかのおすすめ｜音楽",
+        BLOG7_PERMALINK: "たかのおすすめ｜映画",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
@@ -530,6 +537,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG4_PERMALINK: BLOG4_DESCRIPTION,
         BLOG5_PERMALINK: BLOG5_DESCRIPTION,
         BLOG6_PERMALINK: BLOG6_DESCRIPTION,
+        BLOG7_PERMALINK: BLOG7_DESCRIPTION,
     }
     description = descriptions.get(permalink, title)
     base_page = re.sub(
@@ -577,12 +585,14 @@ page3 = article_variant(page, TITLE, PERMALINK, html)
 page4 = article_variant(page, BLOG4_TITLE, BLOG4_PERMALINK, blog4_html)
 page5 = article_variant(page, BLOG5_TITLE, BLOG5_PERMALINK, blog5_html)
 page6 = article_variant(page, BLOG6_TITLE, BLOG6_PERMALINK, blog6_html)
+page7 = article_variant(page, BLOG7_TITLE, BLOG7_PERMALINK, blog7_html)
 (DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
 (DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
 (DIST / PERMALINK).write_text(page3, encoding="utf-8")
 (DIST / BLOG4_PERMALINK).write_text(page4, encoding="utf-8")
 (DIST / BLOG5_PERMALINK).write_text(page5, encoding="utf-8")
 (DIST / BLOG6_PERMALINK).write_text(page6, encoding="utf-8")
+(DIST / BLOG7_PERMALINK).write_text(page7, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
@@ -896,8 +906,8 @@ build_collection_page(
     "おすすめ（映画）",
     "recommendations-movie.html",
     "たかのおすすめ映画の記事一覧。",
-    [],
-    "映画のおすすめ記事は、これから順次追加していきます。",
+    [item for item in ARTICLES if item["permalink"] == BLOG7_PERMALINK],
+    "映画のおすすめ記事を紹介します。", 
 )
 build_collection_page(
     "おすすめ（漫画）",
@@ -1127,4 +1137,5 @@ print(f"built {DIST / BLOG2_PERMALINK}")
 print(f"built {DIST / BLOG4_PERMALINK}")
 print(f"built {DIST / BLOG5_PERMALINK}")
 print(f"built {DIST / BLOG6_PERMALINK}")
+print(f"built {DIST / BLOG7_PERMALINK}")
 print(f"images: {len(list((DIST / 'images').iterdir()))}")
