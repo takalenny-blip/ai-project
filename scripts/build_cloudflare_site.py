@@ -380,6 +380,16 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .home-intro h1 { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.8rem,3.6vw,2.6rem); font-weight:500; letter-spacing:.06em; }
 .home-intro p { margin:12px auto 0; max-width:720px; color:var(--muted); font-size:.92rem; }
 .home-navigation { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.home-recent { margin-top:62px; padding-top:30px; border-top:1px solid var(--line); }
+.home-recent-title { margin:0 0 22px; color:var(--accent); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.45rem; font-weight:500; }
+.home-recent-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.home-recent-item { display:block; min-height:170px; padding:20px; border:1px solid #66563d; border-radius:4px; background:#302d27; color:var(--ink); text-decoration:none; }
+.home-recent-item:hover { border-color:#e0bd78; background:#40392d; }
+.home-recent-part { margin:0 0 9px; color:#d8b979; font-size:.72rem; letter-spacing:.08em; }
+.home-recent-item h3 { margin:0; color:#f0d59c; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.05rem; font-weight:500; line-height:1.55; }
+.home-recent-item p:last-child { margin:10px 0 0; color:var(--muted); font-size:.82rem; line-height:1.65; }
+.home-recent-more { margin:20px 0 0; text-align:right; font-size:.88rem; }
+.home-recent-more a { color:#c4a46a; }
 .home-button { display:flex; min-height:160px; flex-direction:column; justify-content:center; padding:26px 24px; border:1px solid #8f7548; border-radius:5px; background:linear-gradient(145deg,#39352d,#2d2b28); color:var(--ink); text-decoration:none; transition:border-color .15s ease,background .15s ease,transform .15s ease; }
 .home-button:hover { border-color:#e0bd78; background:#40392d; transform:translateY(-2px); }
 .home-button-label { display:block; color:#f0d59c; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.2rem,2vw,1.55rem); font-weight:600; line-height:1.4; }
@@ -421,6 +431,9 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   .home-main { padding:42px 18px 60px; }
   .home-intro { margin-bottom:26px; }
   .home-navigation { grid-template-columns:1fr; gap:12px; }
+  .home-recent { margin-top:44px; }
+  .home-recent-list { grid-template-columns:1fr; gap:12px; }
+  .home-recent-item { min-height:0; padding:18px; }
   .home-button { min-height:112px; padding:22px 20px; }
   .layout { grid-template-columns:1fr; gap:42px; padding:42px 18px 60px; }
   .feature { padding:30px 0 34px; }
@@ -462,11 +475,25 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
       <span class="home-button-description">テーマを横断して、公開中の記事を新着順に読む。</span>
     </a>
   </nav>
+  <section class="home-recent" aria-labelledby="home-recent-title">
+    <h2 class="home-recent-title" id="home-recent-title">新着記事</h2>
+    <div class="home-recent-list">{home_recent_cards}</div>
+    <p class="home-recent-more"><a href="articles.html">すべての記事を見る →</a></p>
+  </section>
 </main>
 {render_footer()}
 </body>
 </html>
 """
+home_recent_cards = "\\n".join(
+    f"""<a class="home-recent-item" href="{html_module.escape(item['permalink'], quote=True)}">
+  <p class="home-recent-part">{html_module.escape(item['part'])}</p>
+  <h3>{html_module.escape(item['title'])}</h3>
+  <p>{html_module.escape(item['description'])}</p>
+</a>"""
+    for item in list(reversed(ARTICLES))[:3]
+)
+home = home.replace('{home_recent_cards}', home_recent_cards)
 home = home.replace('{render_footer()}', render_footer())
 
 quote_samples = """<!doctype html>
