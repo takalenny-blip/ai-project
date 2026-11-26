@@ -84,7 +84,7 @@ def render_recommendation_banner():
     <h2 class="series-title" id="recommendation-title">自分が出会った、いいものを紹介</h2>
     <p class="series-description">流行や知名度だけではなく、自分の中に何かを残してくれた音楽を紹介します。</p>
     <nav class="series-links" aria-label="おすすめカテゴリー">
-      <a class="series-link" href="recommendations-music.html" aria-current="page">おすすめ（音楽）</a>
+      <a class="series-link" href="recommendations-music.html">おすすめ（音楽）</a>
       <a class="series-link" href="recommendations-movie.html">おすすめ（映画）</a>
       <a class="series-link" href="recommendations-manga.html">おすすめ（漫画）</a>
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
