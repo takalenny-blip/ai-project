@@ -44,7 +44,7 @@ ARTICLES = [
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
     {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
     {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AIとの協働", "description": BLOG5_DESCRIPTION},
-    {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "音楽｜たかのおすすめ", "description": BLOG6_DESCRIPTION},
+    {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
