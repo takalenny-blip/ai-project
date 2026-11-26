@@ -485,7 +485,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 </body>
 </html>
 """
-home_recent_cards = "\\n".join(
+home_recent_cards = "\n".join(
     f"""<a class="home-recent-item" href="{html_module.escape(item['permalink'], quote=True)}">
   <p class="home-recent-part">{html_module.escape(item['part'])}</p>
   <h3>{html_module.escape(item['title'])}</h3>
