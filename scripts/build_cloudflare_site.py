@@ -88,7 +88,7 @@ def render_recommendation_banner():
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
     </nav>
   </div>
-</section>"
+</section>"""
 
 
 def render_novel_series_banner(current_permalink=None):
