@@ -35,7 +35,7 @@ BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作
 BLOG4_TITLE = "総括・実践ガイドのご案内｜AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと"
 BLOG4_PERMALINK = "ai-trial-and-record.html"
 BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。"
-BLOG5_TITLE = "AIとやってみる 小説編①｜マンガを作るつもりが、小説を書き上げることになった"
+BLOG5_TITLE = "AIとやってみる 小説編｜マンガを作るつもりが、小説を書き上げることになった"
 BLOG5_PERMALINK = "manga-to-novel-with-ai.html"
 BLOG5_DESCRIPTION = "マンガ制作、シナリオ、小説へ。AIと試行錯誤しながらスター・ウォーズの二次創作小説を書き上げるまでの経験と、AIとの創作の進め方を紹介する。"
 BLOG6_TITLE = "俺にロックの面白さを教えてくれた、ザ・ストリート・スライダーズ"
@@ -47,9 +47,9 @@ BLOG7_DESCRIPTION = "ジャック・ブラック演じるロック好きの教�
 BLOG8_TITLE = "丸得情報・第1回｜卒FIT後、パワコン故障を機に蓄電池を導入。電力会社も見直した"
 BLOG8_PERMALINK = "marutoku-001-solar-battery-after-fit.html"
 BLOG8_DESCRIPTION = "卒FIT後のパワコン故障を機に蓄電池を導入し、電力会社や料金プランも見直してきた実体験を紹介する。"
-BLOG9_TITLE = "AIとやってみる 音楽編①｜ChatGPTとGeminiでオリジナル曲を作ってみた"
+BLOG9_TITLE = "AIとやってみる 音楽編｜ChatGPTとGeminiでオリジナル曲を作ってみた"
 BLOG9_PERMALINK = "ai-try-music-001.html"
-BLOG9_DESCRIPTION = "ChatGPTで音楽の方向性や構成、生成指示文を考え、Geminiでオリジナル曲『Piston and Steel』を完成させた制作体験。"
+BLOG9_DESCRIPTION = "ChatGPTでのMIDI制作は単調でファイル制限にも直面。音楽の設計はChatGPT、実際の音源生成はGeminiと役割を分け、オリジナル曲『Piston and Steel』を完成させた体験。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
@@ -60,7 +60,7 @@ ARTICLES = [
     {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
     {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "おすすめ（映画）｜00001", "description": BLOG7_DESCRIPTION},
     {"title": BLOG8_TITLE, "permalink": BLOG8_PERMALINK, "part": "丸得情報｜第1回", "description": BLOG8_DESCRIPTION},
-    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "音楽編①", "description": BLOG9_DESCRIPTION},
+    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "音楽編", "description": BLOG9_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -72,7 +72,7 @@ def render_series_banner(current_permalink=None):
     <p class="series-kicker">AIとやってみる｜小説編</p>
     <h2 class="series-title" id="series-title">AIとやってみる</h2>
     <p class="series-description">マンガを作るつもりが、AIと小説を書き上げることになった。AIとの創作の試行錯誤を記録したシリーズです。</p>
-    <nav class="series-links" aria-label="シリーズ記事"><a class="series-link" href="{BLOG5_PERMALINK}" aria-current="page">小説編①</a><a class="series-link series-link-all" href="articles.html">すべての記事</a></nav>
+    <nav class="series-links" aria-label="シリーズ記事"><a class="series-link" href="{BLOG5_PERMALINK}" aria-current="page">小説編</a><a class="series-link series-link-all" href="articles.html">すべての記事</a></nav>
   </div>
 </section>"""
     links = []
@@ -119,8 +119,8 @@ def render_ai_try_series_banner(current_permalink=None):
     <p class="series-description">AIと一緒に、創作や新しいことに挑戦してみる。うまくいったことも、試行錯誤した過程も記録するシリーズです。</p>
     <nav class="series-links" aria-label="AIとやってみるシリーズ全記事">
       <a class="series-link" href="ai-try.html">シリーズの入口</a>
-      <a class="series-link"{novel_current} href="{BLOG5_PERMALINK}">小説編①</a>
-      <a class="series-link"{music_current} href="{BLOG9_PERMALINK}">音楽編①</a>
+      <a class="series-link"{novel_current} href="{BLOG5_PERMALINK}">小説編</a>
+      <a class="series-link"{music_current} href="{BLOG9_PERMALINK}">音楽編</a>
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
     </nav>
   </div>
@@ -286,6 +286,19 @@ blog6_html = BLOG6_SOURCE.read_text(encoding="utf-8")
 blog7_html = BLOG7_SOURCE.read_text(encoding="utf-8")
 blog9_markdown = BLOG9_SOURCE.read_text(encoding="utf-8")
 blog9_body = render_blog8_markdown(blog9_markdown)
+audio_player = (
+    '<figure class="audio-player" style="margin:1.5em 0;padding:1em;border:1px solid #786342;'
+    'border-radius:8px;background:#2d2b28;">'
+    '<audio controls preload="metadata" style="display:block;width:100%;">'
+    '<source src="audio/Piston_and_Steel.mp3" type="audio/mpeg">'
+    'お使いのブラウザーは音声再生に対応していません。'
+    '</audio><figcaption style="margin-top:.6em;color:#aaa093;font-size:.85rem;">'
+    'Piston and Steel（約3分）</figcaption></figure>'
+)
+song_intro = '<p>Geminiで生成された曲を聴いてみる。タイトルは「Piston and Steel」。長さは約3分だ。</p>'
+if song_intro not in blog9_body:
+    raise SystemExit("BLOG-0009 audio insertion point not found")
+blog9_body = blog9_body.replace(song_intro, song_intro + audio_player, 1)
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
@@ -302,6 +315,12 @@ for image in sorted(BLOG2_IMAGE_DIR.iterdir()):
 for image in sorted(BLOG8_IMAGE_DIR.iterdir()):
     if image.is_file():
         shutil.copy2(image, DIST / "images" / image.name)
+
+AUDIO_FILE = ROOT / "assets/audio/Piston_and_Steel.mp3"
+if not AUDIO_FILE.is_file():
+    raise SystemExit(f"missing audio file: {AUDIO_FILE}")
+(DIST / "audio").mkdir(parents=True, exist_ok=True)
+shutil.copy2(AUDIO_FILE, DIST / "audio" / AUDIO_FILE.name)
 
 page = f"""<!doctype html>
 <html lang="ja">
@@ -650,7 +669,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG6_PERMALINK: "たかのおすすめ｜音楽",
         BLOG7_PERMALINK: "たかのおすすめ｜映画",
         BLOG8_PERMALINK: "丸得情報｜第1回",
-        BLOG9_PERMALINK: "AIとやってみる｜音楽編①",
+        BLOG9_PERMALINK: "AIとやってみる｜音楽編",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
@@ -746,6 +765,8 @@ for generated_page in DIST.glob("*.html"):
     )
 if missing:
     raise SystemExit("missing local images: " + ", ".join(sorted(missing)))
+if not (DIST / "audio" / "Piston_and_Steel.mp3").is_file():
+    raise SystemExit("missing generated audio asset: audio/Piston_and_Steel.mp3")
 
 
 def is_noindex_page(page_html):
