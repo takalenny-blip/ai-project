@@ -59,10 +59,10 @@ ARTICLES = [
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
     {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
     {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AIとの協働", "description": BLOG5_DESCRIPTION},
-    {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
-    {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "おすすめ（映画）｜00001", "description": BLOG7_DESCRIPTION},
+    {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "たかのおすすめ｜音楽", "description": BLOG6_DESCRIPTION},
+    {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "たかのおすすめ｜映画", "description": BLOG7_DESCRIPTION},
     {"title": BLOG8_TITLE, "permalink": BLOG8_PERMALINK, "part": "丸得情報｜第1回", "description": BLOG8_DESCRIPTION},
-    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "音楽編", "description": BLOG9_DESCRIPTION},
+    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "AIとやってみる｜音楽編", "description": BLOG9_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -581,14 +581,12 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
       <span class="home-button-description">AIと一緒に創作や新しいことに挑戦した記録。</span>
     </a>
     <a class="home-button" href="recommendations.html">
-      <span class="home-button-status">音楽記事準備中</span>
       <span class="home-button-label">たかのおすすめ</span>
-      <span class="home-button-description">自分がいいと思った音楽・映画・漫画などを紹介。映画・漫画は今後追加予定。</span>
+      <span class="home-button-description">音楽・映画の記事を公開中。漫画の記事も今後追加予定。</span>
     </a>
     <a class="home-button" href="marutoku.html">
-      <span class="home-button-status">企画中・記事準備中</span>
-      <span class="home-button-label">丸徳情報</span>
-      <span class="home-button-description">電気料金や家庭の節約など、暮らしに役立つ情報を紹介する予定です。</span>
+      <span class="home-button-label">丸得情報</span>
+      <span class="home-button-description">電気料金や家庭の節約など、実際に試したことや暮らしに役立つ情報を紹介します。</span>
     </a>
     <a class="home-button" href="articles.html">
       <span class="home-button-label">すべての記事</span>
@@ -1069,8 +1067,8 @@ build_collection_page(
     [],
     "独断と偏見で選んだ、お気に入りです。どちらかといえば、世間ではあまり知られていない、隠れた掘り出し物を紹介していきたいと思っています。",
     [
-        ("おすすめ（音楽）", "音楽のおすすめ記事を一覧で紹介します。", "recommendations-music.html"),
-        ("おすすめ（映画）", "映画のおすすめ記事。公開できる記事を順次追加します。", "recommendations-movie.html"),
+        ("おすすめ（音楽）", "公開中の音楽記事を一覧で紹介します。", "recommendations-music.html"),
+        ("おすすめ（映画）", "公開中の映画記事を一覧で紹介します。", "recommendations-movie.html"),
         ("おすすめ（漫画）", "漫画のおすすめ記事。公開できる記事を順次追加します。", "recommendations-manga.html"),
     ],
 )
