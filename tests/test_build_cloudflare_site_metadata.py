@@ -141,11 +141,29 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         html = (DIST / "ai-try.html").read_text(encoding="utf-8")
         self.assertIn(">小説編</span>", html)
         self.assertIn(">音楽編</span>", html)
-        self.assertIn('href="manga-to-novel-with-ai.html"', html)
-        self.assertIn('href="ai-try-music-001.html"', html)
+        self.assertIn('href="ai-try-novel.html"', html)
+        self.assertIn('href="ai-try-music.html"', html)
+        self.assertNotIn('href="manga-to-novel-with-ai.html"', html)
+        self.assertNotIn('href="ai-try-music-001.html"', html)
         self.assertNotIn("現在は小説編を公開しています", html)
         self.assertNotIn("小説編①", html)
         self.assertNotIn("音楽編①", html)
+
+    def test_ai_try_category_pages_list_matching_articles_and_link_back(self):
+        novel = (DIST / "ai-try-novel.html").read_text(encoding="utf-8")
+        music = (DIST / "ai-try-music.html").read_text(encoding="utf-8")
+        self.assertIn("<h1>AIとやってみる｜小説編</h1>", novel)
+        self.assertIn('href="manga-to-novel-with-ai.html"', novel)
+        self.assertNotIn('href="ai-try-music-001.html"', novel)
+        self.assertIn('<a href="ai-try.html">AIとやってみる</a>', novel)
+        self.assertIn("<h1>AIとやってみる｜音楽編</h1>", music)
+        self.assertIn('href="ai-try-music-001.html"', music)
+        self.assertNotIn('href="manga-to-novel-with-ai.html"', music)
+        self.assertIn('<a href="ai-try.html">AIとやってみる</a>', music)
+        for permalink in ("manga-to-novel-with-ai.html", "ai-try-music-001.html"):
+            article = (DIST / permalink).read_text(encoding="utf-8")
+            self.assertIn('href="ai-try-novel.html"', article)
+            self.assertIn('href="ai-try-music.html"', article)
 
     def test_canonical_pages_have_consistent_social_metadata_and_valid_json_ld(self):
         expected_types = {
@@ -155,6 +173,8 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "github-ai-conversation.html": ("article", "BlogPosting"),
             "ai-trial-and-record.html": ("article", "BlogPosting"),
             "ai-try-music-001.html": ("article", "BlogPosting"),
+            "ai-try-novel.html": ("website", "WebPage"),
+            "ai-try-music.html": ("website", "WebPage"),
             "about.html": ("website", "AboutPage"),
             "privacy.html": ("website", "PrivacyPolicy"),
             "sitemap.html": ("website", "WebPage"),
@@ -245,6 +265,8 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             f"{BASE_URL}/github-ai-conversation.html",
             f"{BASE_URL}/ai-trial-and-record.html",
             f"{BASE_URL}/ai-try-music-001.html",
+            f"{BASE_URL}/ai-try-novel.html",
+            f"{BASE_URL}/ai-try-music.html",
             f"{BASE_URL}/about.html",
             f"{BASE_URL}/privacy.html",
         }
@@ -280,6 +302,8 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "vaio-p-again-and-beyond.html",
             "github-ai-conversation.html",
             "ai-trial-and-record.html",
+            "ai-try-novel.html",
+            "ai-try-music.html",
             "about.html",
             "privacy.html",
             "sitemap.html",
