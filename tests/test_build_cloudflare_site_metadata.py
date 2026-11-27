@@ -124,8 +124,18 @@ class ArticleSeoMetadataTests(unittest.TestCase):
     def test_blog_0009_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
             "ai-try-music-001.html",
-            "AIとやってみる 音楽編①｜ChatGPTとGeminiでオリジナル曲を作ってみた",
+            "AIとやってみる 音楽編｜ChatGPTとGeminiでオリジナル曲を作ってみた",
         )
+
+    def test_blog_0009_embeds_the_audio_and_describes_the_chatgpt_to_gemini_pivot(self):
+        html = (DIST / "ai-try-music-001.html").read_text(encoding="utf-8")
+        self.assertIn('<audio controls preload="metadata"', html)
+        self.assertIn('src="audio/Piston_and_Steel.mp3"', html)
+        self.assertIn("Piston and Steel（約3分）", html)
+        self.assertIn("ChatGPTのファイル制限", html)
+        self.assertIn("曲全体も単調", html)
+        self.assertNotIn("音楽編①", html)
+        self.assertTrue((DIST / "audio" / "Piston_and_Steel.mp3").is_file())
 
     def test_ai_try_series_has_separate_novel_and_music_entries(self):
         html = (DIST / "ai-try.html").read_text(encoding="utf-8")
@@ -134,6 +144,8 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         self.assertIn('href="manga-to-novel-with-ai.html"', html)
         self.assertIn('href="ai-try-music-001.html"', html)
         self.assertNotIn("現在は小説編を公開しています", html)
+        self.assertNotIn("小説編①", html)
+        self.assertNotIn("音楽編①", html)
 
     def test_canonical_pages_have_consistent_social_metadata_and_valid_json_ld(self):
         expected_types = {
