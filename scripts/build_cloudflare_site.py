@@ -37,6 +37,7 @@ BLOG4_PERMALINK = "ai-trial-and-record.html"
 BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。"
 BLOG5_TITLE = "AIとやってみる 小説編｜マンガを作るつもりが、小説を書き上げることになった"
 BLOG5_PERMALINK = "manga-to-novel-with-ai.html"
+BLOG5_LIST_PERMALINK = "ai-try-novel.html"
 BLOG5_DESCRIPTION = "マンガ制作、シナリオ、小説へ。AIと試行錯誤しながらスター・ウォーズの二次創作小説を書き上げるまでの経験と、AIとの創作の進め方を紹介する。"
 BLOG6_TITLE = "俺にロックの面白さを教えてくれた、ザ・ストリート・スライダーズ"
 BLOG6_PERMALINK = "recommend-music-00001-the-street-sliders.html"
@@ -49,6 +50,7 @@ BLOG8_PERMALINK = "marutoku-001-solar-battery-after-fit.html"
 BLOG8_DESCRIPTION = "卒FIT後のパワコン故障を機に蓄電池を導入し、電力会社や料金プランも見直してきた実体験を紹介する。"
 BLOG9_TITLE = "AIとやってみる 音楽編｜ChatGPTとGeminiでオリジナル曲を作ってみた"
 BLOG9_PERMALINK = "ai-try-music-001.html"
+BLOG9_LIST_PERMALINK = "ai-try-music.html"
 BLOG9_DESCRIPTION = "ChatGPTでのMIDI制作は単調でファイル制限にも直面。音楽の設計はChatGPT、実際の音源生成はGeminiと役割を分け、オリジナル曲『Piston and Steel』を完成させた体験。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
@@ -110,8 +112,8 @@ def render_recommendation_banner():
 
 
 def render_ai_try_series_banner(current_permalink=None):
-    novel_current = ' aria-current="page"' if current_permalink == BLOG5_PERMALINK else ""
-    music_current = ' aria-current="page"' if current_permalink == BLOG9_PERMALINK else ""
+    novel_current = ' aria-current="page"' if current_permalink in (BLOG5_PERMALINK, BLOG5_LIST_PERMALINK) else ""
+    music_current = ' aria-current="page"' if current_permalink in (BLOG9_PERMALINK, BLOG9_LIST_PERMALINK) else ""
     return f"""<section class="series-banner" aria-labelledby="ai-try-series-title">
   <div class="series-banner-inner">
     <p class="series-kicker">AIとやってみる</p>
@@ -119,8 +121,8 @@ def render_ai_try_series_banner(current_permalink=None):
     <p class="series-description">AIと一緒に、創作や新しいことに挑戦してみる。うまくいったことも、試行錯誤した過程も記録するシリーズです。</p>
     <nav class="series-links" aria-label="AIとやってみるシリーズ全記事">
       <a class="series-link" href="ai-try.html">シリーズの入口</a>
-      <a class="series-link"{novel_current} href="{BLOG5_PERMALINK}">小説編</a>
-      <a class="series-link"{music_current} href="{BLOG9_PERMALINK}">音楽編</a>
+      <a class="series-link"{novel_current} href="{BLOG5_LIST_PERMALINK}">小説編</a>
+      <a class="series-link"{music_current} href="{BLOG9_LIST_PERMALINK}">音楽編</a>
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
     </nav>
   </div>
@@ -1014,6 +1016,7 @@ footer p {{ margin:.8em 0 0; }}
   {cards}
   {sections_html}
   <nav class="collection-nav" aria-label="ブログ内ナビゲーション">
+    {f'<a href="ai-try.html">AIとやってみるへ戻る</a>' if permalink in (BLOG5_LIST_PERMALINK, BLOG9_LIST_PERMALINK) else ""}
     <a href="articles.html">すべての記事</a>
     <a href="./">← トップページへ戻る</a>
   </nav>
@@ -1039,9 +1042,24 @@ build_collection_page(
     [],
     "AIと一緒に試し、考え、形にしていく過程を記録するシリーズです。小説編と音楽編を公開しています。",
     [
-        ("小説編", "マンガ制作から小説の完成まで、AIとの創作の試行錯誤を記録。", BLOG5_PERMALINK),
-        ("音楽編", "ChatGPTで設計し、Geminiでオリジナル曲を生成した体験。", BLOG9_PERMALINK),
+        ("小説編", "マンガ制作から小説の完成まで、AIとの創作の試行錯誤を記録。", BLOG5_LIST_PERMALINK),
+        ("音楽編", "ChatGPTで設計し、Geminiでオリジナル曲を生成した体験。", BLOG9_LIST_PERMALINK),
     ],
+)
+
+build_collection_page(
+    "小説編",
+    BLOG5_LIST_PERMALINK,
+    BLOG5_DESCRIPTION,
+    [item for item in ARTICLES if item["permalink"] == BLOG5_PERMALINK],
+    "AIとマンガ制作から小説の完成まで取り組んだ記録です。",
+)
+build_collection_page(
+    "音楽編",
+    BLOG9_LIST_PERMALINK,
+    BLOG9_DESCRIPTION,
+    [item for item in ARTICLES if item["permalink"] == BLOG9_PERMALINK],
+    "AIと相談しながら音楽を設計し、実際に曲を生成した記録です。",
 )
 
 build_collection_page(
