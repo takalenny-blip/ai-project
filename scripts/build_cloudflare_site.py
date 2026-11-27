@@ -54,15 +54,16 @@ BLOG9_LIST_PERMALINK = "ai-try-music.html"
 BLOG9_DESCRIPTION = "ChatGPTでのMIDI制作は単調でファイル制限にも直面。音楽の設計はChatGPT、実際の音源生成はGeminiと役割を分け、オリジナル曲『Piston and Steel』を完成させた体験。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
+    # Keep publication dates for the homepage's recent-post display in sync with the Pages publication commits.
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
     {"title": BLOG2_TITLE, "permalink": BLOG2_PERMALINK, "part": "第2部｜VAIO P", "description": BLOG2_DESCRIPTION},
     {"title": TITLE, "permalink": PERMALINK, "part": "第3部｜GitHub", "description": BLOG3_DESCRIPTION},
     {"title": BLOG4_TITLE, "permalink": BLOG4_PERMALINK, "part": "総括・実践ガイドのご案内", "description": BLOG4_DESCRIPTION},
     {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AIとの協働", "description": BLOG5_DESCRIPTION},
     {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "たかのおすすめ｜音楽", "description": BLOG6_DESCRIPTION},
-    {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "たかのおすすめ｜映画", "description": BLOG7_DESCRIPTION},
-    {"title": BLOG8_TITLE, "permalink": BLOG8_PERMALINK, "part": "丸得情報｜第1回", "description": BLOG8_DESCRIPTION},
-    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "AIとやってみる｜音楽編", "description": BLOG9_DESCRIPTION},
+    {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "たかのおすすめ｜映画", "description": BLOG7_DESCRIPTION, "published_date": "2026-11-26"},
+    {"title": BLOG8_TITLE, "permalink": BLOG8_PERMALINK, "part": "丸得情報｜第1回", "description": BLOG8_DESCRIPTION, "published_date": "2026-11-27"},
+    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "AIとやってみる｜音楽編", "description": BLOG9_DESCRIPTION, "published_date": "2026-11-27"},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -499,13 +500,19 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 .home-intro { margin:0 0 34px; text-align:center; }
 .home-intro h1 { margin:0; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:clamp(1.8rem,3.6vw,2.6rem); font-weight:500; letter-spacing:.06em; }
 .home-intro p { margin:12px auto 0; max-width:720px; color:var(--muted); font-size:.92rem; }
-.home-navigation { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.home-navigation { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.home-group { margin-top:34px; }
+.home-group-title { margin:0; color:var(--accent); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.3rem; font-weight:500; }
+.home-group-description { margin:7px 0 16px; color:var(--muted); font-size:.86rem; }
+.home-all-link { margin:28px 0 0; text-align:right; font-size:.9rem; }
+.home-all-link a { color:#c4a46a; }
 .home-recent { margin-top:62px; padding-top:30px; border-top:1px solid var(--line); }
 .home-recent-title { margin:0 0 22px; color:var(--accent); font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.45rem; font-weight:500; }
 .home-recent-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
 .home-recent-item { display:block; min-height:170px; padding:20px; border:1px solid #66563d; border-radius:4px; background:#302d27; color:var(--ink); text-decoration:none; }
 .home-recent-item:hover { border-color:#e0bd78; background:#40392d; }
-.home-recent-part { margin:0 0 9px; color:#d8b979; font-size:.72rem; letter-spacing:.08em; }
+.home-recent-part { margin:0 0 4px; color:#d8b979; font-size:.72rem; letter-spacing:.08em; }
+.home-recent-date { margin:0 0 8px; color:#aaa093; font-size:.72rem; }
 .home-recent-item h3 { margin:0; color:#f0d59c; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; font-size:1.05rem; font-weight:500; line-height:1.55; }
 .home-recent-item p:last-child { margin:10px 0 0; color:var(--muted); font-size:.82rem; line-height:1.65; }
 .home-recent-more { margin:20px 0 0; text-align:right; font-size:.88rem; }
@@ -551,6 +558,8 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
   .home-main { padding:42px 18px 60px; }
   .home-intro { margin-bottom:26px; }
   .home-navigation { grid-template-columns:1fr; gap:12px; }
+  .home-group { margin-top:28px; }
+  .home-all-link { margin-top:20px; }
   .home-recent { margin-top:44px; }
   .home-recent-list { grid-template-columns:1fr; gap:12px; }
   .home-recent-item { min-height:0; padding:18px; }
@@ -569,30 +578,37 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 <main class="home-main">
   <section class="home-intro">
     <h1>たか’sブログ</h1>
-    <p>AIとの実践や創作の記録、音楽・映画・漫画のおすすめ、暮らしに役立つ情報などを紹介しています。読みたい入口を選んでください。</p>
+    <p>AIとの実践を軸に、創作や暮らしの中で試したこと、心に残った作品を記録しています。成功だけでなく、試行錯誤や判断の過程も紹介します。</p>
   </section>
-  <nav class="home-navigation" aria-label="ブログの入口">
-    <a class="home-button" href="ai-environment.html">
-      <span class="home-button-label">AI環境構築</span>
-      <span class="home-button-description">AIを使う環境を整え、試行錯誤を重ねてきた記録。</span>
-    </a>
-    <a class="home-button" href="ai-try.html">
-      <span class="home-button-label">AIとやってみる</span>
-      <span class="home-button-description">AIと一緒に創作や新しいことに挑戦した記録。</span>
-    </a>
-    <a class="home-button" href="recommendations.html">
-      <span class="home-button-label">たかのおすすめ</span>
-      <span class="home-button-description">音楽・映画の記事を公開中。漫画の記事も今後追加予定。</span>
-    </a>
-    <a class="home-button" href="marutoku.html">
-      <span class="home-button-label">丸得情報</span>
-      <span class="home-button-description">電気料金や家庭の節約など、実際に試したことや暮らしに役立つ情報を紹介します。</span>
-    </a>
-    <a class="home-button" href="articles.html">
-      <span class="home-button-label">すべての記事</span>
-      <span class="home-button-description">テーマを横断して、公開中の記事を新着順に読む。</span>
-    </a>
-  </nav>
+  <section class="home-group" aria-labelledby="home-ai-title">
+    <h2 class="home-group-title" id="home-ai-title">AIと取り組んだこと</h2>
+    <p class="home-group-description">AIを使う環境づくりと、AIと一緒に形にした作品。</p>
+    <nav class="home-navigation" aria-label="AIと取り組んだ記事">
+      <a class="home-button" href="ai-environment.html">
+        <span class="home-button-label">AI環境構築</span>
+        <span class="home-button-description">AIとの会話を残し、GitHubで作業を再開できる環境を整えた記録。</span>
+      </a>
+      <a class="home-button" href="ai-try.html">
+        <span class="home-button-label">AIとやってみる</span>
+        <span class="home-button-description">小説や音楽など、AIと実際に作ってみた過程と完成した作品を紹介。</span>
+      </a>
+    </nav>
+  </section>
+  <section class="home-group" aria-labelledby="home-life-title">
+    <h2 class="home-group-title" id="home-life-title">好きなもの・暮らしの実体験</h2>
+    <p class="home-group-description">自分が気に入った作品や、日々の生活で試した工夫。</p>
+    <nav class="home-navigation" aria-label="おすすめ・暮らしの記事">
+      <a class="home-button" href="recommendations.html">
+        <span class="home-button-label">たかのおすすめ</span>
+        <span class="home-button-description">ロックや映画など、心に残った作品を自分の言葉で紹介。</span>
+      </a>
+      <a class="home-button" href="marutoku.html">
+        <span class="home-button-label">丸得情報</span>
+        <span class="home-button-description">電気料金や蓄電池など、暮らしの中で試した見直し・節約の実体験。</span>
+      </a>
+    </nav>
+  </section>
+  <p class="home-all-link"><a href="articles.html">すべての記事を新着順で見る →</a></p>
   <section class="home-recent" aria-labelledby="home-recent-title">
     <h2 class="home-recent-title" id="home-recent-title">新着記事</h2>
     <div class="home-recent-list">{home_recent_cards}</div>
@@ -606,6 +622,7 @@ body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-s
 home_recent_cards = "\n".join(
     f"""<a class="home-recent-item" href="{html_module.escape(item['permalink'], quote=True)}">
   <p class="home-recent-part">{html_module.escape(item['part'])}</p>
+  <p class="home-recent-date"><time datetime="{item['published_date']}">{item['published_date'].replace('-', '.')} 公開</time></p>
   <h3>{html_module.escape(item['title'])}</h3>
   <p>{html_module.escape(item['description'])}</p>
 </a>"""

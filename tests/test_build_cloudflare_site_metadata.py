@@ -368,5 +368,28 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             self.assertIn('href="sitemap.html">すべての記事</a>', html)
 
 
+    def test_homepage_groups_entry_cards_and_shows_recent_publication_dates(self):
+        home = (DIST / "index.html").read_text(encoding="utf-8")
+        self.assertIn("AIとの実践を軸に", home)
+        self.assertIn('<h2 class="home-group-title" id="home-ai-title">AIと取り組んだこと</h2>', home)
+        self.assertIn('<h2 class="home-group-title" id="home-life-title">好きなもの・暮らしの実体験</h2>', home)
+        self.assertIn('href="ai-environment.html"', home)
+        self.assertIn('href="ai-try.html"', home)
+        self.assertIn('href="recommendations.html"', home)
+        self.assertIn('href="marutoku.html"', home)
+        self.assertIn('href="articles.html">すべての記事を新着順で見る', home)
+        expected_recent = [
+            ('2026-11-27', 'ai-try-music-001.html'),
+            ('2026-11-27', 'marutoku-001-solar-battery-after-fit.html'),
+            ('2026-11-26', 'recommended-movies-00001-school-of-rock.html'),
+        ]
+        positions = []
+        for published_date, permalink in expected_recent:
+            self.assertIn(f'<time datetime="{published_date}">', home)
+            self.assertIn(f'href="{permalink}"', home)
+            positions.append(home.index(f'href="{permalink}"'))
+        self.assertEqual(positions, sorted(positions))
+
+
 if __name__ == "__main__":
     unittest.main()
