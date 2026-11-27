@@ -13,6 +13,8 @@ BLOG4_SOURCE = ROOT / "docs/企画/BLOG-0004/BLOG-0004_Blogger掲載用.html"
 BLOG5_SOURCE = ROOT / "docs/企画/BLOG-0005/BLOG-0005_Blogger掲載用.html"
 BLOG6_SOURCE = ROOT / "docs/企画/BLOG-0006/BLOG-0006_Blogger掲載用.html"
 BLOG7_SOURCE = ROOT / "docs/企画/BLOG-0007/BLOG-0007_Blogger掲載用.html"
+BLOG8_SOURCE = ROOT / "docs/企画/BLOG-0008/BLOG-0008_本文_作業稿.md"
+BLOG8_IMAGE_DIR = ROOT / "docs/企画/BLOG-0008/images"
 IMAGE_DIR = ROOT / "docs/企画/BLOG-0003/images"
 DIST = ROOT / "dist"
 
@@ -41,6 +43,9 @@ BLOG6_DESCRIPTION = "オープンGやボトルネック奏法、2本のギター
 BLOG7_TITLE = "『スクール・オブ・ロック』ジャック・ブラックとラストライブに鳥肌！"
 BLOG7_PERMALINK = "recommended-movies-00001-school-of-rock.html"
 BLOG7_DESCRIPTION = "ジャック・ブラック演じるロック好きの教師と子どもたちがバンドを結成する映画『スクール・オブ・ロック』。最後のライブに鳥肌が立つ、掘り出し物の一本を紹介する。"
+BLOG8_TITLE = "丸得情報・第1回｜卒FIT後、パワコン故障を機に蓄電池を導入。電力会社も見直した"
+BLOG8_PERMALINK = "marutoku-001-solar-battery-after-fit.html"
+BLOG8_DESCRIPTION = "卒FIT後のパワコン故障を機に蓄電池を導入し、電力会社や料金プランも見直してきた実体験を紹介する。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
@@ -50,6 +55,7 @@ ARTICLES = [
     {"title": BLOG5_TITLE, "permalink": BLOG5_PERMALINK, "part": "創作・AIとの協働", "description": BLOG5_DESCRIPTION},
     {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
     {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "おすすめ（映画）｜00001", "description": BLOG7_DESCRIPTION},
+    {"title": BLOG8_TITLE, "permalink": BLOG8_PERMALINK, "part": "丸得情報｜第1回", "description": BLOG8_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -171,7 +177,88 @@ def render_article_navigation(permalink):
 
 
 
-for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE, BLOG6_SOURCE, BLOG7_SOURCE):
+def render_blog8_markdown(markdown_text):
+    """Render the deliberately small Markdown subset used by BLOG-0008."""
+    lines = markdown_text.splitlines()
+    output = []
+    paragraph = []
+    in_list = False
+    in_table = False
+
+    def flush_paragraph():
+        if paragraph:
+            raw = " ".join(part.strip() for part in paragraph)
+            escaped = html_module.escape(raw)
+            escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+            escaped = re.sub(r"\[(.+?)\]\((https?://[^ )]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', escaped)
+            output.append(f"<p>{escaped}</p>")
+            paragraph.clear()
+
+    def close_list():
+        nonlocal in_list
+        if in_list:
+            output.append("</ul>")
+            in_list = False
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            flush_paragraph()
+            close_list()
+            if in_table:
+                output.append("</tbody></table>")
+                in_table = False
+            continue
+        if stripped.startswith("# "):
+            flush_paragraph()
+            close_list()
+            continue
+        if stripped.startswith("## "):
+            flush_paragraph()
+            close_list()
+            if in_table:
+                output.append("</tbody></table>")
+                in_table = False
+            output.append(f"<h2>{html_module.escape(stripped[3:])}</h2>")
+            continue
+        if stripped.startswith("|") and stripped.endswith("|"):
+            flush_paragraph()
+            close_list()
+            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+            if all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
+                continue
+            if not in_table:
+                output.append("<table><thead><tr>" + "".join(f"<th>{html_module.escape(cell)}</th>" for cell in cells) + "</tr></thead><tbody>")
+                in_table = True
+            else:
+                output.append("<tr>" + "".join(f"<td>{html_module.escape(cell)}</td>" for cell in cells) + "</tr>")
+            continue
+        image_match = re.fullmatch(r"!\[([^]]*)\]\(([^)]+)\)", stripped)
+        if image_match:
+            flush_paragraph()
+            close_list()
+            alt, src = image_match.groups()
+            safe_src = html_module.escape(src, quote=True)
+            output.append(f'<figure><img src="{safe_src}" alt="{html_module.escape(alt, quote=True)}" loading="lazy"><figcaption>{html_module.escape(alt)}</figcaption></figure>')
+            continue
+        if stripped.startswith("- "):
+            flush_paragraph()
+            if not in_list:
+                output.append("<ul>")
+                in_list = True
+            output.append(f"<li>{html_module.escape(stripped[2:])}</li>")
+            continue
+        flush_paragraph()
+        close_list()
+        paragraph.append(stripped)
+    flush_paragraph()
+    close_list()
+    if in_table:
+        output.append("</tbody></table>")
+    return "\n".join(output)
+
+
+for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE, BLOG6_SOURCE, BLOG7_SOURCE, BLOG8_SOURCE):
     if not required_source.is_file():
         raise SystemExit(f"missing source: {required_source}")
 
@@ -203,6 +290,9 @@ shutil.copy2(BANNER, DIST / "images" / "taka-blog-banner.jpg")
 for image in sorted(BLOG2_IMAGE_DIR.iterdir()):
     if image.is_file():
         shutil.copy2(image, DIST / "images" / "blog-0002" / image.name)
+for image in sorted(BLOG8_IMAGE_DIR.iterdir()):
+    if image.is_file():
+        shutil.copy2(image, DIST / "images" / image.name)
 
 page = f"""<!doctype html>
 <html lang="ja">
@@ -550,6 +640,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG5_PERMALINK: "創作・AIとの協働",
         BLOG6_PERMALINK: "たかのおすすめ｜音楽",
         BLOG7_PERMALINK: "たかのおすすめ｜映画",
+        BLOG8_PERMALINK: "丸得情報｜第1回",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
@@ -565,6 +656,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG5_PERMALINK: BLOG5_DESCRIPTION,
         BLOG6_PERMALINK: BLOG6_DESCRIPTION,
         BLOG7_PERMALINK: BLOG7_DESCRIPTION,
+        BLOG8_PERMALINK: BLOG8_DESCRIPTION,
     }
     description = descriptions.get(permalink, title)
     base_page = re.sub(
@@ -613,6 +705,9 @@ page4 = article_variant(page, BLOG4_TITLE, BLOG4_PERMALINK, blog4_html)
 page5 = article_variant(page, BLOG5_TITLE, BLOG5_PERMALINK, blog5_html)
 page6 = article_variant(page, BLOG6_TITLE, BLOG6_PERMALINK, blog6_html)
 page7 = article_variant(page, BLOG7_TITLE, BLOG7_PERMALINK, blog7_html)
+blog8_markdown = BLOG8_SOURCE.read_text(encoding="utf-8")
+blog8_body = render_blog8_markdown(blog8_markdown)
+page8 = article_variant(page, BLOG8_TITLE, BLOG8_PERMALINK, blog8_body)
 (DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
 (DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
 (DIST / PERMALINK).write_text(page3, encoding="utf-8")
@@ -620,6 +715,7 @@ page7 = article_variant(page, BLOG7_TITLE, BLOG7_PERMALINK, blog7_html)
 (DIST / BLOG5_PERMALINK).write_text(page5, encoding="utf-8")
 (DIST / BLOG6_PERMALINK).write_text(page6, encoding="utf-8")
 (DIST / BLOG7_PERMALINK).write_text(page7, encoding="utf-8")
+(DIST / BLOG8_PERMALINK).write_text(page8, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
@@ -943,12 +1039,12 @@ build_collection_page(
     [],
     "漫画のおすすめ記事は、これから順次追加していきます。",
 )
-build_static_page(
-    "丸徳情報",
+build_collection_page(
+    "丸得情報",
     "marutoku.html",
-    "電気料金や家庭の節約など、暮らしに役立つ情報を紹介する企画です。",
-    """<p>電気料金や家庭の節約など、暮らしに役立つ情報を紹介する予定です。</p>
-<p>現在は企画中・記事準備中です。公開できる記事ができ次第、ここに追加します。</p>""",
+    "電気料金や家庭の節約など、暮らしに役立つ情報を紹介する記事一覧。",
+    [item for item in ARTICLES if item["permalink"] == BLOG8_PERMALINK],
+    "電気料金や家庭の節約など、実際に試したことや暮らしに役立つ情報を紹介します。",
 )
 
 
@@ -1165,4 +1261,5 @@ print(f"built {DIST / BLOG4_PERMALINK}")
 print(f"built {DIST / BLOG5_PERMALINK}")
 print(f"built {DIST / BLOG6_PERMALINK}")
 print(f"built {DIST / BLOG7_PERMALINK}")
+print(f"built {DIST / BLOG8_PERMALINK}")
 print(f"images: {len(list((DIST / 'images').iterdir()))}")
