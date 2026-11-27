@@ -35,7 +35,7 @@ BLOG3_DESCRIPTION = "AIとのやりとりをGitHubに残し、現在状態や作
 BLOG4_TITLE = "総括・実践ガイドのご案内｜AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと"
 BLOG4_PERMALINK = "ai-trial-and-record.html"
 BLOG4_DESCRIPTION = "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。"
-BLOG5_TITLE = "AIとやってみる 小説編①｜マンガを作るつもりが、小説を書き上げることになった"
+BLOG5_TITLE = "AIとやってみる 小説編｜マンガを作るつもりが、小説を書き上げることになった"
 BLOG5_PERMALINK = "manga-to-novel-with-ai.html"
 BLOG5_DESCRIPTION = "マンガ制作、シナリオ、小説へ。AIと試行錯誤しながらスター・ウォーズの二次創作小説を書き上げるまでの経験と、AIとの創作の進め方を紹介する。"
 BLOG6_TITLE = "俺にロックの面白さを教えてくれた、ザ・ストリート・スライダーズ"
@@ -47,7 +47,7 @@ BLOG7_DESCRIPTION = "ジャック・ブラック演じるロック好きの教�
 BLOG8_TITLE = "丸得情報・第1回｜卒FIT後、パワコン故障を機に蓄電池を導入。電力会社も見直した"
 BLOG8_PERMALINK = "marutoku-001-solar-battery-after-fit.html"
 BLOG8_DESCRIPTION = "卒FIT後のパワコン故障を機に蓄電池を導入し、電力会社や料金プランも見直してきた実体験を紹介する。"
-BLOG9_TITLE = "AIとやってみる 音楽編①｜ChatGPTとGeminiでオリジナル曲を作ってみた"
+BLOG9_TITLE = "AIとやってみる 音楽編｜ChatGPTとGeminiでオリジナル曲を作ってみた"
 BLOG9_PERMALINK = "ai-try-music-001.html"
 BLOG9_DESCRIPTION = "ChatGPTで音楽の方向性や構成、生成指示文を考え、Geminiでオリジナル曲『Piston and Steel』を完成させた制作体験。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
@@ -60,7 +60,7 @@ ARTICLES = [
     {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
     {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "おすすめ（映画）｜00001", "description": BLOG7_DESCRIPTION},
     {"title": BLOG8_TITLE, "permalink": BLOG8_PERMALINK, "part": "丸得情報｜第1回", "description": BLOG8_DESCRIPTION},
-    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "音楽編①", "description": BLOG9_DESCRIPTION},
+    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "音楽編", "description": BLOG9_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -72,7 +72,7 @@ def render_series_banner(current_permalink=None):
     <p class="series-kicker">AIとやってみる｜小説編</p>
     <h2 class="series-title" id="series-title">AIとやってみる</h2>
     <p class="series-description">マンガを作るつもりが、AIと小説を書き上げることになった。AIとの創作の試行錯誤を記録したシリーズです。</p>
-    <nav class="series-links" aria-label="シリーズ記事"><a class="series-link" href="{BLOG5_PERMALINK}" aria-current="page">小説編①</a><a class="series-link series-link-all" href="articles.html">すべての記事</a></nav>
+    <nav class="series-links" aria-label="シリーズ記事"><a class="series-link" href="{BLOG5_PERMALINK}" aria-current="page">小説編</a><a class="series-link series-link-all" href="articles.html">すべての記事</a></nav>
   </div>
 </section>"""
     links = []
@@ -120,7 +120,7 @@ def render_ai_try_series_banner(current_permalink=None):
     <nav class="series-links" aria-label="AIとやってみるシリーズ全記事">
       <a class="series-link" href="ai-try.html">シリーズの入口</a>
       <a class="series-link"{novel_current} href="{BLOG5_PERMALINK}">小説編①</a>
-      <a class="series-link"{music_current} href="{BLOG9_PERMALINK}">音楽編①</a>
+      <a class="series-link"{music_current} href="{BLOG9_PERMALINK}">音楽編</a>
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
     </nav>
   </div>
@@ -650,7 +650,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG6_PERMALINK: "たかのおすすめ｜音楽",
         BLOG7_PERMALINK: "たかのおすすめ｜映画",
         BLOG8_PERMALINK: "丸得情報｜第1回",
-        BLOG9_PERMALINK: "AIとやってみる｜音楽編①",
+        BLOG9_PERMALINK: "AIとやってみる｜音楽編",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
