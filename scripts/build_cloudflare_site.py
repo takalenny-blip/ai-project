@@ -14,6 +14,7 @@ BLOG5_SOURCE = ROOT / "docs/企画/BLOG-0005/BLOG-0005_Blogger掲載用.html"
 BLOG6_SOURCE = ROOT / "docs/企画/BLOG-0006/BLOG-0006_Blogger掲載用.html"
 BLOG7_SOURCE = ROOT / "docs/企画/BLOG-0007/BLOG-0007_Blogger掲載用.html"
 BLOG8_SOURCE = ROOT / "docs/企画/BLOG-0008/BLOG-0008_本文_作業稿.md"
+BLOG9_SOURCE = ROOT / "docs/企画/BLOG-0009/BLOG-0009_本文_作業稿.md"
 BLOG8_IMAGE_DIR = ROOT / "docs/企画/BLOG-0008/images"
 IMAGE_DIR = ROOT / "docs/企画/BLOG-0003/images"
 DIST = ROOT / "dist"
@@ -46,6 +47,9 @@ BLOG7_DESCRIPTION = "ジャック・ブラック演じるロック好きの教�
 BLOG8_TITLE = "丸得情報・第1回｜卒FIT後、パワコン故障を機に蓄電池を導入。電力会社も見直した"
 BLOG8_PERMALINK = "marutoku-001-solar-battery-after-fit.html"
 BLOG8_DESCRIPTION = "卒FIT後のパワコン故障を機に蓄電池を導入し、電力会社や料金プランも見直してきた実体験を紹介する。"
+BLOG9_TITLE = "AIとやってみる 音楽編①｜ChatGPTとGeminiでオリジナル曲を作ってみた"
+BLOG9_PERMALINK = "ai-try-music-001.html"
+BLOG9_DESCRIPTION = "ChatGPTで音楽の方向性や構成、生成指示文を考え、Geminiでオリジナル曲『Piston and Steel』を完成させた制作体験。"
 SITE_IMAGE_URL = "https://takalenny-blip.github.io/ai-project/images/taka-blog-banner.jpg"
 ARTICLES = [
     {"title": BLOG1_TITLE, "permalink": BLOG1_PERMALINK, "part": "第1部｜経験ログ", "description": BLOG1_DESCRIPTION},
@@ -56,6 +60,7 @@ ARTICLES = [
     {"title": BLOG6_TITLE, "permalink": BLOG6_PERMALINK, "part": "おすすめ（音楽）｜00001", "description": BLOG6_DESCRIPTION},
     {"title": BLOG7_TITLE, "permalink": BLOG7_PERMALINK, "part": "おすすめ（映画）｜00001", "description": BLOG7_DESCRIPTION},
     {"title": BLOG8_TITLE, "permalink": BLOG8_PERMALINK, "part": "丸得情報｜第1回", "description": BLOG8_DESCRIPTION},
+    {"title": BLOG9_TITLE, "permalink": BLOG9_PERMALINK, "part": "音楽編①", "description": BLOG9_DESCRIPTION},
 ]
 SERIES_ARTICLES = ARTICLES[:4]
 
@@ -104,16 +109,18 @@ def render_recommendation_banner():
 </section>"""
 
 
-def render_novel_series_banner(current_permalink=None):
-    current_attr = ' aria-current="page"' if current_permalink == BLOG5_PERMALINK else ""
-    return f"""<section class="series-banner" aria-labelledby="novel-series-title">
+def render_ai_try_series_banner(current_permalink=None):
+    novel_current = ' aria-current="page"' if current_permalink == BLOG5_PERMALINK else ""
+    music_current = ' aria-current="page"' if current_permalink == BLOG9_PERMALINK else ""
+    return f"""<section class="series-banner" aria-labelledby="ai-try-series-title">
   <div class="series-banner-inner">
-    <p class="series-kicker">創作・AIとの協働</p>
-    <h2 class="series-title" id="novel-series-title">AIとやってみる</h2>
-    <p class="series-description">マンガを作るつもりが、AIと小説を書き上げることになった。AIとの創作の試行錯誤を記録したシリーズです。</p>
-    <nav class="series-links" aria-label="小説編シリーズ">
+    <p class="series-kicker">AIとやってみる</p>
+    <h2 class="series-title" id="ai-try-series-title">AIとやってみる</h2>
+    <p class="series-description">AIと一緒に、創作や新しいことに挑戦してみる。うまくいったことも、試行錯誤した過程も記録するシリーズです。</p>
+    <nav class="series-links" aria-label="AIとやってみるシリーズ全記事">
       <a class="series-link" href="ai-try.html">シリーズの入口</a>
-      <a class="series-link"{current_attr} href="{BLOG5_PERMALINK}">小説編①</a>
+      <a class="series-link"{novel_current} href="{BLOG5_PERMALINK}">小説編①</a>
+      <a class="series-link"{music_current} href="{BLOG9_PERMALINK}">音楽編①</a>
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
     </nav>
   </div>
@@ -258,7 +265,7 @@ def render_blog8_markdown(markdown_text):
     return "\n".join(output)
 
 
-for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE, BLOG6_SOURCE, BLOG7_SOURCE, BLOG8_SOURCE):
+for required_source in (SOURCE, BLOG1_SOURCE, BLOG2_SOURCE, BLOG4_SOURCE, BLOG5_SOURCE, BLOG6_SOURCE, BLOG7_SOURCE, BLOG8_SOURCE, BLOG9_SOURCE):
     if not required_source.is_file():
         raise SystemExit(f"missing source: {required_source}")
 
@@ -277,6 +284,8 @@ blog4_html = BLOG4_SOURCE.read_text(encoding="utf-8")
 blog5_html = BLOG5_SOURCE.read_text(encoding="utf-8")
 blog6_html = BLOG6_SOURCE.read_text(encoding="utf-8")
 blog7_html = BLOG7_SOURCE.read_text(encoding="utf-8")
+blog9_markdown = BLOG9_SOURCE.read_text(encoding="utf-8")
+blog9_body = render_blog8_markdown(blog9_markdown)
 
 raw_base = "https://raw.githubusercontent.com/takalenny-blip/ai-project/main/docs/%E4%BC%81%E7%94%BB/BLOG-0003/images/"
 html = html.replace(raw_base, "images/")
@@ -623,8 +632,8 @@ robots_txt = "User-agent: *\nAllow: /\n\nSitemap: https://takalenny-blip.github.
 
 def article_variant(base_page, title, permalink, body_html):
     series_banner = (
-        render_novel_series_banner(permalink)
-        if permalink == BLOG5_PERMALINK
+        render_ai_try_series_banner(permalink)
+        if permalink in (BLOG5_PERMALINK, BLOG9_PERMALINK)
         else render_recommendation_banner() if permalink in (BLOG6_PERMALINK, BLOG7_PERMALINK)
         else render_series_banner(permalink)
     )
@@ -641,6 +650,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG6_PERMALINK: "たかのおすすめ｜音楽",
         BLOG7_PERMALINK: "たかのおすすめ｜映画",
         BLOG8_PERMALINK: "丸得情報｜第1回",
+        BLOG9_PERMALINK: "AIとやってみる｜音楽編①",
     }
     base_page = base_page.replace(
         '<p class="eyebrow">THIRD PART / GITHUB</p>',
@@ -657,6 +667,7 @@ def article_variant(base_page, title, permalink, body_html):
         BLOG6_PERMALINK: BLOG6_DESCRIPTION,
         BLOG7_PERMALINK: BLOG7_DESCRIPTION,
         BLOG8_PERMALINK: BLOG8_DESCRIPTION,
+        BLOG9_PERMALINK: BLOG9_DESCRIPTION,
     }
     description = descriptions.get(permalink, title)
     base_page = re.sub(
@@ -708,6 +719,7 @@ page7 = article_variant(page, BLOG7_TITLE, BLOG7_PERMALINK, blog7_html)
 blog8_markdown = BLOG8_SOURCE.read_text(encoding="utf-8")
 blog8_body = render_blog8_markdown(blog8_markdown)
 page8 = article_variant(page, BLOG8_TITLE, BLOG8_PERMALINK, blog8_body)
+page9 = article_variant(page, BLOG9_TITLE, BLOG9_PERMALINK, blog9_body)
 (DIST / BLOG1_PERMALINK).write_text(page1, encoding="utf-8")
 (DIST / BLOG2_PERMALINK).write_text(page2, encoding="utf-8")
 (DIST / PERMALINK).write_text(page3, encoding="utf-8")
@@ -716,6 +728,7 @@ page8 = article_variant(page, BLOG8_TITLE, BLOG8_PERMALINK, blog8_body)
 (DIST / BLOG6_PERMALINK).write_text(page6, encoding="utf-8")
 (DIST / BLOG7_PERMALINK).write_text(page7, encoding="utf-8")
 (DIST / BLOG8_PERMALINK).write_text(page8, encoding="utf-8")
+(DIST / BLOG9_PERMALINK).write_text(page9, encoding="utf-8")
 
 if re.search(r"https://raw\.githubusercontent\.com/.*/BLOG-0003/images/", html):
     raise SystemExit("unrewritten raw GitHub image URL remains")
@@ -1002,8 +1015,12 @@ build_collection_page(
     "AIとやってみる",
     "ai-try.html",
     "AIと一緒に創作や新しいことに挑戦した記録。",
-    ARTICLES[4:],
-    "AIと一緒に試し、考え、形にしていく過程を記録するシリーズです。現在は小説編を公開しています。",
+    [],
+    "AIと一緒に試し、考え、形にしていく過程を記録するシリーズです。小説編と音楽編を公開しています。",
+    [
+        ("小説編", "マンガ制作から小説の完成まで、AIとの創作の試行錯誤を記録。", BLOG5_PERMALINK),
+        ("音楽編", "ChatGPTで設計し、Geminiでオリジナル曲を生成した体験。", BLOG9_PERMALINK),
+    ],
 )
 
 build_collection_page(
