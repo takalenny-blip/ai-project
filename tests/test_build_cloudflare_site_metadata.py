@@ -124,7 +124,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
     def test_blog_0009_metadata_matches_its_own_url_and_title(self):
         self.assert_article_metadata(
             "ai-try-music-001.html",
-            "AIとやってみる 音楽編①｜ChatGPTとGeminiでオリジナル曲を作ってみた",
+            "AIとやってみる 音楽編｜ChatGPTとGeminiでオリジナル曲を作ってみた",
         )
 
     def test_ai_try_series_has_separate_novel_and_music_entries(self):
