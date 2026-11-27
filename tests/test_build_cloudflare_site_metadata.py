@@ -131,6 +131,8 @@ class ArticleSeoMetadataTests(unittest.TestCase):
         html = (DIST / "ai-try.html").read_text(encoding="utf-8")
         self.assertIn(">小説編</span>", html)
         self.assertIn(">音楽編</span>", html)
+        self.assertNotIn("小説編①", html)
+        self.assertNotIn("音楽編①", html)
         self.assertIn('href="manga-to-novel-with-ai.html"', html)
         self.assertIn('href="ai-try-music-001.html"', html)
         self.assertNotIn("現在は小説編を公開しています", html)
