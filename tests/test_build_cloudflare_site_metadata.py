@@ -27,6 +27,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "vaio-p-again-and-beyond.html": "VAIO Pをもう一度動かすためにDebianを導入し、環境を整えた記録。DIGA／DiMORAの番組予約情報を扱う自動化テストを通して、試行錯誤と次の発想を振り返る。",
             "github-ai-conversation.html": "AIとのやりとりをGitHubに残し、現在状態や作業の進み具合を管理する仕組みを作った経験。会話を保存するだけでなく、あとから再開できる形に整えていく過程を紹介する。",
             "ai-trial-and-record.html": "AIと一緒に試し、結果や失敗を確かめ、経験を記録して次の作業につなげる。ブログ制作や古いPCの再活用、GitHubでの作業管理を通して学んだ、AIとの付き合い方を紹介する。",
+            "ai-try-music-001.html": "ChatGPTで音楽の方向性や構成、生成指示文を考え、Geminiでオリジナル曲『Piston and Steel』を完成させた制作体験。",
         }
         self.assertIn(
             f'<meta name="description" content="{expected_descriptions[permalink]}">',
@@ -120,6 +121,20 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "総括・実践ガイドのご案内｜AIを使うなら、会話だけで終わらせない。試行錯誤から学んだこと",
         )
 
+    def test_blog_0009_metadata_matches_its_own_url_and_title(self):
+        self.assert_article_metadata(
+            "ai-try-music-001.html",
+            "AIとやってみる 音楽編①｜ChatGPTとGeminiでオリジナル曲を作ってみた",
+        )
+
+    def test_ai_try_series_has_separate_novel_and_music_entries(self):
+        html = (DIST / "ai-try.html").read_text(encoding="utf-8")
+        self.assertIn(">小説編</span>", html)
+        self.assertIn(">音楽編</span>", html)
+        self.assertIn('href="manga-to-novel-with-ai.html"', html)
+        self.assertIn('href="ai-try-music-001.html"', html)
+        self.assertNotIn("現在は小説編を公開しています", html)
+
     def test_canonical_pages_have_consistent_social_metadata_and_valid_json_ld(self):
         expected_types = {
             "index.html": ("website", "WebSite"),
@@ -127,6 +142,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             "vaio-p-again-and-beyond.html": ("article", "BlogPosting"),
             "github-ai-conversation.html": ("article", "BlogPosting"),
             "ai-trial-and-record.html": ("article", "BlogPosting"),
+            "ai-try-music-001.html": ("article", "BlogPosting"),
             "about.html": ("website", "AboutPage"),
             "privacy.html": ("website", "PrivacyPolicy"),
             "sitemap.html": ("website", "WebPage"),
@@ -216,6 +232,7 @@ class ArticleSeoMetadataTests(unittest.TestCase):
             f"{BASE_URL}/vaio-p-again-and-beyond.html",
             f"{BASE_URL}/github-ai-conversation.html",
             f"{BASE_URL}/ai-trial-and-record.html",
+            f"{BASE_URL}/ai-try-music-001.html",
             f"{BASE_URL}/about.html",
             f"{BASE_URL}/privacy.html",
         }
