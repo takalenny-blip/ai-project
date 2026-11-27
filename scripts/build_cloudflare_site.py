@@ -119,7 +119,7 @@ def render_ai_try_series_banner(current_permalink=None):
     <p class="series-description">AIと一緒に、創作や新しいことに挑戦してみる。うまくいったことも、試行錯誤した過程も記録するシリーズです。</p>
     <nav class="series-links" aria-label="AIとやってみるシリーズ全記事">
       <a class="series-link" href="ai-try.html">シリーズの入口</a>
-      <a class="series-link"{novel_current} href="{BLOG5_PERMALINK}">小説編①</a>
+      <a class="series-link"{novel_current} href="{BLOG5_PERMALINK}">小説編</a>
       <a class="series-link"{music_current} href="{BLOG9_PERMALINK}">音楽編</a>
       <a class="series-link series-link-all" href="articles.html">すべての記事</a>
     </nav>
